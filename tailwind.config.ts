@@ -52,6 +52,12 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Travel theme colors
+				'nature-green': 'hsl(var(--nature-green))',
+				'ocean-blue': 'hsl(var(--ocean-blue))',
+				'sunset-orange': 'hsl(var(--sunset-orange))',
+				'earth-brown': 'hsl(var(--earth-brown))',
+				'sky-light': 'hsl(var(--sky-light))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -62,6 +68,18 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				}
+			},
+			backgroundImage: {
+				'gradient-hero': 'var(--gradient-hero)',
+				'gradient-sunset': 'var(--gradient-sunset)',
+				'gradient-nature': 'var(--gradient-nature)',
+			},
+			boxShadow: {
+				'travel': 'var(--shadow-travel)',
+				'soft': 'var(--shadow-soft)',
+			},
+			transitionProperty: {
+				'smooth': 'var(--transition-smooth)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
