@@ -4,7 +4,52 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import CategoryBadge from "./CategoryBadge";
+// src/components/PlaceCard.tsx
+import React from "react";
+import type { Place } from "@/lib/sheet";
+import CategoryBadge from "@/components/CategoryBadge";
 
+export default function PlaceCard({ p }: { p: Place }) {
+  return (
+    <article className="group relative overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:shadow-md">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
+        {p.image ? (
+          <img
+            src={p.image}
+            alt={p.name}
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-5xl opacity-70">📍</div>
+        )}
+        <div className="absolute left-3 top-3">
+          <CategoryBadge category={p.category} />
+        </div>
+      </div>
+      <div className="p-4">
+        <h3 className="text-lg font-semibold">{p.name}</h3>
+        <p className="text-sm text-gray-500">
+          {p.city}{p.city && p.country ? ", " : ""}{p.country}
+        </p>
+        <p className="mt-2 text-gray-700 line-clamp-2">{p.description}</p>
+      </div>
+    </article>
+  );
+}
+
+export function PlaceCardSkeleton() {
+  return (
+    <div className="overflow-hidden rounded-2xl border bg-white shadow-sm animate-pulse">
+      <div className="h-40 w-full bg-gray-200" />
+      <div className="p-4 space-y-2">
+        <div className="h-4 w-3/4 bg-gray-200 rounded" />
+        <div className="h-4 w-1/2 bg-gray-200 rounded" />
+        <div className="h-4 w-full bg-gray-200 rounded" />
+      </div>
+    </div>
+  );
+}
 interface PlaceCardProps {
   place: {
     id: number;
