@@ -1,50 +1,96 @@
+// src/lib/sheet.ts
+export type Place = {
+  name: string;
+  city: string;
+  country: string;
+  description: string;
+  image?: string;
+  status: string;
+};
 
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+// CSV parser semplice che gestisce i campi tra virgolette
+function parseCSV(text: string): string[][] {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let cell = "";
+  let inQuotes = false;
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    const next = text[i + 1];
 
-// Sheet utilities
-export const sheetSizes = {
-  sm: "sm:max-w-sm",
-  md: "sm:max-w-md", 
-  lg: "sm:max-w-lg",
-  xl: "sm:max-w-xl",
-  "2xl": "sm:max-w-2xl",
-  full: "sm:max-w-full"
-} as const
-
-export type SheetSize = keyof typeof sheetSizes
-
-// Sheet animation helpers
-export const sheetAnimations = {
-  slideInFromLeft: "data-[state=open]:slide-in-from-left",
-  slideInFromRight: "data-[state=open]:slide-in-from-right", 
-  slideInFromTop: "data-[state=open]:slide-in-from-top",
-  slideInFromBottom: "data-[state=open]:slide-in-from-bottom",
-  slideOutToLeft: "data-[state=closed]:slide-out-to-left",
-  slideOutToRight: "data-[state=closed]:slide-out-to-right",
-  slideOutToTop: "data-[state=closed]:slide-out-to-top",
-  slideOutToBottom: "data-[state=closed]:slide-out-to-bottom"
-} as const
-
-// Helper function to get sheet classes
-export function getSheetClasses(size: SheetSize = "md") {
-  return cn(
-    "fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out",
-    "data-[state=open]:animate-in data-[state=closed]:animate-out", 
-    "data-[state=closed]:duration-300 data-[state=open]:duration-500",
-    sheetSizes[size]
-  )
-}
-
-// Sheet content helpers
-export function createSheetContent(title: string, description?: string) {
-  return {
-    title,
-    description,
-    timestamp: new Date().toISOString()
+    if (ch === '"' ) {
+      if (inQuotes && next === '"') { // escape di doppia virgoletta "": aggiungi una "
+        cell += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (ch === ',' && !inQuotes) {
+      row.push(cell);
+      cell = "";
+    } else if ((ch === '\n' || ch === '\r') && !inQuotes) {
+      if (cell.length || row.length) {
+        row.push(cell);
+        rows.push(row);
+        row = [];
+        cell = "";
+      }
+      // gestisci \r\n: salta il secondo carattere
+      if (ch === '\r' && next === '\n') i++;
+    } else {
+      cell += ch;
+    }
   }
+  // ultima cella/riga
+  if (cell.length || row.length) {
+    row.push(cell);
+    rows.push(row);
+  }
+  return rows;
+}
+
+// normalizza intestazioni (italiano/inglese) -> chiavi standard
+function normalizeHeader(h: string) {
+  const key = h.trim().toLowerCase();
+  const map: Record<string, string> = {
+    "nome del luogo": "name",
+    "name": "name",
+    "città": "city",
+    "city": "city",
+    "paese": "country",
+    "country": "country",
+    "descrizione": "description",
+    "description": "description",
+    "immagine (url opzionale)": "image",
+    "image": "image",
+    "image_url": "image",
+    "status": "status",
+  };
+  return map[key] || key;
+}
+
+export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
+  const res = await fetch(csvUrl);
+  if (!res.ok) throw new Error("Impossibile leggere il CSV del foglio");
+  const text = await res.text();
+  const rows = parseCSV(text);
+  if (rows.length < 2) return [];
+  const headers = rows[0].map(normalizeHeader);
+  const out: Place[] = [];
+
+  for (let i = 1; i < rows.length; i++) {
+    const r = rows[i];
+    const rec: any = {};
+    headers.forEach((h, idx) => rec[h] = (r[idx] ?? "").trim());
+    out.push({
+      name: rec.name || "",
+      city: rec.city || "",
+      country: rec.country || "",
+      description: rec.description || "",
+      image: rec.image || "",
+      status: (rec.status || "").toLowerCase(),
+    });
+  }
+  return out;
 }
