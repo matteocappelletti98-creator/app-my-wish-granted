@@ -39,8 +39,8 @@ function normHeader(h: string) {
     "immagine (url opzionale)":"image","image":"image","image_url":"image",
     "status":"status",
     "categoria":"category","category":"category",
-    "lat":"lat","latitude":"lat",
-    "lng":"lng","long":"lng","lon":"lng","longitude":"lng",
+    "lat":"lat","latitude":"lat","latitudine":"lat",
+    "lng":"lng","long":"lng","lon":"lng","longitude":"lng","longitudine":"lng",
   };
   return map[key] || key;
 }
@@ -57,6 +57,7 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
   const rows = parseCSV(text);
   if (rows.length < 2) return [];
   const headers = rows[0].map(normHeader);
+  console.log("Headers mappati:", headers);
 
   const out: Place[] = [];
   for (let i = 1; i < rows.length; i++) {
@@ -69,6 +70,8 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
 
     const lat = rec.lat ? Number(rec.lat) : undefined;
     const lng = rec.lng ? Number(rec.lng) : undefined;
+
+    console.log(`Parsing ${name}: lat=${rec.lat} -> ${lat}, lng=${rec.lng} -> ${lng}`);
 
     out.push({
       id, slug,
@@ -83,5 +86,7 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
       lng: isFinite(lng!) ? lng : undefined,
     });
   }
+  
+  console.log("Luoghi con coordinate:", out.filter(p => p.lat && p.lng));
   return out;
 }
