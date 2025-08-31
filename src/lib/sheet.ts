@@ -1,5 +1,7 @@
+
 // src/lib/sheet.ts
 export type Place = {
+  id: number;
   name: string;
   city: string;
   country: string;
@@ -44,10 +46,11 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
   if (rows.length < 2) return [];
   const headers = rows[0].map(normalizeHeader);
 
-  return rows.slice(1).map((r) => {
+  return rows.slice(1).map((r, index) => {
     const rec: any = {};
     headers.forEach((h, i) => (rec[h] = (r[i] ?? "").trim()));
     return {
+      id: index + 1, // Generate ID based on row index
       name: rec.name || "",
       city: rec.city || "",
       country: rec.country || "",
