@@ -25,22 +25,19 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
 
   // Inizializza mappa una sola volta
   useEffect(() => {
-    if (!containerRef.current) return;
-    if (!mapRef.current) {
-      mapRef.current = L.map(containerRef.current, { zoomControl: true })
-        .setView([41.9028, 12.4964], 12);
+  if (!containerRef.current) return;
+  if (!mapRef.current) {
+    const map = L.map(containerRef.current, { zoomControl: true }).setView([41.9028, 12.4964], 12);
+    mapRef.current = map;
 
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-  attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-  subdomains: "abcd",
-  maxZoom: 20,
-}).addTo(mapRef.current); {
-        maxZoom: 19,
-        attribution: "&copy; OpenStreetMap contributors",
-      }).addTo(mapRef.current);
-    }
-  }, []);
-
+    // >>> UNA SOLA TILELAYER (SCELTA)
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+      subdomains: "abcd",
+      maxZoom: 20,
+    }).addTo(map);
+  }
+}, []);
   // Aggiungi marker ogni volta che cambia filtered
   useEffect(() => {
     if (!mapRef.current) return;
