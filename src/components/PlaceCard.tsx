@@ -1,68 +1,15 @@
+
+import React from "react";
 import { Star, MapPin, ExternalLink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import CategoryBadge from "./CategoryBadge";
-// src/components/PlaceCard.tsx
-import React from "react";
 import type { Place } from "@/lib/sheet";
-import CategoryBadge from "@/components/CategoryBadge";
 
-export default function PlaceCard({ p }: { p: Place }) {
-  return (
-    <article className="group relative overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:shadow-md">
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
-        {p.image ? (
-          <img
-            src={p.image}
-            alt={p.name}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
-            loading="lazy"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-5xl opacity-70">📍</div>
-        )}
-        <div className="absolute left-3 top-3">
-          <CategoryBadge category={p.category} />
-        </div>
-      </div>
-      <div className="p-4">
-        <h3 className="text-lg font-semibold">{p.name}</h3>
-        <p className="text-sm text-gray-500">
-          {p.city}{p.city && p.country ? ", " : ""}{p.country}
-        </p>
-        <p className="mt-2 text-gray-700 line-clamp-2">{p.description}</p>
-      </div>
-    </article>
-  );
-}
-
-export function PlaceCardSkeleton() {
-  return (
-    <div className="overflow-hidden rounded-2xl border bg-white shadow-sm animate-pulse">
-      <div className="h-40 w-full bg-gray-200" />
-      <div className="p-4 space-y-2">
-        <div className="h-4 w-3/4 bg-gray-200 rounded" />
-        <div className="h-4 w-1/2 bg-gray-200 rounded" />
-        <div className="h-4 w-full bg-gray-200 rounded" />
-      </div>
-    </div>
-  );
-}
 interface PlaceCardProps {
-  place: {
-    id: number;
-    name: string;
-    category: string;
-    rating?: number;
-    reviews?: number;
-    image?: string;
-    description: string;
-    tags?: string[];
-    city?: string;
-    country?: string;
-  };
+  place: Place;
   variant?: "grid" | "list";
   onClick?: () => void;
 }
@@ -144,29 +91,11 @@ export default function PlaceCard({
                     </div>
                   )}
                 </div>
-                {place.rating && (
-                  <div className="flex items-center gap-1 ml-2">
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <span className="font-medium">{place.rating}</span>
-                    {place.reviews && (
-                      <span className="text-muted-foreground text-sm">({place.reviews})</span>
-                    )}
-                  </div>
-                )}
               </div>
               <CategoryBadge category={place.category} className="mb-3" />
               <p className="text-muted-foreground mb-3 line-clamp-2">
                 {place.description}
               </p>
-              {place.tags && place.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1">
-                  {place.tags.map((tag) => (
-                    <Badge key={tag} variant="outline" className="text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
         </CardContent>
@@ -175,56 +104,29 @@ export default function PlaceCard({
   }
 
   return (
-    <Card 
-      className="hover:shadow-travel transition-all cursor-pointer group" 
-      onClick={onClick}
-    >
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          {place.image && (
-            <div className="text-4xl group-hover:scale-110 transition-transform">
-              {place.image}
-            </div>
-          )}
-          {place.rating && (
-            <div className="flex items-center gap-1 text-sm">
-              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-              <span className="font-medium">{place.rating}</span>
-              {place.reviews && (
-                <span className="text-muted-foreground">({place.reviews})</span>
-              )}
-            </div>
-          )}
+    <article className="group relative overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:shadow-md">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
+        {place.image ? (
+          <img
+            src={place.image}
+            alt={place.name}
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.02]"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-5xl opacity-70">📍</div>
+        )}
+        <div className="absolute left-3 top-3">
+          <CategoryBadge category={place.category} />
         </div>
-        <CardTitle className="text-lg">{place.name}</CardTitle>
-        {(place.city || place.country) && (
-          <div className="flex items-center text-sm text-muted-foreground">
-            <MapPin className="h-3 w-3 mr-1" />
-            <span>
-              {place.city}{place.city && place.country ? ", " : ""}{place.country}
-            </span>
-          </div>
-        )}
-      </CardHeader>
-      <CardContent className="pt-0">
-        <CategoryBadge category={place.category} className="mb-3" />
-        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-          {place.description}
+      </div>
+      <div className="p-4">
+        <h3 className="text-lg font-semibold">{place.name}</h3>
+        <p className="text-sm text-gray-500">
+          {place.city}{place.city && place.country ? ", " : ""}{place.country}
         </p>
-        {place.tags && place.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-3">
-            {place.tags.map((tag) => (
-              <Badge key={tag} variant="outline" className="text-xs">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
-        <Button variant="ghost" size="sm" className="w-full">
-          <ExternalLink className="h-4 w-4 mr-2" />
-          Visualizza dettagli
-        </Button>
-      </CardContent>
-    </Card>
+        <p className="mt-2 text-gray-700 line-clamp-2">{place.description}</p>
+      </div>
+    </article>
   );
 }
