@@ -10,7 +10,7 @@ import PlacesPage from "@/pages/PlacesPage";
 // dentro <Routes> ...
 <Route path="/places" element={<PlacesPage />} />
 
-const API = "https://lovable-mvp-dashboard.directus.app/";
+const API = "https://lovable-mvp.directus.app/";
 
 const queryClient = new QueryClient();
 
