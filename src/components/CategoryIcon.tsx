@@ -1,65 +1,53 @@
-
-import { 
-  TreePine, 
-  Utensils, 
-  Building, 
-  Mountain, 
-  Waves, 
-  Camera, 
-  ShoppingBag,
-  MapPin,
-  LucideIcon
+import {
+  Coffee, Utensils, Building2, TreePine, Beer, Hotel, ShoppingBag,
+  Mountain, Waves, MapPin
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
-export type CategoryType = 
-  | "nature" 
-  | "restaurants" 
-  | "monuments" 
-  | "mountains" 
-  | "beaches" 
-  | "photo-spots" 
-  | "shopping"
-  | "default";
+export type CategoryKey =
+  | "cafe" | "restaurant" | "museum" | "park" | "bar"
+  | "hotel" | "shop" | "viewpoint" | "beach" | "other";
 
-interface CategoryIconProps {
-  category: CategoryType;
-  size?: "sm" | "md" | "lg";
-  className?: string;
+const ICONS: Record<CategoryKey, React.ComponentType<{ size?: number; className?: string }>> = {
+  cafe: Coffee,
+  restaurant: Utensils,
+  museum: Building2,
+  park: TreePine,
+  bar: Beer,
+  hotel: Hotel,
+  shop: ShoppingBag,
+  viewpoint: Mountain,
+  beach: Waves,
+  other: MapPin,
+};
+
+function removeDiacritics(s: string) {
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-const categoryConfig: Record<CategoryType, { icon: LucideIcon; color: string }> = {
-  nature: { icon: TreePine, color: "text-nature-green" },
-  restaurants: { icon: Utensils, color: "text-sunset-orange" },
-  monuments: { icon: Building, color: "text-earth-brown" },
-  mountains: { icon: Mountain, color: "text-nature-green" },
-  beaches: { icon: Waves, color: "text-ocean-blue" },
-  "photo-spots": { icon: Camera, color: "text-accent" },
-  shopping: { icon: ShoppingBag, color: "text-sunset-orange" },
-  default: { icon: MapPin, color: "text-muted-foreground" },
-};
+/** Accetta sinonimi/italiano e normalizza alla chiave icona */
+export function normalizeCategory(input?: string): CategoryKey {
+  if (!input) return "other";
+  const s = removeDiacritics(input.trim().toLowerCase());
 
-const sizeConfig = {
-  sm: "h-4 w-4",
-  md: "h-5 w-5", 
-  lg: "h-6 w-6",
-};
+  if (["cafe", "caffe", "caffè", "coffee"].includes(s)) return "cafe";
+  if (["restaurant", "ristorante", "osteria", "trattoria"].includes(s)) return "restaurant";
+  if (["museum", "museo", "galleria", "gallery"].includes(s)) return "museum";
+  if (["park", "parco", "giardino"].includes(s)) return "park";
+  if (["bar", "pub", "winebar", "enoteca"].includes(s)) return "bar";
+  if (["hotel", "bnb", "b&b", "hostel"].includes(s)) return "hotel";
+  if (["shop", "negozio", "boutique", "store"].includes(s)) return "shop";
+  if (["viewpoint", "belvedere", "panorama"].includes(s)) return "viewpoint";
+  if (["beach", "spiaggia", "lido"].includes(s)) return "beach";
 
-export const CategoryIcon = ({ 
-  category, 
-  size = "md", 
-  className 
-}: CategoryIconProps) => {
-  const config = categoryConfig[category] || categoryConfig.default;
-  const Icon = config.icon;
-  
-  return (
-    <Icon 
-      className={cn(
-        sizeConfig[size],
-        config.color,
-        className
-      )} 
-    />
-  );
-};
+  return "other";
+}
+
+export default function CategoryIcon({
+  category,
+  size = 20,
+  className,
+}: { category?: string; size?: number; className?: string }) {
+  const key = normalizeCategory(category);
+  const Icon = ICONS[key];
+  return <Icon size={size} className={className} />;
+}
