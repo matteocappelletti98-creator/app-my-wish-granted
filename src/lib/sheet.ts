@@ -1,3 +1,4 @@
+
 // src/lib/sheet.ts
 
 export type Place = {
@@ -9,6 +10,8 @@ export type Place = {
   image?: string;
   status: string;
   category?: string;
+  lat?: number;               // <-- NEW: latitude coordinate
+  lng?: number;               // <-- NEW: longitude coordinate
 };
 
 // --- helpers ---
@@ -46,6 +49,8 @@ function normalizeHeader(h: string) {
     "immagine (url opzionale)":"image","image":"image","image_url":"image",
     "status":"status",
     "categoria":"category","category":"category",
+    "latitudine":"lat","lat":"lat","latitude":"lat",
+    "longitudine":"lng","lng":"lng","longitude":"lng",
   };
   return map[key] || key;
 }
@@ -79,6 +84,10 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
     const base = toSlug(`${name}-${city}`);
     const id = base ? base : `row-${i}`;   // stable id if possible, else fallback
 
+    // Parse lat/lng if present
+    const lat = rec.lat ? parseFloat(rec.lat) : undefined;
+    const lng = rec.lng ? parseFloat(rec.lng) : undefined;
+
     out.push({
       id,
       name,
@@ -88,6 +97,8 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
       image: rec.image || "",
       status: (rec.status || "").toLowerCase(),
       category: rec.category || "other",
+      lat: !isNaN(lat!) ? lat : undefined,
+      lng: !isNaN(lng!) ? lng : undefined,
     });
   }
   return out;
