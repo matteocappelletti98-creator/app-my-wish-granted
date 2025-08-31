@@ -1,8 +1,7 @@
-
 // src/lib/sheet.ts
-
 export type Place = {
-  id: string;                 // <-- NEW
+  id: string;
+  slug: string;
   name: string;
   city: string;
   country: string;
@@ -10,36 +9,27 @@ export type Place = {
   image?: string;
   status: string;
   category?: string;
-  lat?: number;               // <-- NEW: latitude coordinate
-  lng?: number;               // <-- NEW: longitude coordinate
+  lat?: number;
+  lng?: number;
 };
 
-// --- helpers ---
 function parseCSV(text: string): string[][] {
   const rows: string[][] = [];
-  let row: string[] = [];
-  let cell = "";
-  let inQuotes = false;
-
+  let row: string[] = [], cell = "", inQuotes = false;
   for (let i = 0; i < text.length; i++) {
     const ch = text[i], next = text[i + 1];
-    if (ch === '"') {
-      if (inQuotes && next === '"') { cell += '"'; i++; }
-      else inQuotes = !inQuotes;
-    } else if (ch === "," && !inQuotes) {
-      row.push(cell); cell = "";
-    } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+    if (ch === '"') { if (inQuotes && next === '"') { cell += '"'; i++; } else inQuotes = !inQuotes; }
+    else if (ch === "," && !inQuotes) { row.push(cell); cell = ""; }
+    else if ((ch === "\n" || ch === "\r") && !inQuotes) {
       if (cell.length || row.length) { row.push(cell); rows.push(row); row = []; cell = ""; }
       if (ch === "\r" && next === "\n") i++;
-    } else {
-      cell += ch;
-    }
+    } else { cell += ch; }
   }
   if (cell.length || row.length) { row.push(cell); rows.push(row); }
   return rows;
 }
 
-function normalizeHeader(h: string) {
+function normHeader(h: string) {
   const key = h.trim().toLowerCase();
   const map: Record<string, string> = {
     "nome del luogo":"name","name":"name",
@@ -49,20 +39,15 @@ function normalizeHeader(h: string) {
     "immagine (url opzionale)":"image","image":"image","image_url":"image",
     "status":"status",
     "categoria":"category","category":"category",
-    "latitudine":"lat","lat":"lat","latitude":"lat",
-    "longitudine":"lng","lng":"lng","longitude":"lng",
+    "lat":"lat","latitude":"lat",
+    "lng":"lng","long":"lng","lon":"lng","longitude":"lng",
   };
   return map[key] || key;
 }
 
-// simple stable slug/id from name+city (+fallback to index)
 function toSlug(s: string) {
-  return s
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove diacritics
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "")
-    .slice(0, 60);
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"").slice(0,80);
 }
 
 export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
@@ -71,34 +56,31 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
   const text = await res.text();
   const rows = parseCSV(text);
   if (rows.length < 2) return [];
-  const headers = rows[0].map(normalizeHeader);
+  const headers = rows[0].map(normHeader);
 
   const out: Place[] = [];
   for (let i = 1; i < rows.length; i++) {
-    const r = rows[i];
-    const rec: any = {};
+    const r = rows[i]; const rec: any = {};
     headers.forEach((h, idx) => rec[h] = (r[idx] ?? "").trim());
+    const name = rec.name || ""; const city = rec.city || ""; 
+    const idBase = toSlug(`${name}-${city}`);
+    const id = idBase || `row-${i}`;
+    const slug = id;
 
-    const name = rec.name || "";
-    const city = rec.city || "";
-    const base = toSlug(`${name}-${city}`);
-    const id = base ? base : `row-${i}`;   // stable id if possible, else fallback
-
-    // Parse lat/lng if present
-    const lat = rec.lat ? parseFloat(rec.lat) : undefined;
-    const lng = rec.lng ? parseFloat(rec.lng) : undefined;
+    const lat = rec.lat ? Number(rec.lat) : undefined;
+    const lng = rec.lng ? Number(rec.lng) : undefined;
 
     out.push({
-      id,
+      id, slug,
       name,
       city,
       country: rec.country || "",
       description: rec.description || "",
       image: rec.image || "",
       status: (rec.status || "").toLowerCase(),
-      category: rec.category || "other",
-      lat: !isNaN(lat!) ? lat : undefined,
-      lng: !isNaN(lng!) ? lng : undefined,
+      category: (rec.category || "other"),
+      lat: isFinite(lat!) ? lat : undefined,
+      lng: isFinite(lng!) ? lng : undefined,
     });
   }
   return out;

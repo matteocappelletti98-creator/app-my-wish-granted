@@ -1,18 +1,19 @@
-// src/pages/Index.tsx
 import { useEffect, useMemo, useState } from "react";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
-import PlaceCard, { PlaceCardSkeleton } from "@/components/PlaceCard";
+import MapView from "@/components/MapView";
+import PlaceCard from "@/components/PlaceCard";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
 import { Link } from "react-router-dom";
 
-// Tuo CSV pubblicato (lo abbiamo già usato prima)
-const CSV_URL =
-  "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
+// Tuo CSV pubblicato
+const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
 
 export default function Index() {
   const [all, setAll] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
-  const [cat, setCat] = useState<string>(""); // filtro categoria sulla home
+  const [search, setSearch] = useState("");
+  const [cat, setCat] = useState<string>("");
+  const [overlay, setOverlay] = useState(false); // fullscreen overlay
 
   useEffect(() => {
     (async () => {
@@ -26,117 +27,106 @@ export default function Index() {
   }, []);
 
   const categories = useMemo(() => {
-    const set = new Set(
-      all.map(p => normalizeCategory(p.category)).filter(Boolean)
-    );
-    return Array.from(set) as string[];
+    const s = new Set(all.map(p => normalizeCategory(p.category)).filter(Boolean));
+    return Array.from(s);
   }, [all]);
 
-  // Mostra gli ultimi 9 (filtrati per categoria se selezionata)
-  const latest = useMemo(() => {
-    const sorted = [...all]; // in assenza di timestamp, usiamo l'ordine del foglio
-    const sliced = sorted.slice(-9).reverse();
-    return cat ? sliced.filter(p => normalizeCategory(p.category) === normalizeCategory(cat)) : sliced;
-  }, [all, cat]);
+  const filtered = useMemo(() => {
+    const needle = search.toLowerCase();
+    return all.filter(p => {
+      const t = `${p.name} ${p.city} ${p.description}`.toLowerCase();
+      const okText = !needle || t.includes(needle);
+      const okCat = !cat || normalizeCategory(p.category) === normalizeCategory(cat);
+      return okText && okCat;
+    });
+  }, [all, search, cat]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50">
-      {/* HERO */}
-      <section className="px-6">
-        <div className="mx-auto max-w-6xl py-10 md:py-14">
-          <div className="rounded-3xl bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 text-white p-8 md:p-12 shadow-lg">
-            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">
-              Scopri e condividi luoghi speciali
-            </h1>
-            <p className="mt-3 md:mt-4 text-white/90 md:text-lg">
-              Aggiungi i tuoi posti preferiti e trova ispirazione vicino a te. La community cresce con te.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                to="/add-place"
-                className="inline-flex items-center rounded-xl bg-white px-4 py-2 font-medium text-blue-700 shadow hover:bg-white/90"
-              >
-                + Inserisci un luogo
-              </Link>
-              <Link
-                to="/places"
-                className="inline-flex items-center rounded-xl bg-white/10 px-4 py-2 font-medium text-white ring-1 ring-white/40 hover:bg-white/20"
-              >
-                Esplora tutti i luoghi →
-              </Link>
+    <div className="min-h-screen bg-white">
+      {/* Header stile home */}
+      <header className="px-6 py-4 border-b bg-white">
+        <div className="mx-auto max-w-6xl flex items-center justify-between">
+          <div>
+            <div className="text-2xl font-bold flex items-center gap-2">
+              <span className="text-blue-600">📍</span> <span>explore</span>
             </div>
+            <div className="text-sm text-blue-900/70">Independent local guide</div>
+          </div>
+          <div className="flex gap-3">
+            <Link to="/add-place" className="rounded-xl bg-blue-600 text-white px-3 py-2">+ Aggiungi luogo</Link>
+            <button onClick={()=>setOverlay(true)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">🗖 Ingrandisci</button>
           </div>
         </div>
-      </section>
+      </header>
 
-      {/* CATEGORIE */}
+      {/* Corpo: mappa + categorie */}
       <section className="px-6">
-        <div className="mx-auto max-w-6xl">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">Categorie</h2>
-            {cat && (
-              <button
-                onClick={() => setCat("")}
-                className="text-sm text-blue-700 underline"
-              >
-                Pulisci filtro
-              </button>
+        <div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-4 gap-4 pt-4">
+          <div className="lg:col-span-3">
+            {loading ? (
+              <div className="h-[70vh] w-full rounded-2xl border bg-slate-50" />
+            ) : (
+              <MapView places={filtered} selectedCategory={cat} className="h-[70vh] w-full rounded-2xl border" />
             )}
           </div>
-
-          <div className="mt-3 flex flex-wrap gap-2">
-            {!categories.length && (
-              <span className="text-gray-500 text-sm">
-                Nessuna categoria ancora: aggiungi luoghi dal modulo.
-              </span>
-            )}
-            {categories.map((c) => (
-              <button
-                key={c}
-                onClick={() => setCat(c === cat ? "" : c)}
-                className={`rounded-full border px-3 py-1.5 text-sm transition
-                  ${c === cat ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}
-                `}
-              >
-                <CategoryBadge category={c} showLabel />
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ULTIMI LUOGHI */}
-      <section className="px-6 mt-8 pb-12">
-        <div className="mx-auto max-w-6xl">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-semibold">
-              {cat ? `Ultimi in "${cat}"` : "Ultimi luoghi pubblicati"}
-            </h2>
-            <Link to="/places" className="text-blue-700 text-sm underline">
-              Vedi tutti →
-            </Link>
-          </div>
-
-          {loading ? (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => <PlaceCardSkeleton key={i} />)}
-            </div>
-          ) : latest.length === 0 ? (
-            <div className="rounded-2xl border bg-white p-8 text-center text-gray-600">
-              Nessun luogo pubblicato{cat ? " in questa categoria" : ""}…  
-              <div className="mt-3">
-                <Link to="/add-place" className="text-blue-700 underline">
-                  Aggiungi il primo →
-                </Link>
+          <aside className="lg:col-span-1">
+            <div className="rounded-2xl border p-4 bg-white">
+              <h3 className="font-semibold mb-2">Categorie</h3>
+              <div className="flex flex-col gap-2">
+                <button onClick={()=>setCat("")}
+                  className={`text-left rounded-xl px-3 py-2 border ${cat==="" ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
+                  Tutte
+                </button>
+                {categories.map(c => (
+                  <button key={c} onClick={()=> setCat(c===cat?"":c)}
+                    className={`text-left rounded-xl px-3 py-2 border flex items-center gap-2
+                    ${c===cat ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
+                    <CategoryBadge category={c} />
+                    <span className="text-sm">{c}</span>
+                  </button>
+                ))}
               </div>
             </div>
+          </aside>
+        </div>
+      </section>
+
+      {/* Ricerca + Lista */}
+      <section className="px-6 pb-12">
+        <div className="mx-auto max-w-6xl mt-6">
+          <h2 className="text-xl font-semibold mb-3">Luoghi pubblicati</h2>
+          <div className="flex gap-2 mb-4">
+            <input
+              className="border rounded-xl px-3 py-2 w-full"
+              placeholder="Cerca per nome, città, descrizione…"
+              value={search}
+              onChange={e=>setSearch(e.target.value)}
+            />
+          </div>
+
+          {filtered.length === 0 ? (
+            <div className="rounded-2xl border bg-white p-8 text-center text-gray-600">
+              Nessun luogo trovato {cat ? `in “${cat}”` : ""}.
+            </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {latest.map((p, i) => <PlaceCard key={i} place={p} />)}
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {filtered.map(p => <PlaceCard key={p.id} p={p} />)}
             </div>
           )}
         </div>
       </section>
+
+      {/* Overlay fullscreen mappa */}
+      {overlay && (
+        <div className="fixed inset-0 z-50 bg-white">
+          <div className="absolute right-4 top-4 flex gap-2">
+            <Link to="/add-place" className="rounded-xl bg-blue-600 text-white px-3 py-2">+ Aggiungi luogo</Link>
+            <button onClick={()=>setOverlay(false)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">✖ Chiudi</button>
+          </div>
+          {/* riuso gli stessi dati/filtri correnti */}
+          <MapView places={filtered} selectedCategory={cat} className="h-full w-full" />
+        </div>
+      )}
     </div>
   );
 }
