@@ -92,8 +92,8 @@ export default function PlaceCard({
                   )}
                 </div>
               </div>
-              <CategoryBadge category={place.category} className="mb-3" />
-              <p className="text-muted-foreground mb-3 line-clamp-2">
+              <CategoryBadge category={place.category} />
+              <p className="text-muted-foreground mb-3 line-clamp-2 mt-3">
                 {place.description}
               </p>
             </div>
