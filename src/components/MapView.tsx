@@ -25,19 +25,20 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
 
   // Inizializza mappa una sola volta
   useEffect(() => {
-  if (!containerRef.current) return;
-  if (!mapRef.current) {
-    const map = L.map(containerRef.current, { zoomControl: true }).setView([41.9028, 12.4964], 12);
-    mapRef.current = map;
+    if (!containerRef.current) return;
+    if (!mapRef.current) {
+      const map = L.map(containerRef.current, { zoomControl: true }).setView([41.9028, 12.4964], 12);
+      mapRef.current = map;
 
-    // >>> UNA SOLA TILELAYER (SCELTA)
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-      attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-      subdomains: "abcd",
-      maxZoom: 20,
-    }).addTo(map);
-  }
-}, []);
+      // Tile layer (Carto Positron)
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+        subdomains: "abcd",
+        maxZoom: 20,
+      }).addTo(map);
+    }
+  }, []);
+
   // Aggiungi marker ogni volta che cambia filtered
   useEffect(() => {
     if (!mapRef.current) return;
@@ -66,20 +67,24 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
         iconSize: [34, 34],
         iconAnchor: [17, 17],
       });
+
       const m = L.marker([p.lat!, p.lng!], { icon });
+
+      // 👇 Fix immagine nel popup
       m.bindPopup(`
         <div style="min-width:180px">
           <div style="font-weight:600;margin-bottom:4px">${emoji} ${escapeHtml(p.name)}</div>
           <div style="color:#555;font-size:12px">${escapeHtml(p.city)}${p.city && p.country ? ", " : ""}${escapeHtml(p.country)}</div>
-          ${p.image ? `<img src="${escapeAttr(p.image)}" alt="" style="width:100%;border-radius:8px;margin-top:6px"/>` : ""}
+          ${p.image ? `<img src="${p.image}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px"/>` : ""}
         </div>
       `);
+
       if (onMarkerClick) m.on("click", () => onMarkerClick(p));
       m.addTo(markersRef.current!);
       bounds.push([p.lat!, p.lng!]);
     });
 
-    // fit-to-bounds solo all’aggiornamento dei dati
+    // fit-to-bounds
     if (bounds.length >= 2) {
       mapRef.current.fitBounds(bounds as LatLngBoundsExpression, { padding: [32, 32] });
     } else if (bounds.length === 1) {
@@ -90,12 +95,9 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
   return <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />;
 }
 
-/* Escape utili */
+/* Escape utili (per testo, NON per le immagini) */
 function escapeHtml(s?: string) {
   return (s ?? "").replace(/[&<>"']/g, (m) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]!)
   );
-}
-function escapeAttr(s?: string) {
-  return escapeHtml(s);
 }
