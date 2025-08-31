@@ -1,38 +1,48 @@
-import { useEffect, useState } from "react";
-import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Header } from "@/components/layout/Header";
+import { Sidebar } from "@/components/layout/Sidebar";
+import { MapSection } from "@/components/sections/MapSection";
+import { PlacesSection } from "@/components/sections/PlacesSection";
+import { BlogSection } from "@/components/sections/BlogSection";
+import { ProfileSection } from "@/components/sections/ProfileSection";
 
-const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
+const Index = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("map");
 
-export default function Index() {
-  const [places, setPlaces] = useState<Place[]>([]);
-
-  useEffect(() => {
-    fetchPlacesFromSheet(CSV_URL).then(data => {
-      // prendi solo i published, ultimi 3
-      const published = data.filter(p => p.status === "published");
-      setPlaces(published.slice(-3).reverse());
-    });
-  }, []);
+  const renderActiveSection = () => {
+    switch (activeSection) {
+      case "map":
+        return <MapSection />;
+      case "places":
+        return <PlacesSection />;
+      case "blog":
+        return <BlogSection />;
+      case "profile":
+        return <ProfileSection />;
+      default:
+        return <MapSection />;
+    }
+  };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-8">
-      <h1 className="text-3xl font-bold">Benvenuto nella tua app!</h1>
-      <p className="text-gray-600">Ecco gli ultimi luoghi pubblicati:</p>
-
-      <div className="grid gap-4 md:grid-cols-3">
-        {places.map((p, i) => (
-          <div key={i} className="border rounded-xl p-4 shadow-sm space-y-2 bg-white">
-            {/* icona (qui uso 🌍, ma puoi sostituire con una vera icona lucide-react) */}
-            <div className="text-3xl">🌍</div>
-            <h2 className="text-lg font-semibold">{p.name}</h2>
-            <p className="text-sm text-gray-500">{p.city}, {p.country}</p>
-            <Link to="/places" className="text-blue-600 text-sm underline">
-              Vedi tutti i luoghi →
-            </Link>
+    <div className="min-h-screen bg-background">
+      <Header onMenuClick={() => setSidebarOpen(true)} />
+      <div className="flex">
+        <Sidebar
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
+        />
+        <main className="flex-1 p-6 md:ml-0">
+          <div className="max-w-7xl mx-auto">
+            {renderActiveSection()}
           </div>
-        ))}
+        </main>
       </div>
     </div>
   );
-}
+};
+
+export default Index;
