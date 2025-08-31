@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
+const API = "https://lovable-mvp-dashboard.directus.app/";
+
 const queryClient = new QueryClient();
 
 const App = () => (
