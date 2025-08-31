@@ -30,7 +30,11 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
       mapRef.current = L.map(containerRef.current, { zoomControl: true })
         .setView([41.9028, 12.4964], 12);
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+  attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+  subdomains: "abcd",
+  maxZoom: 20,
+}).addTo(mapRef.current); {
         maxZoom: 19,
         attribution: "&copy; OpenStreetMap contributors",
       }).addTo(mapRef.current);
