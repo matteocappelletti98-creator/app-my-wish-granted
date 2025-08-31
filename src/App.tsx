@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const CSV_URL = "INCOLLA_QUI_IL_TUO_LINK_CSV";
+const CSV_URL = https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/edit?resourcekey=&gid=2050593337#gid=2050593337;
 
 interface Place {
   name: string;
