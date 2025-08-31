@@ -110,7 +110,7 @@ export default function Index() {
         <div className="mx-auto max-w-6xl">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xl font-semibold">
-              {cat ? `Ultimi in “${cat}”` : "Ultimi luoghi pubblicati"}
+              {cat ? `Ultimi in "${cat}"` : "Ultimi luoghi pubblicati"}
             </h2>
             <Link to="/places" className="text-blue-700 text-sm underline">
               Vedi tutti →
@@ -132,7 +132,7 @@ export default function Index() {
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {latest.map((p, i) => <PlaceCard key={i} p={p} />)}
+              {latest.map((p, i) => <PlaceCard key={i} place={p} />)}
             </div>
           )}
         </div>

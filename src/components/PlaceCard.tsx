@@ -1,8 +1,8 @@
-
 import { Star, MapPin, ExternalLink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import CategoryBadge from "./CategoryBadge";
 
 interface PlaceCardProps {
@@ -20,6 +20,52 @@ interface PlaceCardProps {
   };
   variant?: "grid" | "list";
   onClick?: () => void;
+}
+
+export function PlaceCardSkeleton({ variant = "grid" }: { variant?: "grid" | "list" }) {
+  if (variant === "list") {
+    return (
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex items-start space-x-4">
+            <Skeleton className="h-12 w-12 flex-shrink-0" />
+            <div className="flex-1 min-w-0 space-y-2">
+              <Skeleton className="h-6 w-3/4" />
+              <Skeleton className="h-4 w-1/2" />
+              <Skeleton className="h-8 w-20" />
+              <Skeleton className="h-4 w-full" />
+              <div className="flex gap-2">
+                <Skeleton className="h-6 w-16" />
+                <Skeleton className="h-6 w-16" />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <Skeleton className="h-10 w-10" />
+          <Skeleton className="h-6 w-16" />
+        </div>
+        <Skeleton className="h-6 w-3/4" />
+        <Skeleton className="h-4 w-1/2" />
+      </CardHeader>
+      <CardContent className="pt-0 space-y-3">
+        <Skeleton className="h-8 w-20" />
+        <Skeleton className="h-4 w-full" />
+        <div className="flex gap-2">
+          <Skeleton className="h-6 w-16" />
+          <Skeleton className="h-6 w-16" />
+        </div>
+        <Skeleton className="h-8 w-full" />
+      </CardContent>
+    </Card>
+  );
 }
 
 export default function PlaceCard({ 
@@ -83,7 +129,6 @@ export default function PlaceCard({
     );
   }
 
-  // Grid variant
   return (
     <Card 
       className="hover:shadow-travel transition-all cursor-pointer group" 

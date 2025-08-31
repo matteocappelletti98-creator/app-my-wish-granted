@@ -1,14 +1,14 @@
 
 import {
   Coffee, Utensils, Building2, TreePine, Beer, Hotel, ShoppingBag,
-  Mountain, Waves, MapPin
+  Mountain, Waves, MapPin, LucideIcon
 } from "lucide-react";
 
 export type CategoryKey =
   | "cafe" | "restaurant" | "museum" | "park" | "bar"
   | "hotel" | "shop" | "viewpoint" | "beach" | "other";
 
-const ICONS: Record<CategoryKey, React.ComponentType<{ size?: number; className?: string }>> = {
+const ICONS: Record<CategoryKey, LucideIcon> = {
   cafe: Coffee,
   restaurant: Utensils,
   museum: Building2,
