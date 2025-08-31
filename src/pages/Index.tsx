@@ -1,3 +1,4 @@
+
 import { useEffect, useMemo, useState } from "react";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import MapView from "@/components/MapView";
@@ -106,11 +107,11 @@ export default function Index() {
 
           {filtered.length === 0 ? (
             <div className="rounded-2xl border bg-white p-8 text-center text-gray-600">
-              Nessun luogo trovato {cat ? `in “${cat}”` : ""}.
+              Nessun luogo trovato {cat ? `in "${cat}"` : ""}.
             </div>
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {filtered.map(p => <PlaceCard key={p.id} p={p} />)}
+              {filtered.map(p => <PlaceCard key={p.id} place={p} />)}
             </div>
           )}
         </div>
