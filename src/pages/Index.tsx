@@ -129,5 +129,20 @@ export default function Index() {
         </div>
       )}
     </div>
-  );
+  ); 
+  // Dove renderizzi la lista:
+  <div className="absolute left-3 top-3">
+  <button
+    type="button"
+    onClick={(e) => {
+      e.stopPropagation();           // evita click sulla card
+      onCategoryClick?.(p.category); // comunica al genitore
+    }}
+    aria-label={`Vedi categoria ${p.category ?? "tutte"}`}
+    className="rounded-full shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    title="Filtra per categoria"
+  >
+    <CategoryBadge category={p.category} />
+  </button>
+</div>
 }

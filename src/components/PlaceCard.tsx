@@ -60,11 +60,13 @@ export function PlaceCardSkeleton({ variant = "grid" }: { variant?: "grid" | "li
   );
 }
 
-export default function PlaceCard({ 
-  place, 
-  variant = "grid", 
-  onClick 
-}: PlaceCardProps) {
+export default function PlaceCard({
+  p,
+  onCategoryClick,
+}: {
+  p: Place;
+  onCategoryClick?: (category?: string) => void;
+}) {: PlaceCardProps) {
   if (variant === "list") {
     return (
       <Card 
@@ -116,9 +118,20 @@ export default function PlaceCard({
         ) : (
           <div className="flex h-full w-full items-center justify-center text-5xl opacity-70">📍</div>
         )}
-        <div className="absolute left-3 top-3">
-          <CategoryBadge category={place.category} />
-        </div>
+       <div className="absolute left-3 top-3">
+  <button
+    type="button"
+    onClick={(e) => {
+      e.stopPropagation();           // evita click sulla card
+      onCategoryClick?.(p.category); // comunica al genitore
+    }}
+    aria-label={`Vedi categoria ${p.category ?? "tutte"}`}
+    className="rounded-full shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    title="Filtra per categoria"
+  >
+    <CategoryBadge category={p.category} />
+  </button>
+</div>
       </div>
       <div className="p-4">
         <h3 className="text-lg font-semibold">{place.name}</h3>
