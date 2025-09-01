@@ -6,7 +6,7 @@ import CategoryBadge from "./CategoryBadge";
 import type { Place } from "@/lib/sheet";
 
 type PlaceCardProps = {
-  p: Place;
+  place: Place;
   variant?: "grid" | "list";
   onClick?: () => void;
   onCategoryClick?: (category?: string) => void;
@@ -49,7 +49,7 @@ export function PlaceCardSkeleton({ variant = "grid" }: { variant?: "grid" | "li
 
 /* ───────── Card ───────── */
 export default function PlaceCard({
-  p,
+  place: p,
   variant = "grid",
   onClick,
   onCategoryClick,
