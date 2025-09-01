@@ -1,11 +1,11 @@
 
 import {
   Coffee, Utensils, Building2, TreePine, Beer, Hotel, ShoppingBag,
-  Mountain, Waves, MapPin, LucideIcon
+  Mountain, Waves, MapPin, BookImage, LucideIcon
 } from "lucide-react";
 
 export type CategoryKey =
-  | "cafe" | "restaurant" | "museum" | "park" | "bar" | "culture"|
+  | "cafe" | "restaurant" | "museum" | "park" | "bar" | "culture"
   | "hotel" | "shop" | "viewpoint" | "beach" | "other";
 
 const ICONS: Record<CategoryKey, LucideIcon> = {
@@ -19,7 +19,7 @@ const ICONS: Record<CategoryKey, LucideIcon> = {
   viewpoint: Mountain,
   beach: Waves,
   other: MapPin,
-  culture: BookImage; 
+  culture: BookImage,
 };
 
 function removeDiacritics(s: string) {
