@@ -6,7 +6,7 @@ export type CategoryKey =
   | "hotel" | "shop" | "viewpoint" | "beach" | "landmark" | "market" | "trail" | "culture" | "other";
 
 const EMOJI: Record<CategoryKey, string> = {
-  cafe:"☕", restaurant:"🍽️", museum:"🏛️", culture:"🖼️", park:"🌳", bar:"🍺",
+  cafe:"☕", restaurant:"🍽️", museum:"🏛️", culture:"🖼️", gelato: "🍦", park:"🌳", bar:"🍺",
   hotel:"🛎️", shop:"🛍️", viewpoint:"🗻", beach:"🏖️",
   landmark:"📸", market:"🧺", trail:"🥾", other:"📍",
 };
@@ -18,6 +18,7 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["cafe","caffe","caffè","coffee"].includes(s)) return "cafe";
   if (["restaurant","ristorante","osteria","trattoria"].includes(s)) return "restaurant";
   if (["museum","museo","galleria","gallery"].includes(s)) return "museum";
+  if (["gelato","gelateria","icecream"].includes(s)) return "gelato";
   if (["park","parco","giardino"].includes(s)) return "park";
   if (["bar","pub","winebar","enoteca"].includes(s)) return "bar";
   if (["hotel","bnb","b&b","hostel"].includes(s)) return "hotel";
