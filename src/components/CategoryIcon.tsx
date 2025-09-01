@@ -5,7 +5,7 @@ import {
 } from "lucide-react";
 
 export type CategoryKey =
-  | "cafe" | "restaurant" | "museum" | "park" | "bar"
+  | "cafe" | "restaurant" | "museum" | "park" | "bar" | "culture"|
   | "hotel" | "shop" | "viewpoint" | "beach" | "other";
 
 const ICONS: Record<CategoryKey, LucideIcon> = {
@@ -19,6 +19,7 @@ const ICONS: Record<CategoryKey, LucideIcon> = {
   viewpoint: Mountain,
   beach: Waves,
   other: MapPin,
+  culture: BookImage; 
 };
 
 function removeDiacritics(s: string) {
@@ -35,6 +36,7 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["museum", "museo", "galleria", "gallery"].includes(s)) return "museum";
   if (["park", "parco", "giardino"].includes(s)) return "park";
   if (["bar", "pub", "winebar", "enoteca"].includes(s)) return "bar";
+  if (["culture","art ","chiese"].includes(s)) return "culture";
   if (["hotel", "bnb", "b&b", "hostel"].includes(s)) return "hotel";
   if (["shop", "negozio", "boutique", "store"].includes(s)) return "shop";
   if (["viewpoint", "belvedere", "panorama"].includes(s)) return "viewpoint";

@@ -23,6 +23,7 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["hotel","bnb","b&b","hostel"].includes(s)) return "hotel";
   if (["shop","negozio","boutique","store"].includes(s)) return "shop";
   if (["viewpoint","belvedere","panorama"].includes(s)) return "viewpoint";
+  if (["culture","art ","chiese"].includes(s)) return "culture";
   if (["beach","spiaggia","lido"].includes(s)) return "beach";
   if (["landmark","monumento","iconico"].includes(s)) return "landmark";
   if (["market","mercato","street market"].includes(s)) return "market";
