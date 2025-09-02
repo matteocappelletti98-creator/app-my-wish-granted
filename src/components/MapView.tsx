@@ -1,118 +1,97 @@
-import React from "react";
-import { MapPin, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import React, { useEffect, useMemo, useRef } from "react";
+import L, { Map as LeafletMap, LatLngBoundsExpression } from "leaflet";
+import { Place } from "@/lib/sheet";
+import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 
-export default function MapView() {
-  // Mappa semplificata per la home con design inline con il brand
-  const mockPlaces = [
-    {
-      id: 1,
-      name: "Colosseo",
-      category: "Monumenti",
-      rating: 4.8,
-      image: "🏛️",
-      coordinates: { lat: 41.8902, lng: 12.4922 }
-    },
-    {
-      id: 2,
-      name: "Trevi Fountain",
-      category: "Monumenti", 
-      rating: 4.6,
-      image: "⛲",
-      coordinates: { lat: 41.9009, lng: 12.4833 }
-    },
-    {
-      id: 3,
-      name: "Osteria del Borgo",
-      category: "Ristoranti",
-      rating: 4.9,
-      image: "🍝",
-      coordinates: { lat: 41.8955, lng: 12.4823 }
+type Props = {
+  places: Place[];
+  selectedCategory?: string;
+  className?: string;
+  onMarkerClick?: (p: Place) => void;
+};
+
+export default function MapView({ places, selectedCategory, className, onMarkerClick }: Props) {
+  const mapRef = useRef<LeafletMap | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const markersRef = useRef<L.LayerGroup | null>(null);
+
+  // Filtra solo published + categoria + coordinate valide
+  const filtered = useMemo(() => {
+    const cat = selectedCategory ? normalizeCategory(selectedCategory) : "";
+    return places
+      .filter(p => p.lat != null && p.lng != null)
+      .filter(p => (cat ? normalizeCategory(p.category) === cat : true));
+  }, [places, selectedCategory]);
+
+  // Inizializza mappa una sola volta
+  useEffect(() => {
+    if (!containerRef.current) return;
+    if (!mapRef.current) {
+      const map = L.map(containerRef.current, { zoomControl: true }).setView([41.9028, 12.4964], 12);
+      mapRef.current = map;
+
+      // Tile layer (Carto Positron)
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: "© OpenStreetMap contributors",
+  maxZoom: 20,
+}).addTo(map);
     }
-  ];
+  }, []);
 
-  return (
-    <div className="grid lg:grid-cols-3 gap-6">
-      {/* Map Container */}
-      <div className="lg:col-span-2">
-        <Card className="h-[600px] relative overflow-hidden shadow-travel">
-          <CardContent className="p-0 h-full">
-            {/* Design mappa inline con brand */}
-            <div className="w-full h-full bg-gradient-hero relative flex items-center justify-center">
-              <div className="absolute inset-0 opacity-20">
-                <div className="w-full h-full bg-repeat opacity-30" style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-                }}></div>
-              </div>
-              
-              <div className="text-center text-white z-10">
-                <MapPin className="h-16 w-16 mx-auto mb-4 opacity-80" />
-                <h3 className="text-xl font-semibold mb-2">Mappa Interattiva</h3>
-                <p className="text-sm opacity-90 max-w-md">
-                  Esplora i luoghi più belli d'Italia.
-                  <br />
-                  La mappa completa sarà disponibile a breve.
-                </p>
-              </div>
+  // Aggiungi marker ogni volta che cambia filtered
+  useEffect(() => {
+    if (!mapRef.current) return;
 
-              {/* Mock location pins con colori brand */}
-              <div className="absolute top-1/4 left-1/3 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="w-8 h-8 bg-sunset-orange rounded-full flex items-center justify-center text-white shadow-travel animate-pulse">
-                  📍
-                </div>
-              </div>
-              <div className="absolute top-1/2 right-1/4 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="w-8 h-8 bg-nature-green rounded-full flex items-center justify-center text-white shadow-travel animate-pulse">
-                  📍
-                </div>
-              </div>
-              <div className="absolute bottom-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                <div className="w-8 h-8 bg-earth-brown rounded-full flex items-center justify-center text-white shadow-travel animate-pulse">
-                  📍
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+    if (markersRef.current) {
+      markersRef.current.clearLayers();
+      mapRef.current.removeLayer(markersRef.current);
+    }
+    markersRef.current = L.layerGroup().addTo(mapRef.current);
 
-      {/* Places List */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-foreground">Luoghi Nelle Vicinanze</h2>
-        <div className="space-y-3">
-          {mockPlaces.map((place) => (
-            <Card key={place.id} className="hover:shadow-soft transition-shadow cursor-pointer">
-              <CardContent className="p-4">
-                <div className="flex items-start space-x-3">
-                  <div className="text-2xl">{place.image}</div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-foreground">{place.name}</h3>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Badge variant="secondary" className="text-xs">
-                        {place.category}
-                      </Badge>
-                      <span className="text-sm text-muted-foreground">
-                        ⭐ {place.rating}
-                      </span>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      Lat: {place.coordinates.lat}, Lng: {place.coordinates.lng}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+    const bounds: [number, number][] = [];
+
+    filtered.forEach(p => {
+      const emoji = categoryEmoji(p.category);
+      const icon = L.divIcon({
+        html: `
+          <div style="
+            width:34px;height:34px;border-radius:999px;
+            background:#fff; display:flex;align-items:center;justify-content:center;
+            box-shadow:0 1px 4px rgba(0,0,0,.25); border:1px solid rgba(0,0,0,.06);
+          ">
+            <div style="font-size:20px;line-height:20px">${emoji}</div>
+          </div>
+        `,
+        className: "poi-emoji-badge",
+        iconSize: [34, 34],
+        iconAnchor: [17, 17],
+      });
+
+      const m = L.marker([p.lat!, p.lng!], { icon });
+
+      // 👇 Fix immagine nel popup
+      m.bindPopup(`
+        <div style="min-width:180px">
+          <div style="font-weight:600;margin-bottom:4px">${emoji} ${escapeHtml(p.name)}</div>
+          <div style="color:#555;font-size:12px">${escapeHtml(p.city)}${p.city && p.country ? ", " : ""}${escapeHtml(p.country)}</div>
+          ${p.image ? `<img src="${p.image}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px"/>` : ""}
         </div>
-        
-        <Button variant="outline" className="w-full">
-          Vedi tutti i luoghi
-        </Button>
-      </div>
-    </div>
-  );
+      `);
+
+      if (onMarkerClick) m.on("click", () => onMarkerClick(p));
+      m.addTo(markersRef.current!);
+      bounds.push([p.lat!, p.lng!]);
+    });
+
+    // fit-to-bounds
+    if (bounds.length >= 2) {
+      mapRef.current.fitBounds(bounds as LatLngBoundsExpression, { padding: [32, 32] });
+    } else if (bounds.length === 1) {
+      mapRef.current.setView(bounds[0] as any, 15);
+    }
+  }, [filtered, onMarkerClick]);
+
+  return <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />;
 }
 
 /* Escape utili (per testo, NON per le immagini) */

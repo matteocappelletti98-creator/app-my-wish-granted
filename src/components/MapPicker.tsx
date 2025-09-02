@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import L, { Map as LeafletMap } from "leaflet";
-import { Button } from "@/components/ui/button";
-import { Maximize2, MapPin } from "lucide-react";
 
 // Fix per le icone di default di Leaflet
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -31,8 +29,6 @@ export default function MapPicker({ initial, onPick, className }: Props) {
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(
     initial ?? null
   );
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isLocating, setIsLocating] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -75,65 +71,11 @@ export default function MapPicker({ initial, onPick, className }: Props) {
     }
   }, []);
 
-  const getUserLocation = () => {
-    if (!navigator.geolocation) {
-      alert("Geolocalizzazione non supportata dal browser");
-      return;
-    }
-
-    setIsLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        const newPos = { lat: latitude, lng: longitude };
-        setPos(newPos);
-        onPick(newPos);
-        
-        if (mapRef.current) {
-          mapRef.current.setView([latitude, longitude], 15);
-          if (!markerRef.current) {
-            markerRef.current = L.marker([latitude, longitude]).addTo(mapRef.current);
-          } else {
-            markerRef.current.setLatLng([latitude, longitude]);
-          }
-        }
-        setIsLocating(false);
-      },
-      (error) => {
-        console.error("Errore geolocalizzazione:", error);
-        alert("Impossibile ottenere la posizione");
-        setIsLocating(false);
-      }
-    );
-  };
-
   return (
-    <div className={`relative ${isFullscreen ? 'fixed inset-0 z-50 bg-background' : className ?? "h-72 w-full rounded-2xl border"}`}>
-      {/* Controls */}
-      <div className="absolute top-4 right-4 z-10 flex gap-2">
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={getUserLocation}
-          disabled={isLocating}
-        >
-          <MapPin className="h-4 w-4 mr-1" />
-          {isLocating ? "Localizzando..." : "La mia posizione"}
-        </Button>
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() => setIsFullscreen(!isFullscreen)}
-        >
-          <Maximize2 className="h-4 w-4" />
-          {isFullscreen ? "Riduci" : "Ingrandisci"}
-        </Button>
-      </div>
-
-      <div ref={containerRef} className={`h-full w-full ${isFullscreen ? '' : 'rounded-2xl'}`} style={{ minHeight: isFullscreen ? '100vh' : '300px' }} />
-      
+    <div className={className ?? "h-72 w-full rounded-2xl border"}>
+      <div ref={containerRef} className="h-full w-full rounded-2xl" style={{ minHeight: '300px' }} />
       {pos && (
-        <div className={`${isFullscreen ? 'absolute bottom-4 left-4 bg-background/90 backdrop-blur p-2 rounded' : 'mt-2'} text-sm text-muted-foreground`}>
+        <div className="mt-2 text-sm text-gray-600">
           Coordinate selezionate:{" "}
           <b>{pos.lat.toFixed(6)}, {pos.lng.toFixed(6)}</b>
         </div>
