@@ -1,6 +1,5 @@
 // URL del CSV pubblicato della Home
 export const HOME_CSV_URL =
- export const HOME_CSV_URL =
   "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
 
 // URL del CSV pubblicato della sezione "my.explore"

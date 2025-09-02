@@ -6,10 +6,7 @@ import AddPlace from "@/pages/AddPlace";
 import MyExplore from "@/pages/MyExplore";
 import PoiPage from "@/pages/PoiPage";
 import Blog from "@/pages/Blog";
-// ...
-<Route path="/my" element={<MyExplore />} />
-<Route path="/my/poi/:slug" element={<PoiPage />} />
-<Route path="/blog" element={<Blog />} />
+import NotFound from "@/pages/NotFound";
 
 export default function App() {
   return (
@@ -19,7 +16,11 @@ export default function App() {
         <Route path="/" element={<Index />} />
         <Route path="/places" element={<PlacesPage />} />
         <Route path="/add-place" element={<AddPlace />} />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/my-explore" element={<MyExplore />} />
+        <Route path="/poi/:slug" element={<PoiPage />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
     </BrowserRouter>
   );
