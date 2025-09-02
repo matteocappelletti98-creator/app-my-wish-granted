@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams, Link } from "react-router-dom";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import { HOME_CSV_URL, MY_CSV_URL } from "@/config";

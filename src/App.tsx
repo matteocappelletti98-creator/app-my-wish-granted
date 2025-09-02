@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Nav from "@/components/Nav";
 import Index from "@/pages/Index";
