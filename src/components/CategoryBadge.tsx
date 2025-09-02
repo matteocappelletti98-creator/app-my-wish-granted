@@ -3,7 +3,7 @@ import React from "react";
 
 export type CategoryKey =
   | "cafe" | "restaurant" | "museum" | "park" | "bar"
-  | "hotel" | "shop" | "viewpoint" | "beach" | "landmark" | "market" | "trail" | "culture" | "other";
+  | "hotel" | "shop" | "viewpoint" | "beach" | "landmark" | "market" | "trail" | "culture" | "gelato" | "other";
 
 const EMOJI: Record<CategoryKey, string> = {
   cafe:"☕", restaurant:"🧑‍🍳", museum:"🏛️", culture:"🖼️", gelato: "🍦", park:"🌳", bar:"🍺",
@@ -40,7 +40,7 @@ export default function CategoryBadge({ category, showLabel=false }:{
   const labelMap: Record<CategoryKey,string> = {
     cafe:"Caffè", restaurant:"Ristorante", museum:"Museo", park:"Parco",
     bar:"Bar", hotel:"Hotel", shop:"Negozio", viewpoint:"Belvedere",
-    beach:"Spiaggia", landmark:"Monumento", market:"Mercato", trail:"Sentiero", culture:"Cultura", other:"Altro"
+    beach:"Spiaggia", landmark:"Monumento", market:"Mercato", trail:"Sentiero", culture:"Cultura", gelato:"Gelato", other:"Altro"
   };
   return (
     <span className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-2.5 py-1 text-gray-700">
