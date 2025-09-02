@@ -31,11 +31,10 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
       mapRef.current = map;
 
       // Tile layer (Carto Positron)
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-        subdomains: "abcd",
-        maxZoom: 20,
-      }).addTo(map);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution: "© OpenStreetMap contributors",
+  maxZoom: 20,
+}).addTo(map);
     }
   }, []);
 
