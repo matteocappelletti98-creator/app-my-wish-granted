@@ -47,7 +47,12 @@ export default function PoiPage(){
       </div>
 
       {place.lat && place.lng && (
-        <MapView places={[place]} className="h-[40vh] w-full rounded-2xl border" />
+        <div className="h-[40vh] w-full rounded-2xl border bg-gradient-hero flex items-center justify-center">
+          <div className="text-center text-white">
+            <div className="text-4xl mb-2">📍</div>
+            <p className="text-sm opacity-90">Lat: {place.lat?.toFixed(6)}, Lng: {place.lng?.toFixed(6)}</p>
+          </div>
+        </div>
       )}
 
       {place.image && <img src={place.image} alt={place.name} className="rounded-lg border" />}
