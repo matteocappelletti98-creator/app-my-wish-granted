@@ -32,9 +32,8 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
 
       // Tile layer (Carto Positron)
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap contributors",
-  maxZoom: 20,
-}).addTo(map);
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
     }
   }, []);
 
@@ -57,7 +56,7 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
           <div style="
             width:34px;height:34px;border-radius:999px;
             background:#fff; display:flex;align-items:center;justify-content:center;
-            box-shadow:0 1px 4px rgba(0,0,0,.25); border:1px solid rgba(0,0,0,.06);
+            box-shadow:0 1px 4px rgba(0,0,0,.25); border:2px solid #1E66F5;
           ">
             <div style="font-size:20px;line-height:20px">${emoji}</div>
           </div>

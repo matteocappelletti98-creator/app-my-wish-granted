@@ -8,10 +8,12 @@ export default function Nav() {
   return (
     <nav className="w-full border-b bg-white">
       <div className="max-w-5xl mx-auto px-4 py-3 flex gap-4">
-        <Link to="/" className={active("/")}>Home</Link>
-        <Link to="/places" className={active("/places")}>Luoghi</Link>
-        <Link to="/add-place" className={active("/add-place")}>Inserisci luogo</Link>
-      </div>
+  <Link to="/" className={active("/")}>Home</Link>
+  <Link to="/places" className={active("/places")}>Luoghi</Link>
+  <Link to="/add-place" className={active("/add-place")}>Inserisci luogo</Link>
+  <Link to="/my" className={active("/my")}>my.explore</Link>
+  <Link to="/blog" className={active("/blog")}>Blog</Link>
+</div>
     </nav>
   );
 }
