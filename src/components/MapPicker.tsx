@@ -16,27 +16,43 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+// Definizione delle città con coordinate
+const CITIES = {
+  como: { lat: 45.8081, lng: 9.0852, name: "Como" },
+  newyork: { lat: 40.7128, lng: -74.0060, name: "New York" },
+  bangkok: { lat: 13.7563, lng: 100.5018, name: "Bangkok" },
+  parigi: { lat: 48.8566, lng: 2.3522, name: "Parigi" },
+  roma: { lat: 41.9028, lng: 12.4964, name: "Roma" },
+  milano: { lat: 45.4642, lng: 9.1900, name: "Milano" },
+  berlino: { lat: 52.5200, lng: 13.4050, name: "Berlino" },
+  barcellona: { lat: 41.3851, lng: 2.1734, name: "Barcellona" }
+};
+
 type Props = {
   initial?: { lat: number; lng: number };
   onPick: (pos: { lat: number; lng: number }) => void;
   className?: string;
+  selectedCity?: string;
 };
 
-export default function MapPicker({ initial, onPick, className }: Props) {
+export default function MapPicker({ initial, onPick, className, selectedCity = "como" }: Props) {
   const mapRef = useRef<LeafletMap | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
+  const circleRef = useRef<L.Circle | null>(null);
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(
     initial ?? null
   );
 
+  // Inizializza mappa
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
     try {
+      const cityData = CITIES[selectedCity as keyof typeof CITIES] || CITIES.como;
       const map = L.map(containerRef.current, { zoomControl: true }).setView(
-        initial ? [initial.lat, initial.lng] : [41.9028, 12.4964],
-        12
+        [cityData.lat, cityData.lng],
+        10
       );
       mapRef.current = map;
 
@@ -70,6 +86,29 @@ export default function MapPicker({ initial, onPick, className }: Props) {
       console.error("Errore nell'inizializzazione della mappa:", error);
     }
   }, []);
+
+  // Aggiorna cerchio e centro mappa quando cambia la città
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const cityData = CITIES[selectedCity as keyof typeof CITIES] || CITIES.como;
+    
+    // Rimuovi cerchio precedente
+    if (circleRef.current) {
+      mapRef.current.removeLayer(circleRef.current);
+    }
+
+    // Aggiungi nuovo cerchio di 50km
+    circleRef.current = L.circle([cityData.lat, cityData.lng], {
+      color: '#3b82f6',
+      fillColor: '#3b82f6',
+      fillOpacity: 0.1,
+      radius: 50000 // 50km in metri
+    }).addTo(mapRef.current);
+
+    // Centra la mappa sulla città
+    mapRef.current.setView([cityData.lat, cityData.lng], 10);
+  }, [selectedCity]);
 
   return (
     <div className={className ?? "h-72 w-full rounded-2xl border"}>

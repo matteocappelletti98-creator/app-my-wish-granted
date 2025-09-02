@@ -9,6 +9,9 @@ export default function AddPlace() {
 
   // contesto: se stai inserendo per la Home o per my.explore
   const [source, setSource] = useState<string>("home"); // "home" | "my_explore"
+  
+  // città di riferimento
+  const [selectedCity, setSelectedCity] = useState<string>("como");
 
   // URL del Google Form precompilato con le coordinate scelte
   const formUrl = useMemo(() => buildFormUrl(lat, lng, source), [lat, lng, source]);
@@ -24,20 +27,44 @@ export default function AddPlace() {
         <h1 className="text-2xl font-bold">Inserisci un nuovo luogo</h1>
       </div>
 
-      {/* Scelta del contesto */}
-      <div className="space-y-2">
-        <label className="text-sm text-gray-700">Contesto di inserimento</label>
-        <select
-          className="border p-2 rounded"
-          value={source}
-          onChange={(e) => setSource(e.target.value)}
-        >
-          <option value="home">Home</option>
-          <option value="my_explore">my.explore</option>
-        </select>
-        <p className="text-xs text-gray-500">
-          Serve per sapere da dove proviene il POI. Puoi anche mappare questo valore in un campo del Form (opzionale).
-        </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Scelta del contesto */}
+        <div className="space-y-2">
+          <label className="text-sm text-gray-700">Contesto di inserimento</label>
+          <select
+            className="border p-2 rounded w-full"
+            value={source}
+            onChange={(e) => setSource(e.target.value)}
+          >
+            <option value="home">Home</option>
+            <option value="my_explore">my.explore</option>
+          </select>
+          <p className="text-xs text-gray-500">
+            Serve per sapere da dove proviene il POI.
+          </p>
+        </div>
+
+        {/* Scelta della città */}
+        <div className="space-y-2">
+          <label className="text-sm text-gray-700">Città di riferimento</label>
+          <select
+            className="border p-2 rounded w-full"
+            value={selectedCity}
+            onChange={(e) => setSelectedCity(e.target.value)}
+          >
+            <option value="como">Como</option>
+            <option value="newyork">New York</option>
+            <option value="bangkok">Bangkok</option>
+            <option value="parigi">Parigi</option>
+            <option value="roma">Roma</option>
+            <option value="milano">Milano</option>
+            <option value="berlino">Berlino</option>
+            <option value="barcellona">Barcellona</option>
+          </select>
+          <p className="text-xs text-gray-500">
+            Puoi inserire POI in un raggio di 50km dalla città scelta.
+          </p>
+        </div>
       </div>
 
       {/* Mappa cliccabile: scegli le coordinate */}
@@ -46,6 +73,7 @@ export default function AddPlace() {
           Clicca sulla mappa per selezionare le coordinate del nuovo POI.
         </p>
         <MapPicker
+          selectedCity={selectedCity}
           onPick={({ lat, lng }) => {
             setLat(lat);
             setLng(lng);
