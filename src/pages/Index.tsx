@@ -149,15 +149,24 @@ export default function Index() {
         onCitySelect={(cityId) => {
           const city = CITIES[cityId];
           if (city) {
-            // Zoom sulla città selezionata nella mappa attiva
-            if (overlay && mapRef.current) {
-              mapRef.current.setView([city.lat, city.lng], 10);
+            // Se la mappa overlay è aperta, usa quella
+            if (overlay) {
+              // Trova la mappa nel DOM e triggera lo zoom
+              const mapContainer = document.querySelector('.leaflet-container');
+              if (mapContainer && (mapContainer as any)._leaflet_map) {
+                const map = (mapContainer as any)._leaflet_map;
+                map.setView([city.lat, city.lng], 10);
+              }
             } else {
-              // Se non in overlay, apri l'overlay e poi zoom
+              // Altrimenti apri l'overlay e fai zoom
               setOverlay(true);
               setTimeout(() => {
-                // Qui dovremmo avere un ref alla mappa
-              }, 100);
+                const mapContainer = document.querySelector('.leaflet-container');
+                if (mapContainer && (mapContainer as any)._leaflet_map) {
+                  const map = (mapContainer as any)._leaflet_map;
+                  map.setView([city.lat, city.lng], 10);
+                }
+              }, 200);
             }
           }
         }}

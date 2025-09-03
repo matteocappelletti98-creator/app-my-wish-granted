@@ -12,7 +12,7 @@ export default function CityBanner({ city, position, onAction, onClose }: Props)
   if (city.status === 'pending') {
     return (
       <div 
-        className="absolute z-50 bg-white rounded-lg shadow-lg border p-4 min-w-64"
+        className="absolute z-[9998] bg-white rounded-lg shadow-xl border p-4 min-w-64"
         style={{ 
           left: position.x, 
           top: position.y,
@@ -37,7 +37,7 @@ export default function CityBanner({ city, position, onAction, onClose }: Props)
 
   return (
     <div 
-      className="absolute z-50 bg-white rounded-lg shadow-lg border p-4 min-w-64"
+      className="absolute z-[9998] bg-white rounded-lg shadow-xl border p-4 min-w-64"
       style={{ 
         left: position.x, 
         top: position.y,
