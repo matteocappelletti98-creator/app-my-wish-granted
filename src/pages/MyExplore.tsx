@@ -5,12 +5,17 @@ import PlaceCard from "@/components/PlaceCard";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
 import { Link, useNavigate } from "react-router-dom";
 import { MY_CSV_URL } from "@/config";
+import { useCityStatus } from "@/hooks/useCityStatus";
+import { CITIES } from "@/types/city";
 
 export default function MyExplore() {
   const [all, setAll] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [cat, setCat] = useState<string|undefined>(undefined);
+  const [showWishlist, setShowWishlist] = useState(false);
+  const [showVisited, setShowVisited] = useState(false);
   const nav = useNavigate();
+  const { getWishlistCities, getVisitedCities } = useCityStatus();
 
   useEffect(() => {
     (async () => {
@@ -35,6 +40,22 @@ export default function MyExplore() {
             <h1 className="text-2xl font-bold text-blue-700">my.explore</h1>
             <div className="flex items-center gap-3">
               <Link to="/add-place?context=my" className="px-3 py-2 rounded-md border hover:bg-gray-50">+ Inserisci POI</Link>
+              {getWishlistCities().length > 0 && (
+                <button 
+                  onClick={() => setShowWishlist(!showWishlist)}
+                  className="px-3 py-2 rounded-md border bg-green-50 border-green-200 hover:bg-green-100"
+                >
+                  💚 Lista dei desideri ({getWishlistCities().length})
+                </button>
+              )}
+              {getVisitedCities().length > 0 && (
+                <button 
+                  onClick={() => setShowVisited(!showVisited)}
+                  className="px-3 py-2 rounded-md border bg-purple-50 border-purple-200 hover:bg-purple-100"
+                >
+                  🏁 Il mio viaggio ({getVisitedCities().length})
+                </button>
+              )}
             </div>
           </div>
           <p className="text-gray-600">Mappa privata/moderata con le tue aggiunte. Clicca su una categoria per filtrare, oppure seleziona un marker per aprire la pagina del POI.</p>
@@ -82,6 +103,40 @@ export default function MyExplore() {
           </aside>
         </div>
       </section>
+
+      {/* Overlay Wishlist */}
+      {showWishlist && (
+        <div className="fixed inset-0 z-50 bg-white">
+          <div className="absolute right-4 top-4">
+            <button onClick={() => setShowWishlist(false)} className="rounded-xl border border-green-600 text-green-600 px-3 py-2">✖ Chiudi</button>
+          </div>
+          <div className="p-6">
+            <h2 className="text-2xl font-bold text-green-700 mb-4">💚 Lista dei desideri</h2>
+            <MapView 
+              places={[]} 
+              className="h-full w-full" 
+              showCityCircles={true}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Overlay Visited */}
+      {showVisited && (
+        <div className="fixed inset-0 z-50 bg-white">
+          <div className="absolute right-4 top-4">
+            <button onClick={() => setShowVisited(false)} className="rounded-xl border border-purple-600 text-purple-600 px-3 py-2">✖ Chiudi</button>
+          </div>
+          <div className="p-6">
+            <h2 className="text-2xl font-bold text-purple-700 mb-4">🏁 Il mio viaggio</h2>
+            <MapView 
+              places={[]} 
+              className="h-full w-full" 
+              showCityCircles={true}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
