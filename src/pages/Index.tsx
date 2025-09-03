@@ -128,7 +128,7 @@ export default function Index() {
 
       {/* Overlay fullscreen mappa */}
       {overlay && (
-        <div className="fixed inset-0 z-50 bg-white">
+        <div className="fixed inset-0 z-40 bg-white">
           <div className="absolute right-4 top-4 flex gap-2">
             <Link to="/add-place" className="rounded-xl bg-blue-600 text-white px-3 py-2">+ Aggiungi luogo</Link>
             <button onClick={()=>setCitySelector(true)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">🌍 Selezione città</button>

@@ -13,7 +13,7 @@ export default function CitySelector({ isOpen, onClose, onCitySelect }: Props) {
   const sortedCities = Object.values(CITIES).sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
         <div className="p-4 border-b flex items-center justify-between">
           <h2 className="text-lg font-semibold">Seleziona Città</h2>
