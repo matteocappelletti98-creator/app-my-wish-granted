@@ -34,12 +34,20 @@ export default function MyExplore() {
 
   return (
     <div className="space-y-6">
-      <header className="px-6 pt-4">
+      <header className="px-6 pt-4 border-b bg-gradient-to-r from-blue-50 to-purple-50">
         <div className="mx-auto max-w-6xl">
           <div className="flex items-center justify-between gap-3">
-            <h1 className="text-2xl font-bold text-blue-700">my.explore</h1>
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+                👤
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-blue-700">my.explore</h1>
+                <p className="text-sm text-gray-600">Traveler Explorer</p>
+              </div>
+            </div>
             <div className="flex items-center gap-3">
-              <Link to="/add-place?context=my" className="px-3 py-2 rounded-md border hover:bg-gray-50">+ Inserisci POI</Link>
+              <Link to="/add-place?context=my" className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors">+ Inserisci POI</Link>
               {getWishlistCities().length > 0 && (
                 <button 
                   onClick={() => setShowWishlist(!showWishlist)}
@@ -58,7 +66,21 @@ export default function MyExplore() {
               )}
             </div>
           </div>
-          <p className="text-gray-600">Mappa privata/moderata con le tue aggiunte. Clicca su una categoria per filtrare, oppure seleziona un marker per aprire la pagina del POI.</p>
+          <div className="mt-4 flex items-center gap-6 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+              <span>{getWishlistCities().length} città in wishlist</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+              <span>{getVisitedCities().length} città visitate</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+              <span>{all.length} POI aggiunti</span>
+            </div>
+          </div>
+          <p className="text-gray-600 mt-2 pb-4">Mappa privata/moderata con le tue aggiunte. Clicca su una categoria per filtrare, oppure seleziona un marker per aprire la pagina del POI.</p>
         </div>
       </header>
 
@@ -77,8 +99,11 @@ export default function MyExplore() {
             )}
           </div>
           <aside className="lg:col-span-1">
-            <div className="rounded-2xl border p-4 bg-white">
-              <h2 className="font-semibold mb-3 text-blue-700">Categorie</h2>
+            <div className="rounded-2xl border p-4 bg-white shadow-sm">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-lg">🗂️</span>
+                <h2 className="font-semibold text-blue-700">Categorie</h2>
+              </div>
               <div className="flex flex-wrap gap-2">
                 <button onClick={()=>setCat(undefined)} className={"px-2.5 py-1 rounded-full border "+(!cat?"bg-blue-50 border-blue-200":"")}>Tutte</button>
                 {categories.map(c => (
@@ -88,7 +113,10 @@ export default function MyExplore() {
                 ))}
               </div>
               <div className="mt-6">
-                <h3 className="font-medium mb-2">Elenco</h3>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-lg">📍</span>
+                  <h3 className="font-medium">I tuoi luoghi</h3>
+                </div>
                 <div className="space-y-2 max-h-[50vh] overflow-auto pr-1">
                   {filtered.map(p => (
                     <Link key={p.id} to={`/poi/${p.slug}?ctx=my`} className="block rounded-md border p-2 hover:bg-gray-50">
@@ -113,7 +141,10 @@ export default function MyExplore() {
           <div className="p-6">
             <h2 className="text-2xl font-bold text-green-700 mb-4">💚 Lista dei desideri</h2>
             <MapView 
-              places={[]} 
+              places={all.filter(p => getWishlistCities().some(cityId => {
+                const city = Object.values(CITIES).find(c => c.id === cityId);
+                return city && p.city?.toLowerCase().includes(city.name.toLowerCase());
+              }))} 
               className="h-full w-full" 
               showCityCircles={true}
             />
@@ -130,7 +161,10 @@ export default function MyExplore() {
           <div className="p-6">
             <h2 className="text-2xl font-bold text-purple-700 mb-4">🏁 Il mio viaggio</h2>
             <MapView 
-              places={[]} 
+              places={all.filter(p => getVisitedCities().some(cityId => {
+                const city = Object.values(CITIES).find(c => c.id === cityId);
+                return city && p.city?.toLowerCase().includes(city.name.toLowerCase());
+              }))} 
               className="h-full w-full" 
               showCityCircles={true}
             />
