@@ -40,7 +40,7 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
 
       // Tile layer - stile diverso per home vs altre pagine
       const tileUrl = isHomeStyle 
-        ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        ? "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
         : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
       
       const attribution = isHomeStyle
