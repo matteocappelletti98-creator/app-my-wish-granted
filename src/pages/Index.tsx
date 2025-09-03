@@ -76,6 +76,7 @@ export default function Index() {
                 selectedCategory={cat} 
                 className="h-[70vh] w-full rounded-2xl border" 
                 showCityCircles={true}
+                isHomeStyle={true}
               />
             )}
           </div>
@@ -139,6 +140,7 @@ export default function Index() {
             selectedCategory={cat} 
             className="h-full w-full" 
             showCityCircles={true}
+            isHomeStyle={true}
           />
         </div>
       )}
