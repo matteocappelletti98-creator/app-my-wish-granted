@@ -119,7 +119,7 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
           <div style="
             width:34px;height:34px;border-radius:999px;
             background:#fff; display:flex;align-items:center;justify-content:center;
-            box-shadow:0 1px 4px rgba(0,0,0,.25); border:2px solid #1E66F5;
+            box-shadow:0 1px 4px rgba(0,0,0,.25);
           ">
             <div style="font-size:20px;line-height:20px">${emoji}</div>
           </div>
