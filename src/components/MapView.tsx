@@ -38,9 +38,17 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
       const map = L.map(containerRef.current, { zoomControl: true }).setView([41.9028, 12.4964], 6);
       mapRef.current = map;
 
-      // Tile layer
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "© OpenStreetMap contributors",
+      // Tile layer - stile diverso per home vs altre pagine
+      const tileUrl = isHomeStyle 
+        ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+      
+      const attribution = isHomeStyle
+        ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        : "© OpenStreetMap contributors";
+
+      L.tileLayer(tileUrl, {
+        attribution,
         maxZoom: 20,
       }).addTo(map);
 
@@ -110,10 +118,10 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
         html: `
           <div style="
             width:34px;height:34px;border-radius:999px;
-            background:${isHomeStyle ? 'transparent' : '#fff'}; display:flex;align-items:center;justify-content:center;
-            ${isHomeStyle ? '' : 'box-shadow:0 1px 4px rgba(0,0,0,.25); border:2px solid #1E66F5;'}
+            background:#fff; display:flex;align-items:center;justify-content:center;
+            box-shadow:0 1px 4px rgba(0,0,0,.25); border:2px solid #1E66F5;
           ">
-            <div style="font-size:${isHomeStyle ? '24px' : '20px'};line-height:${isHomeStyle ? '24px' : '20px'}">${emoji}</div>
+            <div style="font-size:20px;line-height:20px">${emoji}</div>
           </div>
         `,
         className: "poi-emoji-badge",
