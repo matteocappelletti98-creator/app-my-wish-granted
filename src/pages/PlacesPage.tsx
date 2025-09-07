@@ -42,7 +42,7 @@ export default function PlacesPage() {
               <h2 className="text-lg font-semibold">{p.name}</h2>
               <span className="text-sm text-gray-500">{p.city}{p.city && p.country ? ", " : ""}{p.country}</span>
             </div>
-            {p.image && <img className="w-full aspect-square rounded-lg object-cover" src={p.image} alt={p.name} />}
+            {p.image && <img className="w-32 h-32 rounded-lg object-cover mx-auto" src={p.image} alt={p.name} />}
             <p className="text-gray-700">{p.description}</p>
           </div>
         ))}
