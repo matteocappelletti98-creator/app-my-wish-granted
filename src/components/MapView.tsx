@@ -8,9 +8,11 @@ type Props = {
   selectedCategory?: string;
   className?: string;
   onMarkerClick?: (p: Place) => void;
+  favorites?: string[];
+  onToggleFavorite?: (placeId: string) => void;
 };
 
-export default function MapView({ places, selectedCategory, className, onMarkerClick }: Props) {
+export default function MapView({ places, selectedCategory, className, onMarkerClick, favorites = [], onToggleFavorite }: Props) {
   const mapRef = useRef<LeafletMap | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markersRef = useRef<L.LayerGroup | null>(null);
@@ -70,9 +72,28 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
 
       const m = L.marker([p.lat!, p.lng!], { icon });
 
-      // 👇 Fix immagine nel popup
+      // Popup con bottone preferiti
+      const favoriteButton = onToggleFavorite ? `
+        <button 
+          onclick="toggleFavorite('${p.id}')" 
+          style="
+            position: absolute; top: 8px; right: 8px; 
+            background: rgba(255,255,255,0.9); border: none; 
+            border-radius: 50%; width: 28px; height: 28px; 
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+          "
+          title="${favorites.includes(p.id) ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}"
+        >
+          <span style="color: ${favorites.includes(p.id) ? '#ef4444' : '#9ca3af'}; font-size: 14px;">
+            ${favorites.includes(p.id) ? '❤️' : '🤍'}
+          </span>
+        </button>
+      ` : '';
+
       m.bindPopup(`
-        <div style="min-width:180px">
+        <div style="min-width:180px; position: relative;">
+          ${favoriteButton}
           <div style="font-weight:600;margin-bottom:4px">${emoji} ${escapeHtml(p.name)}</div>
           <div style="color:#555;font-size:12px">${escapeHtml(p.city)}${p.city && p.country ? ", " : ""}${escapeHtml(p.country)}</div>
           ${p.image ? `<img src="${p.image}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px"/>` : ""}
@@ -90,7 +111,17 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
     } else if (bounds.length === 1) {
       mapRef.current.setView(bounds[0] as any, 15);
     }
-  }, [filtered, onMarkerClick]);
+  }, [filtered, onMarkerClick, favorites, onToggleFavorite]);
+
+  // Aggiungi funzione globale per il toggle dei preferiti
+  useEffect(() => {
+    if (onToggleFavorite) {
+      (window as any).toggleFavorite = onToggleFavorite;
+    }
+    return () => {
+      delete (window as any).toggleFavorite;
+    };
+  }, [onToggleFavorite]);
 
   return <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />;
 }
