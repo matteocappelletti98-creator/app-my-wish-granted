@@ -188,8 +188,8 @@ export default function LuogoDetail() {
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {articles.map((article) => (
-              <article key={article.id} className="group cursor-pointer">
-                <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-blue-100/50 overflow-hidden hover:bg-white/90 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-2">
+              <Link key={article.id} to={`/articolo/${article.id}`} className="group cursor-pointer">
+                <article className="bg-white/70 backdrop-blur-sm rounded-3xl border border-blue-100/50 overflow-hidden hover:bg-white/90 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-2">
                   {/* Article Image */}
                   <div className="aspect-[4/3] overflow-hidden relative">
                     <img 
@@ -230,8 +230,8 @@ export default function LuogoDetail() {
                       </div>
                     </div>
                   </div>
-                </div>
-              </article>
+                </article>
+              </Link>
             ))}
           </div>
         </div>

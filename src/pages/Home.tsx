@@ -1,7 +1,17 @@
 import { Link } from "react-router-dom";
-import { Map, List, FileText, Route } from "lucide-react";
+import { Map, List, FileText, Route, MapPin } from "lucide-react";
+import { useState } from "react";
 
 export default function Home() {
+  const [selectedCity, setSelectedCity] = useState("");
+  
+  const cities = [
+    { value: "como", label: "Como" },
+    { value: "milano", label: "Milano" },
+    { value: "bergamo", label: "Bergamo" },
+    { value: "torino", label: "Torino" },
+    { value: "venezia", label: "Venezia" }
+  ];
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/50 via-white to-blue-100/30">
       {/* Header */}
@@ -14,13 +24,33 @@ export default function Home() {
             <p className="text-lg text-blue-700/70 font-light tracking-wide">Independent local guide</p>
           </div>
           
-          <div className="flex gap-6 justify-center">
+          <div className="flex gap-6 justify-center items-center">
             <button className="px-8 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-colors">
               Accedi
             </button>
             <button className="px-8 py-3 bg-blue-600 text-white font-medium tracking-wide hover:bg-blue-700 transition-colors rounded-2xl">
               Registrati
             </button>
+          </div>
+
+          {/* City Selector */}
+          <div className="mt-8">
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-blue-100/50 max-w-md mx-auto">
+              <div className="flex items-center gap-3 mb-4">
+                <MapPin className="w-5 h-5 text-blue-600" />
+                <h3 className="text-lg font-medium text-blue-900">Seleziona città</h3>
+              </div>
+              <select
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+                className="w-full px-4 py-3 bg-white/80 border border-blue-100 rounded-xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
+              >
+                <option value="">Tutte le città</option>
+                {cities.map(city => (
+                  <option key={city.value} value={city.value}>{city.label}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       </header>
