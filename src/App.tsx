@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Nav from "@/components/Nav";
-import Index from "@/pages/Index";
-import PlacesPage from "@/pages/PlacesPage";
+import Home from "@/pages/Home";
+import VirtualExploration from "@/pages/VirtualExploration";
+import Luoghi from "@/pages/Luoghi";
+import Blog from "@/pages/Blog";
 import AddPlace from "@/pages/AddPlace";
 
 export default function App() {
@@ -9,8 +11,10 @@ export default function App() {
     <BrowserRouter>
       <Nav />
       <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/places" element={<PlacesPage />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/virtual-exploration" element={<VirtualExploration />} />
+        <Route path="/luoghi" element={<Luoghi />} />
+        <Route path="/blog" element={<Blog />} />
         <Route path="/add-place" element={<AddPlace />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

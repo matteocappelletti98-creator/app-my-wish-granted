@@ -9,7 +9,9 @@ export default function Nav() {
     <nav className="w-full border-b bg-white">
       <div className="max-w-5xl mx-auto px-4 py-3 flex gap-4">
         <Link to="/" className={active("/")}>Home</Link>
-        <Link to="/places" className={active("/places")}>Luoghi</Link>
+        <Link to="/virtual-exploration" className={active("/virtual-exploration")}>Virtual Exploration</Link>
+        <Link to="/luoghi" className={active("/luoghi")}>Luoghi</Link>
+        <Link to="/blog" className={active("/blog")}>Blog</Link>
         <Link to="/add-place" className={active("/add-place")}>Inserisci luogo</Link>
       </div>
     </nav>
