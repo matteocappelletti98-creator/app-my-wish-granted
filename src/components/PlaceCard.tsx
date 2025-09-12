@@ -102,7 +102,7 @@ export default function PlaceCard({
   // variant = "grid"
   return (
     <article className="group relative overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:shadow-md">
-      <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
         {p.image ? (
           <img
             src={p.image}

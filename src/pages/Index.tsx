@@ -1,11 +1,9 @@
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import MapView from "@/components/MapView";
 import PlaceCard from "@/components/PlaceCard";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
 import { Link } from "react-router-dom";
-import CitySelector from "@/components/CitySelector";
-import { CITIES } from "@/types/city";
 
 // Tuo CSV pubblicato
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
@@ -15,9 +13,7 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [cat, setCat] = useState<string>("");
-  const [overlay, setOverlay] = useState(false);
-  const [citySelector, setCitySelector] = useState(false);
-  const mapRef = useRef<any>(null);
+  const [overlay, setOverlay] = useState(false); // fullscreen overlay
 
   useEffect(() => {
     (async () => {
@@ -58,7 +54,6 @@ export default function Index() {
           </div>
           <div className="flex gap-3">
             <Link to="/add-place" className="rounded-xl bg-blue-600 text-white px-3 py-2">+ Aggiungi luogo</Link>
-            <button onClick={()=>setCitySelector(true)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">🌍 Selezione città</button>
             <button onClick={()=>setOverlay(true)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">🗖 Ingrandisci</button>
           </div>
         </div>
@@ -71,13 +66,7 @@ export default function Index() {
             {loading ? (
               <div className="h-[70vh] w-full rounded-2xl border bg-slate-50" />
             ) : (
-              <MapView 
-                places={filtered} 
-                selectedCategory={cat} 
-                className="h-[70vh] w-full rounded-2xl border" 
-                showCityCircles={true}
-                isHomeStyle={true}
-              />
+              <MapView places={filtered} selectedCategory={cat} className="h-[70vh] w-full rounded-2xl border" />
             )}
           </div>
           <aside className="lg:col-span-1">
@@ -129,50 +118,15 @@ export default function Index() {
 
       {/* Overlay fullscreen mappa */}
       {overlay && (
-        <div className="fixed inset-0 z-40 bg-white">
+        <div className="fixed inset-0 z-50 bg-white">
           <div className="absolute right-4 top-4 flex gap-2">
             <Link to="/add-place" className="rounded-xl bg-blue-600 text-white px-3 py-2">+ Aggiungi luogo</Link>
-            <button onClick={()=>setCitySelector(true)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">🌍 Selezione città</button>
             <button onClick={()=>setOverlay(false)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">✖ Chiudi</button>
           </div>
-          <MapView 
-            places={filtered} 
-            selectedCategory={cat} 
-            className="h-full w-full" 
-            showCityCircles={true}
-            isHomeStyle={true}
-          />
+          {/* riuso gli stessi dati/filtri correnti */}
+          <MapView places={filtered} selectedCategory={cat} className="h-full w-full" />
         </div>
       )}
-
-      <CitySelector
-        isOpen={citySelector}
-        onClose={() => setCitySelector(false)}
-        onCitySelect={(cityId) => {
-          const city = CITIES[cityId];
-          if (city) {
-            // Se la mappa overlay è aperta, usa quella
-            if (overlay) {
-              // Trova la mappa nel DOM e triggera lo zoom
-              const mapContainer = document.querySelector('.leaflet-container');
-              if (mapContainer && (mapContainer as any)._leaflet_map) {
-                const map = (mapContainer as any)._leaflet_map;
-                map.setView([city.lat, city.lng], 10);
-              }
-            } else {
-              // Altrimenti apri l'overlay e fai zoom
-              setOverlay(true);
-              setTimeout(() => {
-                const mapContainer = document.querySelector('.leaflet-container');
-                if (mapContainer && (mapContainer as any)._leaflet_map) {
-                  const map = (mapContainer as any)._leaflet_map;
-                  map.setView([city.lat, city.lng], 10);
-                }
-              }, 200);
-            }
-          }
-        }}
-      />
     </div>
   );
 }

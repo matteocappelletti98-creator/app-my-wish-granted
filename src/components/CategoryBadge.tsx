@@ -3,10 +3,10 @@ import React from "react";
 
 export type CategoryKey =
   | "cafe" | "restaurant" | "museum" | "park" | "bar"
-  | "hotel" | "shop" | "viewpoint" | "beach" | "landmark" | "market" | "trail" | "culture" | "gelato" | "other";
+  | "hotel" | "shop" | "viewpoint" | "beach" | "landmark" | "market" | "trail" | "culture" | "other";
 
 const EMOJI: Record<CategoryKey, string> = {
-  cafe:"☕", restaurant:"🧑‍🍳", museum:"🏛️", culture:"🖼️", gelato: "🍦", park:"🌳", bar:"🍺",
+  cafe:"☕", restaurant:"🍽️", museum:"🏛️", culture:"🖼️", park:"🌳", bar:"🍺",
   hotel:"🛎️", shop:"🛍️", viewpoint:"🗻", beach:"🏖️",
   landmark:"📸", market:"🧺", trail:"🥾", other:"📍",
 };
@@ -18,7 +18,6 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["cafe","caffe","caffè","coffee"].includes(s)) return "cafe";
   if (["restaurant","ristorante","osteria","trattoria"].includes(s)) return "restaurant";
   if (["museum","museo","galleria","gallery"].includes(s)) return "museum";
-  if (["gelato","gelateria","icecream"].includes(s)) return "gelato";
   if (["park","parco","giardino"].includes(s)) return "park";
   if (["bar","pub","winebar","enoteca"].includes(s)) return "bar";
   if (["hotel","bnb","b&b","hostel"].includes(s)) return "hotel";
@@ -40,7 +39,7 @@ export default function CategoryBadge({ category, showLabel=false }:{
   const labelMap: Record<CategoryKey,string> = {
     cafe:"Caffè", restaurant:"Ristorante", museum:"Museo", park:"Parco",
     bar:"Bar", hotel:"Hotel", shop:"Negozio", viewpoint:"Belvedere",
-    beach:"Spiaggia", landmark:"Monumento", market:"Mercato", trail:"Sentiero", culture:"Cultura", gelato:"Gelato", other:"Altro"
+    beach:"Spiaggia", landmark:"Monumento", market:"Mercato", trail:"Sentiero", culture:"Cultura", other:"Altro"
   };
   return (
     <span className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-2.5 py-1 text-gray-700">
