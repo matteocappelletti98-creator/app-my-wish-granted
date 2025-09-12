@@ -49,7 +49,7 @@ export default function Luoghi() {
   }
 
   return (
-    <div key="luoghi-page-v2" className="min-h-screen bg-gradient-to-br from-blue-50/50 via-white to-blue-100/30">
+    <div key="luoghi-page-v3" className="min-h-screen bg-gradient-to-br from-blue-50/50 via-white to-blue-100/30">
       {/* Header */}
       <header className="px-6 py-12 text-center border-b border-blue-100/30">
         <div className="mx-auto max-w-4xl">
