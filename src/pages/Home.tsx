@@ -6,11 +6,11 @@ export default function Home() {
   const [selectedCity, setSelectedCity] = useState("");
   
   const cities = [
-    { value: "como", label: "Como", description: "Lago e montagne" },
-    { value: "milano", label: "Milano", description: "Moda e design" },
-    { value: "bergamo", label: "Bergamo", description: "Città alta medievale" },
-    { value: "torino", label: "Torino", description: "Storia e architettura" },
-    { value: "venezia", label: "Venezia", description: "Canali e gondole" }
+    { value: "como", label: "Como" },
+    { value: "milano", label: "Milano" },
+    { value: "bergamo", label: "Bergamo" },
+    { value: "torino", label: "Torino" },
+    { value: "venezia", label: "Venezia" }
   ];
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 relative overflow-hidden">
@@ -40,41 +40,23 @@ export default function Home() {
             </button>
           </div>
 
-          {/* City Selector Enhanced */}
-          <div className="max-w-lg mx-auto">
-            <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-8 border border-white/50 shadow-xl">
-              <div className="flex items-center gap-3 mb-6 justify-center">
-                <div className="p-2 bg-blue-100 rounded-xl">
-                  <MapPin className="w-6 h-6 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-light text-blue-900">Seleziona la tua destinazione</h3>
+          {/* City Selector */}
+          <div className="max-w-md mx-auto">
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-blue-100/50">
+              <div className="flex items-center gap-3 mb-4">
+                <MapPin className="w-5 h-5 text-blue-600" />
+                <h3 className="text-lg font-medium text-blue-900">Seleziona città</h3>
               </div>
-              
-              <div className="space-y-3">
+              <select
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+                className="w-full px-4 py-3 bg-white/80 border border-blue-100 rounded-xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
+              >
+                <option value="">Tutte le città</option>
                 {cities.map(city => (
-                  <button
-                    key={city.value}
-                    onClick={() => setSelectedCity(city.value)}
-                    className={`w-full p-4 rounded-2xl border transition-all duration-300 text-left group ${
-                      selectedCity === city.value
-                        ? 'bg-blue-600 border-blue-600 text-white shadow-lg'
-                        : 'bg-white/70 border-blue-100/50 text-blue-900 hover:bg-white hover:shadow-md hover:scale-[1.02]'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-medium text-lg">{city.label}</div>
-                        <div className={`text-sm ${selectedCity === city.value ? 'text-blue-100' : 'text-blue-600/70'}`}>
-                          {city.description}
-                        </div>
-                      </div>
-                      <div className={`w-2 h-2 rounded-full transition-all ${
-                        selectedCity === city.value ? 'bg-white' : 'bg-blue-200 group-hover:bg-blue-400'
-                      }`}></div>
-                    </div>
-                  </button>
+                  <option key={city.value} value={city.value}>{city.label}</option>
                 ))}
-              </div>
+              </select>
             </div>
           </div>
         </div>
