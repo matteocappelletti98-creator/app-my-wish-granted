@@ -10,7 +10,7 @@ export default function Luoghi() {
   const [all, setAll] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -33,10 +33,25 @@ export default function Luoghi() {
     return all.filter(p => {
       const t = (p.name + p.city + p.description).toLowerCase();
       const okText = !needle || t.includes(needle);
-      const okCat = !selectedCategory || normalizeCategory(p.category) === selectedCategory;
+      const okCat = selectedCategories.length === 0 || selectedCategories.some(cat => normalizeCategory(p.category) === cat);
       return okText && okCat;
     });
-  }, [all, q, selectedCategory]);
+  }, [all, q, selectedCategories]);
+
+  // Luoghi che hanno una pagina dedicata (solo alcuni selezionati)
+  const placesWithDedicatedPage = [
+    'caffe-e-caffe-como',
+    'duomo-di-como-como',
+    'fornaio-beretta-como'
+  ];
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories(prev => 
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
 
   if (loading) {
     return (
@@ -74,30 +89,36 @@ export default function Luoghi() {
                 />
               </div>
               
-              {/* Category Filter */}
+              {/* Category Filter - Multiple Selection */}
               <div className="flex flex-wrap gap-2">
                 <button
-                  onClick={() => setSelectedCategory("")}
+                  onClick={() => setSelectedCategories([])}
                   className={`px-4 py-2 rounded-xl border transition-all font-light tracking-wide ${
-                    selectedCategory === "" 
+                    selectedCategories.length === 0
                       ? "bg-blue-600 text-white border-blue-600" 
                       : "bg-white/80 text-blue-700 border-blue-200 hover:bg-blue-50"
                   }`}
                 >
-                  Tutte
+                  Tutte ({all.length})
                 </button>
                 {categories.map(cat => (
                   <button
                     key={cat}
-                    onClick={() => setSelectedCategory(cat === selectedCategory ? "" : cat)}
+                    onClick={() => toggleCategory(cat)}
                     className={`px-4 py-2 rounded-xl border transition-all font-light tracking-wide flex items-center gap-2 ${
-                      selectedCategory === cat
+                      selectedCategories.includes(cat)
                         ? "bg-blue-600 text-white border-blue-600"
                         : "bg-white/80 text-blue-700 border-blue-200 hover:bg-blue-50"
                     }`}
                   >
                     <CategoryBadge category={cat} />
                     <span>{cat}</span>
+                    <span className="text-xs bg-blue-200/30 px-1.5 py-0.5 rounded-full">
+                      {all.filter(p => normalizeCategory(p.category) === cat).length}
+                    </span>
+                    {selectedCategories.includes(cat) && (
+                      <span className="ml-1 text-xs bg-white/20 px-1 rounded">✓</span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -116,8 +137,8 @@ export default function Luoghi() {
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {filtered.map((p, i) => (
-                <Link key={i} to={`/luogo/${p.slug}`} className="group">
-                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-blue-100/50 overflow-hidden hover:bg-white/90 hover:shadow-xl hover:shadow-blue-100/20 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col cursor-pointer">
+                <div key={i} className="group">
+                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-blue-100/50 overflow-hidden hover:bg-white/90 hover:shadow-xl hover:shadow-blue-100/20 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col relative">
                     {/* Image */}
                     <div className="aspect-square overflow-hidden">
                       {p.image ? (
@@ -152,11 +173,21 @@ export default function Luoghi() {
                       )}
                       
                       {p.description && (
-                        <p className="text-sm text-blue-700/80 font-light line-clamp-3 flex-1">{p.description}</p>
+                        <p className="text-sm text-blue-700/80 font-light line-clamp-3 flex-1 mb-4">{p.description}</p>
+                      )}
+
+                      {/* Bottone dedicato solo per alcuni luoghi */}
+                      {placesWithDedicatedPage.includes(p.id) && (
+                        <Link 
+                          to={`/luogo/${p.slug}`}
+                          className="mt-auto w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors text-center"
+                        >
+                          Entra dentro il luogo
+                        </Link>
                       )}
                     </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           )}

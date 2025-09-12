@@ -13,7 +13,7 @@ export default function VirtualExploration() {
   const [all, setAll] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [cat, setCat] = useState<string>("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [overlay, setOverlay] = useState(false); // fullscreen overlay
   const [favorites, setFavorites] = useState<string[]>([]);
 
@@ -59,10 +59,18 @@ export default function VirtualExploration() {
     return all.filter(p => {
       const t = `${p.name} ${p.city} ${p.description}`.toLowerCase();
       const okText = !needle || t.includes(needle);
-      const okCat = !cat || normalizeCategory(p.category) === normalizeCategory(cat);
+      const okCat = selectedCategories.length === 0 || selectedCategories.some(cat => normalizeCategory(p.category) === cat);
       return okText && okCat;
     });
-  }, [all, search, cat]);
+  }, [all, search, selectedCategories]);
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories(prev => 
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
 
   // Filtra solo i luoghi preferiti per la lista
   const favoritesList = useMemo(() => {
@@ -96,7 +104,7 @@ export default function VirtualExploration() {
             ) : (
               <MapView 
                 places={filtered} 
-                selectedCategory={cat} 
+                selectedCategory={selectedCategories[0] || ""} 
                 className="h-[70vh] w-full rounded-2xl border"
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
@@ -107,16 +115,22 @@ export default function VirtualExploration() {
             <div className="rounded-2xl border p-4 bg-white">
               <h3 className="font-semibold mb-2">Categorie</h3>
               <div className="flex flex-col gap-2">
-                <button onClick={()=>setCat("")}
-                  className={`text-left rounded-xl px-3 py-2 border ${cat==="" ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
+                <button onClick={() => setSelectedCategories([])}
+                  className={`text-left rounded-xl px-3 py-2 border ${selectedCategories.length === 0 ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
                   Tutte
                 </button>
                 {categories.map(c => (
-                  <button key={c} onClick={()=> setCat(c===cat?"":c)}
+                  <button key={c} onClick={() => toggleCategory(c)}
                     className={`text-left rounded-xl px-3 py-2 border flex items-center gap-2
-                    ${c===cat ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
+                    ${selectedCategories.includes(c) ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
                     <CategoryBadge category={c} />
                     <span className="text-sm">{c}</span>
+                    <span className="text-xs bg-blue-200/30 px-1 rounded">
+                      {all.filter(p => normalizeCategory(p.category) === c).length}
+                    </span>
+                    {selectedCategories.includes(c) && (
+                      <span className="ml-auto text-xs bg-white/20 px-1 rounded">✓</span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -168,7 +182,7 @@ export default function VirtualExploration() {
           {/* riuso gli stessi dati/filtri correnti */}
           <MapView 
             places={filtered} 
-            selectedCategory={cat} 
+            selectedCategory={selectedCategories[0] || ""} 
             className="h-full w-full"
             favorites={favorites}
             onToggleFavorite={toggleFavorite}
