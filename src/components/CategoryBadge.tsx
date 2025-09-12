@@ -6,9 +6,9 @@ export type CategoryKey =
   | "hotel" | "shop" | "viewpoint" | "beach" | "landmark" | "market" | "trail" | "culture" | "other";
 
 const EMOJI: Record<CategoryKey, string> = {
-  cafe:"☕", restaurant:"🍽️", museum:"🏛️", culture:"🖼️", adventure:"🌋", bar:"🍺",
+  cafe:"☕", restaurant:"🍽️", museum:"🏛️", culture:"🖼️", bar:"🍺",
   hotel:"🛎️", shop:"🛍️", viewpoint:"🗻", beach:"🏖️",
-  landmark:"📸", market:"🧺", trail:"🥾", other:"📍",
+  landmark:"📸", market:"🧺", trail:"🥾", park:"🌳", other:"📍",
 };
 
 function strip(s:string){ return s.normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
