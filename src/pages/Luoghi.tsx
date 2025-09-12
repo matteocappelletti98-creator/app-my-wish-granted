@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import { Search, Filter } from "lucide-react";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
@@ -115,8 +116,8 @@ export default function Luoghi() {
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {filtered.map((p, i) => (
-                <div key={i} className="group">
-                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-blue-100/50 overflow-hidden hover:bg-white/90 hover:shadow-xl hover:shadow-blue-100/20 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
+                <Link key={i} to={`/luogo/${p.slug}`} className="group">
+                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-blue-100/50 overflow-hidden hover:bg-white/90 hover:shadow-xl hover:shadow-blue-100/20 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col cursor-pointer">
                     {/* Image */}
                     <div className="aspect-square overflow-hidden">
                       {p.image ? (
@@ -155,7 +156,7 @@ export default function Luoghi() {
                       )}
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}
