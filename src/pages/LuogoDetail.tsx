@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
-import { ArrowLeft, MapPin, Clock, Star, Share2, Bookmark, Camera, Calendar, Users } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, Star, Share2, Bookmark, Camera, Calendar, Users, X } from "lucide-react";
 import CategoryBadge from "@/components/CategoryBadge";
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
@@ -45,6 +45,9 @@ export default function LuogoDetail() {
   const [place, setPlace] = useState<Place | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -80,6 +83,14 @@ export default function LuogoDetail() {
   }
 
   const articles = getEditorialArticles(place.name);
+
+  const handleSubmitReview = () => {
+    // Qui implementare la logica per inviare la recensione
+    console.log("Recensione inviata:", { rating, reviewText });
+    setShowReviewModal(false);
+    setRating(0);
+    setReviewText("");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white to-blue-100/20">
@@ -250,17 +261,85 @@ export default function LuogoDetail() {
                 Condividi la tua esperienza e aiuta altri viaggiatori a scoprire questo luogo
               </p>
               <div className="flex gap-4 justify-center">
-                <button className="px-8 py-3 bg-white text-blue-600 font-medium rounded-xl hover:bg-blue-50 transition-colors">
+                <button 
+                  onClick={() => setShowReviewModal(true)}
+                  className="px-8 py-3 bg-white text-blue-600 font-medium rounded-xl hover:bg-blue-50 transition-colors"
+                >
                   Scrivi una recensione
-                </button>
-                <button className="px-8 py-3 border border-white/30 text-white font-medium rounded-xl hover:bg-white/10 transition-colors">
-                  Carica foto
                 </button>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Review Modal */}
+      {showReviewModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full mx-4 relative">
+            <button
+              onClick={() => setShowReviewModal(false)}
+              className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+            
+            <h3 className="text-2xl font-light text-blue-900 mb-6 text-center">
+              Scrivi una recensione
+            </h3>
+            
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-blue-900 mb-3">
+                Voto (1-10)
+              </label>
+              <div className="flex gap-2 justify-center">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((star) => (
+                  <button
+                    key={star}
+                    onClick={() => setRating(star)}
+                    className={`w-10 h-10 rounded-full border-2 flex items-center justify-center font-medium transition-all ${
+                      star <= rating
+                        ? 'bg-blue-600 border-blue-600 text-white'
+                        : 'border-blue-200 text-blue-400 hover:border-blue-400'
+                    }`}
+                  >
+                    {star}
+                  </button>
+                ))}
+              </div>
+            </div>
+            
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-blue-900 mb-3">
+                La tua recensione
+              </label>
+              <textarea
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                placeholder="Condividi la tua esperienza..."
+                className="w-full px-4 py-3 border border-blue-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all"
+                rows={4}
+              />
+            </div>
+            
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowReviewModal(false)}
+                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                Annulla
+              </button>
+              <button
+                onClick={handleSubmitReview}
+                disabled={rating === 0}
+                className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                Pubblica
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
