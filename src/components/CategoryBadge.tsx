@@ -6,7 +6,7 @@ export type CategoryKey =
   | "hotel" | "shop" | "viewpoint" | "beach" | "landmark" | "market" | "trail" | "culture" | "other";
 
 const EMOJI: Record<CategoryKey, string> = {
-  cafe:"☕", restaurant:"🍽️", museum:"🏛️", culture:"🖼️", park:"🌳", bar:"🍺",
+  cafe:"☕", restaurant:"🍽️", museum:"🏛️", culture:"🖼️", adventure:"🌋", bar:"🍺",
   hotel:"🛎️", shop:"🛍️", viewpoint:"🗻", beach:"🏖️",
   landmark:"📸", market:"🧺", trail:"🥾", other:"📍",
 };
