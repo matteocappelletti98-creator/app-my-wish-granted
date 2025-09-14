@@ -72,7 +72,7 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
 
       const m = L.marker([p.lat!, p.lng!], { icon });
 
-      // Popup con bottone preferiti
+      // Popup con bottone preferiti e bottone dettaglio
       const favoriteButton = onToggleFavorite ? `
         <button 
           onclick="toggleFavorite('${p.id}')" 
@@ -91,12 +91,31 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
         </button>
       ` : '';
 
+      // Controllare se il luogo ha una pagina dedicata
+      const hasDetailPage = ['caffe-e-caffe-como', 'duomo-di-como-como', 'fornaio-beretta-como'].includes(p.slug);
+      
+      const detailButton = hasDetailPage ? `
+        <button 
+          onclick="goToPlace('${p.slug}')" 
+          style="
+            background: #3b82f6; color: white; border: none; 
+            border-radius: 6px; padding: 6px 12px; margin-top: 8px;
+            font-size: 12px; cursor: pointer; width: 100%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+          "
+          title="Vai alla pagina del luogo"
+        >
+          🚪 Entra dentro il luogo
+        </button>
+      ` : '';
+
       m.bindPopup(`
         <div style="min-width:180px; position: relative;">
           ${favoriteButton}
           <div style="font-weight:600;margin-bottom:4px">${emoji} ${escapeHtml(p.name)}</div>
           <div style="color:#555;font-size:12px">${escapeHtml(p.city)}${p.city && p.country ? ", " : ""}${escapeHtml(p.country)}</div>
           ${p.image ? `<img src="${p.image}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px"/>` : ""}
+          ${detailButton}
         </div>
       `);
 
@@ -113,13 +132,20 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
     }
   }, [filtered, onMarkerClick, favorites, onToggleFavorite]);
 
-  // Aggiungi funzione globale per il toggle dei preferiti
+  // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
   useEffect(() => {
     if (onToggleFavorite) {
       (window as any).toggleFavorite = onToggleFavorite;
     }
+    
+    // Funzione globale per navigare al luogo
+    (window as any).goToPlace = (slug: string) => {
+      window.location.href = `/luogo/${slug}`;
+    };
+    
     return () => {
       delete (window as any).toggleFavorite;
+      delete (window as any).goToPlace;
     };
   }, [onToggleFavorite]);
 
