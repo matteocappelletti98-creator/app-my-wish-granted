@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { Map, List, FileText, Route, MapPin } from "lucide-react";
+import { Map, List, FileText, Route, MapPin, Globe, Info } from "lucide-react";
 import { useState } from "react";
 
 export default function Home() {
   const [selectedCity, setSelectedCity] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("it");
   
   const cities = [
     { value: "como", label: "Como" },
@@ -11,6 +12,14 @@ export default function Home() {
     { value: "bergamo", label: "Bergamo" },
     { value: "torino", label: "Torino" },
     { value: "venezia", label: "Venezia" }
+  ];
+
+  const languages = [
+    { value: "it", label: "Italiano" },
+    { value: "en", label: "English" },
+    { value: "fr", label: "Français" },
+    { value: "de", label: "Deutsch" },
+    { value: "es", label: "Español" }
   ];
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 relative overflow-hidden">
@@ -38,10 +47,16 @@ export default function Home() {
             <button className="px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105">
               Registrati
             </button>
+            <button className="px-8 py-4 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
+              <Info className="w-4 h-4" />
+              Chi siamo?
+            </button>
           </div>
 
-          {/* City Selector */}
-          <div className="max-w-md mx-auto">
+          {/* Selectors Container */}
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            {/* City Selector */}
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-blue-100/50">
               <div className="flex items-center gap-3 mb-4">
                 <MapPin className="w-5 h-5 text-blue-600" />
@@ -55,6 +70,23 @@ export default function Home() {
                 <option value="">Tutte le città</option>
                 {cities.map(city => (
                   <option key={city.value} value={city.value}>{city.label}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Language Selector */}
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-blue-100/50">
+              <div className="flex items-center gap-3 mb-4">
+                <Globe className="w-5 h-5 text-blue-600" />
+                <h3 className="text-lg font-medium text-blue-900">Seleziona lingua</h3>
+              </div>
+              <select
+                value={selectedLanguage}
+                onChange={(e) => setSelectedLanguage(e.target.value)}
+                className="w-full px-4 py-3 bg-white/80 border border-blue-100 rounded-xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
+              >
+                {languages.map(language => (
+                  <option key={language.value} value={language.value}>{language.label}</option>
                 ))}
               </select>
             </div>
