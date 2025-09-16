@@ -161,13 +161,12 @@ export default function Home() {
               <Link 
                 to="/traveller-path" 
                 className="block"
-                onClick={(e) => {
+                onMouseEnter={() => {
                   if (hasIncompleteSurvey) {
-                    e.preventDefault();
                     setShowSurveyMessage(true);
-                    setTimeout(() => setShowSurveyMessage(false), 3000);
                   }
                 }}
+                onMouseLeave={() => setShowSurveyMessage(false)}
               >
                 <div className={`backdrop-blur-lg rounded-3xl p-12 text-center border transition-all duration-500 hover:-translate-y-2 relative overflow-hidden ${
                   hasIncompleteSurvey 
@@ -208,11 +207,11 @@ export default function Home() {
               </Link>
 
               {/* Survey Message Popup */}
-              {showSurveyMessage && (
+              {showSurveyMessage && hasIncompleteSurvey && (
                 <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-4 bg-orange-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 animate-bounce">
                   <div className="flex items-center gap-2">
                     <AlertCircle className="w-4 h-4" />
-                    <span className="text-sm font-medium">Finisci il questionario per continuare!</span>
+                    <span className="text-sm font-medium">Clicca per finire il questionario!</span>
                   </div>
                   <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-orange-500"></div>
                 </div>
