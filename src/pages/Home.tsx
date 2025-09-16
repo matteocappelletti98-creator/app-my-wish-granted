@@ -20,11 +20,17 @@ export default function Home() {
   }, []);
   
   const cities = [
-    { value: "como", label: "Como" },
     { value: "milano", label: "Milano" },
-    { value: "bergamo", label: "Bergamo" },
-    { value: "torino", label: "Torino" },
-    { value: "venezia", label: "Venezia" }
+    { value: "roma", label: "Roma" },
+    { value: "new-york", label: "New York" },
+    { value: "parigi", label: "Parigi" },
+    { value: "bangkok", label: "Bangkok" },
+    { value: "las-vegas", label: "Las Vegas" },
+    { value: "berlino", label: "Berlino" },
+    { value: "beirut", label: "Beirut" },
+    { value: "ryad", label: "Ryad" },
+    { value: "tokyo", label: "Tokyo" },
+    { value: "sidney", label: "Sidney" }
   ];
 
   const languages = [
