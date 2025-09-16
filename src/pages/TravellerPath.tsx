@@ -75,6 +75,7 @@ const questions: Question[] = [
     id: "travel_inclination",
     category: "Viaggio",
     question: "Inclinazione",
+    multiple: true,
     options: [
       { value: "adventure", label: "Avventura" },
       { value: "relax", label: "Relax" },
@@ -99,6 +100,7 @@ const questions: Question[] = [
     id: "transport",
     category: "Viaggio",
     question: "Mezzo di trasporto",
+    multiple: true,
     options: [
       { value: "own", label: "Proprio" },
       { value: "none", label: "No" },
