@@ -143,15 +143,15 @@ export default function Home() {
               </div>
             </Link>
 
-            {/* Travelling path */}
-            <Link to="/travelling-path" className="group">
+            {/* Traveller Path */}
+            <Link to="/traveller-path" className="group">
               <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-12 text-center border border-white/50 hover:bg-white/80 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative z-10">
                   <div className="w-24 h-24 mx-auto mb-8 bg-gradient-to-br from-emerald-100 to-blue-100 rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-lg">
                     <Route className="w-12 h-12 text-blue-600" strokeWidth={1.5} />
                   </div>
-                  <h2 className="text-2xl font-light text-blue-900 tracking-wide mb-2">Travelling path</h2>
+                  <h2 className="text-2xl font-light text-blue-900 tracking-wide mb-2">Traveller.Path</h2>
                   <p className="text-blue-600/70 font-light text-sm">Itinerari personalizzati</p>
                 </div>
               </div>

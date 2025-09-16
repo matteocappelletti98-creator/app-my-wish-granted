@@ -7,6 +7,7 @@ import Blog from "@/pages/Blog";
 import LuogoDetail from "@/pages/LuogoDetail";
 import ArticlePage from "@/pages/ArticlePage";
 import AddPlace from "@/pages/AddPlace";
+import TravellerPath from "@/pages/TravellerPath";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/luogo/:slug" element={<LuogoDetail />} />
         <Route path="/articolo/:articleId" element={<ArticlePage />} />
         <Route path="/add-place" element={<AddPlace />} />
+        <Route path="/traveller-path" element={<TravellerPath />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
