@@ -20,6 +20,7 @@ export default function Home() {
   }, []);
   
   const cities = [
+    { value: "como", label: "Como" },
     { value: "milano", label: "Milano" },
     { value: "roma", label: "Roma" },
     { value: "new-york", label: "New York" },
