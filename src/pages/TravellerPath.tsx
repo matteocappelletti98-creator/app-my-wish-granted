@@ -156,21 +156,35 @@ const questions: Question[] = [
 ];
 
 export default function TravellerPath() {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load saved answers from localStorage
+  // Load saved answers from localStorage and find the first unanswered question
   useEffect(() => {
     const savedAnswers = localStorage.getItem('traveller-path-answers');
     if (savedAnswers) {
-      setAnswers(JSON.parse(savedAnswers));
+      const parsedAnswers = JSON.parse(savedAnswers);
+      setAnswers(parsedAnswers);
+      
+      // Find the first unanswered question
+      const firstUnansweredIndex = questions.findIndex(question => {
+        const answer = parsedAnswers[question.id];
+        return !answer || (question.multiple && (!answer || answer.length === 0));
+      });
+      
+      // If all questions are answered, stay at the last question, otherwise go to first unanswered
+      setCurrentQuestionIndex(firstUnansweredIndex === -1 ? questions.length - 1 : firstUnansweredIndex);
     }
+    setIsLoaded(true);
   }, []);
 
-  // Save answers to localStorage whenever they change
+  // Save answers to localStorage whenever they change (but only after initial load)
   useEffect(() => {
-    localStorage.setItem('traveller-path-answers', JSON.stringify(answers));
-  }, [answers]);
+    if (isLoaded) {
+      localStorage.setItem('traveller-path-answers', JSON.stringify(answers));
+    }
+  }, [answers, isLoaded]);
 
   const currentQuestion = questions[currentQuestionIndex];
   const currentAnswer = answers[currentQuestion.id];
@@ -211,6 +225,15 @@ export default function TravellerPath() {
     );
   };
 
+  // Don't render until data is loaded
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 flex items-center justify-center">
+        <div className="text-blue-600">Caricamento...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30">
       <div className="max-w-4xl mx-auto px-4 py-8">
@@ -226,6 +249,11 @@ export default function TravellerPath() {
             <div>
               <h1 className="text-3xl font-light text-blue-900 mb-2">Traveller.Path</h1>
               <p className="text-blue-600/70">Crea il tuo itinerario personalizzato</p>
+              {getAnsweredQuestionsCount() > 0 && getAnsweredQuestionsCount() < questions.length && (
+                <p className="text-orange-600 text-sm mt-1">
+                  Stai continuando il questionario da dove avevi lasciato
+                </p>
+              )}
             </div>
             
             <div className="text-sm text-blue-600/70">
