@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, MapPin, ExternalLink } from "lucide-react";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
@@ -166,25 +166,53 @@ export default function Luoghi() {
                         )}
                       </div>
                       
-                      {(p.city || p.country) && (
-                        <p className="text-sm text-blue-600/70 font-light mb-3">
-                          {p.city}{p.city && p.country ? ", " : ""}{p.country}
-                        </p>
+                      {(p.address || p.city || p.country) && (
+                        <div className="text-sm text-blue-600/70 font-light mb-3">
+                          <div className="flex items-center gap-1 mb-1">
+                            <MapPin className="w-3 h-3" />
+                            <span>
+                              {p.address && (
+                                <div>{p.address}</div>
+                              )}
+                              {(p.city || p.country) && (
+                                <div>{p.city}{p.city && p.country ? ", " : ""}{p.country}</div>
+                              )}
+                            </span>
+                          </div>
+                        </div>
                       )}
                       
                       {p.description && (
                         <p className="text-sm text-blue-700/80 font-light line-clamp-3 flex-1 mb-4">{p.description}</p>
                       )}
 
-                      {/* Bottone dedicato solo per alcuni luoghi */}
-                      {placesWithDedicatedPage.includes(p.id) && (
-                        <Link 
-                          to={`/luogo/${p.slug}`}
-                          className="mt-auto w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors text-center"
-                        >
-                          Entra dentro il luogo
-                        </Link>
-                      )}
+                      {/* Pulsanti azione */}
+                      <div className="mt-auto space-y-2">
+                        {/* Pulsante Google Maps */}
+                        {(p.address || p.city) && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const query = encodeURIComponent(p.address || `${p.name}, ${p.city}, ${p.country}`);
+                              window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+                            }}
+                            className="w-full px-3 py-2 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            Apri in Google Maps
+                          </button>
+                        )}
+                        
+                        {/* Bottone dedicato solo per alcuni luoghi */}
+                        {placesWithDedicatedPage.includes(p.id) && (
+                          <Link 
+                            to={`/luogo/${p.slug}`}
+                            className="block w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors text-center"
+                          >
+                            Entra dentro il luogo
+                          </Link>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

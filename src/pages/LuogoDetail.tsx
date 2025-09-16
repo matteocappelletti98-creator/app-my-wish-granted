@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
-import { ArrowLeft, MapPin, Clock, Star, Share2, Bookmark, Camera, Calendar, Users, X } from "lucide-react";
+import { ArrowLeft, MapPin, Clock, Star, Share2, Bookmark, Camera, Calendar, Users, X, ExternalLink } from "lucide-react";
 import CategoryBadge from "@/components/CategoryBadge";
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
@@ -135,9 +135,19 @@ export default function LuogoDetail() {
                   </div>
                 </div>
                 <h1 className="text-4xl font-light mb-2 tracking-wide">{place.name}</h1>
-                <div className="flex items-center gap-2 text-white/90 mb-3">
-                  <MapPin className="w-4 h-4" />
-                  <span className="font-light">{place.city}, {place.country}</span>
+                <div className="space-y-1 mb-3">
+                  {place.address && (
+                    <div className="flex items-center gap-2 text-white/90">
+                      <MapPin className="w-4 h-4" />
+                      <span className="font-light">{place.address}</span>
+                    </div>
+                  )}
+                  {(place.city || place.country) && (
+                    <div className="flex items-center gap-2 text-white/90">
+                      <MapPin className="w-4 h-4" />
+                      <span className="font-light">{place.city}{place.city && place.country ? ", " : ""}{place.country}</span>
+                    </div>
+                  )}
                 </div>
                 {place.description && (
                   <p className="text-lg font-light text-white/90 max-w-2xl leading-relaxed">
@@ -147,6 +157,20 @@ export default function LuogoDetail() {
               </div>
               
               <div className="flex gap-3 ml-6">
+                {/* Pulsante Google Maps */}
+                {(place.address || place.city) && (
+                  <button
+                    onClick={() => {
+                      const query = encodeURIComponent(place.address || `${place.name}, ${place.city}, ${place.country}`);
+                      window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+                    }}
+                    className="px-4 py-2 bg-green-600/90 backdrop-blur-md rounded-xl hover:bg-green-700/90 transition-all text-white font-medium flex items-center gap-2"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    Google Maps
+                  </button>
+                )}
+                
                 <button 
                   onClick={() => setIsSaved(!isSaved)}
                   className="p-3 bg-white/20 backdrop-blur-md rounded-xl hover:bg-white/30 transition-all"
