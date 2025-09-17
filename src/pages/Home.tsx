@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Map, List, FileText, Route, MapPin, Globe, Info, Clock, AlertCircle } from "lucide-react";
+import { Map, List, FileText, Route, MapPin, Globe, Info, Clock, AlertCircle, Settings } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function Home() {
@@ -71,6 +71,10 @@ export default function Home() {
               <Info className="w-4 h-4" />
               Chi siamo?
             </button>
+            <Link to="/impostazioni" className="px-8 py-4 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              Impostazioni
+            </Link>
           </div>
 
           {/* Selectors Container */}

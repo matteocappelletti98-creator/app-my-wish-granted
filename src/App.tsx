@@ -8,6 +8,8 @@ import LuogoDetail from "@/pages/LuogoDetail";
 import ArticlePage from "@/pages/ArticlePage";
 import AddPlace from "@/pages/AddPlace";
 import TravellerPath from "@/pages/TravellerPath";
+import Impostazioni from "@/pages/Impostazioni";
+import Privacy from "@/pages/Privacy";
 
 export default function App() {
   return (
@@ -22,6 +24,8 @@ export default function App() {
         <Route path="/articolo/:articleId" element={<ArticlePage />} />
         <Route path="/add-place" element={<AddPlace />} />
         <Route path="/traveller-path" element={<TravellerPath />} />
+        <Route path="/impostazioni" element={<Impostazioni />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
