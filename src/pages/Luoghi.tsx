@@ -38,7 +38,7 @@ export default function Luoghi() {
       
       // Sub-filter logic for restaurants
       let okSubFilter = true;
-      if (selectedCategories.includes('ristoranti') && selectedSubFilters.length > 0) {
+      if (selectedCategories.includes('restaurant') && selectedSubFilters.length > 0) {
         const desc = p.description.toLowerCase();
         okSubFilter = selectedSubFilters.some(subFilter => {
           if (subFilter === 'carne') return desc.includes('carne') || desc.includes('bistecca') || desc.includes('manzo') || desc.includes('agnello') || desc.includes('maiale');
@@ -65,7 +65,7 @@ export default function Luoghi() {
         : [...prev, category]
     );
     // Reset sub-filters when changing categories
-    if (category !== 'ristoranti') {
+    if (category !== 'restaurant') {
       setSelectedSubFilters([]);
     }
   };
@@ -157,7 +157,7 @@ export default function Luoghi() {
               </div>
 
               {/* Sub-filters for restaurants */}
-              {selectedCategories.includes('ristoranti') && (
+              {selectedCategories.includes('restaurant') && (
                 <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-blue-100">
                   <span className="text-sm text-blue-600 font-medium">Tipo di cucina:</span>
                   {['carne', 'pesce'].map(subFilter => (
