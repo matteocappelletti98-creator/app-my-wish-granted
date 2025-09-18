@@ -11,6 +11,7 @@ export default function Luoghi() {
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedSubFilters, setSelectedSubFilters] = useState<string[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -34,9 +35,21 @@ export default function Luoghi() {
       const t = (p.name + p.city + p.description).toLowerCase();
       const okText = !needle || t.includes(needle);
       const okCat = selectedCategories.length === 0 || selectedCategories.some(cat => normalizeCategory(p.category) === cat);
-      return okText && okCat;
+      
+      // Sub-filter logic for restaurants
+      let okSubFilter = true;
+      if (selectedCategories.includes('ristoranti') && selectedSubFilters.length > 0) {
+        const desc = p.description.toLowerCase();
+        okSubFilter = selectedSubFilters.some(subFilter => {
+          if (subFilter === 'carne') return desc.includes('carne') || desc.includes('bistecca') || desc.includes('manzo') || desc.includes('agnello') || desc.includes('maiale');
+          if (subFilter === 'pesce') return desc.includes('pesce') || desc.includes('mare') || desc.includes('salmone') || desc.includes('branzino') || desc.includes('orata') || desc.includes('seafood');
+          return false;
+        });
+      }
+      
+      return okText && okCat && okSubFilter;
     });
-  }, [all, q, selectedCategories]);
+  }, [all, q, selectedCategories, selectedSubFilters]);
 
   // Luoghi che hanno una pagina dedicata (solo alcuni selezionati)
   const placesWithDedicatedPage = [
@@ -50,6 +63,18 @@ export default function Luoghi() {
       prev.includes(category)
         ? prev.filter(c => c !== category)
         : [...prev, category]
+    );
+    // Reset sub-filters when changing categories
+    if (category !== 'ristoranti') {
+      setSelectedSubFilters([]);
+    }
+  };
+
+  const toggleSubFilter = (subFilter: string) => {
+    setSelectedSubFilters(prev => 
+      prev.includes(subFilter)
+        ? prev.filter(f => f !== subFilter)
+        : [...prev, subFilter]
     );
   };
 
@@ -97,7 +122,10 @@ export default function Luoghi() {
               {/* Category Filter - Multiple Selection */}
               <div className="flex flex-wrap gap-2">
                 <button
-                  onClick={() => setSelectedCategories([])}
+                  onClick={() => {
+                    setSelectedCategories([]);
+                    setSelectedSubFilters([]);
+                  }}
                   className={`px-4 py-2 rounded-xl border transition-all font-light tracking-wide ${
                     selectedCategories.length === 0
                       ? "bg-blue-600 text-white border-blue-600" 
@@ -127,6 +155,29 @@ export default function Luoghi() {
                   </button>
                 ))}
               </div>
+
+              {/* Sub-filters for restaurants */}
+              {selectedCategories.includes('ristoranti') && (
+                <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-blue-100">
+                  <span className="text-sm text-blue-600 font-medium">Tipo di cucina:</span>
+                  {['carne', 'pesce'].map(subFilter => (
+                    <button
+                      key={subFilter}
+                      onClick={() => toggleSubFilter(subFilter)}
+                      className={`px-3 py-1.5 rounded-lg border transition-all text-sm font-light tracking-wide ${
+                        selectedSubFilters.includes(subFilter)
+                          ? "bg-blue-500 text-white border-blue-500"
+                          : "bg-white/60 text-blue-600 border-blue-200 hover:bg-blue-50"
+                      }`}
+                    >
+                      {subFilter.charAt(0).toUpperCase() + subFilter.slice(1)}
+                      {selectedSubFilters.includes(subFilter) && (
+                        <span className="ml-1 text-xs">✓</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
