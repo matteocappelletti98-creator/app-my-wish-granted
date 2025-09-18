@@ -68,8 +68,13 @@ export default function Luoghi() {
       {/* Header */}
       <header className="px-6 py-12 text-center border-b border-blue-100/30">
         <div className="mx-auto max-w-4xl">
-          <h1 className="text-4xl font-light text-blue-900 mb-3 tracking-wide">Luoghi</h1>
-          <p className="text-lg text-blue-700/70 font-light tracking-wide">Scopri tutti i luoghi pubblicati</p>
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <h1 className="text-4xl font-light text-blue-900 tracking-wide">Luoghi</h1>
+            <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium tracking-wide">
+              Explore Approved
+            </div>
+          </div>
+          <p className="text-lg text-blue-700/70 font-light tracking-wide">Scopri tutti i luoghi selezionati con cura dalla nostra guida</p>
         </div>
       </header>
 
