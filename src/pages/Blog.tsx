@@ -86,47 +86,53 @@ export default function Blog() {
   };
 
   const renderArticles = (categoryArticles: any[]) => (
-    <div className="grid gap-6 md:grid-cols-2">
+    <div className="grid gap-8 md:grid-cols-2">
       {categoryArticles.map(article => (
-        <Card key={article.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+        <Card key={article.id} className="group overflow-hidden bg-background/60 backdrop-blur-lg border border-border/50 hover:bg-background/80 hover:shadow-travel transition-all duration-500 hover:-translate-y-2 rounded-3xl">
           <div className="aspect-video overflow-hidden">
             <img 
               src={article.image} 
               alt={article.title}
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
           </div>
-          <CardHeader>
-            <CardTitle className="text-lg leading-tight hover:text-blue-600 cursor-pointer">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl font-light leading-tight text-foreground hover:text-ocean-blue cursor-pointer transition-colors duration-300 tracking-wide">
               {article.title}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <p className="text-gray-600 text-sm leading-relaxed">{article.excerpt}</p>
+          <CardContent className="space-y-4 pt-0">
+            <p className="text-foreground/70 text-sm leading-relaxed font-light">{article.excerpt}</p>
             
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              <User className="w-3 h-3" />
-              <span>{article.author}</span>
-              <Calendar className="w-3 h-3 ml-2" />
-              <span>{article.date}</span>
+            <div className="flex items-center gap-3 text-xs text-foreground/60">
+              <div className="flex items-center gap-1">
+                <User className="w-3 h-3" />
+                <span className="font-light">{article.author}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Calendar className="w-3 h-3" />
+                <span className="font-light">{article.date}</span>
+              </div>
             </div>
             
-            <div className="flex items-center justify-between pt-2 border-t">
-              <div className="flex items-center gap-4 text-xs text-gray-500">
+            <div className="flex items-center justify-between pt-4 border-t border-border/30">
+              <div className="flex items-center gap-4 text-xs text-foreground/60">
                 <div className="flex items-center gap-1">
                   <Eye className="w-3 h-3" />
-                  <span>{article.views}</span>
+                  <span className="font-light">{article.views}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Heart className="w-3 h-3" />
-                  <span>{article.likes}</span>
+                  <span className="font-light">{article.likes}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <MessageCircle className="w-3 h-3" />
-                  <span>{article.comments}</span>
+                  <span className="font-light">{article.comments}</span>
                 </div>
               </div>
-              <Button variant="outline" size="sm">Leggi</Button>
+              <Button variant="outline" size="sm" className="bg-background/80 border-border/50 text-foreground hover:bg-ocean-blue hover:text-background hover:border-ocean-blue transition-all duration-300 rounded-xl font-light">
+                Leggi
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -135,70 +141,83 @@ export default function Blog() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-sky-light/20 via-background to-secondary/20 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-ocean-blue/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-nature-green/10 rounded-full blur-3xl"></div>
+      </div>
+
       {/* Header */}
-      <header className="bg-white border-b">
-        <div className="px-6 py-8">
+      <header className="relative z-10 bg-background/70 backdrop-blur-sm border-b border-border/30">
+        <div className="px-6 py-16">
           <div className="mx-auto max-w-6xl">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">Blog</h1>
-                <p className="text-gray-600 mt-2">Guide, consigli e storie di viaggio</p>
-              </div>
-              <Button className="bg-blue-600 hover:bg-blue-700">
+            <div className="text-center mb-12">
+              <h1 className="text-6xl md:text-7xl font-extralight text-foreground mb-4 tracking-wider">
+                blog
+              </h1>
+              <p className="text-xl text-foreground/70 font-light tracking-wide mb-8">Guide, consigli e storie di viaggio</p>
+              <div className="w-24 h-px bg-gradient-to-r from-transparent via-ocean-blue to-transparent mx-auto mb-8"></div>
+              
+              <Button className="bg-gradient-to-r from-ocean-blue to-nature-green text-background font-medium tracking-wide hover:from-ocean-blue/90 hover:to-nature-green/90 transition-all duration-300 rounded-2xl shadow-travel hover:shadow-xl hover:scale-105 px-8 py-4">
                 Scrivi articolo
               </Button>
             </div>
             
             {/* Search */}
-            <div className="flex gap-3 max-w-md">
+            <div className="flex gap-4 max-w-2xl mx-auto">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-foreground/40 w-5 h-5" />
                 <Input
                   placeholder="Cerca articoli..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-12 py-4 bg-background/80 backdrop-blur-sm border-border/50 rounded-2xl text-foreground focus:outline-none focus:ring-2 focus:ring-ocean-blue/30 focus:border-ocean-blue/50 transition-all font-light"
                 />
               </div>
-              <Button variant="outline">Filtri</Button>
+              <Button variant="outline" className="px-6 py-4 bg-background/80 backdrop-blur-sm border-border/50 rounded-2xl text-foreground hover:bg-background/90 transition-all">
+                Filtri
+              </Button>
             </div>
           </div>
         </div>
       </header>
 
       {/* Content */}
-      <main className="px-6 py-8">
+      <main className="relative z-10 px-6 py-12">
         <div className="mx-auto max-w-6xl">
-          <Tabs defaultValue="faq" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 max-w-md">
-              <TabsTrigger value="faq">FAQ</TabsTrigger>
-              <TabsTrigger value="daytrip">Day Trip</TabsTrigger>
-              <TabsTrigger value="tips">Tips</TabsTrigger>
+          <Tabs defaultValue="faq" className="space-y-8">
+            <TabsList className="grid w-full grid-cols-3 max-w-2xl mx-auto bg-background/80 backdrop-blur-sm border border-border/50 rounded-2xl p-2">
+              <TabsTrigger value="faq" className="rounded-xl py-3 font-light tracking-wide data-[state=active]:bg-ocean-blue data-[state=active]:text-background transition-all">FAQ</TabsTrigger>
+              <TabsTrigger value="daytrip" className="rounded-xl py-3 font-light tracking-wide data-[state=active]:bg-ocean-blue data-[state=active]:text-background transition-all">Day Trip</TabsTrigger>
+              <TabsTrigger value="tips" className="rounded-xl py-3 font-light tracking-wide data-[state=active]:bg-ocean-blue data-[state=active]:text-background transition-all">Tips</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="faq" className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-semibold mb-2">Domande frequenti</h2>
-                <p className="text-gray-600 mb-6">Risposte alle domande più comuni sulla piattaforma</p>
-                {renderArticles(articles.faq)}
+            <TabsContent value="faq" className="space-y-8">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-extralight text-foreground mb-4 tracking-wide">Domande frequenti</h2>
+                <p className="text-foreground/70 font-light tracking-wide text-lg">Risposte alle domande più comuni sulla piattaforma</p>
+                <div className="mt-6 w-16 h-px bg-gradient-to-r from-transparent via-ocean-blue to-transparent mx-auto"></div>
               </div>
+              {renderArticles(articles.faq)}
             </TabsContent>
 
-            <TabsContent value="daytrip" className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-semibold mb-2">Itinerari giornalieri</h2>
-                <p className="text-gray-600 mb-6">Scopri i migliori itinerari per gite di un giorno</p>
-                {renderArticles(articles.daytrip)}
+            <TabsContent value="daytrip" className="space-y-8">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-extralight text-foreground mb-4 tracking-wide">Itinerari giornalieri</h2>
+                <p className="text-foreground/70 font-light tracking-wide text-lg">Scopri i migliori itinerari per gite di un giorno</p>
+                <div className="mt-6 w-16 h-px bg-gradient-to-r from-transparent via-nature-green to-transparent mx-auto"></div>
               </div>
+              {renderArticles(articles.daytrip)}
             </TabsContent>
 
-            <TabsContent value="tips" className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-semibold mb-2">Consigli di viaggio</h2>
-                <p className="text-gray-600 mb-6">Suggerimenti utili per migliorare la tua esperienza di viaggio</p>
-                {renderArticles(articles.tips)}
+            <TabsContent value="tips" className="space-y-8">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-extralight text-foreground mb-4 tracking-wide">Consigli di viaggio</h2>
+                <p className="text-foreground/70 font-light tracking-wide text-lg">Suggerimenti utili per migliorare la tua esperienza di viaggio</p>
+                <div className="mt-6 w-16 h-px bg-gradient-to-r from-transparent via-sunset-orange to-transparent mx-auto"></div>
               </div>
+              {renderArticles(articles.tips)}
             </TabsContent>
           </Tabs>
         </div>
