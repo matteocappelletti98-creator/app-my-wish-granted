@@ -135,12 +135,12 @@ export default function Luoghi() {
               <p className="text-blue-700/70 font-light">Prova a modificare i filtri di ricerca</p>
             </div>
           ) : (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {filtered.map((p, i) => (
                 <div key={i} className="group">
-                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-blue-100/50 overflow-hidden hover:bg-white/90 hover:shadow-xl hover:shadow-blue-100/20 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col relative">
-                    {/* Image */}
-                    <div className="aspect-square overflow-hidden">
+                  <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-blue-100/50 overflow-hidden hover:bg-white/90 hover:shadow-lg hover:shadow-blue-100/20 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
+                    {/* Image - più piccola */}
+                    <div className="aspect-[4/3] overflow-hidden">
                       {p.image ? (
                         <img 
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
@@ -150,44 +150,39 @@ export default function Luoghi() {
                         />
                       ) : (
                         <div className="w-full h-full bg-blue-50/80 flex items-center justify-center">
-                          <span className="text-blue-300 text-4xl">📍</span>
+                          <span className="text-blue-300 text-2xl">📍</span>
                         </div>
                       )}
                     </div>
                     
-                    {/* Content */}
-                    <div className="p-6 flex-1 flex flex-col">
-                      <div className="flex items-start justify-between mb-3">
-                        <h2 className="text-lg font-light text-blue-900 tracking-wide leading-tight flex-1">{p.name}</h2>
+                    {/* Content - più compatto */}
+                    <div className="p-3 flex-1 flex flex-col">
+                      <div className="flex items-start justify-between mb-2">
+                        <h2 className="text-sm font-medium text-blue-900 tracking-wide leading-tight flex-1 line-clamp-2">{p.name}</h2>
                         {p.category && (
-                          <div className="ml-2 flex-shrink-0">
+                          <div className="ml-1 flex-shrink-0">
                             <CategoryBadge category={p.category} />
                           </div>
                         )}
                       </div>
                       
-                      {(p.address || p.city || p.country) && (
-                        <div className="text-sm text-blue-600/70 font-light mb-3">
-                          <div className="flex items-center gap-1 mb-1">
-                            <MapPin className="w-3 h-3" />
-                            <span>
-                              {p.address && (
-                                <div>{p.address}</div>
-                              )}
-                              {(p.city || p.country) && (
-                                <div>{p.city}{p.city && p.country ? ", " : ""}{p.country}</div>
-                              )}
+                      {(p.city || p.country) && (
+                        <div className="text-xs text-blue-600/70 font-light mb-2">
+                          <div className="flex items-center gap-1">
+                            <MapPin className="w-2.5 h-2.5" />
+                            <span className="line-clamp-1">
+                              {p.city}{p.city && p.country ? ", " : ""}{p.country}
                             </span>
                           </div>
                         </div>
                       )}
                       
                       {p.description && (
-                        <p className="text-sm text-blue-700/80 font-light line-clamp-3 flex-1 mb-4">{p.description}</p>
+                        <p className="text-xs text-blue-700/80 font-light line-clamp-2 flex-1 mb-2">{p.description}</p>
                       )}
 
-                      {/* Pulsanti azione */}
-                      <div className="mt-auto space-y-2">
+                      {/* Pulsanti azione - più compatti */}
+                      <div className="mt-auto space-y-1">
                         {/* Pulsante Google Maps */}
                         {(p.address || p.city) && (
                           <button
@@ -196,10 +191,10 @@ export default function Luoghi() {
                               const query = encodeURIComponent(p.address || `${p.name}, ${p.city}, ${p.country}`);
                               window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
                             }}
-                            className="w-full px-2 py-1.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-200 transition-colors flex items-center justify-center gap-1.5"
+                            className="w-full px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-200 transition-colors flex items-center justify-center gap-1"
                           >
-                            <ExternalLink className="w-3 h-3" />
-                            Google Maps
+                            <ExternalLink className="w-2.5 h-2.5" />
+                            Maps
                           </button>
                         )}
                         
@@ -207,9 +202,9 @@ export default function Luoghi() {
                         {placesWithDedicatedPage.includes(p.id) && (
                           <Link 
                             to={`/luogo/${p.slug}`}
-                            className="block w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition-colors text-center"
+                            className="block w-full px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors text-center"
                           >
-                            Entra dentro il luogo
+                            Entra
                           </Link>
                         )}
                       </div>
