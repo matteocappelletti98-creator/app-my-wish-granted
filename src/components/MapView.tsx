@@ -5,25 +5,27 @@ import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 
 type Props = {
   places: Place[];
-  selectedCategory?: string;
+  selectedCategories?: string[];
   className?: string;
   onMarkerClick?: (p: Place) => void;
   favorites?: string[];
   onToggleFavorite?: (placeId: string) => void;
 };
 
-export default function MapView({ places, selectedCategory, className, onMarkerClick, favorites = [], onToggleFavorite }: Props) {
+export default function MapView({ places, selectedCategories = [], className, onMarkerClick, favorites = [], onToggleFavorite }: Props) {
   const mapRef = useRef<LeafletMap | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markersRef = useRef<L.LayerGroup | null>(null);
 
   // Filtra solo published + categoria + coordinate valide
   const filtered = useMemo(() => {
-    const cat = selectedCategory ? normalizeCategory(selectedCategory) : "";
     return places
       .filter(p => p.lat != null && p.lng != null)
-      .filter(p => (cat ? normalizeCategory(p.category) === cat : true));
-  }, [places, selectedCategory]);
+      .filter(p => {
+        if (selectedCategories.length === 0) return true;
+        return selectedCategories.some(cat => normalizeCategory(p.category) === normalizeCategory(cat));
+      });
+  }, [places, selectedCategories]);
 
   // Inizializza mappa una sola volta
   useEffect(() => {

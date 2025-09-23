@@ -103,8 +103,8 @@ export default function VirtualExploration() {
               <div className="h-[70vh] w-full rounded-2xl border bg-slate-50" />
             ) : (
               <MapView 
-                places={filtered} 
-                selectedCategory={selectedCategories[0] || ""} 
+                places={all.filter(p => p.status === "published")} 
+                selectedCategories={selectedCategories} 
                 className="h-[70vh] w-full rounded-2xl border"
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
@@ -181,8 +181,8 @@ export default function VirtualExploration() {
           </div>
           {/* riuso gli stessi dati/filtri correnti */}
           <MapView 
-            places={filtered} 
-            selectedCategory={selectedCategories[0] || ""} 
+            places={all.filter(p => p.status === "published")} 
+            selectedCategories={selectedCategories} 
             className="h-full w-full"
             favorites={favorites}
             onToggleFavorite={toggleFavorite}
