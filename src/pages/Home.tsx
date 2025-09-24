@@ -51,10 +51,10 @@ export default function Home() {
       </div>
 
       {/* Header with Navigation */}
-      <header className="relative z-10 px-6 py-8">
+      <header className="relative z-10 px-6 py-6">
         <div className="mx-auto max-w-6xl">
           {/* Top Navigation Bar */}
-          <div className="flex justify-between items-center mb-16">
+          <div className="flex justify-between items-center mb-20">
             {/* Left buttons */}
             <div className="flex gap-4">
               <button className="px-8 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105">
