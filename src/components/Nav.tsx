@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Map, List, FileText, Info, Settings } from "lucide-react";
+import { Home, Map, List, FileText, MapPin } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Nav() {
@@ -11,19 +11,7 @@ export default function Nav() {
   return (
     <nav className="w-full bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 border-b border-blue-100/50">
       <div className="max-w-6xl mx-auto px-6 py-6">
-        <div className="flex justify-between items-center">
-          {/* Left buttons */}
-          <div className="flex gap-4">
-            <button className="px-8 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105">
-              Accedi
-            </button>
-            <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105">
-              Registrati
-            </button>
-          </div>
-
-          {/* Center navigation */}
-          <div className="flex gap-6 justify-center items-center">
+        <div className="flex gap-6 justify-center items-center">
           <Link to="/" className={`group transition-all duration-300 hover:-translate-y-1`}>
             <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-lg group-hover:scale-110 ${
               active("/") 
@@ -64,20 +52,7 @@ export default function Nav() {
             </div>
           </Link>
         </div>
-          </div>
-          
-          {/* Right buttons */}
-          <div className="flex gap-4">
-            <button className="px-6 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
-              <Info className="w-4 h-4" />
-              Chi siamo
-            </button>
-            <Link to="/impostazioni" className="px-6 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
-              <Settings className="w-4 h-4" />
-              Impostazioni
-            </Link>
-          </div>
-        </div>
+      </div>
     </nav>
   );
 }
