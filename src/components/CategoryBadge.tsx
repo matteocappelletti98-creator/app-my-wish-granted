@@ -14,7 +14,7 @@ const EMOJI: Record<CategoryKey, string> = {
   landmark:"📸", market:"🧺", trail:"🥾", park:"🌳", 
   pizza:"🍕", taxi:"🚕", calcio:"⚽", boat:"🛥️", attractions:"🎢",
   cocktails:"🍸", gym:"💪", parking:"🅿️", free_beaches:"🏖️", bike:"🚴",
-  luxury:"💎", transport:"🚌", villa:"🏡", stroll:"🚶", lidi:"🏝️",
+  luxury:"💎", transport:"🚌", villa:"⛲️", stroll:"🚶", lidi:"🏝️",
   secret:"🤫", gelato:"🍦", daytrips:"🗓️", bakery:"🥖", shopping_hq:"👑", wc:"🚻", adventure:"🏔️", other:"📍",
 };
 
