@@ -11,7 +11,7 @@ export type CategoryKey =
   | "hotel" | "shop" | "viewpoint" | "beach" | "pizza" | "taxi" | "calcio" 
   | "boat" | "attractions" | "cocktails" | "gym" | "parking" | "free_beaches" 
   | "bike" | "luxury" | "transport" | "villa" | "stroll" | "lidi" | "secret" 
-  | "gelato" | "daytrips" | "bakery" | "shopping_hq" | "wc" | "other";
+  | "gelato" | "daytrips" | "bakery" | "shopping_hq" | "wc" | "adventure" | "other";
 
 const ICONS: Record<CategoryKey, LucideIcon> = {
   cafe: Coffee,
@@ -45,6 +45,7 @@ const ICONS: Record<CategoryKey, LucideIcon> = {
   bakery: Coffee,
   shopping_hq: ShoppingCart,
   wc: MapPin,
+  adventure: Mountain,
   other: MapPin,
 };
 
@@ -88,6 +89,7 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["bakery","panetteria","forno"].includes(s)) return "bakery";
   if (["shopping ( high quality )","shopping high quality","alta qualità"].includes(s)) return "shopping_hq";
   if (["wc","bagno","toilette","restroom","bathroom"].includes(s)) return "wc";
+  if (["adventure","avventura","adventures"].includes(s)) return "adventure";
 
   return "other";
 }
