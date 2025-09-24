@@ -5,8 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, Calendar, User, Eye, Heart, MessageCircle } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Blog() {
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
 
   // Mock data per gli articoli
@@ -131,7 +133,7 @@ export default function Blog() {
                 </div>
               </div>
               <Button variant="outline" size="sm" className="bg-white/80 border-blue-100/50 text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 rounded-xl font-light">
-                Leggi
+                {t('blog.read')}
               </Button>
             </div>
           </CardContent>
@@ -154,13 +156,13 @@ export default function Blog() {
           <div className="mx-auto max-w-6xl">
             <div className="text-center mb-12">
               <h1 className="text-6xl md:text-7xl font-extralight text-blue-900 mb-4 tracking-wider">
-                blog
+                {t('blog.title')}
               </h1>
-              <p className="text-xl text-blue-700/70 font-light tracking-wide mb-8">Guide, consigli e storie di viaggio</p>
+              <p className="text-xl text-blue-700/70 font-light tracking-wide mb-8">{t('blog.subtitle')}</p>
               <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto mb-8"></div>
               
               <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-8 py-4">
-                Scrivi articolo
+                {t('blog.writeArticle')}
               </Button>
             </div>
             
@@ -169,14 +171,14 @@ export default function Blog() {
               <div className="relative flex-1">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-600/40 w-5 h-5" />
                 <Input
-                  placeholder="Cerca articoli..."
+                  placeholder={t('blog.searchArticles')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-12 py-4 bg-white/80 backdrop-blur-sm border-blue-100/50 rounded-2xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
                 />
               </div>
               <Button variant="outline" className="px-6 py-4 bg-white/80 backdrop-blur-sm border-blue-100/50 rounded-2xl text-blue-600 hover:bg-white/90 transition-all">
-                Filtri
+                {t('blog.filters')}
               </Button>
             </div>
           </div>
@@ -188,15 +190,15 @@ export default function Blog() {
         <div className="mx-auto max-w-6xl">
           <Tabs defaultValue="faq" className="space-y-8">
             <TabsList className="grid w-full grid-cols-3 max-w-xs mx-auto bg-white/80 backdrop-blur-sm border border-blue-100/50 rounded-2xl p-1">
-              <TabsTrigger value="faq" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">FAQ</TabsTrigger>
-              <TabsTrigger value="daytrip" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">Day Trip</TabsTrigger>
-              <TabsTrigger value="tips" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">Tips</TabsTrigger>
+              <TabsTrigger value="faq" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">{t('blog.faq')}</TabsTrigger>
+              <TabsTrigger value="daytrip" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">{t('blog.dayTrip')}</TabsTrigger>
+              <TabsTrigger value="tips" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">{t('blog.tips')}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="faq" className="space-y-8">
               <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-extralight text-blue-900 mb-4 tracking-wide">Domande frequenti</h2>
-                <p className="text-blue-700/70 font-light tracking-wide text-lg">Risposte alle domande più comuni sulla piattaforma</p>
+                <h2 className="text-3xl md:text-4xl font-extralight text-blue-900 mb-4 tracking-wide">{t('blog.faqTitle')}</h2>
+                <p className="text-blue-700/70 font-light tracking-wide text-lg">{t('blog.faqDesc')}</p>
                 <div className="mt-6 w-16 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto"></div>
               </div>
               {renderArticles(articles.faq)}
@@ -204,8 +206,8 @@ export default function Blog() {
 
             <TabsContent value="daytrip" className="space-y-8">
               <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-extralight text-blue-900 mb-4 tracking-wide">Itinerari giornalieri</h2>
-                <p className="text-blue-700/70 font-light tracking-wide text-lg">Scopri i migliori itinerari per gite di un giorno</p>
+                <h2 className="text-3xl md:text-4xl font-extralight text-blue-900 mb-4 tracking-wide">{t('blog.dayTripTitle')}</h2>
+                <p className="text-blue-700/70 font-light tracking-wide text-lg">{t('blog.dayTripDesc')}</p>
                 <div className="mt-6 w-16 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto"></div>
               </div>
               {renderArticles(articles.daytrip)}
@@ -213,8 +215,8 @@ export default function Blog() {
 
             <TabsContent value="tips" className="space-y-8">
               <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-extralight text-blue-900 mb-4 tracking-wide">Consigli di viaggio</h2>
-                <p className="text-blue-700/70 font-light tracking-wide text-lg">Suggerimenti utili per migliorare la tua esperienza di viaggio</p>
+                <h2 className="text-3xl md:text-4xl font-extralight text-blue-900 mb-4 tracking-wide">{t('blog.tipsTitle')}</h2>
+                <p className="text-blue-700/70 font-light tracking-wide text-lg">{t('blog.tipsDesc')}</p>
                 <div className="mt-6 w-16 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto"></div>
               </div>
               {renderArticles(articles.tips)}

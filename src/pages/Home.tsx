@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { Map, List, FileText, Route, MapPin, Globe, Info, Clock, AlertCircle, Settings } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Home() {
+  const { language, setLanguage, t } = useLanguage();
   const [selectedCity, setSelectedCity] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("it");
   const [hasIncompleteSurvey, setHasIncompleteSurvey] = useState(false);
   const [showSurveyMessage, setShowSurveyMessage] = useState(false);
 
@@ -54,26 +55,26 @@ export default function Home() {
         <div className="mx-auto max-w-4xl">
           <div className="mb-12">
             <h1 className="text-6xl md:text-7xl font-extralight text-blue-900 mb-4 tracking-wider">
-              explore
+              {t('home.title')}
             </h1>
-            <p className="text-xl text-blue-700/70 font-light tracking-wide mb-8">Independent local guide</p>
+            <p className="text-xl text-blue-700/70 font-light tracking-wide mb-8">{t('home.subtitle')}</p>
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto"></div>
           </div>
           
           <div className="flex gap-8 justify-center items-center mb-12">
             <button className="px-10 py-4 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105">
-              Accedi
+              {t('home.login')}
             </button>
             <button className="px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105">
-              Registrati
+              {t('home.register')}
             </button>
             <button className="px-8 py-4 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
               <Info className="w-4 h-4" />
-              Chi siamo?
+              {t('home.about')}
             </button>
             <Link to="/impostazioni" className="px-8 py-4 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
               <Settings className="w-4 h-4" />
-              Impostazioni
+              {t('home.settings')}
             </Link>
           </div>
 
@@ -84,14 +85,14 @@ export default function Home() {
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-blue-100/50">
               <div className="flex items-center gap-3 mb-4">
                 <MapPin className="w-5 h-5 text-blue-600" />
-                <h3 className="text-lg font-medium text-blue-900">Seleziona città</h3>
+                <h3 className="text-lg font-medium text-blue-900">{t('home.selectCity')}</h3>
               </div>
               <select
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}
                 className="w-full px-4 py-3 bg-white/80 border border-blue-100 rounded-xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
               >
-                <option value="">Tutte le città</option>
+                <option value="">{t('home.allCities')}</option>
                 {cities.map(city => (
                   <option key={city.value} value={city.value}>{city.label}</option>
                 ))}
@@ -102,15 +103,15 @@ export default function Home() {
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-blue-100/50">
               <div className="flex items-center gap-3 mb-4">
                 <Globe className="w-5 h-5 text-blue-600" />
-                <h3 className="text-lg font-medium text-blue-900">Seleziona lingua</h3>
+                <h3 className="text-lg font-medium text-blue-900">{t('home.selectLanguage')}</h3>
               </div>
               <select
-                value={selectedLanguage}
-                onChange={(e) => setSelectedLanguage(e.target.value)}
+                value={language}
+                onChange={(e) => setLanguage(e.target.value as any)}
                 className="w-full px-4 py-3 bg-white/80 border border-blue-100 rounded-xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
               >
-                {languages.map(language => (
-                  <option key={language.value} value={language.value}>{language.label}</option>
+                {languages.map(lang => (
+                  <option key={lang.value} value={lang.value}>{lang.label}</option>
                 ))}
               </select>
             </div>
