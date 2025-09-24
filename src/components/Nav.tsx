@@ -51,6 +51,16 @@ export default function Nav() {
               <FileText className={`w-8 h-8 ${active("/blog") ? 'text-blue-600' : 'text-blue-500 group-hover:text-blue-600'}`} strokeWidth={1.5} />
             </div>
           </Link>
+          
+          <Link to="/add-place" className={`group transition-all duration-300 hover:-translate-y-1`}>
+            <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-lg group-hover:scale-110 ${
+              active("/add-place") 
+                ? 'bg-gradient-to-br from-emerald-100 to-blue-100 shadow-blue-200' 
+                : 'bg-gradient-to-br from-white/80 to-blue-50/80 hover:bg-gradient-to-br hover:from-emerald-100 hover:to-blue-100'
+            }`}>
+              <MapPin className={`w-8 h-8 ${active("/add-place") ? 'text-blue-600' : 'text-blue-500 group-hover:text-blue-600'}`} strokeWidth={1.5} />
+            </div>
+          </Link>
         </div>
       </div>
     </nav>
