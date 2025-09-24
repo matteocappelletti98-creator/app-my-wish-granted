@@ -101,15 +101,30 @@ export default function MapView({ places, selectedCategories = [], className, on
           onclick="goToPlace('${p.slug}')" 
           style="
             background: #3b82f6; color: white; border: none; 
-            border-radius: 6px; padding: 6px 12px; margin-top: 8px;
+            border-radius: 6px; padding: 8px 12px; margin-top: 8px;
             font-size: 12px; cursor: pointer; width: 100%;
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
           "
           title="Vai alla pagina del luogo"
         >
-          🚪 Entra dentro il luogo
+          🚪 Entra
         </button>
       ` : '';
+
+      const googleMapsButton = `
+        <button 
+          onclick="openInGoogleMaps('${encodeURIComponent(p.name + ' ' + (p.address || p.city || ''))}')" 
+          style="
+            background: #34d399; color: white; border: none; 
+            border-radius: 6px; padding: 8px 12px; margin-top: 8px;
+            font-size: 12px; cursor: pointer; width: 100%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+          "
+          title="Apri in Google Maps"
+        >
+          🗺️ Apri in Google Maps
+        </button>
+      `;
 
       m.bindPopup(`
         <div style="min-width:180px; position: relative;">
@@ -118,6 +133,7 @@ export default function MapView({ places, selectedCategories = [], className, on
           <div style="color:#555;font-size:12px">${escapeHtml(p.city)}${p.city && p.country ? ", " : ""}${escapeHtml(p.country)}</div>
           ${p.image ? `<img src="${p.image}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px"/>` : ""}
           ${detailButton}
+          ${googleMapsButton}
         </div>
       `);
 
@@ -145,9 +161,16 @@ export default function MapView({ places, selectedCategories = [], className, on
       window.location.href = `/luogo/${slug}`;
     };
     
+    // Funzione globale per aprire in Google Maps
+    (window as any).openInGoogleMaps = (searchQuery: string) => {
+      const url = `https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
+      window.open(url, '_blank');
+    };
+    
     return () => {
       delete (window as any).toggleFavorite;
       delete (window as any).goToPlace;
+      delete (window as any).openInGoogleMaps;
     };
   }, [onToggleFavorite]);
 
