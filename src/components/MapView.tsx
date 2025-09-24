@@ -93,10 +93,8 @@ export default function MapView({ places, selectedCategories = [], className, on
         </button>
       ` : '';
 
-      // Controllare se il luogo ha una pagina dedicata
-      const hasDetailPage = ['caffe-e-caffe-como', 'duomo-di-como-como', 'fornaio-beretta-como'].includes(p.slug);
-      
-      const detailButton = hasDetailPage ? `
+      // Bottone per entrare nel luogo (per tutti i luoghi)
+      const detailButton = `
         <button 
           onclick="goToPlace('${p.slug}')" 
           style="
@@ -109,7 +107,7 @@ export default function MapView({ places, selectedCategories = [], className, on
         >
           🚪 Entra
         </button>
-      ` : '';
+      `;
 
       const googleMapsButton = `
         <button 
