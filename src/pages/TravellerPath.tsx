@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Check, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Question {
   id: string;
@@ -158,6 +159,7 @@ const questions: Question[] = [
 ];
 
 export default function TravellerPath() {
+  const { t } = useLanguage();
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -231,7 +233,7 @@ export default function TravellerPath() {
   if (!isLoaded) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 flex items-center justify-center">
-        <div className="text-blue-600">Caricamento...</div>
+        <div className="text-blue-600">{t('travellerPath.loading')}</div>
       </div>
     );
   }
@@ -244,22 +246,22 @@ export default function TravellerPath() {
         <div className="mb-8">
           <Link to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-4">
             <ArrowLeft className="w-4 h-4" />
-            Torna alla home
+            {t('travellerPath.backToHome')}
           </Link>
           
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-light text-blue-900 mb-2">Traveller.Path</h1>
-              <p className="text-blue-600/70">Crea il tuo itinerario personalizzato</p>
+              <h1 className="text-3xl font-light text-blue-900 mb-2">{t('travellerPath.title')}</h1>
+              <p className="text-blue-600/70">{t('travellerPath.subtitle')}</p>
               {getAnsweredQuestionsCount() > 0 && getAnsweredQuestionsCount() < questions.length && (
                 <p className="text-orange-600 text-sm mt-1">
-                  Stai continuando il questionario da dove avevi lasciato
+                  {t('travellerPath.continuing')}
                 </p>
               )}
             </div>
             
             <div className="text-sm text-blue-600/70">
-              {getAnsweredQuestionsCount()} / {questions.length} domande completate
+              {getAnsweredQuestionsCount()} / {questions.length} {t('travellerPath.questionsCompleted')}
             </div>
           </div>
         </div>
@@ -267,7 +269,7 @@ export default function TravellerPath() {
         {/* Progress Bar */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-blue-600/70">Progresso</span>
+            <span className="text-sm text-blue-600/70">{t('travellerPath.progress')}</span>
             <span className="text-sm text-blue-600/70">
               {Math.round((currentQuestionIndex + 1) / questions.length * 100)}%
             </span>
@@ -286,13 +288,13 @@ export default function TravellerPath() {
           {/* Category */}
           <div className="mb-6">
             <span className="inline-block px-4 py-2 bg-blue-100/50 text-blue-700 rounded-full text-sm font-medium">
-              {currentQuestion.category}
+              {t(`questions.${currentQuestion.id}.category`) || currentQuestion.category}
             </span>
           </div>
 
           {/* Question */}
           <h2 className="text-2xl font-light text-blue-900 mb-8">
-            {currentQuestion.question}
+            {t(`questions.${currentQuestion.id}.question`) || currentQuestion.question}
           </h2>
 
           {/* Answer Options */}
@@ -310,7 +312,7 @@ export default function TravellerPath() {
                       onChange={() => handleAnswerChange(option.value)}
                       className="w-4 h-4 text-blue-600 rounded border-blue-300 focus:ring-blue-200"
                     />
-                    <span className="text-blue-900">{option.label}</span>
+                    <span className="text-blue-900">{t(`questions.${currentQuestion.id}.options.${option.value}`) || option.label}</span>
                   </label>
                 ))}
               </div>
@@ -326,7 +328,7 @@ export default function TravellerPath() {
                     className="flex items-center gap-3 p-4 bg-white/50 rounded-xl border border-blue-100/30 hover:bg-blue-50/50 transition-colors cursor-pointer"
                   >
                     <RadioGroupItem value={option.value} />
-                    <span className="text-blue-900">{option.label}</span>
+                    <span className="text-blue-900">{t(`questions.${currentQuestion.id}.options.${option.value}`) || option.label}</span>
                   </label>
                 ))}
               </RadioGroup>
@@ -342,7 +344,7 @@ export default function TravellerPath() {
               className="flex items-center gap-2"
             >
               <ChevronLeft className="w-4 h-4" />
-              Precedente
+              {t('travellerPath.previous')}
             </Button>
 
             <div className="flex items-center gap-4">
@@ -352,16 +354,16 @@ export default function TravellerPath() {
                 disabled={currentQuestionIndex === questions.length - 1}
                 className="text-blue-600"
               >
-                Salta
+                {t('travellerPath.skip')}
               </Button>
 
               {currentQuestionIndex === questions.length - 1 ? (
                 <Button
-                  onClick={() => alert('Questionario completato! I tuoi dati sono stati salvati.')}
+                  onClick={() => alert(t('travellerPath.completed'))}
                   className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
                 >
                   <Check className="w-4 h-4" />
-                  Completa
+                  {t('travellerPath.complete')}
                 </Button>
               ) : (
                 <Button
@@ -369,7 +371,7 @@ export default function TravellerPath() {
                   disabled={currentQuestionIndex === questions.length - 1}
                   className="flex items-center gap-2"
                 >
-                  Successiva
+                  {t('travellerPath.next')}
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               )}

@@ -1,7 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
 import { Home, Map, List, FileText, MapPin } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Nav() {
+  const { t } = useLanguage();
   const { pathname } = useLocation();
   const active = (p: string) =>
     pathname === p;

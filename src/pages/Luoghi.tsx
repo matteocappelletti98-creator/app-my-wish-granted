@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import { Search, Filter, MapPin, ExternalLink } from "lucide-react";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
 
 export default function Luoghi() {
+  const { t } = useLanguage();
   const [all, setAll] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
@@ -82,7 +84,7 @@ export default function Luoghi() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50/50 via-white to-blue-100/30">
         <div className="px-6 py-12 text-center">
-          <div className="text-blue-600 font-light tracking-wide">Caricamento...</div>
+          <div className="text-blue-600 font-light tracking-wide">{t('places.loading')}</div>
         </div>
       </div>
     );
@@ -94,12 +96,12 @@ export default function Luoghi() {
       <header className="px-6 py-12 text-center border-b border-blue-100/30">
         <div className="mx-auto max-w-4xl">
           <div className="flex items-center justify-center gap-3 mb-3">
-            <h1 className="text-4xl font-light text-blue-900 tracking-wide">Luoghi</h1>
+            <h1 className="text-4xl font-light text-blue-900 tracking-wide">{t('places.title')}</h1>
             <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium tracking-wide">
               Explore Approved
             </div>
           </div>
-          <p className="text-lg text-blue-700/70 font-light tracking-wide">Scopri tutti i luoghi selezionati con cura dalla nostra guida</p>
+          <p className="text-lg text-blue-700/70 font-light tracking-wide">{t('places.subtitle')}</p>
         </div>
       </header>
 
@@ -113,7 +115,7 @@ export default function Luoghi() {
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400 w-5 h-5" />
                 <input 
                   className="w-full pl-12 pr-4 py-3 bg-white/80 border border-blue-100 rounded-xl text-blue-900 placeholder-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light" 
-                  placeholder="Cerca luoghi..." 
+                  placeholder={t('places.searchPlaceholder')} 
                   value={q} 
                   onChange={(e) => setQ(e.target.value)} 
                 />
@@ -132,7 +134,7 @@ export default function Luoghi() {
                       : "bg-white/80 text-blue-700 border-blue-200 hover:bg-blue-50"
                   }`}
                 >
-                  Tutte ({all.length})
+                  {t('categories.all')} ({all.length})
                 </button>
                 {categories.map(cat => (
                   <button
@@ -159,7 +161,7 @@ export default function Luoghi() {
               {/* Sub-filters for restaurants */}
               {selectedCategories.includes('restaurant') && (
                 <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-blue-100">
-                  <span className="text-sm text-blue-600 font-medium">Tipo di cucina:</span>
+                  <span className="text-sm text-blue-600 font-medium">{t('places.cuisineType')}:</span>
                   {['carne', 'pesce'].map(subFilter => (
                     <button
                       key={subFilter}
@@ -187,8 +189,8 @@ export default function Luoghi() {
               <div className="text-blue-400 mb-3">
                 <Filter className="w-12 h-12 mx-auto" />
               </div>
-              <h3 className="text-xl font-light text-blue-900 mb-2">Nessun luogo trovato</h3>
-              <p className="text-blue-700/70 font-light">Prova a modificare i filtri di ricerca</p>
+              <h3 className="text-xl font-light text-blue-900 mb-2">{t('places.noPlacesFound')}</h3>
+              <p className="text-blue-700/70 font-light">{t('places.tryModifyFilters')}</p>
             </div>
           ) : (
             <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
@@ -250,7 +252,7 @@ export default function Luoghi() {
                             className="w-full px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-200 transition-colors flex items-center justify-center gap-1"
                           >
                             <ExternalLink className="w-2.5 h-2.5" />
-                            Maps
+                            {t('places.maps')}
                           </button>
                         )}
                         
@@ -260,7 +262,7 @@ export default function Luoghi() {
                             to={`/luogo/${p.slug}`}
                             className="block w-full px-2 py-1 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors text-center"
                           >
-                            Entra
+                            {t('places.enter')}
                           </Link>
                         )}
                       </div>
