@@ -159,12 +159,31 @@ export default function VirtualExploration() {
               {favoritesList.map(p => (
                 <div key={p.id} className="relative">
                   <PlaceCard place={p} />
-                  <button
-                    onClick={() => toggleFavorite(p.id)}
-                    className="absolute top-3 right-3 p-2 bg-white/90 rounded-full shadow-sm hover:bg-white transition-colors"
-                  >
-                    <Heart className="w-4 h-4 text-red-500 fill-current" />
-                  </button>
+                  <div className="absolute top-3 right-3 flex gap-2">
+                    <a
+                      href={`/luogo/${p.slug}`}
+                      className="p-2 bg-blue-600 text-white rounded-full shadow-sm hover:bg-blue-700 transition-colors"
+                      title="Visita"
+                    >
+                      <span className="text-xs">👁️</span>
+                    </a>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' ' + (p.address || p.city || ''))}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 bg-green-600 text-white rounded-full shadow-sm hover:bg-green-700 transition-colors"
+                      title="Google Maps"
+                    >
+                      <span className="text-xs">🗺️</span>
+                    </a>
+                    <button
+                      onClick={() => toggleFavorite(p.id)}
+                      className="p-2 bg-white/90 rounded-full shadow-sm hover:bg-white transition-colors"
+                      title="Rimuovi dai preferiti"
+                    >
+                      <Heart className="w-4 h-4 text-red-500 fill-current" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
