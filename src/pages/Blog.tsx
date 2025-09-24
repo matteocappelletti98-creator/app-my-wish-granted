@@ -187,10 +187,10 @@ export default function Blog() {
       <main className="relative z-10 px-6 py-12">
         <div className="mx-auto max-w-6xl">
           <Tabs defaultValue="faq" className="space-y-8">
-            <TabsList className="grid w-full grid-cols-3 max-w-md mx-auto bg-white/80 backdrop-blur-sm border border-blue-100/50 rounded-2xl p-2">
-              <TabsTrigger value="faq" className="rounded-xl py-3 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all">FAQ</TabsTrigger>
-              <TabsTrigger value="daytrip" className="rounded-xl py-3 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all">Day Trip</TabsTrigger>
-              <TabsTrigger value="tips" className="rounded-xl py-3 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all">Tips</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3 max-w-xs mx-auto bg-white/80 backdrop-blur-sm border border-blue-100/50 rounded-2xl p-1">
+              <TabsTrigger value="faq" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">FAQ</TabsTrigger>
+              <TabsTrigger value="daytrip" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">Day Trip</TabsTrigger>
+              <TabsTrigger value="tips" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">Tips</TabsTrigger>
             </TabsList>
 
             <TabsContent value="faq" className="space-y-8">
