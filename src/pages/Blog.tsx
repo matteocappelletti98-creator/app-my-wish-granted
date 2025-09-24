@@ -86,25 +86,25 @@ export default function Blog() {
   };
 
   const renderArticles = (categoryArticles: any[]) => (
-    <div className="grid gap-8 md:grid-cols-2">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {categoryArticles.map(article => (
-        <Card key={article.id} className="group overflow-hidden bg-background/60 backdrop-blur-lg border border-border/50 hover:bg-background/80 hover:shadow-travel transition-all duration-500 hover:-translate-y-2 rounded-3xl">
-          <div className="aspect-video overflow-hidden">
+        <Card key={article.id} className="group overflow-hidden bg-white/60 backdrop-blur-lg border border-blue-100/50 hover:bg-white/80 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-2 rounded-3xl">
+          <div className="aspect-[4/3] overflow-hidden">
             <img 
               src={article.image} 
               alt={article.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
           </div>
-          <CardHeader className="pb-4">
-            <CardTitle className="text-xl font-light leading-tight text-foreground hover:text-ocean-blue cursor-pointer transition-colors duration-300 tracking-wide">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg font-light leading-tight text-blue-900 hover:text-blue-600 cursor-pointer transition-colors duration-300 tracking-wide">
               {article.title}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 pt-0">
-            <p className="text-foreground/70 text-sm leading-relaxed font-light">{article.excerpt}</p>
+          <CardContent className="space-y-3 pt-0">
+            <p className="text-blue-700/70 text-sm leading-relaxed font-light line-clamp-2">{article.excerpt}</p>
             
-            <div className="flex items-center gap-3 text-xs text-foreground/60">
+            <div className="flex items-center gap-3 text-xs text-blue-600/60">
               <div className="flex items-center gap-1">
                 <User className="w-3 h-3" />
                 <span className="font-light">{article.author}</span>
@@ -115,8 +115,8 @@ export default function Blog() {
               </div>
             </div>
             
-            <div className="flex items-center justify-between pt-4 border-t border-border/30">
-              <div className="flex items-center gap-4 text-xs text-foreground/60">
+            <div className="flex items-center justify-between pt-3 border-t border-blue-100/30">
+              <div className="flex items-center gap-3 text-xs text-blue-600/60">
                 <div className="flex items-center gap-1">
                   <Eye className="w-3 h-3" />
                   <span className="font-light">{article.views}</span>
@@ -130,7 +130,7 @@ export default function Blog() {
                   <span className="font-light">{article.comments}</span>
                 </div>
               </div>
-              <Button variant="outline" size="sm" className="bg-background/80 border-border/50 text-foreground hover:bg-ocean-blue hover:text-background hover:border-ocean-blue transition-all duration-300 rounded-xl font-light">
+              <Button variant="outline" size="sm" className="bg-white/80 border-blue-100/50 text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 rounded-xl font-light">
                 Leggi
               </Button>
             </div>
@@ -141,11 +141,11 @@ export default function Blog() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-light/20 via-background to-secondary/20 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-ocean-blue/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-nature-green/10 rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-100/30 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-100/30 rounded-full blur-3xl"></div>
       </div>
 
       {/* Header */}
