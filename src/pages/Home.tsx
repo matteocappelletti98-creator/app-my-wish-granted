@@ -51,49 +51,17 @@ export default function Home() {
       </div>
 
       {/* Header */}
-      <header className="relative z-10">
-        {/* Navigation Bar with Action Buttons */}
-        <div className="w-full bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 border-b border-blue-100/50">
-          <div className="max-w-6xl mx-auto px-6 py-6">
-            <div className="flex justify-between items-center">
-              {/* Left buttons */}
-              <div className="flex gap-4">
-                <button className="px-8 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105">
-                  {t('home.login')}
-                </button>
-                <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105">
-                  {t('home.register')}
-                </button>
-              </div>
-              
-              {/* Right buttons */}
-              <div className="flex gap-4">
-                <button className="px-6 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
-                  <Info className="w-4 h-4" />
-                  {t('home.about')}
-                </button>
-                <Link to="/impostazioni" className="px-6 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
-                  <Settings className="w-4 h-4" />
-                  {t('home.settings')}
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Centered App Title */}
-        <div className="px-6 py-16 text-center">
-          <div className="mx-auto max-w-4xl">
+      <header className="relative z-10 px-6 py-16 text-center">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-12">
             <h1 className="text-6xl md:text-8xl font-extralight text-blue-900 mb-6 tracking-wider">
               {t('home.title')}
             </h1>
             <p className="text-xl text-blue-700/70 font-light tracking-wide mb-8">{t('home.subtitle')}</p>
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto"></div>
           </div>
-        </div>
 
-        {/* Selectors Container */}
-        <div className="px-6">
+          {/* Selectors Container */}
           <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* City Selector */}
