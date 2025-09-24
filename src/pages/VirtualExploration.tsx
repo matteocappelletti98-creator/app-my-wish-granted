@@ -6,6 +6,7 @@ import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
 import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 // Tuo CSV pubblicato
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
@@ -116,26 +117,28 @@ export default function VirtualExploration() {
           <aside className="lg:col-span-1">
             <div className="rounded-2xl border p-4 bg-white">
               <h3 className="font-semibold mb-2">{t('categories.title')}</h3>
-              <div className="flex flex-col gap-2">
-                <button onClick={() => setSelectedCategories([])}
-                  className={`text-left rounded-xl px-3 py-2 border ${selectedCategories.length === 0 ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
-                  {t('categories.all')}
-                </button>
-                {categories.map(c => (
-                  <button key={c} onClick={() => toggleCategory(c)}
-                    className={`text-left rounded-xl px-3 py-2 border flex items-center gap-2
-                    ${selectedCategories.includes(c) ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
-                    <CategoryBadge category={c} />
-                    <span className="text-sm">{c}</span>
-                    <span className="text-xs bg-blue-200/30 px-1 rounded">
-                      {all.filter(p => normalizeCategory(p.category) === c).length}
-                    </span>
-                    {selectedCategories.includes(c) && (
-                      <span className="ml-auto text-xs bg-white/20 px-1 rounded">✓</span>
-                    )}
+              <ScrollArea className="h-[400px]">
+                <div className="flex flex-col gap-2 pr-4">
+                  <button onClick={() => setSelectedCategories([])}
+                    className={`text-left rounded-xl px-3 py-2 border ${selectedCategories.length === 0 ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
+                    {t('categories.all')}
                   </button>
-                ))}
-              </div>
+                  {categories.map(c => (
+                    <button key={c} onClick={() => toggleCategory(c)}
+                      className={`text-left rounded-xl px-3 py-2 border flex items-center gap-2
+                      ${selectedCategories.includes(c) ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
+                      <CategoryBadge category={c} />
+                      <span className="text-sm">{c}</span>
+                      <span className="text-xs bg-blue-200/30 px-1 rounded">
+                        {all.filter(p => normalizeCategory(p.category) === c).length}
+                      </span>
+                      {selectedCategories.includes(c) && (
+                        <span className="ml-auto text-xs bg-white/20 px-1 rounded">✓</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </ScrollArea>
             </div>
           </aside>
         </div>
