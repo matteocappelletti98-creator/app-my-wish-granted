@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Map, List, FileText, Route, MapPin, Globe, Info, Clock, AlertCircle, Settings } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export default function Home() {
   const { language, setLanguage, t } = useLanguage();
@@ -67,10 +68,33 @@ export default function Home() {
             
             {/* Right buttons */}
             <div className="flex gap-4">
-              <button className="px-6 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
-                <Info className="w-4 h-4" />
-                {t('home.about')}
-              </button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="px-6 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
+                    <Info className="w-4 h-4" />
+                    {t('home.about')}
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md animate-scale-in">
+                  <DialogHeader>
+                    <DialogTitle className="text-xl font-bold text-blue-600 flex items-center gap-2">
+                      <Info className="w-5 h-5" />
+                      Chi siamo
+                    </DialogTitle>
+                  </DialogHeader>
+                  <DialogDescription className="text-gray-700 leading-relaxed space-y-4">
+                    <p>
+                      Siamo una guida indipendente che seleziona i migliori luoghi e attività della città di Como.
+                    </p>
+                    <p>
+                      Nessuna attività commerciale paga per entrare: ogni scelta è basata solo sulla qualità.
+                    </p>
+                    <p>
+                      Organizziamo l'esplorazione attraverso categorie di interesse e, grazie al questionario di screening Traveller.Path, ti aiutiamo a scoprire i posti più adatti al tuo viaggio e alle tue esigenze.
+                    </p>
+                  </DialogDescription>
+                </DialogContent>
+              </Dialog>
               <Link to="/impostazioni" className="px-6 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
                 <Settings className="w-4 h-4" />
                 {t('home.settings')}
