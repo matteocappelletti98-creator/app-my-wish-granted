@@ -50,32 +50,41 @@ export default function Home() {
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-100/30 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Header */}
-      <header className="relative z-10 px-6 py-16 text-center">
-        <div className="mx-auto max-w-4xl">
-          <div className="mb-12">
-            <h1 className="text-6xl md:text-7xl font-extralight text-blue-900 mb-4 tracking-wider">
+      {/* Header with Navigation */}
+      <header className="relative z-10 px-6 py-8">
+        <div className="mx-auto max-w-6xl">
+          {/* Top Navigation Bar */}
+          <div className="flex justify-between items-center mb-16">
+            {/* Left buttons */}
+            <div className="flex gap-4">
+              <button className="px-8 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105">
+                {t('home.login')}
+              </button>
+              <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105">
+                {t('home.register')}
+              </button>
+            </div>
+            
+            {/* Right buttons */}
+            <div className="flex gap-4">
+              <button className="px-6 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
+                <Info className="w-4 h-4" />
+                {t('home.about')}
+              </button>
+              <Link to="/impostazioni" className="px-6 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
+                <Settings className="w-4 h-4" />
+                {t('home.settings')}
+              </Link>
+            </div>
+          </div>
+
+          {/* Centered App Title */}
+          <div className="text-center mb-16">
+            <h1 className="text-6xl md:text-8xl font-extralight text-blue-900 mb-6 tracking-wider">
               {t('home.title')}
             </h1>
             <p className="text-xl text-blue-700/70 font-light tracking-wide mb-8">{t('home.subtitle')}</p>
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto"></div>
-          </div>
-          
-          <div className="flex gap-8 justify-center items-center mb-12">
-            <button className="px-10 py-4 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105">
-              {t('home.login')}
-            </button>
-            <button className="px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105">
-              {t('home.register')}
-            </button>
-            <button className="px-8 py-4 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
-              <Info className="w-4 h-4" />
-              {t('home.about')}
-            </button>
-            <Link to="/impostazioni" className="px-8 py-4 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
-              <Settings className="w-4 h-4" />
-              {t('home.settings')}
-            </Link>
           </div>
 
           {/* Selectors Container */}
