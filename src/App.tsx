@@ -10,9 +10,6 @@ import AddPlace from "@/pages/AddPlace";
 import TravellerPath from "@/pages/TravellerPath";
 import Impostazioni from "@/pages/Impostazioni";
 import Privacy from "@/pages/Privacy";
-import { Routes, Route } from "react-router-dom";
-import BlogIndex from "@/pages/BlogIndex";
-import BlogPost from "@/pages/BlogPost";
 
 export default function App() {
   return (
@@ -30,8 +27,6 @@ export default function App() {
         <Route path="/impostazioni" element={<Impostazioni />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="*" element={<Navigate to="/" />} />
-        <Route path="/blog" element={<BlogIndex />} />
-        <Route path="/blog/:slug" element={<BlogPost />} />
         
       </Routes>
     </BrowserRouter>
