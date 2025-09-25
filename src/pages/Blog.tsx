@@ -9,7 +9,7 @@ import { getAllArticles, type ArticleMeta } from "@/lib/articles";
 import { Link } from "react-router-dom";
 
 export default function Blog() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<("faq" | "daytrip" | "tip")[]>(["faq"]);
   
@@ -20,8 +20,8 @@ export default function Blog() {
         : [...prev, category]
     );
   };
-  // Carica gli articoli reali dal sistema markdown
-  const allArticles = getAllArticles();
+  // Carica gli articoli reali dal sistema markdown con la lingua selezionata
+  const allArticles = getAllArticles(language);
   
   // Raggruppa articoli per tipo
   const articles = {

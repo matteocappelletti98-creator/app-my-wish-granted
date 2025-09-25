@@ -2,14 +2,16 @@ import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Clock, User, Calendar, Share2, Bookmark, Eye, Heart } from "lucide-react";
 import { useState } from "react";
 import { getArticleBySlug } from "@/lib/articles";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
+  const { language } = useLanguage();
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [likes, setLikes] = useState(0);
 
-  const article = getArticleBySlug(slug || "");
+  const article = getArticleBySlug(slug || "", language);
   console.log("ArticlePage - slug:", slug);
   console.log("ArticlePage - article found:", article);
   console.log("ArticlePage - article HTML:", article?.html);
