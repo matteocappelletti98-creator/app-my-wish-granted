@@ -1,6 +1,7 @@
 ---
 id: " Ristoranti turistici e come evitarli "
-titolo: "Come riconoscere un ristorante turistico in quattro segnali"
+titolo: "Come riconoscere un ristorante turistico in quattro segnali
+ "
 tipo: "tip"            # faq | tip | daytrip
 autore: "Explore team"
 data: "2025-09-25"
