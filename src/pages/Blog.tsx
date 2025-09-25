@@ -3,8 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Calendar, User, Eye, Heart, MessageCircle } from "lucide-react";
+import { Search, Calendar, User } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getAllArticles, type ArticleMeta } from "@/lib/articles";
 import { Link } from "react-router-dom";
@@ -12,6 +11,7 @@ import { Link } from "react-router-dom";
 export default function Blog() {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState<"faq" | "daytrip" | "tip">("faq");
   
   // Carica gli articoli reali dal sistema markdown
   const allArticles = getAllArticles();
@@ -109,13 +109,34 @@ export default function Blog() {
               
               {/* Category Navigation Buttons */}
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
-                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl">
+                <Button 
+                  onClick={() => setActiveCategory("faq")}
+                  className={`font-medium tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl ${
+                    activeCategory === "faq" 
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700" 
+                      : "bg-white/80 text-blue-600 border border-blue-200 hover:bg-blue-50"
+                  }`}
+                >
                   FAQ
                 </Button>
-                <Button className="bg-gradient-to-r from-green-600 to-emerald-600 text-white font-medium tracking-wide hover:from-green-700 hover:to-emerald-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl">
+                <Button 
+                  onClick={() => setActiveCategory("daytrip")}
+                  className={`font-medium tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl ${
+                    activeCategory === "daytrip" 
+                      ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700" 
+                      : "bg-white/80 text-green-600 border border-green-200 hover:bg-green-50"
+                  }`}
+                >
                   Day Trip
                 </Button>
-                <Button className="bg-gradient-to-r from-purple-600 to-violet-600 text-white font-medium tracking-wide hover:from-purple-700 hover:to-violet-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl">
+                <Button 
+                  onClick={() => setActiveCategory("tip")}
+                  className={`font-medium tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl ${
+                    activeCategory === "tip" 
+                      ? "bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-700 hover:to-violet-700" 
+                      : "bg-white/80 text-purple-600 border border-purple-200 hover:bg-purple-50"
+                  }`}
+                >
                   Tips
                 </Button>
               </div>
@@ -143,42 +164,14 @@ export default function Blog() {
       {/* Content */}
       <main className="relative z-10 px-6 py-12">
         <div className="mx-auto max-w-6xl">
-          <Tabs defaultValue="faq" className="space-y-8">
-            <div className="hidden">
-              <TabsList className="grid w-full grid-cols-3 max-w-xs mx-auto bg-white/80 backdrop-blur-sm border border-blue-100/50 rounded-2xl p-1">
-                <TabsTrigger value="faq" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">{t('blog.faq')}</TabsTrigger>
-                <TabsTrigger value="daytrip" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">{t('blog.dayTrip')}</TabsTrigger>
-                <TabsTrigger value="tips" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">{t('blog.tips')}</TabsTrigger>
-              </TabsList>
-            </div>
-
-            <TabsContent value="faq" className="space-y-8">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-extralight text-blue-900 mb-4 tracking-wide">{t('blog.faqTitle')}</h2>
-                <p className="text-blue-700/70 font-light tracking-wide text-lg">{t('blog.faqDesc')}</p>
-                <div className="mt-6 w-16 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto"></div>
-              </div>
-              {renderArticles(articles.faq)}
-            </TabsContent>
-
-            <TabsContent value="daytrip" className="space-y-8">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-extralight text-blue-900 mb-4 tracking-wide">{t('blog.dayTripTitle')}</h2>
-                <p className="text-blue-700/70 font-light tracking-wide text-lg">{t('blog.dayTripDesc')}</p>
-                <div className="mt-6 w-16 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto"></div>
-              </div>
-              {renderArticles(articles.daytrip)}
-            </TabsContent>
-
-            <TabsContent value="tips" className="space-y-8">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-extralight text-blue-900 mb-4 tracking-wide">{t('blog.tipsTitle')}</h2>
-                <p className="text-blue-700/70 font-light tracking-wide text-lg">{t('blog.tipsDesc')}</p>
-                <div className="mt-6 w-16 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto"></div>
-              </div>
-              {renderArticles(articles.tip)}
-            </TabsContent>
-          </Tabs>
+          {/* Render articles based on active category */}
+          <div className="space-y-8">
+            {renderArticles(
+              activeCategory === "faq" ? articles.faq : 
+              activeCategory === "daytrip" ? articles.daytrip : 
+              articles.tip
+            )}
+          </div>
         </div>
       </main>
     </div>
