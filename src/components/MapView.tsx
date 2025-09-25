@@ -5,23 +5,27 @@ import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 
 type Props = {
   places: Place[];
-  selectedCategory?: string;
+  selectedCategories?: string[];
   className?: string;
   onMarkerClick?: (p: Place) => void;
+  favorites?: string[];
+  onToggleFavorite?: (placeId: string) => void;
 };
 
-export default function MapView({ places, selectedCategory, className, onMarkerClick }: Props) {
+export default function MapView({ places, selectedCategories = [], className, onMarkerClick, favorites = [], onToggleFavorite }: Props) {
   const mapRef = useRef<LeafletMap | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markersRef = useRef<L.LayerGroup | null>(null);
 
   // Filtra solo published + categoria + coordinate valide
   const filtered = useMemo(() => {
-    const cat = selectedCategory ? normalizeCategory(selectedCategory) : "";
     return places
       .filter(p => p.lat != null && p.lng != null)
-      .filter(p => (cat ? normalizeCategory(p.category) === cat : true));
-  }, [places, selectedCategory]);
+      .filter(p => {
+        if (selectedCategories.length === 0) return true;
+        return selectedCategories.some(cat => normalizeCategory(p.category) === normalizeCategory(cat));
+      });
+  }, [places, selectedCategories]);
 
   // Inizializza mappa una sola volta
   useEffect(() => {
@@ -70,12 +74,64 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
 
       const m = L.marker([p.lat!, p.lng!], { icon });
 
-      // 👇 Fix immagine nel popup
+      // Popup con bottone preferiti e bottone dettaglio
+      const favoriteButton = onToggleFavorite ? `
+        <button 
+          onclick="toggleFavorite('${p.id}')" 
+          style="
+            position: absolute; top: 8px; right: 8px; 
+            background: rgba(255,255,255,0.9); border: none; 
+            border-radius: 50%; width: 28px; height: 28px; 
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+          "
+          title="${favorites.includes(p.id) ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}"
+        >
+          <span style="color: ${favorites.includes(p.id) ? '#ef4444' : '#9ca3af'}; font-size: 14px;">
+            ${favorites.includes(p.id) ? '❤️' : '🤍'}
+          </span>
+        </button>
+      ` : '';
+
+      // Bottone per entrare nel luogo (per tutti i luoghi)
+      const detailButton = `
+        <button 
+          onclick="goToPlace('${p.slug}')" 
+          style="
+            background: #3b82f6; color: white; border: none; 
+            border-radius: 6px; padding: 8px 12px; margin-top: 8px;
+            font-size: 12px; cursor: pointer; width: 100%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+          "
+          title="Vai alla pagina del luogo"
+        >
+          🚪 Entra
+        </button>
+      `;
+
+      const googleMapsButton = `
+        <button 
+          onclick="openInGoogleMaps('${encodeURIComponent(p.name + ' ' + (p.address || p.city || ''))}')" 
+          style="
+            background: #34d399; color: white; border: none; 
+            border-radius: 6px; padding: 8px 12px; margin-top: 8px;
+            font-size: 12px; cursor: pointer; width: 100%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+          "
+          title="Apri in Google Maps"
+        >
+          🗺️ Apri in Google Maps
+        </button>
+      `;
+
       m.bindPopup(`
-        <div style="min-width:180px">
+        <div style="min-width:180px; position: relative;">
+          ${favoriteButton}
           <div style="font-weight:600;margin-bottom:4px">${emoji} ${escapeHtml(p.name)}</div>
           <div style="color:#555;font-size:12px">${escapeHtml(p.city)}${p.city && p.country ? ", " : ""}${escapeHtml(p.country)}</div>
           ${p.image ? `<img src="${p.image}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px"/>` : ""}
+          ${detailButton}
+          ${googleMapsButton}
         </div>
       `);
 
@@ -90,7 +146,31 @@ export default function MapView({ places, selectedCategory, className, onMarkerC
     } else if (bounds.length === 1) {
       mapRef.current.setView(bounds[0] as any, 15);
     }
-  }, [filtered, onMarkerClick]);
+  }, [filtered, onMarkerClick, favorites, onToggleFavorite]);
+
+  // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
+  useEffect(() => {
+    if (onToggleFavorite) {
+      (window as any).toggleFavorite = onToggleFavorite;
+    }
+    
+    // Funzione globale per navigare al luogo
+    (window as any).goToPlace = (slug: string) => {
+      window.location.href = `/luogo/${slug}`;
+    };
+    
+    // Funzione globale per aprire in Google Maps
+    (window as any).openInGoogleMaps = (searchQuery: string) => {
+      const url = `https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
+      window.open(url, '_blank');
+    };
+    
+    return () => {
+      delete (window as any).toggleFavorite;
+      delete (window as any).goToPlace;
+      delete (window as any).openInGoogleMaps;
+    };
+  }, [onToggleFavorite]);
 
   return <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />;
 }

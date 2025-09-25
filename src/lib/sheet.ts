@@ -9,6 +9,7 @@ export type Place = {
   image?: string;
   status: string;
   category?: string;
+  address?: string;
   lat?: number;
   lng?: number;
 };
@@ -39,6 +40,7 @@ function normHeader(h: string) {
     "immagine (url opzionale)":"image","image":"image","image_url":"image",
     "status":"status",
     "categoria":"category","category":"category",
+    "indirizzo":"address","address":"address","via":"address","strada":"address",
     "lat":"lat","latitude":"lat","latitudine":"lat",
     "lng":"lng","long":"lng","lon":"lng","longitude":"lng","longitudine":"lng",
   };
@@ -82,6 +84,7 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
       image: rec.image || "",
       status: (rec.status || "").toLowerCase(),
       category: (rec.category || "other"),
+      address: rec.address || "",
       lat: isFinite(lat!) ? lat : undefined,
       lng: isFinite(lng!) ? lng : undefined,
     });
