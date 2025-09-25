@@ -121,80 +121,39 @@ export default function Luoghi() {
                 />
               </div>
               
-              {/* Category Filter - Modern Floating Cards */}
+              {/* Category Filter */}
               <div className="space-y-3">
                 <div className="text-sm font-medium text-blue-700">{t('places.categories')}</div>
-                <div className="flex flex-wrap gap-3">
-                  {/* All Categories Card */}
-                  <div
+                <div className="flex flex-wrap gap-2">
+                  <button
                     onClick={() => {
                       setSelectedCategories([]);
                       setSelectedSubFilters([]);
                     }}
-                    className={`group cursor-pointer relative p-4 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg ${
+                    className={`px-4 py-2 rounded-full border-2 transition-all text-sm font-medium ${
                       selectedCategories.length === 0
-                        ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-200/50" 
-                        : "bg-white/90 backdrop-blur-sm text-blue-700 border border-blue-100 hover:bg-white hover:border-blue-200"
+                        ? "bg-blue-600 text-white border-blue-600" 
+                        : "bg-white text-blue-600 border-blue-200 hover:bg-blue-50"
                     }`}
                   >
-                    <div className="flex flex-col items-center text-center min-w-[80px]">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 ${
-                        selectedCategories.length === 0 
-                          ? "bg-white/20" 
-                          : "bg-blue-50 group-hover:bg-blue-100"
-                      } transition-colors`}>
-                        <span className="text-2xl">🌟</span>
-                      </div>
-                      <div className="text-xs font-medium">{t('categories.all')}</div>
-                      <div className={`text-xs mt-1 px-2 py-0.5 rounded-full ${
-                        selectedCategories.length === 0 
-                          ? "bg-white/20 text-white" 
-                          : "bg-blue-100 text-blue-600"
-                      }`}>
-                        {all.length}
-                      </div>
-                    </div>
-                    {selectedCategories.length === 0 && (
-                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md">
-                        <span className="text-blue-600 text-xs">✓</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Category Cards */}
+                    {t('categories.all')} ({all.length})
+                  </button>
                   {categories.map(cat => (
-                    <div
+                    <button
                       key={cat}
                       onClick={() => toggleCategory(cat)}
-                      className={`group cursor-pointer relative p-4 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg ${
+                      className={`px-4 py-2 rounded-full border-2 transition-all text-sm font-medium flex items-center gap-2 ${
                         selectedCategories.includes(cat)
-                          ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-200/50"
-                          : "bg-white/90 backdrop-blur-sm text-blue-700 border border-blue-100 hover:bg-white hover:border-blue-200"
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-white text-blue-600 border-blue-200 hover:bg-blue-50"
                       }`}
                     >
-                      <div className="flex flex-col items-center text-center min-w-[80px]">
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 ${
-                          selectedCategories.includes(cat) 
-                            ? "bg-white/20" 
-                            : "bg-blue-50 group-hover:bg-blue-100"
-                        } transition-colors`}>
-                          <CategoryBadge category={cat} />
-                        </div>
-                        <div className="text-xs font-medium capitalize">{cat}</div>
-                        <div className={`text-xs mt-1 px-2 py-0.5 rounded-full ${
-                          selectedCategories.includes(cat) 
-                            ? "bg-white/20 text-white" 
-                            : "bg-blue-100 text-blue-600"
-                        }`}>
-                          {all.filter(p => normalizeCategory(p.category) === cat).length}
-                        </div>
-                      </div>
-                      {selectedCategories.includes(cat) && (
-                        <div className="absolute -top-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md animate-scale-in">
-                          <span className="text-blue-600 text-xs">✓</span>
-                        </div>
-                      )}
-                    </div>
+                      <CategoryBadge category={cat} />
+                      <span className="capitalize">{cat}</span>
+                      <span className="text-xs opacity-70">
+                        ({all.filter(p => normalizeCategory(p.category) === cat).length})
+                      </span>
+                    </button>
                   ))}
                 </div>
               </div>
