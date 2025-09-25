@@ -21,7 +21,7 @@ Explore has gone around Como to taste, compare, and hand-pick the very best. Her
 
 ---
 
-#### 👀 Before Tasting
+# 👀 Before Tasting
 
 > [!TIP] **Color matters**  
 > Shades should look natural. Pistachio glowing neon green or lemon shining bright yellow? Likely boosted with colorants.  
