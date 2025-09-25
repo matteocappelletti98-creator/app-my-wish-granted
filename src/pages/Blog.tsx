@@ -11,8 +11,15 @@ import { Link } from "react-router-dom";
 export default function Blog() {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState<"faq" | "daytrip" | "tip">("faq");
+  const [selectedCategories, setSelectedCategories] = useState<("faq" | "daytrip" | "tip")[]>(["faq"]);
   
+  const toggleCategory = (category: "faq" | "daytrip" | "tip") => {
+    setSelectedCategories(prev => 
+      prev.includes(category) 
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
   // Carica gli articoli reali dal sistema markdown
   const allArticles = getAllArticles();
   
@@ -128,9 +135,9 @@ export default function Blog() {
               {/* Category Navigation Buttons */}
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
                 <Button 
-                  onClick={() => setActiveCategory("faq")}
+                  onClick={() => toggleCategory("faq")}
                   className={`font-medium tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl ${
-                    activeCategory === "faq" 
+                    selectedCategories.includes("faq") 
                       ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700" 
                       : "bg-white/80 text-blue-600 border border-blue-200 hover:bg-blue-50"
                   }`}
@@ -138,9 +145,9 @@ export default function Blog() {
                   FAQ
                 </Button>
                 <Button 
-                  onClick={() => setActiveCategory("daytrip")}
+                  onClick={() => toggleCategory("daytrip")}
                   className={`font-medium tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl ${
-                    activeCategory === "daytrip" 
+                    selectedCategories.includes("daytrip") 
                       ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700" 
                       : "bg-white/80 text-green-600 border border-green-200 hover:bg-green-50"
                   }`}
@@ -148,9 +155,9 @@ export default function Blog() {
                   Day Trip
                 </Button>
                 <Button 
-                  onClick={() => setActiveCategory("tip")}
+                  onClick={() => toggleCategory("tip")}
                   className={`font-medium tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl ${
-                    activeCategory === "tip" 
+                    selectedCategories.includes("tip") 
                       ? "bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-700 hover:to-violet-700" 
                       : "bg-white/80 text-purple-600 border border-purple-200 hover:bg-purple-50"
                   }`}
@@ -179,12 +186,14 @@ export default function Blog() {
       {/* Content */}
       <main className="relative z-10 px-6 py-12">
         <div className="mx-auto max-w-6xl">
-          {/* Render articles based on active category */}
+          {/* Render articles based on selected categories */}
           <div className="space-y-8">
             {renderArticles(
-              activeCategory === "faq" ? articles.faq : 
-              activeCategory === "daytrip" ? articles.daytrip : 
-              articles.tip
+              selectedCategories.flatMap(category => 
+                category === "faq" ? articles.faq : 
+                category === "daytrip" ? articles.daytrip : 
+                articles.tip
+              )
             )}
           </div>
         </div>
