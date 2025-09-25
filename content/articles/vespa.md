@@ -5,7 +5,7 @@ titolo: "What requirements do I need to rent a vespa or a motor bike?
 tipo: "faq"            # faq | tip | daytrip
 autore: "Explore team"
 data: "2025-09-25"
-cover: "/articles/conceptlab.jpg"
+cover: "/articles/vespa.jpg"
 tags: ["Rent Vespa  ","Rent motor bike"]
 ---
 
