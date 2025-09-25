@@ -158,60 +158,6 @@ export default function ArticlePage() {
         </div>
       </section>
 
-      {/* Related Articles */}
-      <section className="px-6 pb-16 bg-blue-50/30">
-        <div className="max-w-6xl mx-auto py-12">
-          <h2 className="text-2xl font-light text-blue-900 text-center mb-8">Altri articoli</h2>
-          
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {/* Mock related articles */}
-            {[
-              {
-                id: "2",
-                title: "Guida locale: Scopri Como",
-                excerpt: "I consigli esclusivi di chi vive qui per vivere un'esperienza autentica...",
-                image: "/beretta.png",
-                category: "Guida",
-                readTime: "8 min"
-              },
-              {
-                id: "3", 
-                title: "Fotografia: i migliori angoli di Como",
-                excerpt: "Una guida fotografica completa per catturare la bellezza...",
-                image: "/duomodicomo.png",
-                category: "Fotografia", 
-                readTime: "6 min"
-              }
-            ].map((relatedArticle) => (
-              <Link key={relatedArticle.id} to={`/blog`} className="group">
-                <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-blue-100/50 overflow-hidden hover:bg-white/90 hover:shadow-xl hover:shadow-blue-100/20 transition-all duration-300 hover:-translate-y-1">
-                  <div className="aspect-[4/3] overflow-hidden">
-                    <img 
-                      src={relatedArticle.image} 
-                      alt={relatedArticle.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
-                        {relatedArticle.category}
-                      </span>
-                      <span className="text-xs text-blue-600/70">{relatedArticle.readTime}</span>
-                    </div>
-                    <h3 className="text-lg font-medium text-blue-900 mb-2 group-hover:text-blue-700 transition-colors">
-                      {relatedArticle.title}
-                    </h3>
-                    <p className="text-sm text-blue-700/80 font-light line-clamp-2">
-                      {relatedArticle.excerpt}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
