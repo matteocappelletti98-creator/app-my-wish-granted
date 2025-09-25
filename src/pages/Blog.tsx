@@ -6,139 +6,87 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, Calendar, User, Eye, Heart, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getAllArticles, type ArticleMeta } from "@/lib/articles";
+import { Link } from "react-router-dom";
 
 export default function Blog() {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
-
-  // Mock data per gli articoli
+  
+  // Carica gli articoli reali dal sistema markdown
+  const allArticles = getAllArticles();
+  
+  // Raggruppa articoli per tipo
   const articles = {
-    faq: [
-      {
-        id: 1,
-        title: "Come funziona la mappa interattiva?",
-        excerpt: "Scopri come navigare e utilizzare al meglio la nostra mappa per esplorare i luoghi più interessanti.",
-        author: "Marco Rossi",
-        date: "15 Gen 2024",
-        views: 245,
-        likes: 12,
-        comments: 5,
-        image: "/public/duomodicomo.png"
-      },
-      {
-        id: 2,
-        title: "Come aggiungere un nuovo luogo?",
-        excerpt: "Guida passo-passo per contribuire alla community aggiungendo i tuoi luoghi preferiti.",
-        author: "Laura Bianchi",
-        date: "12 Gen 2024",
-        views: 189,
-        likes: 8,
-        comments: 3,
-        image: "/public/beretta.png"
-      }
-    ],
-    daytrip: [
-      {
-        id: 3,
-        title: "Un giorno a Como: itinerario perfetto",
-        excerpt: "Dalle rive del lago alle ville storiche, ecco come vivere al meglio una giornata nella città di Como.",
-        author: "Giulia Verdi",
-        date: "18 Gen 2024",
-        views: 532,
-        likes: 45,
-        comments: 12,
-        image: "/public/duomodicomo.png"
-      },
-      {
-        id: 4,
-        title: "Bergamo Alta in 6 ore",
-        excerpt: "Scopri i tesori della città alta di Bergamo in un itinerario ottimizzato per una giornata indimenticabile.",
-        author: "Andrea Neri",
-        date: "14 Gen 2024",
-        views: 398,
-        likes: 32,
-        comments: 8,
-        image: "/public/beretta.png"
-      }
-    ],
-    tips: [
-      {
-        id: 5,
-        title: "5 consigli per fotografare i luoghi storici",
-        excerpt: "Tecniche e suggerimenti per catturare la bellezza dei monumenti e dei luoghi storici che visiti.",
-        author: "Elena Russo",
-        date: "20 Gen 2024",
-        views: 287,
-        likes: 23,
-        comments: 6,
-        image: "/public/caffe-ecaffe-immagine.jpg"
-      },
-      {
-        id: 6,
-        title: "Viaggiare sostenibile: guida pratica",
-        excerpt: "Come esplorare nuovi luoghi rispettando l'ambiente e le comunità locali.",
-        author: "Roberto Costa",
-        date: "16 Gen 2024",
-        views: 412,
-        likes: 38,
-        comments: 15,
-        image: "/public/duomodicomo.png"
-      }
-    ]
+    faq: allArticles.filter(a => a.tipo === 'faq'),
+    daytrip: allArticles.filter(a => a.tipo === 'daytrip'), 
+    tip: allArticles.filter(a => a.tipo === 'tip')
   };
 
-  const renderArticles = (categoryArticles: any[]) => (
+  const renderArticles = (categoryArticles: ArticleMeta[]) => (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {categoryArticles.map(article => (
-        <Card key={article.id} className="group overflow-hidden bg-white/60 backdrop-blur-lg border border-blue-100/50 hover:bg-white/80 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-2 rounded-3xl">
-          <div className="aspect-[4/3] overflow-hidden">
-            <img 
-              src={article.image} 
-              alt={article.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-          </div>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg font-light leading-tight text-blue-900 hover:text-blue-600 cursor-pointer transition-colors duration-300 tracking-wide">
-              {article.title}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 pt-0">
-            <p className="text-blue-700/70 text-sm leading-relaxed font-light line-clamp-2">{article.excerpt}</p>
-            
-            <div className="flex items-center gap-3 text-xs text-blue-600/60">
-              <div className="flex items-center gap-1">
-                <User className="w-3 h-3" />
-                <span className="font-light">{article.author}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Calendar className="w-3 h-3" />
-                <span className="font-light">{article.date}</span>
-              </div>
-            </div>
-            
-            <div className="flex items-center justify-between pt-3 border-t border-blue-100/30">
-              <div className="flex items-center gap-3 text-xs text-blue-600/60">
-                <div className="flex items-center gap-1">
-                  <Eye className="w-3 h-3" />
-                  <span className="font-light">{article.views}</span>
+      {categoryArticles.length === 0 ? (
+        <div className="col-span-full text-center py-12">
+          <p className="text-blue-700/70 text-lg font-light">Nessun articolo disponibile in questa categoria</p>
+        </div>
+      ) : (
+        categoryArticles.map(article => (
+          <Link key={article.id} to={`/articolo/${article.slug}`}>
+            <Card className="group overflow-hidden bg-white/60 backdrop-blur-lg border border-blue-100/50 hover:bg-white/80 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-2 rounded-3xl h-full">
+              {article.cover && (
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img 
+                    src={article.cover} 
+                    alt={article.titolo}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
-                <div className="flex items-center gap-1">
-                  <Heart className="w-3 h-3" />
-                  <span className="font-light">{article.likes}</span>
+              )}
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg font-light leading-tight text-blue-900 hover:text-blue-600 cursor-pointer transition-colors duration-300 tracking-wide">
+                  {article.titolo}
+                </CardTitle>
+                {article.tags && article.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {article.tags.map(tag => (
+                      <Badge key={tag} variant="secondary" className="text-xs bg-blue-100/50 text-blue-600">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </CardHeader>
+              <CardContent className="space-y-3 pt-0">
+                <div className="flex items-center gap-3 text-xs text-blue-600/60">
+                  {article.autore && (
+                    <div className="flex items-center gap-1">
+                      <User className="w-3 h-3" />
+                      <span className="font-light">{article.autore}</span>
+                    </div>
+                  )}
+                  {article.data && (
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-3 h-3" />
+                      <span className="font-light">{article.data}</span>
+                    </div>
+                  )}
                 </div>
-                <div className="flex items-center gap-1">
-                  <MessageCircle className="w-3 h-3" />
-                  <span className="font-light">{article.comments}</span>
+                
+                <div className="flex items-center justify-between pt-3 border-t border-blue-100/30">
+                  <div className="flex items-center gap-3 text-xs text-blue-600/60">
+                    <Badge variant="outline" className="text-xs border-blue-200 text-blue-600">
+                      {article.tipo}
+                    </Badge>
+                  </div>
+                  <Button variant="outline" size="sm" className="bg-white/80 border-blue-100/50 text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 rounded-xl font-light">
+                    {t('blog.read')}
+                  </Button>
                 </div>
-              </div>
-              <Button variant="outline" size="sm" className="bg-white/80 border-blue-100/50 text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 rounded-xl font-light">
-                {t('blog.read')}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+              </CardContent>
+            </Card>
+          </Link>
+        ))
+      )}
     </div>
   );
 
@@ -219,7 +167,7 @@ export default function Blog() {
                 <p className="text-blue-700/70 font-light tracking-wide text-lg">{t('blog.tipsDesc')}</p>
                 <div className="mt-6 w-16 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto"></div>
               </div>
-              {renderArticles(articles.tips)}
+              {renderArticles(articles.tip)}
             </TabsContent>
           </Tabs>
         </div>
