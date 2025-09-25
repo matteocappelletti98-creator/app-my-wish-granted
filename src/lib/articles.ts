@@ -1,4 +1,3 @@
-import matter from "gray-matter";
 import { marked } from "marked";
 
 export type ArticleMeta = {
@@ -16,6 +15,57 @@ export type Article = ArticleMeta & { html: string };
 
 const files = import.meta.glob("/content/articles/*.md", { as: "raw", eager: true });
 
+// Simple frontmatter parser for browser
+function parseFrontmatter(content: string) {
+  const lines = content.split('\n');
+  if (lines[0] !== '---') {
+    return { data: {}, content };
+  }
+  
+  let endIndex = -1;
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i] === '---') {
+      endIndex = i;
+      break;
+    }
+  }
+  
+  if (endIndex === -1) {
+    return { data: {}, content };
+  }
+  
+  const frontmatterLines = lines.slice(1, endIndex);
+  const markdownContent = lines.slice(endIndex + 1).join('\n');
+  
+  const data: any = {};
+  
+  for (const line of frontmatterLines) {
+    const colonIndex = line.indexOf(':');
+    if (colonIndex > 0) {
+      const key = line.substring(0, colonIndex).trim();
+      let value = line.substring(colonIndex + 1).trim();
+      
+      // Remove quotes
+      if ((value.startsWith('"') && value.endsWith('"')) || 
+          (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      
+      // Parse arrays
+      if (value.startsWith('[') && value.endsWith(']')) {
+        const arrayContent = value.slice(1, -1);
+        data[key] = arrayContent.split(',').map(item => 
+          item.trim().replace(/['"]/g, '')
+        ).filter(Boolean);
+      } else {
+        data[key] = value;
+      }
+    }
+  }
+  
+  return { data, content: markdownContent };
+}
+
 function slugify(s: string) {
   return s
     .toLowerCase()
@@ -29,7 +79,7 @@ export function getAllArticles(): ArticleMeta[] {
   return Object.entries(files)
     .map(([path, raw]) => {
       console.log("Processing file:", path);
-      const { data } = matter(raw as string);
+      const { data } = parseFrontmatter(raw as string);
       console.log("Parsed frontmatter:", data);
       const titolo = (data.titolo ?? "Senza titolo") as string;
       return {
@@ -53,7 +103,7 @@ export function getArticleBySlug(slug: string): Article | null {
   for (const [path, raw] of Object.entries(files)) {
     console.log("Checking file:", path);
     const file = raw as string;
-    const { data, content } = matter(file);
+    const { data, content } = parseFrontmatter(file);
     console.log("File frontmatter:", data);
     console.log("File content:", content);
     const titolo = (data.titolo ?? "Senza titolo") as string;
