@@ -121,63 +121,107 @@ export default function Luoghi() {
                 />
               </div>
               
-              {/* Category Filter - Multiple Selection */}
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => {
-                    setSelectedCategories([]);
-                    setSelectedSubFilters([]);
-                  }}
-                  className={`px-4 py-2 rounded-xl border transition-all font-light tracking-wide ${
-                    selectedCategories.length === 0
-                      ? "bg-blue-600 text-white border-blue-600" 
-                      : "bg-white/80 text-blue-700 border-blue-200 hover:bg-blue-50"
-                  }`}
-                >
-                  {t('categories.all')} ({all.length})
-                </button>
-                {categories.map(cat => (
-                  <button
-                    key={cat}
-                    onClick={() => toggleCategory(cat)}
-                    className={`px-4 py-2 rounded-xl border transition-all font-light tracking-wide flex items-center gap-2 ${
-                      selectedCategories.includes(cat)
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "bg-white/80 text-blue-700 border-blue-200 hover:bg-blue-50"
+              {/* Category Filter - Modern Floating Cards */}
+              <div className="space-y-3">
+                <div className="text-sm font-medium text-blue-700">{t('places.categories')}</div>
+                <div className="flex flex-wrap gap-3">
+                  {/* All Categories Card */}
+                  <div
+                    onClick={() => {
+                      setSelectedCategories([]);
+                      setSelectedSubFilters([]);
+                    }}
+                    className={`group cursor-pointer relative p-4 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg ${
+                      selectedCategories.length === 0
+                        ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-200/50" 
+                        : "bg-white/90 backdrop-blur-sm text-blue-700 border border-blue-100 hover:bg-white hover:border-blue-200"
                     }`}
                   >
-                    <CategoryBadge category={cat} />
-                    <span>{cat}</span>
-                    <span className="text-xs bg-blue-200/30 px-1.5 py-0.5 rounded-full">
-                      {all.filter(p => normalizeCategory(p.category) === cat).length}
-                    </span>
-                    {selectedCategories.includes(cat) && (
-                      <span className="ml-1 text-xs bg-white/20 px-1 rounded">✓</span>
+                    <div className="flex flex-col items-center text-center min-w-[80px]">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 ${
+                        selectedCategories.length === 0 
+                          ? "bg-white/20" 
+                          : "bg-blue-50 group-hover:bg-blue-100"
+                      } transition-colors`}>
+                        <span className="text-2xl">🌟</span>
+                      </div>
+                      <div className="text-xs font-medium">{t('categories.all')}</div>
+                      <div className={`text-xs mt-1 px-2 py-0.5 rounded-full ${
+                        selectedCategories.length === 0 
+                          ? "bg-white/20 text-white" 
+                          : "bg-blue-100 text-blue-600"
+                      }`}>
+                        {all.length}
+                      </div>
+                    </div>
+                    {selectedCategories.length === 0 && (
+                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md">
+                        <span className="text-blue-600 text-xs">✓</span>
+                      </div>
                     )}
-                  </button>
-                ))}
-              </div>
+                  </div>
 
-              {/* Sub-filters for restaurants */}
-              {selectedCategories.includes('restaurant') && (
-                <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-blue-100">
-                  <span className="text-sm text-blue-600 font-medium">{t('places.cuisineType')}:</span>
-                  {['carne', 'pesce'].map(subFilter => (
-                    <button
-                      key={subFilter}
-                      onClick={() => toggleSubFilter(subFilter)}
-                      className={`px-3 py-1.5 rounded-lg border transition-all text-sm font-light tracking-wide ${
-                        selectedSubFilters.includes(subFilter)
-                          ? "bg-blue-500 text-white border-blue-500"
-                          : "bg-white/60 text-blue-600 border-blue-200 hover:bg-blue-50"
+                  {/* Category Cards */}
+                  {categories.map(cat => (
+                    <div
+                      key={cat}
+                      onClick={() => toggleCategory(cat)}
+                      className={`group cursor-pointer relative p-4 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg ${
+                        selectedCategories.includes(cat)
+                          ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-200/50"
+                          : "bg-white/90 backdrop-blur-sm text-blue-700 border border-blue-100 hover:bg-white hover:border-blue-200"
                       }`}
                     >
-                      {subFilter.charAt(0).toUpperCase() + subFilter.slice(1)}
-                      {selectedSubFilters.includes(subFilter) && (
-                        <span className="ml-1 text-xs">✓</span>
+                      <div className="flex flex-col items-center text-center min-w-[80px]">
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 ${
+                          selectedCategories.includes(cat) 
+                            ? "bg-white/20" 
+                            : "bg-blue-50 group-hover:bg-blue-100"
+                        } transition-colors`}>
+                          <CategoryBadge category={cat} />
+                        </div>
+                        <div className="text-xs font-medium capitalize">{cat}</div>
+                        <div className={`text-xs mt-1 px-2 py-0.5 rounded-full ${
+                          selectedCategories.includes(cat) 
+                            ? "bg-white/20 text-white" 
+                            : "bg-blue-100 text-blue-600"
+                        }`}>
+                          {all.filter(p => normalizeCategory(p.category) === cat).length}
+                        </div>
+                      </div>
+                      {selectedCategories.includes(cat) && (
+                        <div className="absolute -top-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md animate-scale-in">
+                          <span className="text-blue-600 text-xs">✓</span>
+                        </div>
                       )}
-                    </button>
+                    </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Sub-filters for restaurants - Modern Pills */}
+              {selectedCategories.includes('restaurant') && (
+                <div className="space-y-2 mt-4 p-4 bg-blue-50/50 rounded-xl border border-blue-100/50 animate-fade-in">
+                  <div className="text-sm font-medium text-blue-700">{t('places.cuisineType')}</div>
+                  <div className="flex flex-wrap gap-2">
+                    {['carne', 'pesce'].map(subFilter => (
+                      <button
+                        key={subFilter}
+                        onClick={() => toggleSubFilter(subFilter)}
+                        className={`px-4 py-2 rounded-full border-2 transition-all duration-200 text-sm font-medium hover:scale-105 ${
+                          selectedSubFilters.includes(subFilter)
+                            ? "bg-blue-500 text-white border-blue-500 shadow-lg shadow-blue-200/50"
+                            : "bg-white text-blue-600 border-blue-200 hover:bg-blue-50 hover:border-blue-300"
+                        }`}
+                      >
+                        <span className="mr-2">{subFilter === 'carne' ? '🥩' : '🐟'}</span>
+                        {subFilter.charAt(0).toUpperCase() + subFilter.slice(1)}
+                        {selectedSubFilters.includes(subFilter) && (
+                          <span className="ml-2 w-4 h-4 bg-white/20 rounded-full inline-flex items-center justify-center text-xs">✓</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
