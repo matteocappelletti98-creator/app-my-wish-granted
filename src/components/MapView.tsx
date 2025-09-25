@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import L, { Map as LeafletMap, LatLngBoundsExpression } from "leaflet";
-import { Place } from "@/lib/sheet";
+import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 
 type Props = {
@@ -129,7 +129,7 @@ export default function MapView({ places, selectedCategories = [], className, on
           ${favoriteButton}
           <div style="font-weight:600;margin-bottom:4px">${emoji} ${escapeHtml(p.name)}</div>
           <div style="color:#555;font-size:12px">${escapeHtml(p.city)}${p.city && p.country ? ", " : ""}${escapeHtml(p.country)}</div>
-          ${p.image ? `<img src="${p.image}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px"/>` : ""}
+          ${p.image ? `<img src="${normalizeImagePath(p.image)}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px;max-width:100%;height:auto"/>` : ""}
           ${detailButton}
           ${googleMapsButton}
         </div>

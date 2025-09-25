@@ -52,6 +52,21 @@ function toSlug(s: string) {
     .toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"").slice(0,80);
 }
 
+export function normalizeImagePath(imagePath: string): string {
+  if (!imagePath || imagePath === "z") return "";
+  
+  let normalized = imagePath;
+  // Remove "public/" prefix if present
+  if (normalized.startsWith("public/")) {
+    normalized = normalized.substring(7);
+  }
+  // Add "/" prefix if not present
+  if (!normalized.startsWith("/")) {
+    normalized = "/" + normalized;
+  }
+  return normalized;
+}
+
 export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
   const res = await fetch(csvUrl);
   if (!res.ok) throw new Error("Impossibile leggere il CSV del foglio");
@@ -76,17 +91,7 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
     console.log(`Parsing ${name}: lat=${rec.lat} -> ${lat}, lng=${rec.lng} -> ${lng}`);
 
     // Normalize image path
-    let imagePath = rec.image || "";
-    if (imagePath && imagePath !== "z") {
-      // Remove "public/" prefix if present
-      if (imagePath.startsWith("public/")) {
-        imagePath = imagePath.substring(7);
-      }
-      // Add "/" prefix if not present
-      if (!imagePath.startsWith("/")) {
-        imagePath = "/" + imagePath;
-      }
-    }
+    const imagePath = normalizeImagePath(rec.image || "");
 
     out.push({
       id, slug,
