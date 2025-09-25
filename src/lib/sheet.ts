@@ -75,13 +75,26 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
 
     console.log(`Parsing ${name}: lat=${rec.lat} -> ${lat}, lng=${rec.lng} -> ${lng}`);
 
+    // Normalize image path
+    let imagePath = rec.image || "";
+    if (imagePath && imagePath !== "z") {
+      // Remove "public/" prefix if present
+      if (imagePath.startsWith("public/")) {
+        imagePath = imagePath.substring(7);
+      }
+      // Add "/" prefix if not present
+      if (!imagePath.startsWith("/")) {
+        imagePath = "/" + imagePath;
+      }
+    }
+
     out.push({
       id, slug,
       name,
       city,
       country: rec.country || "",
       description: rec.description || "",
-      image: rec.image || "",
+      image: imagePath,
       status: (rec.status || "").toLowerCase(),
       category: (rec.category || "other"),
       address: rec.address || "",
