@@ -23,14 +23,31 @@ export default function Blog() {
     tip: allArticles.filter(a => a.tipo === 'tip')
   };
 
-  const renderArticles = (categoryArticles: ArticleMeta[]) => (
+  // Filtra gli articoli in base alla ricerca
+  const filterArticles = (categoryArticles: ArticleMeta[]) => {
+    if (!searchQuery.trim()) return categoryArticles;
+    
+    const query = searchQuery.toLowerCase().trim();
+    return categoryArticles.filter(article => 
+      article.titolo.toLowerCase().includes(query) ||
+      article.autore?.toLowerCase().includes(query) ||
+      article.tags?.some(tag => tag.toLowerCase().includes(query))
+    );
+  };
+
+  const renderArticles = (categoryArticles: ArticleMeta[]) => {
+    const filteredArticles = filterArticles(categoryArticles);
+    
+    return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {categoryArticles.length === 0 ? (
+      {filteredArticles.length === 0 ? (
         <div className="col-span-full text-center py-12">
-          <p className="text-blue-700/70 text-lg font-light">Nessun articolo disponibile in questa categoria</p>
+          <p className="text-blue-700/70 text-lg font-light">
+            {searchQuery.trim() ? "Nessun articolo trovato per la ricerca" : "Nessun articolo disponibile in questa categoria"}
+          </p>
         </div>
       ) : (
-        categoryArticles.map(article => (
+        filteredArticles.map(article => (
           <Link key={article.id} to={`/articolo/${article.slug}`}>
             <Card className="group overflow-hidden bg-white/60 backdrop-blur-lg border border-blue-100/50 hover:bg-white/80 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-2 rounded-3xl h-full">
               {article.cover && (
@@ -89,6 +106,7 @@ export default function Blog() {
       )}
     </div>
   );
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 relative overflow-hidden">
@@ -143,19 +161,16 @@ export default function Blog() {
             </div>
             
             {/* Search */}
-            <div className="flex gap-4 max-w-2xl mx-auto">
-              <div className="relative flex-1">
+            <div className="max-w-2xl mx-auto">
+              <div className="relative">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-600/40 w-5 h-5" />
                 <Input
-                  placeholder={t('blog.searchArticles')}
+                  placeholder="Cerca articoli..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-12 py-4 bg-white/80 backdrop-blur-sm border-blue-100/50 rounded-2xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
                 />
               </div>
-              <Button variant="outline" className="px-6 py-4 bg-white/80 backdrop-blur-sm border-blue-100/50 rounded-2xl text-blue-600 hover:bg-white/90 transition-all">
-                {t('blog.filters')}
-              </Button>
             </div>
           </div>
         </div>
