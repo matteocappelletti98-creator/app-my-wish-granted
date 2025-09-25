@@ -102,11 +102,25 @@ export default function Blog() {
       <header className="relative z-10 bg-white/70 backdrop-blur-sm border-b border-blue-100/50">
         <div className="px-6 py-16">
           <div className="mx-auto max-w-6xl">
-            <div className="text-center mb-12">
-              <h1 className="text-6xl md:text-7xl font-extralight text-blue-900 mb-4 tracking-wider">
-                {t('blog.title')}
+            <div className="text-center mb-16">
+              <h1 className="text-8xl md:text-9xl font-extralight text-blue-900 mb-8 tracking-wider">
+                Blog
               </h1>
-              <p className="text-xl text-blue-700/70 font-light tracking-wide mb-8">{t('blog.subtitle')}</p>
+              <p className="text-xl text-blue-700/70 font-light tracking-wide mb-12">{t('blog.subtitle')}</p>
+              
+              {/* Category Navigation Buttons */}
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+                <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl">
+                  FAQ
+                </Button>
+                <Button className="bg-gradient-to-r from-green-600 to-emerald-600 text-white font-medium tracking-wide hover:from-green-700 hover:to-emerald-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl">
+                  Day Trip
+                </Button>
+                <Button className="bg-gradient-to-r from-purple-600 to-violet-600 text-white font-medium tracking-wide hover:from-purple-700 hover:to-violet-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl">
+                  Tips
+                </Button>
+              </div>
+              
               <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto mb-8"></div>
               
               <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-8 py-4">
