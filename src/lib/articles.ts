@@ -21,7 +21,7 @@ const mockArticles: ArticleMeta[] = [
     tipo: "faq",
     autore: "Team Explore",
     data: "2025-09-25",
-    cover: "/articles/tp-cover.jpg",
+    cover: "/articles/conceptlab.jpg",
     tags: ["screening", "personalizzazione"],
     slug: "come-funziona-travelling-path"
   }
