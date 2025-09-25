@@ -106,7 +106,6 @@ export default function Blog() {
               <h1 className="text-8xl md:text-9xl font-extralight text-blue-900 mb-8 tracking-wider">
                 Blog
               </h1>
-              <p className="text-xl text-blue-700/70 font-light tracking-wide mb-12">{t('blog.subtitle')}</p>
               
               {/* Category Navigation Buttons */}
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
@@ -120,12 +119,6 @@ export default function Blog() {
                   Tips
                 </Button>
               </div>
-              
-              <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto mb-8"></div>
-              
-              <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-8 py-4">
-                {t('blog.writeArticle')}
-              </Button>
             </div>
             
             {/* Search */}
@@ -151,11 +144,13 @@ export default function Blog() {
       <main className="relative z-10 px-6 py-12">
         <div className="mx-auto max-w-6xl">
           <Tabs defaultValue="faq" className="space-y-8">
-            <TabsList className="grid w-full grid-cols-3 max-w-xs mx-auto bg-white/80 backdrop-blur-sm border border-blue-100/50 rounded-2xl p-1">
-              <TabsTrigger value="faq" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">{t('blog.faq')}</TabsTrigger>
-              <TabsTrigger value="daytrip" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">{t('blog.dayTrip')}</TabsTrigger>
-              <TabsTrigger value="tips" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">{t('blog.tips')}</TabsTrigger>
-            </TabsList>
+            <div className="hidden">
+              <TabsList className="grid w-full grid-cols-3 max-w-xs mx-auto bg-white/80 backdrop-blur-sm border border-blue-100/50 rounded-2xl p-1">
+                <TabsTrigger value="faq" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">{t('blog.faq')}</TabsTrigger>
+                <TabsTrigger value="daytrip" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">{t('blog.dayTrip')}</TabsTrigger>
+                <TabsTrigger value="tips" className="rounded-xl py-2 px-4 font-light tracking-wide data-[state=active]:bg-blue-600 data-[state=active]:text-white transition-all text-sm">{t('blog.tips')}</TabsTrigger>
+              </TabsList>
+            </div>
 
             <TabsContent value="faq" className="space-y-8">
               <div className="text-center mb-12">
