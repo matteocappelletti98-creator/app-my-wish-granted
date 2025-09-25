@@ -89,7 +89,7 @@ export function getAllArticles(language: string = 'it'): ArticleMeta[] {
   
   Object.entries(files).forEach(([path, raw]) => {
     const fileName = path.split('/').pop()!;
-    const match = fileName.match(/^(.+)\.(it|en)\.md$/);
+    const match = fileName.match(/^(.+)\.(it|en|fr|de|es)\.md$/);
     
     if (match) {
       const [, baseName, lang] = match;
@@ -104,21 +104,21 @@ export function getAllArticles(language: string = 'it'): ArticleMeta[] {
   
   console.log("Article groups:", articleGroups);
   
-  // Per ogni gruppo, scegli la versione nella lingua richiesta o fallback italiano
+  // Per ogni gruppo, scegli la versione nella lingua richiesta o fallback inglese
   const articles: ArticleMeta[] = [];
   
   Object.entries(articleGroups).forEach(([baseName, langs]) => {
     let selectedLang = language;
     let articleData = langs[language];
     
-    // Se non esiste nella lingua richiesta, usa l'italiano come fallback
-    if (!articleData && langs['it']) {
-      selectedLang = 'it';
-      articleData = langs['it'];
-      console.log(`Fallback to Italian for article: ${baseName}`);
+    // Se non esiste nella lingua richiesta, usa l'inglese come fallback
+    if (!articleData && langs['en']) {
+      selectedLang = 'en';
+      articleData = langs['en'];
+      console.log(`Fallback to English for article: ${baseName}`);
     }
     
-    // Se non esiste nemmeno in italiano, prendi la prima disponibile
+    // Se non esiste nemmeno in inglese, prendi la prima disponibile
     if (!articleData) {
       const availableLangs = Object.keys(langs);
       if (availableLangs.length > 0) {
@@ -156,7 +156,7 @@ export function getArticleBySlug(slug: string, language: string = 'it'): Article
   
   Object.entries(files).forEach(([path, raw]) => {
     const fileName = path.split('/').pop()!;
-    const match = fileName.match(/^(.+)\.(it|en)\.md$/);
+    const match = fileName.match(/^(.+)\.(it|en|fr|de|es)\.md$/);
     
     if (match) {
       const [, baseName, lang] = match;
@@ -184,14 +184,14 @@ export function getArticleBySlug(slug: string, language: string = 'it'): Article
       let selectedArticle = langs[language];
       let usedLang = language;
       
-      // Se non esiste nella lingua richiesta, usa l'italiano come fallback
-      if (!selectedArticle && langs['it']) {
-        selectedArticle = langs['it'];
-        usedLang = 'it';
-        console.log(`Fallback to Italian for article: ${baseName}`);
+      // Se non esiste nella lingua richiesta, usa l'inglese come fallback
+      if (!selectedArticle && langs['en']) {
+        selectedArticle = langs['en'];
+        usedLang = 'en';
+        console.log(`Fallback to English for article: ${baseName}`);
       }
       
-      // Se non esiste nemmeno in italiano, prendi la prima disponibile
+      // Se non esiste nemmeno in inglese, prendi la prima disponibile
       if (!selectedArticle) {
         const availableLangs = Object.keys(langs);
         if (availableLangs.length > 0) {
