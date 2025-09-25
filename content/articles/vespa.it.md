@@ -1,7 +1,6 @@
 ---
 id: " Noleggia una vespa!  "
-titolo: "Cosa mi occorre per noleggiare una vespa o una moto in generale
- "
+titolo: "Cosa mi occorre per noleggiare una vespa o una moto in generale"
 tipo: "faq"            # faq | tip | daytrip
 autore: "Explore team"
 data: "2025-09-25"
