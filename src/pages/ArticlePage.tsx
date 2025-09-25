@@ -1,56 +1,15 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Clock, User, Calendar, Share2, Bookmark, Eye, Heart } from "lucide-react";
 import { useState } from "react";
-
-// Mock data per l'articolo
-const getArticleById = (id: string) => {
-  const articles = {
-    "1": {
-      id: "1",
-      title: "La storia nascosta di Caffé e Caffé",
-      content: `
-        <p class="text-lg leading-relaxed mb-6">Nascosto tra le strette vie del centro storico di Como, Caffé e Caffé rappresenta molto più di una semplice caffetteria. La sua storia affonda le radici nel 1892, quando la famiglia Rossi aprì quello che allora era solo un piccolo torrefazione.</p>
-
-        <h2 class="text-2xl font-light text-blue-900 mb-4 mt-8">Le origini storiche</h2>
-        <p class="mb-6">Nel cuore della città lariana, questo luogo ha visto passare generazioni di comacini e viaggiatori. Le mura di pietra testimoniano decenni di conversazioni, accordi commerciali e momenti di pausa che hanno contribuito a scrivere la storia moderna di Como.</p>
-
-        <blockquote class="border-l-4 border-blue-200 pl-6 italic text-blue-800 my-8 bg-blue-50/50 p-4 rounded-r-xl">
-          "Qui non si serve solo caffè, si crea comunità. Ogni tazza racconta una storia, ogni cliente porta con sé un pezzo di Como." - Giuseppe Rossi, proprietario storico
-        </blockquote>
-
-        <h2 class="text-2xl font-light text-blue-900 mb-4 mt-8">La tradizione che continua</h2>
-        <p class="mb-6">Oggi, Caffé e Caffé mantiene viva la tradizione artigianale della torrefazione, utilizzando tecniche tramandate di generazione in generazione. La miscela esclusiva "Como Oro" è diventata simbolo della città, apprezzata da locals e turisti.</p>
-
-        <p class="mb-6">L'atmosfera intima e accogliente del locale, con i suoi tavoli in legno massello e le lampade dal design vintage, trasporta i visitatori in un'epoca dove il tempo scorreva più lentamente e ogni momento aveva il suo valore.</p>
-
-        <h2 class="text-2xl font-light text-blue-900 mb-4 mt-8">Curiosità e aneddoti</h2>
-        <ul class="list-disc pl-6 mb-6 space-y-2">
-          <li>Il famoso scrittore Alessandro Manzoni era un cliente abituale quando soggiornava a Como</li>
-          <li>Durante la seconda guerra mondiale, il locale servì come punto di incontro clandestino per la resistenza</li>
-          <li>La ricetta originale della miscela "Como Oro" è custodita in una cassaforte e conosciuta solo da tre persone</li>
-        </ul>
-      `,
-      author: "Marco Bianchi",
-      date: "2 giorni fa",
-      readTime: "5 min",
-      image: "/public/caffe-ecaffe-immagine.jpg",
-      category: "Storia",
-      views: 1247,
-      likes: 89,
-      placeName: "Caffé e Caffé"
-    }
-  };
-  
-  return articles[id as keyof typeof articles] || null;
-};
+import { getArticleBySlug } from "@/lib/articles";
 
 export default function ArticlePage() {
-  const { articleId } = useParams<{ articleId: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [likes, setLikes] = useState(0);
 
-  const article = getArticleById(articleId || "");
+  const article = getArticleBySlug(slug || "");
 
   if (!article) {
     return (
@@ -107,41 +66,43 @@ export default function ArticlePage() {
           {/* Article Meta */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full mb-6">
-              <span>{article.category}</span>
+              <span className="capitalize">{article.tipo}</span>
             </div>
             
             <h1 className="text-4xl md:text-5xl font-light text-blue-900 mb-6 tracking-wide leading-tight">
-              {article.title}
+              {article.titolo}
             </h1>
             
             <div className="flex items-center justify-center gap-6 text-sm text-blue-600/70 mb-8">
-              <div className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                <span className="font-medium">{article.author}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <span>{article.date}</span>
-              </div>
+              {article.autore && (
+                <div className="flex items-center gap-2">
+                  <User className="w-4 h-4" />
+                  <span className="font-medium">{article.autore}</span>
+                </div>
+              )}
+              {article.data && (
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  <span>{article.data}</span>
+                </div>
+              )}
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                <span>{article.readTime}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4" />
-                <span>{article.views}</span>
+                <span>5 min</span>
               </div>
             </div>
           </div>
 
           {/* Article Image */}
-          <div className="aspect-[16/9] overflow-hidden rounded-3xl mb-12 shadow-xl">
-            <img 
-              src={article.image} 
-              alt={article.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
+          {article.cover && (
+            <div className="aspect-[16/9] overflow-hidden rounded-3xl mb-12 shadow-xl">
+              <img 
+                src={article.cover} 
+                alt={article.titolo}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
         </div>
       </section>
 
@@ -151,7 +112,7 @@ export default function ArticlePage() {
           <article className="prose prose-lg max-w-none">
             <div 
               className="text-blue-900/90 leading-relaxed font-light"
-              dangerouslySetInnerHTML={{ __html: article.content }}
+              dangerouslySetInnerHTML={{ __html: article.html }}
             />
           </article>
         </div>
@@ -172,26 +133,23 @@ export default function ArticlePage() {
                   }`}
                 >
                   <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
-                  <span className="font-medium">{article.likes + likes}</span>
+                  <span className="font-medium">{likes}</span>
                 </button>
-                
-                <div className="flex items-center gap-2 text-sm text-blue-600/70">
-                  <Eye className="w-4 h-4" />
-                  <span>{article.views} visualizzazioni</span>
-                </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-blue-600 text-sm font-medium">
-                    {article.author.split(' ').map(n => n[0]).join('')}
-                  </span>
+              {article.autore && (
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                    <span className="text-blue-600 text-sm font-medium">
+                      {article.autore.split(' ').map(n => n[0]).join('')}
+                    </span>
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium text-blue-900">{article.autore}</div>
+                    <div className="text-xs text-blue-600/70">Autore</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-sm font-medium text-blue-900">{article.author}</div>
-                  <div className="text-xs text-blue-600/70">Autore</div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -200,29 +158,29 @@ export default function ArticlePage() {
       {/* Related Articles */}
       <section className="px-6 pb-16 bg-blue-50/30">
         <div className="max-w-6xl mx-auto py-12">
-          <h2 className="text-2xl font-light text-blue-900 text-center mb-8">Altri articoli su {article.placeName}</h2>
+          <h2 className="text-2xl font-light text-blue-900 text-center mb-8">Altri articoli</h2>
           
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Mock related articles */}
             {[
               {
                 id: "2",
-                title: "Guida locale: cosa non perdere a Caffé e Caffé",
+                title: "Guida locale: Scopri Como",
                 excerpt: "I consigli esclusivi di chi vive qui per vivere un'esperienza autentica...",
-                image: "/public/beretta.png",
+                image: "/beretta.png",
                 category: "Guida",
                 readTime: "8 min"
               },
               {
                 id: "3", 
-                title: "Fotografia: i migliori angoli di Caffé e Caffé",
+                title: "Fotografia: i migliori angoli di Como",
                 excerpt: "Una guida fotografica completa per catturare la bellezza...",
-                image: "/public/duomodicomo.png",
+                image: "/duomodicomo.png",
                 category: "Fotografia", 
                 readTime: "6 min"
               }
             ].map((relatedArticle) => (
-              <Link key={relatedArticle.id} to={`/articolo/${relatedArticle.id}`} className="group">
+              <Link key={relatedArticle.id} to={`/blog`} className="group">
                 <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-blue-100/50 overflow-hidden hover:bg-white/90 hover:shadow-xl hover:shadow-blue-100/20 transition-all duration-300 hover:-translate-y-1">
                   <div className="aspect-[4/3] overflow-hidden">
                     <img 
