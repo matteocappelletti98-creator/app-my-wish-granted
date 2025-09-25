@@ -48,9 +48,9 @@ export default function Index() {
         <div className="mx-auto max-w-6xl flex items-center justify-between">
           <div>
             <div className="text-2xl font-bold flex items-center gap-2 text-foreground">
-              <span className="text-nature-green">📍</span> <span>explore</span>
+              <span className="text-primary">📍</span> <span>explore</span>
             </div>
-            <div className="text-sm text-muted-foreground">Independent local guide</div>
+            <div className="text-sm text-primary/70">Independent local guide</div>
           </div>
           <div className="flex gap-3">
             <Link to="/add-place" className="rounded-xl bg-primary text-primary-foreground px-3 py-2">+ Aggiungi luogo</Link>
