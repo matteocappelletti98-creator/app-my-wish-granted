@@ -9,4 +9,4 @@ tags: ["screening","personalizzazione"]
 ---
 Il Travelling Path è il questionario iniziale che ci aiuta a proporti i posti giusti.
 Qui spieghi in poche righe come funziona e perché è utile.
-ffrffrffwdfj3norkf
+ffrffrffwdfj3norkfQnxche perche lòa vita   PWDOPWEFNPIQERWFGNRQG
