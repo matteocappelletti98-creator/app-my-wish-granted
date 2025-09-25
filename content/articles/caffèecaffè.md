@@ -8,4 +8,5 @@ cover: "/articles/conceptlab.jpg"
 tags: ["screening","personalizzazione"]
 ---
 
-Ciao bella come stai tutto ok 
+Ciao bella come stai tutto ok xxxxxx
+
