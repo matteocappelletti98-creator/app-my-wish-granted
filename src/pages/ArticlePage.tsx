@@ -10,6 +10,9 @@ export default function ArticlePage() {
   const [likes, setLikes] = useState(0);
 
   const article = getArticleBySlug(slug || "");
+  console.log("ArticlePage - slug:", slug);
+  console.log("ArticlePage - article found:", article);
+  console.log("ArticlePage - article HTML:", article?.html);
 
   if (!article) {
     return (

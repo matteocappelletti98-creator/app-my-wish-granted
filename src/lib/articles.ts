@@ -40,7 +40,9 @@ export function getAllArticles(): ArticleMeta[] {
 }
 
 export function getArticleBySlug(slug: string): Article | null {
+  console.log("getArticleBySlug called with slug:", slug);
   const article = mockArticles.find(a => a.slug === slug);
+  console.log("Found article:", article);
   if (!article) return null;
   
   // HTML content per ora
