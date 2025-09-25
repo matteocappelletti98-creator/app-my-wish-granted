@@ -5,7 +5,7 @@ titolo: " Come riconoscere un ristorante turistico in quattro segnali
 tipo: "tip"            # faq | tip | daytrip
 autore: "Explore team"
 data: "2025-09-25"
-cover: "/articles/touristtrap.jpg"
+cover: "/articles/touristrap.jpg"
 tags: ["   "," "]
 ---
 
