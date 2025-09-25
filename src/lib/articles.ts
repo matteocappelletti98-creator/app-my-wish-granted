@@ -80,15 +80,58 @@ function slugify(s: string) {
     .replace(/\s+/g, "-");
 }
 
-export function getAllArticles(): ArticleMeta[] {
+export function getAllArticles(language: string = 'it'): ArticleMeta[] {
   console.log("getAllArticles - files found:", Object.keys(files));
-  return Object.entries(files)
-    .map(([path, raw]) => {
-      console.log("Processing file:", path);
+  console.log("getAllArticles - requested language:", language);
+  
+  // Raggruppa articoli per base name (senza estensione lingua)
+  const articleGroups: { [baseName: string]: { [lang: string]: { path: string; data: any } } } = {};
+  
+  Object.entries(files).forEach(([path, raw]) => {
+    const fileName = path.split('/').pop()!;
+    const match = fileName.match(/^(.+)\.(it|en)\.md$/);
+    
+    if (match) {
+      const [, baseName, lang] = match;
+      if (!articleGroups[baseName]) {
+        articleGroups[baseName] = {};
+      }
+      
       const { data } = parseFrontmatter(raw as string);
-      console.log("Parsed frontmatter:", data);
+      articleGroups[baseName][lang] = { path, data };
+    }
+  });
+  
+  console.log("Article groups:", articleGroups);
+  
+  // Per ogni gruppo, scegli la versione nella lingua richiesta o fallback italiano
+  const articles: ArticleMeta[] = [];
+  
+  Object.entries(articleGroups).forEach(([baseName, langs]) => {
+    let selectedLang = language;
+    let articleData = langs[language];
+    
+    // Se non esiste nella lingua richiesta, usa l'italiano come fallback
+    if (!articleData && langs['it']) {
+      selectedLang = 'it';
+      articleData = langs['it'];
+      console.log(`Fallback to Italian for article: ${baseName}`);
+    }
+    
+    // Se non esiste nemmeno in italiano, prendi la prima disponibile
+    if (!articleData) {
+      const availableLangs = Object.keys(langs);
+      if (availableLangs.length > 0) {
+        selectedLang = availableLangs[0];
+        articleData = langs[selectedLang];
+        console.log(`Using ${selectedLang} for article: ${baseName}`);
+      }
+    }
+    
+    if (articleData) {
+      const { data } = articleData;
       const titolo = (data.titolo ?? "Senza titolo") as string;
-      return {
+      articles.push({
         id: (data.id ?? slugify(titolo)) as string,
         titolo,
         tipo: (data.tipo ?? "tip") as ArticleMeta["tipo"],
@@ -97,42 +140,88 @@ export function getAllArticles(): ArticleMeta[] {
         cover: data.cover as string | undefined,
         tags: (data.tags ?? []) as string[],
         slug: slugify(titolo),
-      };
-    })
-    .sort((a, b) => (b.data ?? "").localeCompare(a.data ?? ""));
+      });
+    }
+  });
+  
+  return articles.sort((a, b) => (b.data ?? "").localeCompare(a.data ?? ""));
 }
 
-export function getArticleBySlug(slug: string): Article | null {
-  console.log("getArticleBySlug - searching for slug:", slug);
+export function getArticleBySlug(slug: string, language: string = 'it'): Article | null {
+  console.log("getArticleBySlug - searching for slug:", slug, "in language:", language);
   console.log("getArticleBySlug - available files:", Object.keys(files));
   
-  for (const [path, raw] of Object.entries(files)) {
-    console.log("Checking file:", path);
-    const file = raw as string;
-    const { data, content } = parseFrontmatter(file);
-    console.log("File frontmatter:", data);
-    console.log("File content:", content);
-    const titolo = (data.titolo ?? "Senza titolo") as string;
-    const fileSlug = slugify(titolo);
-    console.log("Generated slug:", fileSlug, "vs requested:", slug);
+  // Raggruppa articoli per base name e trova corrispondenze per slug
+  const articleGroups: { [baseName: string]: { [lang: string]: { path: string; data: any; content: string } } } = {};
+  
+  Object.entries(files).forEach(([path, raw]) => {
+    const fileName = path.split('/').pop()!;
+    const match = fileName.match(/^(.+)\.(it|en)\.md$/);
     
-    if (fileSlug === slug) {
-      console.log("Match found! Processing content...");
-      const html = marked(content) as string;
-      console.log("Generated HTML:", html);
-      return {
-        id: (data.id ?? slug) as string,
-        titolo,
-        tipo: (data.tipo ?? "tip") as ArticleMeta["tipo"],
-        autore: data.autore as string | undefined,
-        data: data.data as string | undefined,
-        cover: data.cover as string | undefined,
-        tags: (data.tags ?? []) as string[],
-        slug,
-        html,
-      };
+    if (match) {
+      const [, baseName, lang] = match;
+      if (!articleGroups[baseName]) {
+        articleGroups[baseName] = {};
+      }
+      
+      const { data, content } = parseFrontmatter(raw as string);
+      articleGroups[baseName][lang] = { path, data, content };
+    }
+  });
+  
+  // Cerca l'articolo che corrisponde al slug
+  for (const [baseName, langs] of Object.entries(articleGroups)) {
+    // Controlla se qualsiasi versione linguistica corrisponde al slug
+    const matchingLang = Object.entries(langs).find(([lang, article]) => {
+      const titolo = (article.data.titolo ?? "Senza titolo") as string;
+      return slugify(titolo) === slug;
+    });
+    
+    if (matchingLang) {
+      console.log("Found article group for slug:", slug);
+      
+      // Cerca nella lingua richiesta
+      let selectedArticle = langs[language];
+      let usedLang = language;
+      
+      // Se non esiste nella lingua richiesta, usa l'italiano come fallback
+      if (!selectedArticle && langs['it']) {
+        selectedArticle = langs['it'];
+        usedLang = 'it';
+        console.log(`Fallback to Italian for article: ${baseName}`);
+      }
+      
+      // Se non esiste nemmeno in italiano, prendi la prima disponibile
+      if (!selectedArticle) {
+        const availableLangs = Object.keys(langs);
+        if (availableLangs.length > 0) {
+          usedLang = availableLangs[0];
+          selectedArticle = langs[usedLang];
+          console.log(`Using ${usedLang} for article: ${baseName}`);
+        }
+      }
+      
+      if (selectedArticle) {
+        const { data, content } = selectedArticle;
+        const html = marked(content) as string;
+        const titolo = (data.titolo ?? "Senza titolo") as string;
+        
+        console.log(`Match found! Using ${usedLang} version. Processing content...`);
+        return {
+          id: (data.id ?? slug) as string,
+          titolo,
+          tipo: (data.tipo ?? "tip") as ArticleMeta["tipo"],
+          autore: data.autore as string | undefined,
+          data: data.data as string | undefined,
+          cover: data.cover as string | undefined,
+          tags: (data.tags ?? []) as string[],
+          slug,
+          html,
+        };
+      }
     }
   }
+  
   console.log("No matching article found for slug:", slug);
   return null;
 }
