@@ -8,4 +8,4 @@ cover: "/articles/conceptlab.jpg"
 tags: ["screening","personalizzazione"]
 ---
 
-Ciao bella 
+Ciao bella come stai 
