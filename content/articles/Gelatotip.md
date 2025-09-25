@@ -4,7 +4,7 @@ titolo: "How to recognize high quality gelato! "
 tipo: "tip"            # faq | tip | daytrip
 autore: "Explore team"
 data: "2025-09-25"
-cover: "/articles/conceptlab.jpg"
+cover: "/articles/gelato.jpg"
 tags: ["gelato","tips"]
 ---
 Even the best gelaterie, in order to meet high demand, sometimes use semi-finished products for certain flavors. These can be high-quality, but they are still industrial products. However, every good gelateria has a few signature flavors they truly excel at — and with those, you can never go wrong. Explore has gone in search of the best gelaterie and their top flavors: check out our guides to discover them!
