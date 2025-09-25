@@ -42,19 +42,19 @@ export default function Index() {
   }, [all, search, cat]);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       {/* Header stile home */}
-      <header className="px-6 py-4 border-b bg-white">
+      <header className="px-6 py-4 border-b bg-card">
         <div className="mx-auto max-w-6xl flex items-center justify-between">
           <div>
-            <div className="text-2xl font-bold flex items-center gap-2">
-              <span className="text-blue-600">📍</span> <span>explore</span>
+            <div className="text-2xl font-bold flex items-center gap-2 text-foreground">
+              <span className="text-nature-green">📍</span> <span>explore</span>
             </div>
-            <div className="text-sm text-blue-900/70">Independent local guide</div>
+            <div className="text-sm text-muted-foreground">Independent local guide</div>
           </div>
           <div className="flex gap-3">
-            <Link to="/add-place" className="rounded-xl bg-blue-600 text-white px-3 py-2">+ Aggiungi luogo</Link>
-            <button onClick={()=>setOverlay(true)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">🗖 Ingrandisci</button>
+            <Link to="/add-place" className="rounded-xl bg-primary text-primary-foreground px-3 py-2">+ Aggiungi luogo</Link>
+            <button onClick={()=>setOverlay(true)} className="rounded-xl border border-primary text-primary px-3 py-2">🗖 Ingrandisci</button>
           </div>
         </div>
       </header>
@@ -70,17 +70,17 @@ export default function Index() {
             )}
           </div>
           <aside className="lg:col-span-1">
-            <div className="rounded-2xl border p-4 bg-white">
-              <h3 className="font-semibold mb-2">Categorie</h3>
+            <div className="rounded-2xl border p-4 bg-card">
+              <h3 className="font-semibold mb-2 text-card-foreground">Categorie</h3>
               <div className="flex flex-col gap-2">
                 <button onClick={()=>setCat("")}
-                  className={`text-left rounded-xl px-3 py-2 border ${cat==="" ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
+                  className={`text-left rounded-xl px-3 py-2 border ${cat==="" ? "bg-primary text-primary-foreground border-primary" : "bg-card hover:bg-muted"}`}>
                   Tutte
                 </button>
                 {categories.map(c => (
                   <button key={c} onClick={()=> setCat(c===cat?"":c)}
                     className={`text-left rounded-xl px-3 py-2 border flex items-center gap-2
-                    ${c===cat ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
+                    ${c===cat ? "bg-primary text-primary-foreground border-primary" : "bg-card hover:bg-muted"}`}>
                     <CategoryBadge category={c} />
                     <span className="text-sm">{c}</span>
                   </button>
@@ -105,7 +105,7 @@ export default function Index() {
           </div>
 
           {filtered.length === 0 ? (
-            <div className="rounded-2xl border bg-white p-8 text-center text-gray-600">
+            <div className="rounded-2xl border bg-card p-8 text-center text-muted-foreground">
               Nessun luogo trovato {cat ? `in "${cat}"` : ""}.
             </div>
           ) : (
@@ -118,10 +118,10 @@ export default function Index() {
 
       {/* Overlay fullscreen mappa */}
       {overlay && (
-        <div className="fixed inset-0 z-50 bg-white">
+        <div className="fixed inset-0 z-50 bg-background">
           <div className="absolute right-4 top-4 flex gap-2">
-            <Link to="/add-place" className="rounded-xl bg-blue-600 text-white px-3 py-2">+ Aggiungi luogo</Link>
-            <button onClick={()=>setOverlay(false)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">✖ Chiudi</button>
+            <Link to="/add-place" className="rounded-xl bg-primary text-primary-foreground px-3 py-2">+ Aggiungi luogo</Link>
+            <button onClick={()=>setOverlay(false)} className="rounded-xl border border-primary text-primary px-3 py-2">✖ Chiudi</button>
           </div>
           {/* riuso gli stessi dati/filtri correnti */}
           <MapView places={filtered} selectedCategory={cat} className="h-full w-full" />

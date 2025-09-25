@@ -1,6 +1,3 @@
-import matter from "gray-matter";
-import { marked } from "marked";
-
 export type ArticleMeta = {
   id: string;
   titolo: string;
@@ -14,49 +11,33 @@ export type ArticleMeta = {
 
 export type Article = ArticleMeta & { html: string };
 
-const files = import.meta.glob("/content/articles/*.md", { as: "raw", eager: true });
-
 function slugify(s: string) {
   return s.toLowerCase().replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "-");
 }
 
 export function getAllArticles(): ArticleMeta[] {
-  return Object.entries(files)
-    .map(([_, raw]) => {
-      const { data } = matter(raw as string);
-      const titolo = (data.titolo ?? "Senza titolo") as string;
-      return {
-        id: (data.id ?? slugify(titolo)) as string,
-        titolo,
-        tipo: (data.tipo ?? "tip") as ArticleMeta["tipo"],
-        autore: data.autore as string | undefined,
-        data: data.data as string | undefined,
-        cover: data.cover as string | undefined,
-        tags: (data.tags ?? []) as string[],
-        slug: slugify(titolo),
-      };
-    })
-    .sort((a, b) => (b.data ?? "").localeCompare(a.data ?? ""));
+  // Placeholder data until markdown files are available
+  return [
+    {
+      id: "welcome",
+      titolo: "Benvenuto nella Guida",
+      tipo: "tip",
+      autore: "Guide Team", 
+      data: "2024-01-01",
+      cover: "/conceptlab.jpg",
+      tags: ["benvenuto"],
+      slug: "welcome"
+    }
+  ];
 }
 
 export function getArticleBySlug(slug: string): Article | null {
-  for (const raw of Object.values(files)) {
-    const file = raw as string;
-    const { data, content } = matter(file);
-    const titolo = (data.titolo ?? "Senza titolo") as string;
-    if (slugify(titolo) === slug) {
-      return {
-        id: (data.id ?? slug) as string,
-        titolo,
-        tipo: (data.tipo ?? "tip") as ArticleMeta["tipo"],
-        autore: data.autore as string | undefined,
-        data: data.data as string | undefined,
-        cover: data.cover as string | undefined,
-        tags: (data.tags ?? []) as string[],
-        slug,
-        html: marked.parse(content),
-      };
-    }
-  }
-  return null;
+  const articles = getAllArticles();
+  const meta = articles.find(a => a.slug === slug);
+  if (!meta) return null;
+  
+  return {
+    ...meta,
+    html: "<h1>Articolo in arrivo</h1><p>I contenuti markdown saranno disponibili a breve.</p>"
+  };
 }
