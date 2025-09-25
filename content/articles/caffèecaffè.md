@@ -4,7 +4,7 @@ titolo: "Come funziona il Travelling Path"
 tipo: "faq"            # faq | tip | daytrip
 autore: "Team Explore"
 data: "2025-09-25"
-cover: "/articles/caffe-ecaffe-immagine.jpg"
+cover: "/articles/conceptlab.jpg"
 tags: ["screening","personalizzazione"]
 ---
 Il Travelling Path è il questionario iniziale che ci aiuta a proporti i posti giusti.
