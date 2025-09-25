@@ -1,4 +1,5 @@
 import matter from "gray-matter";
+import { marked } from "marked";
 
 export type ArticleMeta = {
   id: string;
@@ -13,19 +14,7 @@ export type ArticleMeta = {
 
 export type Article = ArticleMeta & { html: string };
 
-// Per ora usiamo dati mock, ma il sistema è pronto per i file markdown
-const mockArticles: ArticleMeta[] = [
-  {
-    id: "tp-come-funziona",
-    titolo: "Come funziona il Travelling Path",
-    tipo: "faq",
-    autore: "Team Explore",
-    data: "2025-09-25",
-    cover: "/articles/conceptlab.jpg",
-    tags: ["screening", "personalizzazione"],
-    slug: "come-funziona-travelling-path"
-  }
-];
+const files = import.meta.glob("/content/articles/*.md", { as: "raw", eager: true });
 
 function slugify(s: string) {
   return s
@@ -36,43 +25,58 @@ function slugify(s: string) {
 }
 
 export function getAllArticles(): ArticleMeta[] {
-  return mockArticles.sort((a, b) => (b.data ?? "").localeCompare(a.data ?? ""));
+  console.log("getAllArticles - files found:", Object.keys(files));
+  return Object.entries(files)
+    .map(([path, raw]) => {
+      console.log("Processing file:", path);
+      const { data } = matter(raw as string);
+      console.log("Parsed frontmatter:", data);
+      const titolo = (data.titolo ?? "Senza titolo") as string;
+      return {
+        id: (data.id ?? slugify(titolo)) as string,
+        titolo,
+        tipo: (data.tipo ?? "tip") as ArticleMeta["tipo"],
+        autore: data.autore as string | undefined,
+        data: data.data as string | undefined,
+        cover: data.cover as string | undefined,
+        tags: (data.tags ?? []) as string[],
+        slug: slugify(titolo),
+      };
+    })
+    .sort((a, b) => (b.data ?? "").localeCompare(a.data ?? ""));
 }
 
 export function getArticleBySlug(slug: string): Article | null {
-  console.log("getArticleBySlug called with slug:", slug);
-  const article = mockArticles.find(a => a.slug === slug);
-  console.log("Found article:", article);
-  if (!article) return null;
+  console.log("getArticleBySlug - searching for slug:", slug);
+  console.log("getArticleBySlug - available files:", Object.keys(files));
   
-  // HTML content per ora
-  const htmlContent = `
-<h1>${article.titolo}</h1>
-
-<p>Il Travelling Path è il questionario iniziale che ci aiuta a proporti i posti giusti.
-Qui spieghi in poche righe come funziona e perché è utile.</p>
-
-<h2>Come funziona</h2>
-
-<ol>
-<li>Completi il questionario iniziale</li>
-<li>L'algoritmo analizza le tue preferenze</li>
-<li>Ti proponiamo luoghi personalizzati</li>
-<li>Esplori e scopri posti nuovi</li>
-</ol>
-
-<h2>Perché è utile</h2>
-
-<ul>
-<li><strong>Personalizzazione</strong>: Ogni suggerimento è basato sui tuoi gusti</li>
-<li><strong>Scoperta</strong>: Trova luoghi che non avresti mai considerato</li>
-<li><strong>Efficienza</strong>: Risparmia tempo nella pianificazione</li>
-<li><strong>Diversità</strong>: Esplora oltre la tua zona comfort</li>
-</ul>
-  `;
-  
-  return {
-    ...article,
-    html: htmlContent
-  };
+  for (const [path, raw] of Object.entries(files)) {
+    console.log("Checking file:", path);
+    const file = raw as string;
+    const { data, content } = matter(file);
+    console.log("File frontmatter:", data);
+    console.log("File content:", content);
+    const titolo = (data.titolo ?? "Senza titolo") as string;
+    const fileSlug = slugify(titolo);
+    console.log("Generated slug:", fileSlug, "vs requested:", slug);
+    
+    if (fileSlug === slug) {
+      console.log("Match found! Processing content...");
+      const html = marked(content) as string;
+      console.log("Generated HTML:", html);
+      return {
+        id: (data.id ?? slug) as string,
+        titolo,
+        tipo: (data.tipo ?? "tip") as ArticleMeta["tipo"],
+        autore: data.autore as string | undefined,
+        data: data.data as string | undefined,
+        cover: data.cover as string | undefined,
+        tags: (data.tags ?? []) as string[],
+        slug,
+        html,
+      };
+    }
+  }
+  console.log("No matching article found for slug:", slug);
+  return null;
 }
