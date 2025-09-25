@@ -45,6 +45,12 @@ function parseFrontmatter(content: string) {
       const key = line.substring(0, colonIndex).trim();
       let value = line.substring(colonIndex + 1).trim();
       
+      // Remove comments (everything after #)
+      const hashIndex = value.indexOf('#');
+      if (hashIndex >= 0) {
+        value = value.substring(0, hashIndex).trim();
+      }
+      
       // Remove quotes
       if ((value.startsWith('"') && value.endsWith('"')) || 
           (value.startsWith("'") && value.endsWith("'"))) {
