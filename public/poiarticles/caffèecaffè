@@ -1,6 +1,6 @@
 ---
 type: poi
-poi_id: poi:caffe-e-caffe--1qqimv # deve coincidere col tuo Sheet
+poi_id: caffe-e-caffe-como # deve coincidere col tuo Sheet
 title: "Caffé e Caffé"
 slug: "caffe-e-caffe"
 cover: "/images/poi/caffe-e-caffe.jpg"
