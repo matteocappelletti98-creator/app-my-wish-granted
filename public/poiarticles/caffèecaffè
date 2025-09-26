@@ -3,7 +3,7 @@ type: poi
 poi_id: poi:caffe-e-caffe--1qqimv # deve coincidere col tuo Sheet
 title: "Caffé e Caffé"
 slug: "caffe-e-caffe"
-cover: "/images/poi/caffe-e-caffe.jpg"
+cover: "public/articles/caffèecaffèoriz.jpg"
 tags: ["caffè", "como", "storico"]
 updated: 2025-09-26
 ---
