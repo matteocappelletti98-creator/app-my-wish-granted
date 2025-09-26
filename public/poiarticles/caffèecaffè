@@ -3,7 +3,7 @@ type: poi
 poi_id: poi:caffe-e-caffe--1qqimv # deve coincidere col tuo Sheet
 title: "Caffé e Caffé"
 slug: "caffe-e-caffe"
-cover: "/caffecaffeorizzontale.jpg"
+cover: "/caffe-ecaffe-immagine.jpg"
 tags: ["caffè", "como", "storico"]
 updated: 2025-09-26
 ---
@@ -16,7 +16,7 @@ Situato nel cuore di Como, **Caffé e Caffé** è molto più di un semplice bar:
 - Ampia selezione di miscele  
 - Ottimo punto di partenza per scoprire il centro storico  
 
-![Interno del locale](/articles/caffecaffeorizzontale.jpg)
+![Interno del locale](/caffe-ecaffe-immagine.jpg)
 
 ### Curiosità
 Il locale è stato arredato con fotografie storiche di Como e ospita spesso piccole esposizioni artistiche.
