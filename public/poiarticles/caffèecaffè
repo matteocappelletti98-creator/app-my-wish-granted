@@ -7,8 +7,8 @@ cover: "/articles/caffeecaffe3.PNG"
 tags: ["caffè", "como", "storico"]
 updated: 2025-09-26
 .poi-article .poi-cover {
-  max-width: 400px;   /* limita la larghezza */
-  width: 100%;        /* si adatta su schermi piccoli */
+  max-width: 100px;   /* limita la larghezza */
+  width: 50%;        /* si adatta su schermi piccoli */
   height: auto;       /* mantiene proporzioni */
   margin: 0 auto 16px auto; /* centrata */
   border-radius: 12px;
