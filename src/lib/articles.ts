@@ -11,9 +11,22 @@ export type ArticleMeta = {
   slug: string;
 };
 
+export type POIArticleMeta = {
+  id: string;
+  title: string;
+  type: "poi";
+  poi_id?: string;
+  cover?: string;
+  tags?: string[];
+  updated?: string;
+};
+
+export type POIArticle = POIArticleMeta & { html: string };
+
 export type Article = ArticleMeta & { html: string };
 
 const files = import.meta.glob("/content/articles/*.md", { as: "raw", eager: true });
+const poiFiles = import.meta.glob("/public/poiarticles/*", { as: "raw", eager: true });
 
 // Simple frontmatter parser for browser
 function parseFrontmatter(content: string) {
@@ -223,5 +236,39 @@ export function getArticleBySlug(slug: string, language: string = 'it'): Article
   }
   
   console.log("No matching article found for slug:", slug);
+  return null;
+}
+
+export function getPOIArticleByPoiId(poiId: string): POIArticle | null {
+  console.log("getPOIArticleByPoiId - searching for poi_id:", poiId);
+  console.log("getPOIArticleByPoiId - available files:", Object.keys(poiFiles));
+  
+  for (const [path, raw] of Object.entries(poiFiles)) {
+    try {
+      const { data, content } = parseFrontmatter(raw as string);
+      
+      if (data.type === 'poi' && data.poi_id === poiId) {
+        console.log("Found POI article for poi_id:", poiId);
+        
+        const html = marked(content) as string;
+        const title = (data.title ?? "Senza titolo") as string;
+        
+        return {
+          id: path.split('/').pop() || poiId,
+          title,
+          type: "poi",
+          poi_id: data.poi_id as string,
+          cover: data.cover as string | undefined,
+          tags: (data.tags ?? []) as string[],
+          updated: data.updated as string | undefined,
+          html,
+        };
+      }
+    } catch (error) {
+      console.error("Error parsing POI article at path:", path, error);
+    }
+  }
+  
+  console.log("No POI article found for poi_id:", poiId);
   return null;
 }

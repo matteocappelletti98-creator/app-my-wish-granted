@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
+import { getPOIArticleByPoiId, POIArticle } from "@/lib/articles";
 import { ArrowLeft, MapPin, Clock, Star, Share2, Bookmark, Camera, Calendar, Users, X, ExternalLink } from "lucide-react";
 import CategoryBadge from "@/components/CategoryBadge";
 
@@ -43,6 +44,7 @@ const getEditorialArticles = (placeName: string) => [
 export default function LuogoDetail() {
   const { slug } = useParams<{ slug: string }>();
   const [place, setPlace] = useState<Place | null>(null);
+  const [poiArticle, setPOIArticle] = useState<POIArticle | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
@@ -55,6 +57,12 @@ export default function LuogoDetail() {
         const data = await fetchPlacesFromSheet(CSV_URL);
         const foundPlace = data.find(p => p.slug === slug);
         setPlace(foundPlace || null);
+        
+        // Cerca l'articolo POI collegato se il luogo esiste
+        if (foundPlace?.id) {
+          const article = getPOIArticleByPoiId(foundPlace.id);
+          setPOIArticle(article);
+        }
       } finally {
         setLoading(false);
       }
@@ -209,15 +217,71 @@ export default function LuogoDetail() {
         </div>
       </section>
 
+      {/* POI Article Section */}
+      {poiArticle && (
+        <section className="px-6 py-16">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white/70 backdrop-blur-sm rounded-3xl border border-blue-100/50 overflow-hidden">
+              {/* Article Header */}
+              {poiArticle.cover && (
+                <div className="aspect-[16/9] overflow-hidden">
+                  <img 
+                    src={poiArticle.cover} 
+                    alt={poiArticle.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+              
+              {/* Article Content */}
+              <div className="p-8">
+                <div className="mb-6">
+                  <h2 className="text-3xl font-light text-blue-900 mb-4 tracking-wide">
+                    {poiArticle.title}
+                  </h2>
+                  {poiArticle.updated && (
+                    <div className="text-sm text-blue-600/70">
+                      Aggiornato il {new Date(poiArticle.updated).toLocaleDateString('it-IT')}
+                    </div>
+                  )}
+                </div>
+                
+                {/* Article Body */}
+                <div 
+                  className="prose prose-blue max-w-none text-blue-800/90 font-light leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: poiArticle.html }}
+                />
+                
+                {/* Tags */}
+                {poiArticle.tags && poiArticle.tags.length > 0 && (
+                  <div className="mt-8 pt-6 border-t border-blue-100">
+                    <div className="flex flex-wrap gap-2">
+                      {poiArticle.tags.map((tag, index) => (
+                        <span 
+                          key={index}
+                          className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Editorial Articles Section */}
       <section className="px-6 py-16">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-light text-blue-900 mb-4 tracking-wide">
-              Articoli dedicati
+              Articoli correlati
             </h2>
             <p className="text-blue-700/70 font-light text-lg max-w-2xl mx-auto">
-              Approfondimenti esclusivi e guide locali per scoprire ogni segreto di questo luogo
+              Approfondimenti e guide locali per scoprire ogni segreto di questo luogo
             </p>
           </div>
 
