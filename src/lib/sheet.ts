@@ -63,6 +63,10 @@ export function normalizeImagePath(imagePath: string): string {
   if (normalized.startsWith("public/")) {
     normalized = normalized.substring(7);
   }
+  // Remove "./" prefix if present
+  if (normalized.startsWith("./")) {
+    normalized = normalized.substring(2);
+  }
   // Add "/" prefix if not present
   if (!normalized.startsWith("/")) {
     normalized = "/" + normalized;
