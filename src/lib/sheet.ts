@@ -34,6 +34,7 @@ function parseCSV(text: string): string[][] {
 function normHeader(h: string) {
   const key = h.trim().toLowerCase();
   const map: Record<string, string> = {
+    "id":"id","poi_id":"id",
     "nome del luogo":"name","name":"name",
     "città":"city","city":"city",
     "paese":"country","country":"country",
@@ -83,9 +84,10 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
     const r = rows[i]; const rec: any = {};
     headers.forEach((h, idx) => rec[h] = (r[idx] ?? "").trim());
     const name = rec.name || ""; const city = rec.city || ""; 
-    const idBase = toSlug(`${name}-${city}`);
-    const id = idBase || `row-${i}`;
-    const slug = id;
+    
+    // Usa l'ID dal foglio se disponibile, altrimenti genera uno slug
+    const id = rec.id || toSlug(`${name}-${city}`) || `row-${i}`;
+    const slug = toSlug(`${name}-${city}`) || id;
 
     const lat = rec.lat ? Number(rec.lat) : undefined;
     const lng = rec.lng ? Number(rec.lng) : undefined;
