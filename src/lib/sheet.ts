@@ -71,16 +71,7 @@ export function normalizeImagePath(imagePath: string): string {
   if (!normalized.startsWith("/")) {
     normalized = "/" + normalized;
   }
-  
-  // Encode special characters to handle URLs properly
-  // Split by "/" to encode only the filename parts, not the path separators
-  const parts = normalized.split('/');
-  const encodedParts = parts.map(part => {
-    if (part === '') return part; // Keep empty parts (like the first empty part from leading "/")
-    return encodeURIComponent(part);
-  });
-  
-  return encodedParts.join('/');
+  return normalized;
 }
 
 export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
