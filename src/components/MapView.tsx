@@ -71,6 +71,7 @@ export default function MapView({ places, selectedCategories = [], className, on
             background:#fff; display:flex;align-items:center;justify-content:center;
             box-shadow:0 1px 4px rgba(0,0,0,.25); 
             border:${isCompatible ? '3px solid #3b82f6' : '1px solid rgba(0,0,0,.06)'};
+            animation: ${isCompatible ? 'zoom-bounce 1.2s ease-out' : 'none'};
           ">
             <div style="font-size:20px;line-height:20px">${emoji}</div>
           </div>
@@ -180,7 +181,19 @@ export default function MapView({ places, selectedCategories = [], className, on
     };
   }, [onToggleFavorite]);
 
-  return <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />;
+  return (
+    <>
+      <style>{`
+        @keyframes zoom-bounce {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.4); }
+          75% { transform: scale(1.1); }
+          100% { transform: scale(1); }
+        }
+      `}</style>
+      <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
+    </>
+  );
 }
 
 /* Escape utili (per testo, NON per le immagini) */
