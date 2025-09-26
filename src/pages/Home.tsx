@@ -52,62 +52,25 @@ export default function Home() {
       </div>
 
       {/* Header with Navigation */}
-      <header className="relative z-10 px-6 py-6">
+      <header className="relative z-10 px-6 py-8">
         <div className="mx-auto max-w-6xl">
-          {/* Compact Header Layout */}
-          <div className="flex justify-between items-center mb-8">
-            {/* Logo and Selectors in Left Section */}
-            <div className="flex items-center gap-8">
-              {/* Logo */}
-              <div className="text-center">
-                <h1 className="text-4xl md:text-5xl font-extralight text-blue-900 tracking-wider">
-                  {t('home.title')}
-                </h1>
-                <p className="text-sm text-blue-700/70 font-light tracking-wide">{t('home.subtitle')}</p>
-              </div>
-              
-              {/* Compact Selectors */}
-              <div className="flex gap-4">
-                {/* City Selector */}
-                <div className="bg-white/70 backdrop-blur-sm rounded-xl p-3 border border-blue-100/50 min-w-[140px]">
-                  <select
-                    value={selectedCity}
-                    onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full px-2 py-1 bg-transparent border-0 text-blue-900 focus:outline-none text-sm font-light"
-                  >
-                    <option value="">{t('home.allCities')}</option>
-                    {cities.map(city => (
-                      <option key={city.value} value={city.value}>{city.label}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Language Selector */}
-                <div className="bg-white/70 backdrop-blur-sm rounded-xl p-3 border border-blue-100/50 min-w-[120px]">
-                  <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value as any)}
-                    className="w-full px-2 py-1 bg-transparent border-0 text-blue-900 focus:outline-none text-sm font-light"
-                  >
-                    {languages.map(lang => (
-                      <option key={lang.value} value={lang.value}>{lang.label}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-            
-            {/* Right Navigation Buttons - At same height as add-place button */}
-            <div className="flex items-center gap-3">
-              <button className="px-4 py-2 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 text-sm">
+          {/* Top Navigation Bar */}
+          <div className="flex justify-between items-center mb-16">
+            {/* Left buttons */}
+            <div className="flex gap-4">
+              <button className="px-8 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105">
                 {t('home.login')}
               </button>
-              <button className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 text-sm">
+              <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium tracking-wide hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105">
                 {t('home.register')}
               </button>
+            </div>
+            
+            {/* Right buttons */}
+            <div className="flex gap-4">
               <Dialog>
                 <DialogTrigger asChild>
-                  <button className="px-4 py-2 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2 text-sm">
+                  <button className="px-6 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
                     <Info className="w-4 h-4" />
                     {t('home.about')}
                   </button>
@@ -132,14 +95,58 @@ export default function Home() {
                   </DialogDescription>
                 </DialogContent>
               </Dialog>
-              <Link to="/impostazioni" className="px-4 py-2 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2 text-sm">
+              <Link to="/impostazioni" className="px-6 py-3 text-blue-600 font-medium tracking-wide hover:text-blue-800 transition-all duration-300 hover:scale-105 flex items-center gap-2">
                 <Settings className="w-4 h-4" />
                 {t('home.settings')}
               </Link>
-              <Link to="/add-place" className="rounded-xl bg-blue-600 text-white px-4 py-2 font-medium hover:bg-blue-700 transition-colors text-sm flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
-                Inserisci luogo
-              </Link>
+            </div>
+          </div>
+
+          {/* Centered App Title */}
+          <div className="text-center mb-16">
+            <h1 className="text-6xl md:text-8xl font-extralight text-blue-900 mb-6 tracking-wider">
+              {t('home.title')}
+            </h1>
+            <p className="text-xl text-blue-700/70 font-light tracking-wide mb-8">{t('home.subtitle')}</p>
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto"></div>
+          </div>
+
+          {/* Selectors Container */}
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            {/* City Selector */}
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-blue-100/50">
+              <div className="flex items-center gap-3 mb-4">
+                <MapPin className="w-5 h-5 text-blue-600" />
+                <h3 className="text-lg font-medium text-blue-900">{t('home.selectCity')}</h3>
+              </div>
+              <select
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+                className="w-full px-4 py-3 bg-white/80 border border-blue-100 rounded-xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
+              >
+                <option value="">{t('home.allCities')}</option>
+                {cities.map(city => (
+                  <option key={city.value} value={city.value}>{city.label}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Language Selector */}
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-blue-100/50">
+              <div className="flex items-center gap-3 mb-4">
+                <Globe className="w-5 h-5 text-blue-600" />
+                <h3 className="text-lg font-medium text-blue-900">{t('home.selectLanguage')}</h3>
+              </div>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value as any)}
+                className="w-full px-4 py-3 bg-white/80 border border-blue-100 rounded-xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
+              >
+                {languages.map(lang => (
+                  <option key={lang.value} value={lang.value}>{lang.label}</option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
