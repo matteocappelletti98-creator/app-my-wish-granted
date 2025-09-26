@@ -10,9 +10,10 @@ type Props = {
   onMarkerClick?: (p: Place) => void;
   favorites?: string[];
   onToggleFavorite?: (placeId: string) => void;
+  userTravellerCodes?: number[];
 };
 
-export default function MapView({ places, selectedCategories = [], className, onMarkerClick, favorites = [], onToggleFavorite }: Props) {
+export default function MapView({ places, selectedCategories = [], className, onMarkerClick, favorites = [], onToggleFavorite, userTravellerCodes = [] }: Props) {
   const mapRef = useRef<LeafletMap | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markersRef = useRef<L.LayerGroup | null>(null);
@@ -57,12 +58,19 @@ export default function MapView({ places, selectedCategories = [], className, on
 
     filtered.forEach(p => {
       const emoji = categoryEmoji(p.category);
+      
+      // Controlla se il POI è compatibile con il traveller path dell'utente
+      const isCompatible = userTravellerCodes.length > 0 && p.tp_codes && p.tp_codes.length > 0 
+        ? p.tp_codes.some(code => userTravellerCodes.includes(code))
+        : false;
+      
       const icon = L.divIcon({
         html: `
           <div style="
             width:34px;height:34px;border-radius:999px;
             background:#fff; display:flex;align-items:center;justify-content:center;
-            box-shadow:0 1px 4px rgba(0,0,0,.25); border:1px solid rgba(0,0,0,.06);
+            box-shadow:0 1px 4px rgba(0,0,0,.25); 
+            border:${isCompatible ? '3px solid #3b82f6' : '1px solid rgba(0,0,0,.06)'};
           ">
             <div style="font-size:20px;line-height:20px">${emoji}</div>
           </div>
@@ -146,7 +154,7 @@ export default function MapView({ places, selectedCategories = [], className, on
     } else if (bounds.length === 1) {
       mapRef.current.setView(bounds[0] as any, 15);
     }
-  }, [filtered, onMarkerClick, favorites, onToggleFavorite]);
+  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes]);
 
   // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
   useEffect(() => {

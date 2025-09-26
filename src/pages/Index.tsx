@@ -14,6 +14,7 @@ export default function Index() {
   const [search, setSearch] = useState("");
   const [cat, setCat] = useState<string>("");
   const [overlay, setOverlay] = useState(false); // fullscreen overlay
+  const [userTravellerCodes, setUserTravellerCodes] = useState<number[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -24,6 +25,17 @@ export default function Index() {
         setLoading(false);
       }
     })();
+    
+    // Carica i codici traveller path salvati
+    const savedCodes = localStorage.getItem('traveller-path-codes');
+    if (savedCodes) {
+      try {
+        const codes = JSON.parse(savedCodes);
+        setUserTravellerCodes(codes);
+      } catch (err) {
+        console.error("Errore caricamento codici traveller path:", err);
+      }
+    }
   }, []);
 
   const categories = useMemo(() => {
@@ -66,7 +78,12 @@ export default function Index() {
             {loading ? (
               <div className="h-[70vh] w-full rounded-2xl border bg-slate-50" />
             ) : (
-              <MapView places={filtered} selectedCategories={cat ? [cat] : []} className="h-[70vh] w-full rounded-2xl border" />
+              <MapView 
+                places={filtered} 
+                selectedCategories={cat ? [cat] : []} 
+                className="h-[70vh] w-full rounded-2xl border"
+                userTravellerCodes={userTravellerCodes}
+              />
             )}
           </div>
           <aside className="lg:col-span-1">
@@ -124,7 +141,12 @@ export default function Index() {
             <button onClick={()=>setOverlay(false)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">✖ Chiudi</button>
           </div>
           {/* riuso gli stessi dati/filtri correnti */}
-          <MapView places={filtered} selectedCategories={cat ? [cat] : []} className="h-full w-full" />
+          <MapView 
+            places={filtered} 
+            selectedCategories={cat ? [cat] : []} 
+            className="h-full w-full"
+            userTravellerCodes={userTravellerCodes}
+          />
         </div>
       )}
     </div>

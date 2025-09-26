@@ -9,7 +9,7 @@ interface Question {
   id: string;
   category: string;
   question: string;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; code: number }[];
   multiple?: boolean;
 }
 
@@ -20,8 +20,8 @@ const questions: Question[] = [
     category: "Profilo",
     question: "Sei un Local o un Traveler?",
     options: [
-      { value: "local", label: "Local" },
-      { value: "traveler", label: "Traveler" }
+      { value: "local", label: "Local", code: 1 },
+      { value: "traveler", label: "Traveler", code: 2 }
     ]
   },
   {
@@ -29,9 +29,9 @@ const questions: Question[] = [
     category: "Profilo",
     question: "Genere",
     options: [
-      { value: "male", label: "Maschio" },
-      { value: "female", label: "Femmina" },
-      { value: "other", label: "Altro" }
+      { value: "male", label: "Maschio", code: 10 },
+      { value: "female", label: "Femmina", code: 11 },
+      { value: "other", label: "Altro", code: 12 }
     ]
   },
   {
@@ -39,12 +39,12 @@ const questions: Question[] = [
     category: "Profilo",
     question: "Età",
     options: [
-      { value: "under_18", label: "<18" },
-      { value: "18_24", label: "18–24" },
-      { value: "25_34", label: "25–34" },
-      { value: "35_49", label: "35–49" },
-      { value: "50_64", label: "50–64" },
-      { value: "over_65", label: ">65" }
+      { value: "under_18", label: "<18", code: 20 },
+      { value: "18_24", label: "18–24", code: 21 },
+      { value: "25_34", label: "25–34", code: 22 },
+      { value: "35_49", label: "35–49", code: 23 },
+      { value: "50_64", label: "50–64", code: 24 },
+      { value: "over_65", label: ">65", code: 25 }
     ]
   },
   {
@@ -52,11 +52,12 @@ const questions: Question[] = [
     category: "Profilo",
     question: "Nazionalità",
     options: [
-      { value: "europe", label: "Europa" },
-      { value: "usa", label: "USA" },
-      { value: "south_america", label: "Sud America" },
-      { value: "asia", label: "Asia" },
-      { value: "africa", label: "Africa" }
+      { value: "europe", label: "Europa", code: 90 },
+      { value: "usa", label: "USA", code: 91 },
+      { value: "south_america", label: "Sud America", code: 92 },
+      { value: "asia", label: "Asia", code: 93 },
+      { value: "africa", label: "Africa", code: 94 },
+      { value: "middle_east", label: "Middle East", code: 95 }
     ]
   },
   // Composizione del viaggio
@@ -65,10 +66,20 @@ const questions: Question[] = [
     category: "Composizione del viaggio",
     question: "Composizione",
     options: [
-      { value: "solo", label: "Solo" },
-      { value: "couple", label: "Coppia" },
-      { value: "group", label: "Gruppo" },
-      { value: "family", label: "Famiglia" }
+      { value: "solo", label: "Solo", code: 110 },
+      { value: "couple", label: "Coppia", code: 111 },
+      { value: "group", label: "Gruppo", code: 112 },
+      { value: "family", label: "Famiglia", code: 113 }
+    ]
+  },
+  {
+    id: "budget",
+    category: "Budget",
+    question: "Budget indicativo",
+    options: [
+      { value: "low", label: "Low", code: 120 },
+      { value: "medium", label: "Medium", code: 121 },
+      { value: "premium", label: "Premium", code: 122 }
     ]
   },
   // Viaggio
@@ -78,12 +89,12 @@ const questions: Question[] = [
     question: "Inclinazione",
     multiple: true,
     options: [
-      { value: "adventure", label: "Avventura" },
-      { value: "relax", label: "Relax" },
-      { value: "culture", label: "Cultura" },
-      { value: "shopping", label: "Shopping" },
-      { value: "nightlife", label: "Nightlife" },
-      { value: "socializing", label: "Socializing" }
+      { value: "adventure", label: "Avventura", code: 30 },
+      { value: "relax", label: "Relax", code: 31 },
+      { value: "culture", label: "Cultura", code: 32 },
+      { value: "shopping", label: "Shopping", code: 33 },
+      { value: "nightlife", label: "Nightlife", code: 34 },
+      { value: "socializing", label: "Socializing", code: 35 }
     ]
   },
   {
@@ -91,10 +102,10 @@ const questions: Question[] = [
     category: "Viaggio",
     question: "Tempo di permanenza",
     options: [
-      { value: "1_day", label: "1 giorno" },
-      { value: "2_days", label: "2 giorni" },
-      { value: "3_7_days", label: "3–7 giorni" },
-      { value: "over_7_days", label: ">7 giorni" }
+      { value: "1_day", label: "1 giorno", code: 40 },
+      { value: "2_days", label: "2 giorni", code: 41 },
+      { value: "3_7_days", label: "3–7 giorni", code: 42 },
+      { value: "over_7_days", label: ">7 giorni", code: 43 }
     ]
   },
   {
@@ -103,9 +114,9 @@ const questions: Question[] = [
     question: "Mezzo di trasporto",
     multiple: true,
     options: [
-      { value: "own", label: "Proprio" },
-      { value: "none", label: "No" },
-      { value: "rental", label: "Vorrei noleggiarlo" }
+      { value: "own", label: "Proprio", code: 70 },
+      { value: "none", label: "No", code: 71 },
+      { value: "rental", label: "Vorrei noleggiarlo", code: 72 }
     ]
   },
   // Cucina
@@ -115,18 +126,18 @@ const questions: Question[] = [
     question: "Preferenze culinarie",
     multiple: true,
     options: [
-      { value: "homemade", label: "Casereccia" },
-      { value: "fine_dining", label: "Fine dining" },
-      { value: "healthy", label: "Healthy" },
-      { value: "wine_pairing", label: "Wine pairing" },
-      { value: "street_food", label: "Street food" },
-      { value: "organic", label: "Organic" },
-      { value: "dairy_free", label: "Dairy free" },
-      { value: "halal", label: "Halal" },
-      { value: "nuts_free", label: "Nuts free" },
-      { value: "gluten_free", label: "Gluten free" },
-      { value: "vegan", label: "Vegano" },
-      { value: "vegetarian", label: "Vegetariano" }
+      { value: "homemade", label: "Casereccia", code: 50 },
+      { value: "fine_dining", label: "Fine dining", code: 51 },
+      { value: "healthy", label: "Healthy", code: 52 },
+      { value: "wine_pairing", label: "Wine pairing", code: 53 },
+      { value: "street_food", label: "Street food", code: 54 },
+      { value: "vegan", label: "Vegano", code: 80 },
+      { value: "vegetarian", label: "Vegetariano", code: 81 },
+      { value: "gluten_free", label: "Gluten free", code: 82 },
+      { value: "organic", label: "Organic", code: 83 },
+      { value: "dairy_free", label: "Dairy free", code: 84 },
+      { value: "halal", label: "Halal", code: 85 },
+      { value: "nuts_free", label: "Nuts free", code: 86 }
     ]
   },
   // Alloggio
@@ -135,11 +146,11 @@ const questions: Question[] = [
     category: "Alloggio",
     question: "Zona di pernottamento",
     options: [
-      { value: "z1", label: "Z1" },
-      { value: "z2", label: "Z2" },
-      { value: "z3", label: "Z3" },
-      { value: "z4", label: "Z4" },
-      { value: "z5", label: "Z5" }
+      { value: "z1", label: "Z1", code: 60 },
+      { value: "z2", label: "Z2", code: 61 },
+      { value: "z3", label: "Z3", code: 62 },
+      { value: "z4", label: "Z4", code: 63 },
+      { value: "z5", label: "Z5", code: 64 }
     ]
   },
   // Accessibilità
@@ -149,14 +160,36 @@ const questions: Question[] = [
     question: "Necessità specifiche",
     multiple: true,
     options: [
-      { value: "reduced_mobility", label: "Mobilità ridotta" },
-      { value: "elderly", label: "Anziani" },
-      { value: "pregnant", label: "Donne incinta" },
-      { value: "odorophobia", label: "Odorofobia" },
-      { value: "mental_wellness", label: "Benessere mentale" }
+      { value: "reduced_mobility", label: "Mobilità ridotta", code: 100 },
+      { value: "odorophobia", label: "Odorofobia", code: 101 },
+      { value: "elderly", label: "Anziani", code: 102 },
+      { value: "pregnant", label: "Donne incinta", code: 103 },
+      { value: "mental_wellness", label: "Benessere mentale", code: 104 }
     ]
   }
 ];
+
+// Funzione per convertire le risposte in array di codici numerici
+const convertAnswersToCodes = (answers: Record<string, string | string[]>): number[] => {
+  const codes: number[] = [];
+  
+  Object.entries(answers).forEach(([questionId, answer]) => {
+    const question = questions.find(q => q.id === questionId);
+    if (!question) return;
+    
+    if (question.multiple && Array.isArray(answer)) {
+      answer.forEach(value => {
+        const option = question.options.find(opt => opt.value === value);
+        if (option) codes.push(option.code);
+      });
+    } else if (!question.multiple && typeof answer === 'string') {
+      const option = question.options.find(opt => opt.value === answer);
+      if (option) codes.push(option.code);
+    }
+  });
+  
+  return codes.sort((a, b) => a - b);
+};
 
 export default function TravellerPath() {
   const { t } = useLanguage();
@@ -187,6 +220,10 @@ export default function TravellerPath() {
   useEffect(() => {
     if (isLoaded) {
       localStorage.setItem('traveller-path-answers', JSON.stringify(answers));
+      // Salva anche i codici numerici
+      const codes = convertAnswersToCodes(answers);
+      localStorage.setItem('traveller-path-codes', JSON.stringify(codes));
+      console.log('Codici traveller path salvati:', codes);
     }
   }, [answers, isLoaded]);
 
@@ -359,7 +396,10 @@ export default function TravellerPath() {
 
               {currentQuestionIndex === questions.length - 1 ? (
                 <Button
-                  onClick={() => alert(t('travellerPath.completed'))}
+                  onClick={() => {
+                    const codes = convertAnswersToCodes(answers);
+                    alert(`Traveller Path completato! I tuoi codici: ${codes.join(', ')}`);
+                  }}
                   className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
                 >
                   <Check className="w-4 h-4" />

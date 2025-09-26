@@ -12,6 +12,7 @@ export type Place = {
   address?: string;
   lat?: number;
   lng?: number;
+  tp_codes?: number[];
 };
 
 function parseCSV(text: string): string[][] {
@@ -43,6 +44,7 @@ function normHeader(h: string) {
     "indirizzo":"address","address":"address","via":"address","strada":"address",
     "lat":"lat","latitude":"lat","latitudine":"lat",
     "lng":"lng","long":"lng","lon":"lng","longitude":"lng","longitudine":"lng",
+    "tp_codes":"tp_codes",
   };
   return map[key] || key;
 }
@@ -93,6 +95,11 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
     // Normalize image path
     const imagePath = normalizeImagePath(rec.image || "");
 
+    // Parse tp_codes
+    const tpCodes = rec.tp_codes 
+      ? rec.tp_codes.split(',').map((code: string) => parseInt(code.trim())).filter((code: number) => !isNaN(code))
+      : [];
+
     out.push({
       id, slug,
       name,
@@ -105,6 +112,7 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
       address: rec.address || "",
       lat: isFinite(lat!) ? lat : undefined,
       lng: isFinite(lng!) ? lng : undefined,
+      tp_codes: tpCodes,
     });
   }
   

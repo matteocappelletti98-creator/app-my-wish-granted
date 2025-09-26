@@ -19,6 +19,7 @@ export default function VirtualExploration() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [overlay, setOverlay] = useState(false); // fullscreen overlay
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [userTravellerCodes, setUserTravellerCodes] = useState<number[]>([]);
 
   // Carica preferiti dal localStorage
   useEffect(() => {
@@ -50,6 +51,17 @@ export default function VirtualExploration() {
         setLoading(false);
       }
     })();
+    
+    // Carica i codici traveller path salvati
+    const savedCodes = localStorage.getItem('traveller-path-codes');
+    if (savedCodes) {
+      try {
+        const codes = JSON.parse(savedCodes);
+        setUserTravellerCodes(codes);
+      } catch (err) {
+        console.error("Errore caricamento codici traveller path:", err);
+      }
+    }
   }, []);
 
   const categories = useMemo(() => {
@@ -111,6 +123,7 @@ export default function VirtualExploration() {
                 className="h-[70vh] w-full rounded-2xl border"
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
+                userTravellerCodes={userTravellerCodes}
               />
             )}
           </div>
@@ -210,6 +223,7 @@ export default function VirtualExploration() {
             className="h-full w-full"
             favorites={favorites}
             onToggleFavorite={toggleFavorite}
+            userTravellerCodes={userTravellerCodes}
           />
         </div>
       )}
