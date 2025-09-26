@@ -325,13 +325,13 @@ export default function TravellerPath() {
           {/* Category */}
           <div className="mb-6">
             <span className="inline-block px-4 py-2 bg-blue-100/50 text-blue-700 rounded-full text-sm font-medium">
-              {t(`category.${currentQuestion.id.split('_')[0]}`) || currentQuestion.category}
+              {currentQuestion.category}
             </span>
           </div>
 
           {/* Question */}
           <h2 className="text-2xl font-light text-blue-900 mb-8">
-            {t(`question.${currentQuestion.id.replace(/_([a-z])/g, (_, char) => char.toUpperCase())}`) || currentQuestion.question}
+            {currentQuestion.question}
           </h2>
 
           {/* Answer Options */}
@@ -349,7 +349,7 @@ export default function TravellerPath() {
                       onChange={() => handleAnswerChange(option.value)}
                       className="w-4 h-4 text-blue-600 rounded border-blue-300 focus:ring-blue-200"
                     />
-                    <span className="text-blue-900">{t(`option.${option.value.replace(/_([a-z])/g, (_, char) => char.toUpperCase())}`) || option.label}</span>
+                    <span className="text-blue-900">{option.label}</span>
                   </label>
                 ))}
               </div>
@@ -365,7 +365,7 @@ export default function TravellerPath() {
                     className="flex items-center gap-3 p-4 bg-white/50 rounded-xl border border-blue-100/30 hover:bg-blue-50/50 transition-colors cursor-pointer"
                   >
                     <RadioGroupItem value={option.value} />
-                    <span className="text-blue-900">{t(`option.${option.value.replace(/_([a-z])/g, (_, char) => char.toUpperCase())}`) || option.label}</span>
+                    <span className="text-blue-900">{option.label}</span>
                   </label>
                 ))}
               </RadioGroup>
