@@ -98,7 +98,7 @@ export default function VirtualExploration() {
       <header className="px-6 py-12 border-b bg-white">
         <div className="mx-auto max-w-6xl flex items-center justify-center">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-light tracking-wide text-gray-900">
+            <h1 className="text-4xl md:text-5xl font-light tracking-wide text-blue-600">
               Exploration
             </h1>
           </div>
@@ -157,7 +157,7 @@ export default function VirtualExploration() {
         <div className="mx-auto max-w-6xl mt-6">
           <div className="flex items-center gap-2 mb-3">
             <Heart className="w-5 h-5 text-red-500" />
-            <h2 className="text-xl font-semibold">{t('virtualExploration.favorites')}</h2>
+            <h2 className="text-xl font-semibold text-blue-600">My favorites</h2>
             <span className="text-sm text-gray-500">({favorites.length})</span>
           </div>
           
