@@ -98,7 +98,7 @@ export default function VirtualExploration() {
       <header className="px-6 py-12 border-b bg-white">
         <div className="mx-auto max-w-6xl flex items-center justify-center">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-light tracking-wide text-blue-600">
+            <h1 className="text-4xl md:text-5xl font-light tracking-wide text-gray-900">
               Exploration
             </h1>
           </div>
