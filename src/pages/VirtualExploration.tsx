@@ -95,17 +95,12 @@ export default function VirtualExploration() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header stile home */}
-      <header className="px-6 py-4 border-b bg-white">
-        <div className="mx-auto max-w-6xl flex items-center justify-between">
-          <div>
-            <div className="text-2xl font-bold flex items-center gap-2">
-              <span className="text-blue-600">📍</span> <span>{t('virtualExploration.title')}</span>
-            </div>
-            <div className="text-sm text-blue-900/70">{t('virtualExploration.subtitle')}</div>
-          </div>
-          <div className="flex gap-3">
-            <Link to="/add-place" className="rounded-xl bg-blue-600 text-white px-3 py-2">+ {t('virtualExploration.addPlace')}</Link>
-            <button onClick={()=>setOverlay(true)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">🗖 {t('virtualExploration.expand')}</button>
+      <header className="px-6 py-12 border-b bg-white">
+        <div className="mx-auto max-w-6xl flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-light tracking-wide text-gray-900">
+              Exploration
+            </h1>
           </div>
         </div>
       </header>
@@ -209,24 +204,6 @@ export default function VirtualExploration() {
         </div>
       </section>
 
-      {/* Overlay fullscreen mappa */}
-      {overlay && (
-        <div className="fixed inset-0 z-50 bg-white">
-          <div className="absolute right-4 top-4 flex gap-2">
-            <Link to="/add-place" className="rounded-xl bg-blue-600 text-white px-3 py-2">+ {t('virtualExploration.addPlace')}</Link>
-            <button onClick={()=>setOverlay(false)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">✖ {t('virtualExploration.close')}</button>
-          </div>
-          {/* riuso gli stessi dati/filtri correnti */}
-          <MapView 
-            places={all.filter(p => p.status === "published")} 
-            selectedCategories={selectedCategories} 
-            className="h-full w-full"
-            favorites={favorites}
-            onToggleFavorite={toggleFavorite}
-            userTravellerCodes={userTravellerCodes}
-          />
-        </div>
-      )}
     </div>
   );
 }
