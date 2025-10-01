@@ -67,24 +67,31 @@ export default function MapView({ places, selectedCategories = [], className, on
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     
-    // Effetto cinematico: zoom dall'atmosfera a Como con rotazione della Terra
+    // Effetto cinematico in 2 fasi: prima rotazione veloce, poi zoom
     map.on('load', () => {
-      // Easing function personalizzata: veloce all'inizio, rallenta alla fine
-      const easeOutCubic = (t: number) => {
-        return 1 - Math.pow(1 - t, 3);
-      };
-      
       setTimeout(() => {
-        map.flyTo({
-          center: [9.0852, 45.8081],
-          zoom: 12,
-          pitch: 0,
-          bearing: 720, // 2 rotazioni complete (720 gradi)
-          duration: 3500, // 3.5 secondi per l'animazione
-          easing: easeOutCubic,
-          essential: true
+        // FASE 1: Rotazione veloce della Terra (2 secondi)
+        map.easeTo({
+          bearing: 1080, // 3 rotazioni complete
+          duration: 2000,
+          easing: (t) => t // Lineare per rotazione uniforme
         });
-      }, 500); // Piccolo delay iniziale per far caricare tutto
+        
+        // FASE 2: Zoom su Como con rallentamento (inizia dopo la rotazione)
+        setTimeout(() => {
+          const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+          
+          map.flyTo({
+            center: [9.0852, 45.8081],
+            zoom: 12,
+            pitch: 0,
+            bearing: 1080, // Mantieni la rotazione finale
+            duration: 3500,
+            easing: easeOutCubic,
+            essential: true
+          });
+        }, 2000); // Aspetta che finisca la rotazione
+      }, 500);
     });
     
     // Inizializza Directions
