@@ -59,38 +59,29 @@ export default function MapView({ places, selectedCategories = [], className, on
     const map = new mapboxgl.Map({
       container: containerRef.current,
       style: 'mapbox://styles/teoteoteo/cmg7lnkab002601qo6yviai9g',
-      center: [9.0852, 45.8081], // Como, Lombardia
-      zoom: 1.5, // Partiamo dall'atmosfera
-      pitch: 60, // Angolo iniziale per effetto più drammatico
-      bearing: 0 // Partenza rotazione
+      center: [0, 20], // Partiamo da una vista globale centrata
+      zoom: 0.8, // Zoom molto lontano per vedere il globo intero
+      pitch: 0,
+      bearing: -720 // Partiamo da -720° per fare 2 rotazioni complete
     });
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     
-    // Effetto cinematico in 2 fasi: prima rotazione veloce, poi zoom
+    // Effetto cinematico: rotazione E zoom insieme dall'inizio
     map.on('load', () => {
+      // Easing personalizzato: veloce all'inizio, rallenta alla fine
+      const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+      
       setTimeout(() => {
-        // FASE 1: Rotazione veloce della Terra (2 secondi)
-        map.easeTo({
-          bearing: 1080, // 3 rotazioni complete
-          duration: 2000,
-          easing: (t) => t // Lineare per rotazione uniforme
+        map.flyTo({
+          center: [9.0852, 45.8081], // Como
+          zoom: 12,
+          pitch: 0,
+          bearing: 0, // Arriva a 0°, facendo 2 rotazioni complete da -720°
+          duration: 4000, // 4 secondi totali
+          easing: easeOutCubic,
+          essential: true
         });
-        
-        // FASE 2: Zoom su Como con rallentamento (inizia dopo la rotazione)
-        setTimeout(() => {
-          const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-          
-          map.flyTo({
-            center: [9.0852, 45.8081],
-            zoom: 12,
-            pitch: 0,
-            bearing: 1080, // Mantieni la rotazione finale
-            duration: 3500,
-            easing: easeOutCubic,
-            essential: true
-          });
-        }, 2000); // Aspetta che finisca la rotazione
       }, 500);
     });
     
