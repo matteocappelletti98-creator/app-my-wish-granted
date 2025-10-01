@@ -155,6 +155,7 @@ export default function MapView({ places, selectedCategories = [], className, on
       
       // Crea elemento marker con animazione di caduta (solo al primo caricamento)
       const el = document.createElement('div');
+      const animationName = isCompatible ? 'fall-from-west' : 'fall-from-sky';
       el.innerHTML = `
         <style>
           @keyframes fall-from-sky {
@@ -173,6 +174,29 @@ export default function MapView({ places, selectedCategories = [], className, on
               opacity: 1;
             }
           }
+          
+          @keyframes fall-from-west {
+            0% {
+              transform: translate(-1200px, -1000px) rotate(0deg) scale(0.3);
+              opacity: 0;
+            }
+            60% {
+              opacity: 1;
+            }
+            75% {
+              transform: translate(0, 25px) rotate(-720deg) scale(1.15);
+            }
+            85% {
+              transform: translate(0, -5px) rotate(-720deg) scale(1.08);
+            }
+            92% {
+              transform: translate(0, 8px) rotate(-720deg) scale(1.05);
+            }
+            100% {
+              transform: translate(0, 0) rotate(-720deg) scale(1);
+              opacity: 1;
+            }
+          }
         </style>
         <div style="
           width:30px;height:30px;border-radius:999px;
@@ -180,7 +204,7 @@ export default function MapView({ places, selectedCategories = [], className, on
           box-shadow:0 2px 8px rgba(0,0,0,.3), 0 0 20px rgba(59, 130, 246, 0.3); 
           border:${isCompatible ? '2.5px solid #3b82f6' : '1px solid rgba(0,0,0,.1)'};
           cursor: pointer;
-          ${isInitialLoad ? `animation: fall-from-sky 2s ease-out ${delay}ms forwards; opacity: 0;` : 'opacity: 1;'}
+          ${isInitialLoad ? `animation: ${animationName} 2.2s ease-out ${delay}ms forwards; opacity: 0;` : 'opacity: 1;'}
         ">
           <div style="font-size:18px;line-height:18px">${emoji}</div>
         </div>
