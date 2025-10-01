@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import mapboxgl from "mapbox-gl";
-import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
-import "mapbox-gl/dist/mapbox-gl.css";
-import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import React, { useEffect, useMemo, useRef } from "react";
+import L, { Map as LeafletMap, LatLngBoundsExpression } from "leaflet";
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import 'leaflet-geosearch/dist/geosearch.css';
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 
@@ -16,13 +15,10 @@ type Props = {
   userTravellerCodes?: number[];
 };
 
-const ACCESS_TOKEN = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
-
 export default function MapView({ places, selectedCategories = [], className, onMarkerClick, favorites = [], onToggleFavorite, userTravellerCodes = [] }: Props) {
-  const mapRef = useRef<mapboxgl.Map | null>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const markersRef = useRef<mapboxgl.Marker[]>([]);
-  const [mapLoaded, setMapLoaded] = useState(false);
+  const markersRef = useRef<L.LayerGroup | null>(null);
 
   // Filtra solo published + categoria + coordinate valide
   const filtered = useMemo(() => {
@@ -36,81 +32,65 @@ export default function MapView({ places, selectedCategories = [], className, on
 
   // Inizializza mappa una sola volta
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) return;
+    if (!containerRef.current) return;
+    if (!mapRef.current) {
+      const map = L.map(containerRef.current, { zoomControl: true }).setView([41.9028, 12.4964], 12);
+      mapRef.current = map;
 
-    mapboxgl.accessToken = ACCESS_TOKEN;
-    
-    const map = new mapboxgl.Map({
-      container: containerRef.current,
-      style: 'mapbox://styles/teoteoteo/cmg7lnkab002601qo6yviai9g',
-      center: [12.4964, 41.9028], // Roma
-      zoom: 12
-    });
+      // Tile layer (Carto Positron)
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+        subdomains: "abcd",
+        maxZoom: 20,
+      }).addTo(map);
 
-    // Aspetta che la mappa sia caricata
-    map.on('load', () => {
-      setMapLoaded(true);
-    });
+      // Aggiungi controllo di ricerca
+      const provider = new OpenStreetMapProvider({
+        params: {
+          'accept-language': 'it',
+          countrycodes: 'it'
+        }
+      });
 
-    // Aggiungi controlli di navigazione
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      const searchControl = GeoSearchControl({
+        provider: provider,
+        style: 'bar',
+        autoComplete: true,
+        autoCompleteDelay: 250,
+        showMarker: true,
+        showPopup: false,
+        marker: {
+          icon: L.divIcon({
+            html: '<div style="width:30px;height:30px;border-radius:50%;background:#3b82f6;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>',
+            className: 'search-marker',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
+          }),
+          draggable: false
+        },
+        maxMarkers: 1,
+        retainZoomLevel: false,
+        animateZoom: true,
+        autoClose: true,
+        searchLabel: 'Cerca un luogo...',
+        keepResult: true
+      });
 
-    // Aggiungi geocoder (search box)
-    const geocoder = new MapboxGeocoder({
-      accessToken: ACCESS_TOKEN,
-      mapboxgl: mapboxgl,
-      language: 'it',
-      countries: 'IT',
-      marker: {
-        color: '#3b82f6'
-      },
-      placeholder: 'Cerca un luogo...'
-    });
-    
-    map.addControl(geocoder, 'top-left');
-
-    mapRef.current = map;
-
-    return () => {
-      setMapLoaded(false);
-      map.remove();
-    };
-  }, []);
-
-  // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
-  useEffect(() => {
-    if (onToggleFavorite) {
-      (window as any).toggleFavorite = onToggleFavorite;
+      map.addControl(searchControl as any);
     }
-    
-    // Funzione globale per navigare al luogo
-    (window as any).goToPlace = (slug: string) => {
-      window.location.href = `/luogo/${slug}`;
-    };
-    
-    // Funzione globale per aprire in Google Maps
-    (window as any).openInGoogleMaps = (searchQuery: string) => {
-      const url = `https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
-      window.open(url, '_blank');
-    };
-    
-    return () => {
-      delete (window as any).toggleFavorite;
-      delete (window as any).goToPlace;
-      delete (window as any).openInGoogleMaps;
-    };
-  }, [onToggleFavorite]);
+  }, []);
 
   // Aggiungi marker ogni volta che cambia filtered
   useEffect(() => {
-    if (!mapRef.current || !mapLoaded) return;
+    if (!mapRef.current) return;
 
-    // Rimuovi marker esistenti
-    markersRef.current.forEach(marker => marker.remove());
-    markersRef.current = [];
+    if (markersRef.current) {
+      markersRef.current.clearLayers();
+      mapRef.current.removeLayer(markersRef.current);
+    }
+    markersRef.current = L.layerGroup().addTo(mapRef.current);
 
-    const bounds = new mapboxgl.LngLatBounds();
-    let hasValidBounds = false;
+    const bounds: [number, number][] = [];
 
     filtered.forEach(p => {
       const emoji = categoryEmoji(p.category);
@@ -120,20 +100,24 @@ export default function MapView({ places, selectedCategories = [], className, on
         ? p.tp_codes.some(code => userTravellerCodes.includes(code))
         : false;
       
-      // Crea elemento HTML per il marker
-      const el = document.createElement('div');
-      el.innerHTML = `
-        <div style="
-          width:34px;height:34px;border-radius:999px;
-          background:#fff; display:flex;align-items:center;justify-content:center;
-          box-shadow:0 1px 4px rgba(0,0,0,.25); 
-          border:${isCompatible ? '3px solid #3b82f6' : '1px solid rgba(0,0,0,.06)'};
-          animation: ${isCompatible ? 'zoom-bounce 1.2s ease-out' : 'none'};
-          cursor: pointer;
-        ">
-          <div style="font-size:20px;line-height:20px">${emoji}</div>
-        </div>
-      `;
+      const icon = L.divIcon({
+        html: `
+          <div style="
+            width:34px;height:34px;border-radius:999px;
+            background:#fff; display:flex;align-items:center;justify-content:center;
+            box-shadow:0 1px 4px rgba(0,0,0,.25); 
+            border:${isCompatible ? '3px solid #3b82f6' : '1px solid rgba(0,0,0,.06)'};
+            animation: ${isCompatible ? 'zoom-bounce 1.2s ease-out' : 'none'};
+          ">
+            <div style="font-size:20px;line-height:20px">${emoji}</div>
+          </div>
+        `,
+        className: "poi-emoji-badge",
+        iconSize: [34, 34],
+        iconAnchor: [17, 17],
+      });
+
+      const m = L.marker([p.lat!, p.lng!], { icon });
 
       // Popup con bottone preferiti e bottone dettaglio
       const favoriteButton = onToggleFavorite ? `
@@ -154,6 +138,7 @@ export default function MapView({ places, selectedCategories = [], className, on
         </button>
       ` : '';
 
+      // Bottone per entrare nel luogo (per tutti i luoghi)
       const detailButton = `
         <button 
           onclick="goToPlace('${p.slug}')" 
@@ -184,7 +169,7 @@ export default function MapView({ places, selectedCategories = [], className, on
         </button>
       `;
 
-      const popupContent = `
+      m.bindPopup(`
         <div style="min-width:180px; position: relative;">
           ${favoriteButton}
           <div style="font-weight:600;margin-bottom:4px">${emoji} ${escapeHtml(p.name)}</div>
@@ -193,32 +178,44 @@ export default function MapView({ places, selectedCategories = [], className, on
           ${detailButton}
           ${googleMapsButton}
         </div>
-      `;
+      `);
 
-      const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupContent);
-
-      const marker = new mapboxgl.Marker(el)
-        .setLngLat([p.lng!, p.lat!])
-        .setPopup(popup)
-        .addTo(mapRef.current!);
-
-      if (onMarkerClick) {
-        el.addEventListener('click', () => onMarkerClick(p));
-      }
-
-      markersRef.current.push(marker);
-      bounds.extend([p.lng!, p.lat!]);
-      hasValidBounds = true;
+      if (onMarkerClick) m.on("click", () => onMarkerClick(p));
+      m.addTo(markersRef.current!);
+      bounds.push([p.lat!, p.lng!]);
     });
 
     // fit-to-bounds
-    if (hasValidBounds) {
-      mapRef.current.fitBounds(bounds, { 
-        padding: { top: 50, bottom: 50, left: 50, right: 50 },
-        maxZoom: 15
-      });
+    if (bounds.length >= 2) {
+      mapRef.current.fitBounds(bounds as LatLngBoundsExpression, { padding: [32, 32] });
+    } else if (bounds.length === 1) {
+      mapRef.current.setView(bounds[0] as any, 15);
     }
-  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapLoaded]);
+  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes]);
+
+  // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
+  useEffect(() => {
+    if (onToggleFavorite) {
+      (window as any).toggleFavorite = onToggleFavorite;
+    }
+    
+    // Funzione globale per navigare al luogo
+    (window as any).goToPlace = (slug: string) => {
+      window.location.href = `/luogo/${slug}`;
+    };
+    
+    // Funzione globale per aprire in Google Maps
+    (window as any).openInGoogleMaps = (searchQuery: string) => {
+      const url = `https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
+      window.open(url, '_blank');
+    };
+    
+    return () => {
+      delete (window as any).toggleFavorite;
+      delete (window as any).goToPlace;
+      delete (window as any).openInGoogleMaps;
+    };
+  }, [onToggleFavorite]);
 
   return (
     <>
@@ -229,16 +226,21 @@ export default function MapView({ places, selectedCategories = [], className, on
           75% { transform: scale(1.1); }
           100% { transform: scale(1); }
         }
-        .mapboxgl-ctrl-bottom-left,
-        .mapboxgl-ctrl-bottom-right {
-          display: none;
+        .leaflet-control-geosearch {
+          border-radius: 12px !important;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
         }
-        .mapbox-container {
-          width: 100%;
-          height: 100%;
+        .leaflet-control-geosearch form input {
+          border-radius: 12px !important;
+          padding: 8px 12px !important;
+          font-size: 14px !important;
+        }
+        .leaflet-control-geosearch .results {
+          border-radius: 8px !important;
+          margin-top: 4px !important;
         }
       `}</style>
-      <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl"} style={{ minHeight: '500px' }} />
+      <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
     </>
   );
 }
