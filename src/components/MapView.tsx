@@ -310,9 +310,11 @@ export default function MapView({ places, selectedCategories = [], className, on
       map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
     }
     
-    // Disabilita l'animazione dopo il primo caricamento
+    // Disabilita l'animazione dopo che è partita (con delay per assicurarsi che parta)
     if (isFirstLoadRef.current) {
-      isFirstLoadRef.current = false;
+      setTimeout(() => {
+        isFirstLoadRef.current = false;
+      }, 100);
     }
   }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken]);
 
