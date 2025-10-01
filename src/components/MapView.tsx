@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
 import "mapbox-gl/dist/mapbox-gl.css";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 import { Input } from "@/components/ui/input";
@@ -54,7 +58,36 @@ export default function MapView({ places, selectedCategories = [], className, on
       zoom: 12
     });
 
+    // Controlli di navigazione
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+    // Geocoder per la ricerca
+    const geocoder = new MapboxGeocoder({
+      accessToken: mapboxToken,
+      mapboxgl: mapboxgl,
+      marker: true,
+      placeholder: 'Cerca un luogo...',
+      language: 'it',
+      countries: 'it'
+    });
+    map.addControl(geocoder, 'top-left');
+
+    // Indicazioni stradali
+    const directions = new MapboxDirections({
+      accessToken: mapboxToken,
+      unit: 'metric',
+      profile: 'mapbox/walking',
+      language: 'it',
+      controls: {
+        inputs: true,
+        instructions: true,
+        profileSwitcher: true
+      },
+      placeholderOrigin: 'Scegli un punto di partenza',
+      placeholderDestination: 'Scegli una destinazione'
+    });
+    map.addControl(directions, 'top-left');
+
     mapRef.current = map;
 
     return () => {
