@@ -149,17 +149,29 @@ export default function MapView({ places, selectedCategories = [], className, on
         ? p.tp_codes.some(code => userTravellerCodes.includes(code))
         : false;
       
-      // Crea elemento marker
+      // Crea elemento marker con cubo 4D
       const el = document.createElement('div');
       el.innerHTML = `
         <div style="
-          width:30px;height:30px;border-radius:999px;
+          width:32px;height:32px;
           background:#fff; display:flex;align-items:center;justify-content:center;
-          box-shadow:0 1px 4px rgba(0,0,0,.2); 
-          border:${isCompatible ? '2.5px solid #3b82f6' : '1px solid rgba(0,0,0,.06)'};
+          box-shadow:0 2px 8px rgba(0,0,0,.3); 
+          border:${isCompatible ? '2.5px solid #3b82f6' : '1px solid rgba(0,0,0,.1)'};
           cursor: pointer;
+          transform-style: preserve-3d;
+          animation: rotate4d 4s infinite linear;
+          position: relative;
         ">
-          <div style="font-size:18px;line-height:18px">${emoji}</div>
+          <div style="font-size:18px;line-height:18px;position:relative;z-index:10;">${emoji}</div>
+          <style>
+            @keyframes rotate4d {
+              0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+              25% { transform: rotateX(90deg) rotateY(90deg) rotateZ(0deg); }
+              50% { transform: rotateX(180deg) rotateY(180deg) rotateZ(90deg); }
+              75% { transform: rotateX(270deg) rotateY(270deg) rotateZ(180deg); }
+              100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+            }
+          </style>
         </div>
       `;
 
