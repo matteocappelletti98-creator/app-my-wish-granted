@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useRef } from "react";
-import L, { Map as LeafletMap, LatLngBoundsExpression } from "leaflet";
-import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import 'leaflet-geosearch/dist/geosearch.css';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
+import { Input } from "@/components/ui/input";
 
 type Props = {
   places: Place[];
@@ -16,10 +16,12 @@ type Props = {
 };
 
 export default function MapView({ places, selectedCategories = [], className, onMarkerClick, favorites = [], onToggleFavorite, userTravellerCodes = [] }: Props) {
-  const mapRef = useRef<LeafletMap | null>(null);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const markersRef = useRef<L.LayerGroup | null>(null);
-  const routeLayerRef = useRef<L.Polyline | null>(null);
+  const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const [mapboxToken, setMapboxToken] = useState<string>(
+    localStorage.getItem('mapboxToken') || ''
+  );
 
   // Filtra solo published + categoria + coordinate valide
   const filtered = useMemo(() => {
@@ -31,67 +33,46 @@ export default function MapView({ places, selectedCategories = [], className, on
       });
   }, [places, selectedCategories]);
 
-  // Inizializza mappa una sola volta
+  // Salva token in localStorage
   useEffect(() => {
-    if (!containerRef.current) return;
-    if (!mapRef.current) {
-      const map = L.map(containerRef.current, { zoomControl: true }).setView([45.8105, 9.0863], 13);
-      mapRef.current = map;
-
-      // Tile layer (Carto Positron)
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-        subdomains: "abcd",
-        maxZoom: 20,
-      }).addTo(map);
-
-      // Aggiungi controllo di ricerca
-      const provider = new OpenStreetMapProvider({
-        params: {
-          'accept-language': 'it',
-          countrycodes: 'it'
-        }
-      });
-
-      const searchControl = GeoSearchControl({
-        provider: provider,
-        style: 'bar',
-        autoComplete: true,
-        autoCompleteDelay: 250,
-        showMarker: true,
-        showPopup: false,
-        marker: {
-          icon: L.divIcon({
-            html: '<div style="width:30px;height:30px;border-radius:50%;background:#3b82f6;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3)"></div>',
-            className: 'search-marker',
-            iconSize: [30, 30],
-            iconAnchor: [15, 15]
-          }),
-          draggable: false
-        },
-        maxMarkers: 1,
-        retainZoomLevel: false,
-        animateZoom: true,
-        autoClose: true,
-        searchLabel: 'Cerca un luogo...',
-        keepResult: true
-      });
-
-      map.addControl(searchControl as any);
+    if (mapboxToken) {
+      localStorage.setItem('mapboxToken', mapboxToken);
     }
-  }, []);
+  }, [mapboxToken]);
+
+  // Inizializza mappa Mapbox
+  useEffect(() => {
+    if (!containerRef.current || !mapboxToken) return;
+    if (mapRef.current) return; // Già inizializzata
+
+    mapboxgl.accessToken = mapboxToken;
+    
+    const map = new mapboxgl.Map({
+      container: containerRef.current,
+      style: 'mapbox://styles/teoteoteo/cmg7lnkab002601qo6yviai9g',
+      center: [9.0852, 45.8081], // Como, Lombardia
+      zoom: 12
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
+  }, [mapboxToken]);
 
   // Aggiungi marker ogni volta che cambia filtered
   useEffect(() => {
-    if (!mapRef.current) return;
+    if (!mapRef.current || !mapboxToken) return;
+    const map = mapRef.current;
 
-    if (markersRef.current) {
-      markersRef.current.clearLayers();
-      mapRef.current.removeLayer(markersRef.current);
-    }
-    markersRef.current = L.layerGroup().addTo(mapRef.current);
+    // Rimuovi marker esistenti
+    markersRef.current.forEach(m => m.remove());
+    markersRef.current = [];
 
-    const bounds: [number, number][] = [];
+    const bounds = new mapboxgl.LngLatBounds();
 
     filtered.forEach(p => {
       const emoji = categoryEmoji(p.category);
@@ -101,26 +82,24 @@ export default function MapView({ places, selectedCategories = [], className, on
         ? p.tp_codes.some(code => userTravellerCodes.includes(code))
         : false;
       
-      const icon = L.divIcon({
-        html: `
-          <div style="
-            width:34px;height:34px;border-radius:999px;
-            background:#fff; display:flex;align-items:center;justify-content:center;
-            box-shadow:0 1px 4px rgba(0,0,0,.25); 
-            border:${isCompatible ? '3px solid #3b82f6' : '1px solid rgba(0,0,0,.06)'};
-            animation: ${isCompatible ? 'zoom-bounce 1.2s ease-out' : 'none'};
-          ">
-            <div style="font-size:20px;line-height:20px">${emoji}</div>
-          </div>
-        `,
-        className: "poi-emoji-badge",
-        iconSize: [34, 34],
-        iconAnchor: [17, 17],
-      });
+      // Crea elemento marker
+      const el = document.createElement('div');
+      el.innerHTML = `
+        <div style="
+          width:34px;height:34px;border-radius:999px;
+          background:#fff; display:flex;align-items:center;justify-content:center;
+          box-shadow:0 1px 4px rgba(0,0,0,.25); 
+          border:${isCompatible ? '3px solid #3b82f6' : '1px solid rgba(0,0,0,.06)'};
+          cursor: pointer;
+        ">
+          <div style="font-size:20px;line-height:20px">${emoji}</div>
+        </div>
+      `;
 
-      const m = L.marker([p.lat!, p.lng!], { icon });
+      const marker = new mapboxgl.Marker(el)
+        .setLngLat([p.lng!, p.lat!]);
 
-      // Popup con bottone preferiti, dettaglio e indicazioni
+      // Popup con bottoni
       const favoriteButton = onToggleFavorite ? `
         <button 
           onclick="toggleFavorite('${p.id}')" 
@@ -154,7 +133,6 @@ export default function MapView({ places, selectedCategories = [], className, on
         </button>
       `;
 
-
       const googleMapsButton = `
         <button 
           onclick="openInGoogleMaps('${encodeURIComponent(p.name + ' ' + (p.address || p.city || ''))}')" 
@@ -170,29 +148,35 @@ export default function MapView({ places, selectedCategories = [], className, on
         </button>
       `;
 
-      m.bindPopup(`
-        <div style="min-width:180px; position: relative;">
-          ${favoriteButton}
-          <div style="font-weight:600;margin-bottom:4px">${emoji} ${escapeHtml(p.name)}</div>
-          <div style="color:#555;font-size:12px">${escapeHtml(p.city)}${p.city && p.country ? ", " : ""}${escapeHtml(p.country)}</div>
-          ${p.image ? `<img src="${normalizeImagePath(p.image)}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px;max-width:100%;height:auto"/>` : ""}
-          ${detailButton}
-          ${googleMapsButton}
-        </div>
-      `);
+      const popup = new mapboxgl.Popup({ offset: 25 })
+        .setHTML(`
+          <div style="min-width:180px; position: relative;">
+            ${favoriteButton}
+            <div style="font-weight:600;margin-bottom:4px">${emoji} ${escapeHtml(p.name)}</div>
+            <div style="color:#555;font-size:12px">${escapeHtml(p.city)}${p.city && p.country ? ", " : ""}${escapeHtml(p.country)}</div>
+            ${p.image ? `<img src="${normalizeImagePath(p.image)}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px;max-width:100%;height:auto"/>` : ""}
+            ${detailButton}
+            ${googleMapsButton}
+          </div>
+        `);
 
-      if (onMarkerClick) m.on("click", () => onMarkerClick(p));
-      m.addTo(markersRef.current!);
-      bounds.push([p.lat!, p.lng!]);
+      marker.setPopup(popup);
+      
+      if (onMarkerClick) {
+        marker.getElement().addEventListener('click', () => onMarkerClick(p));
+      }
+
+      marker.addTo(map);
+      markersRef.current.push(marker);
+      
+      bounds.extend([p.lng!, p.lat!]);
     });
 
-    // fit-to-bounds
-    if (bounds.length >= 2) {
-      mapRef.current.fitBounds(bounds as LatLngBoundsExpression, { padding: [32, 32] });
-    } else if (bounds.length === 1) {
-      mapRef.current.setView(bounds[0] as any, 15);
+    // Fit bounds se ci sono markers
+    if (filtered.length > 0) {
+      map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
     }
-  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes]);
+  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken]);
 
   // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
   useEffect(() => {
@@ -219,30 +203,32 @@ export default function MapView({ places, selectedCategories = [], className, on
   }, [onToggleFavorite]);
 
   return (
-    <>
-      <style>{`
-        @keyframes zoom-bounce {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.4); }
-          75% { transform: scale(1.1); }
-          100% { transform: scale(1); }
-        }
-        .leaflet-control-geosearch {
-          border-radius: 12px !important;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
-        }
-        .leaflet-control-geosearch form input {
-          border-radius: 12px !important;
-          padding: 8px 12px !important;
-          font-size: 14px !important;
-        }
-        .leaflet-control-geosearch .results {
-          border-radius: 8px !important;
-          margin-top: 4px !important;
-        }
-      `}</style>
+    <div className="relative">
+      {!mapboxToken && (
+        <div className="absolute top-4 left-4 z-10 bg-background/95 backdrop-blur-sm p-4 rounded-lg shadow-lg border max-w-md">
+          <p className="text-sm mb-2 font-medium">Inserisci il tuo Mapbox Access Token:</p>
+          <Input
+            type="text"
+            placeholder="pk.eyJ1..."
+            value={mapboxToken}
+            onChange={(e) => setMapboxToken(e.target.value)}
+            className="mb-2"
+          />
+          <p className="text-xs text-muted-foreground">
+            Ottieni il token su{' '}
+            <a 
+              href="https://account.mapbox.com/access-tokens/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary underline"
+            >
+              mapbox.com
+            </a>
+          </p>
+        </div>
+      )}
       <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
-    </>
+    </div>
   );
 }
 
