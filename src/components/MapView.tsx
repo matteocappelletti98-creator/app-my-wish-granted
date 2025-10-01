@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import mapboxgl from "mapbox-gl";
-import { MapboxSearchBox } from "@mapbox/search-js-web";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "mapbox-gl/dist/mapbox-gl.css";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 
@@ -48,18 +49,19 @@ export default function MapView({ places, selectedCategories = [], className, on
     // Aggiungi controlli di navigazione
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-    // Aggiungi search box dopo il caricamento
-    map.on('load', () => {
-      const searchBox = new MapboxSearchBox();
-      searchBox.accessToken = ACCESS_TOKEN;
-      searchBox.options = {
-        language: 'it',
-        country: 'IT'
-      };
-      searchBox.marker = true;
-      searchBox.mapboxgl = mapboxgl;
-      map.addControl(searchBox as any, 'top-left');
+    // Aggiungi geocoder (search box)
+    const geocoder = new MapboxGeocoder({
+      accessToken: ACCESS_TOKEN,
+      mapboxgl: mapboxgl,
+      language: 'it',
+      countries: 'IT',
+      marker: {
+        color: '#3b82f6'
+      },
+      placeholder: 'Cerca un luogo...'
     });
+    
+    map.addControl(geocoder, 'top-left');
 
     mapRef.current = map;
 
