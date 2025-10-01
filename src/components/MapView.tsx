@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
+import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 
@@ -18,6 +20,8 @@ export default function MapView({ places, selectedCategories = [], className, on
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const directionsRef = useRef<MapboxDirections | null>(null);
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const mapboxToken = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
 
   // Filtra solo published + categoria + coordinate valide
@@ -30,6 +34,20 @@ export default function MapView({ places, selectedCategories = [], className, on
       });
   }, [places, selectedCategories]);
 
+
+  // Geolocalizzazione utente
+  useEffect(() => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation([position.coords.longitude, position.coords.latitude]);
+        },
+        (error) => {
+          console.log('Geolocalizzazione non disponibile:', error);
+        }
+      );
+    }
+  }, []);
 
   // Inizializza mappa Mapbox
   useEffect(() => {
@@ -46,11 +64,28 @@ export default function MapView({ places, selectedCategories = [], className, on
     });
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    
+    // Inizializza Directions
+    const directions = new MapboxDirections({
+      accessToken: mapboxToken,
+      unit: 'metric',
+      profile: 'mapbox/walking',
+      language: 'it',
+      controls: {
+        inputs: false,
+        instructions: true,
+        profileSwitcher: true,
+      }
+    });
+    
+    directionsRef.current = directions;
+    
     mapRef.current = map;
 
     return () => {
       map.remove();
       mapRef.current = null;
+      directionsRef.current = null;
     };
   }, [mapboxToken]);
 
@@ -139,6 +174,21 @@ export default function MapView({ places, selectedCategories = [], className, on
         </button>
       `;
 
+      const directionsButton = userLocation ? `
+        <button 
+          onclick="getDirections(${p.lng}, ${p.lat})" 
+          style="
+            background: #8b5cf6; color: white; border: none; 
+            border-radius: 6px; padding: 8px 12px; margin-top: 8px;
+            font-size: 12px; cursor: pointer; width: 100%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+          "
+          title="Ottieni indicazioni dalla tua posizione"
+        >
+          🧭 Indicazioni stradali
+        </button>
+      ` : '';
+
       const popup = new mapboxgl.Popup({ offset: 25 })
         .setHTML(`
           <div style="min-width:180px; position: relative;">
@@ -147,6 +197,7 @@ export default function MapView({ places, selectedCategories = [], className, on
             <div style="color:#555;font-size:12px">${escapeHtml(p.city)}${p.city && p.country ? ", " : ""}${escapeHtml(p.country)}</div>
             ${p.image ? `<img src="${normalizeImagePath(p.image)}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px;max-width:100%;height:auto"/>` : ""}
             ${detailButton}
+            ${directionsButton}
             ${googleMapsButton}
           </div>
         `);
@@ -186,12 +237,27 @@ export default function MapView({ places, selectedCategories = [], className, on
       window.open(url, '_blank');
     };
     
+    // Funzione globale per ottenere indicazioni
+    (window as any).getDirections = (destLng: number, destLat: number) => {
+      if (!mapRef.current || !directionsRef.current || !userLocation) return;
+      
+      // Aggiungi il controllo directions alla mappa se non è già stato aggiunto
+      if (!mapRef.current.hasControl(directionsRef.current)) {
+        mapRef.current.addControl(directionsRef.current, 'top-left');
+      }
+      
+      // Imposta origine (posizione utente) e destinazione
+      directionsRef.current.setOrigin(userLocation);
+      directionsRef.current.setDestination([destLng, destLat]);
+    };
+    
     return () => {
       delete (window as any).toggleFavorite;
       delete (window as any).goToPlace;
       delete (window as any).openInGoogleMaps;
+      delete (window as any).getDirections;
     };
-  }, [onToggleFavorite]);
+  }, [onToggleFavorite, userLocation]);
 
   return (
     <div className="relative">
