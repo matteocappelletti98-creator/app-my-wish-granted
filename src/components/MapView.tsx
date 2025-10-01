@@ -62,26 +62,53 @@ export default function MapView({ places, selectedCategories = [], className, on
       center: [0, 20], // Partiamo da una vista globale centrata
       zoom: 0.8, // Zoom molto lontano per vedere il globo intero
       pitch: 0,
-      bearing: -2880 // Partiamo da -2880° per fare 8 rotazioni complete (effetto turbinio)
+      bearing: 0
     });
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     
-    // Effetto turbinio: rotazione velocissima E zoom insieme
+    // Effetto turbinio con rotazione continua durante lo zoom
     map.on('load', () => {
-      // Easing personalizzato: veloce all'inizio, rallenta alla fine
-      const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-      
       setTimeout(() => {
+        let rotationSpeed = 15; // Gradi per frame (molto veloce)
+        let currentBearing = 0;
+        let isRotating = true;
+        
+        // Funzione per rotazione continua
+        const rotate = () => {
+          if (!isRotating) return;
+          currentBearing = (currentBearing + rotationSpeed) % 360;
+          map.setBearing(currentBearing);
+          requestAnimationFrame(rotate);
+        };
+        
+        // Inizia rotazione frenetica
+        rotate();
+        
+        // Zoom verso Como con easing che rallenta
+        const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+        
         map.flyTo({
-          center: [9.0852, 45.8081], // Como
+          center: [9.0852, 45.8081],
           zoom: 12,
           pitch: 0,
-          bearing: 0, // Arriva a 0°, facendo 8 rotazioni complete da -2880°
-          duration: 4000, // 4 secondi totali per effetto turbinio
+          duration: 4500,
           easing: easeOutCubic,
           essential: true
         });
+        
+        // Rallenta gradualmente la rotazione e fermala alla fine
+        setTimeout(() => {
+          const slowDown = setInterval(() => {
+            rotationSpeed *= 0.85; // Rallenta progressivamente
+            if (rotationSpeed < 0.5) {
+              isRotating = false;
+              map.setBearing(0); // Assicura orientamento finale corretto
+              clearInterval(slowDown);
+            }
+          }, 100);
+        }, 3000); // Inizia a rallentare dopo 3 secondi
+        
       }, 500);
     });
     
