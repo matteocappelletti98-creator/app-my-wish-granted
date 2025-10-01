@@ -72,10 +72,31 @@ export default function MapView({ places, selectedCategories = [], className, on
       profile: 'mapbox/walking',
       language: 'it',
       controls: {
-        inputs: false,
+        inputs: true,
         instructions: true,
         profileSwitcher: true,
-      }
+      },
+      interactive: true,
+      styles: [
+        {
+          'id': 'directions-route-line',
+          'type': 'line',
+          'source': 'directions',
+          'layout': {
+            'line-cap': 'round',
+            'line-join': 'round'
+          },
+          'paint': {
+            'line-color': '#3b82f6',
+            'line-width': 5
+          },
+          'filter': [
+            'all',
+            ['in', '$type', 'LineString'],
+            ['in', 'route', 'selected']
+          ]
+        }
+      ]
     });
     
     directionsRef.current = directions;
@@ -261,6 +282,28 @@ export default function MapView({ places, selectedCategories = [], className, on
 
   return (
     <div className="relative">
+      <style>{`
+        @media (max-width: 768px) {
+          .mapboxgl-ctrl-directions {
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+          .directions-control {
+            width: 100% !important;
+          }
+          .mapbox-directions-component {
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+          .mapbox-directions-inputs {
+            width: 100% !important;
+          }
+          .mapbox-directions-instructions {
+            max-height: 40vh !important;
+            overflow-y: auto !important;
+          }
+        }
+      `}</style>
       <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
     </div>
   );
