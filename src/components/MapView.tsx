@@ -149,8 +149,8 @@ export default function MapView({ places, selectedCategories = [], className, on
         ? p.tp_codes.some(code => userTravellerCodes.includes(code))
         : false;
       
-      // Delay per effetto caduta multipla
-      const delay = (index * 50) + Math.random() * 200;
+      // Delay minimo per effetto sincronizzato con lo zoom
+      const delay = (index * 30) + Math.random() * 100;
       
       // Crea elemento marker con animazione di caduta
       const el = document.createElement('div');
@@ -158,26 +158,21 @@ export default function MapView({ places, selectedCategories = [], className, on
         <style>
           @keyframes fall-from-sky {
             0% {
-              transform: translateY(-1000px) rotate(0deg) scale(0.3);
+              transform: scale(0.05) translateZ(-1000px);
               opacity: 0;
+            }
+            50% {
+              opacity: 0.8;
             }
             70% {
               opacity: 1;
+              transform: scale(1.2) translateZ(0);
             }
-            80% {
-              transform: translateY(30px) rotate(720deg) scale(1.15);
-            }
-            88% {
-              transform: translateY(-15px) rotate(720deg) scale(0.95);
-            }
-            94% {
-              transform: translateY(8px) rotate(720deg) scale(1.05);
-            }
-            97% {
-              transform: translateY(-4px) rotate(720deg) scale(0.98);
+            85% {
+              transform: scale(1.1) translateY(5px);
             }
             100% {
-              transform: translateY(0) rotate(720deg) scale(1);
+              transform: scale(1) translateY(0);
               opacity: 1;
             }
           }
@@ -188,7 +183,7 @@ export default function MapView({ places, selectedCategories = [], className, on
           box-shadow:0 2px 8px rgba(0,0,0,.3), 0 0 20px rgba(59, 130, 246, 0.3); 
           border:${isCompatible ? '2.5px solid #3b82f6' : '1px solid rgba(0,0,0,.1)'};
           cursor: pointer;
-          animation: fall-from-sky 2s ease-out ${delay}ms forwards;
+          animation: fall-from-sky 3s ease-out ${delay}ms forwards;
           opacity: 0;
         ">
           <div style="font-size:18px;line-height:18px">${emoji}</div>
