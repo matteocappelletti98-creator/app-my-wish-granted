@@ -22,7 +22,7 @@ export default function MapView({ places, selectedCategories = [], className, on
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const directionsRef = useRef<MapboxDirections | null>(null);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const previousCategoriesRef = useRef<string[]>([]);
   const mapboxToken = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
 
   // Filtra solo published + categoria + coordinate valide
@@ -142,6 +142,10 @@ export default function MapView({ places, selectedCategories = [], className, on
 
     const bounds = new mapboxgl.LngLatBounds();
 
+    // Verifica se le categorie sono cambiate (per disabilitare animazione)
+    const categoriesChanged = JSON.stringify(previousCategoriesRef.current.sort()) !== JSON.stringify([...selectedCategories].sort());
+    const shouldAnimate = !categoriesChanged || previousCategoriesRef.current.length === 0;
+    
     filtered.forEach((p, index) => {
       const emoji = categoryEmoji(p.category);
       
@@ -150,10 +154,10 @@ export default function MapView({ places, selectedCategories = [], className, on
         ? p.tp_codes.some(code => userTravellerCodes.includes(code))
         : false;
       
-      // Delay casuale per ogni marker per effetto caduta multipla (solo al primo caricamento)
-      const delay = isInitialLoad ? (index * 50) + Math.random() * 200 : 0;
+      // Delay casuale per ogni marker per effetto caduta multipla
+      const delay = (index * 50) + Math.random() * 200;
       
-      // Crea elemento marker con animazione di caduta (solo al primo caricamento)
+      // Crea elemento marker con animazione di caduta
       const el = document.createElement('div');
       const animationName = isCompatible ? 'fall-from-west' : 'fall-from-sky';
       el.innerHTML = `
@@ -177,20 +181,23 @@ export default function MapView({ places, selectedCategories = [], className, on
           
           @keyframes fall-from-west {
             0% {
-              transform: translate(-1200px, -1000px) rotate(0deg) scale(0.3);
+              transform: translate(-1500px, -1200px) rotate(0deg) scale(0.3);
               opacity: 0;
             }
             60% {
               opacity: 1;
             }
-            75% {
-              transform: translate(0, 25px) rotate(-720deg) scale(1.15);
+            70% {
+              transform: translate(0, 35px) rotate(-720deg) scale(1.2);
             }
-            85% {
-              transform: translate(0, -5px) rotate(-720deg) scale(1.08);
+            80% {
+              transform: translate(0, -8px) rotate(-720deg) scale(1.12);
             }
-            92% {
-              transform: translate(0, 8px) rotate(-720deg) scale(1.05);
+            88% {
+              transform: translate(0, 15px) rotate(-720deg) scale(1.06);
+            }
+            94% {
+              transform: translate(0, -3px) rotate(-720deg) scale(1.02);
             }
             100% {
               transform: translate(0, 0) rotate(-720deg) scale(1);
@@ -204,7 +211,7 @@ export default function MapView({ places, selectedCategories = [], className, on
           box-shadow:0 2px 8px rgba(0,0,0,.3), 0 0 20px rgba(59, 130, 246, 0.3); 
           border:${isCompatible ? '2.5px solid #3b82f6' : '1px solid rgba(0,0,0,.1)'};
           cursor: pointer;
-          ${isInitialLoad ? `animation: ${animationName} 2.2s ease-out ${delay}ms forwards; opacity: 0;` : 'opacity: 1;'}
+          ${shouldAnimate ? `animation: ${animationName} 2.5s ease-out ${delay}ms forwards; opacity: 0;` : 'opacity: 1;'}
         ">
           <div style="font-size:18px;line-height:18px">${emoji}</div>
         </div>
@@ -307,11 +314,9 @@ export default function MapView({ places, selectedCategories = [], className, on
       map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
     }
     
-    // Dopo il primo caricamento, disabilita l'animazione
-    if (isInitialLoad) {
-      setIsInitialLoad(false);
-    }
-  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken, isInitialLoad]);
+    // Aggiorna le categorie precedenti per il prossimo render
+    previousCategoriesRef.current = [...selectedCategories];
+  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken, selectedCategories]);
 
   // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
   useEffect(() => {
