@@ -75,7 +75,7 @@ export default function MapView({ places, selectedCategories = [], className, on
       setTimeout(() => {
         map.flyTo({
           center: [9.0852, 45.8081], // Como
-          zoom: 12,
+          zoom: 10.5,
           pitch: 0,
           bearing: 1080, // 3 rotazioni complete da est verso ovest (direzione positiva)
           duration: 4500,
