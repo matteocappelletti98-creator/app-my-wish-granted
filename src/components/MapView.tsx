@@ -187,17 +187,14 @@ export default function MapView({ places, selectedCategories = [], className, on
             60% {
               opacity: 1;
             }
-            70% {
-              transform: translate(0, 35px) rotate(-720deg) scale(1.2);
+            75% {
+              transform: translate(0, 0) rotate(-720deg) scale(1);
             }
-            80% {
-              transform: translate(0, -8px) rotate(-720deg) scale(1.12);
+            85% {
+              transform: translate(0, 0) rotate(-720deg) scale(1);
             }
-            88% {
-              transform: translate(0, 15px) rotate(-720deg) scale(1.06);
-            }
-            94% {
-              transform: translate(0, -3px) rotate(-720deg) scale(1.02);
+            92% {
+              transform: translate(0, 0) rotate(-720deg) scale(1.5);
             }
             100% {
               transform: translate(0, 0) rotate(-720deg) scale(1);
