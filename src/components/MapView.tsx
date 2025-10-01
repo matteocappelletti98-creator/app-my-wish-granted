@@ -21,7 +21,16 @@ export default function MapView({ places, selectedCategories = [], className, on
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const directionsRef = useRef<MapboxDirections | null>(null);
+  const watchIdRef = useRef<number | null>(null);
+  const currentRouteRef = useRef<any>(null);
+  const lastSpokenStepRef = useRef<number>(-1);
+  
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [currentStep, setCurrentStep] = useState<any>(null);
+  const [nextStep, setNextStep] = useState<any>(null);
+  const [distanceToNextStep, setDistanceToNextStep] = useState<number>(0);
+  
   const mapboxToken = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
 
   // Filtra solo published + categoria + coordinate valide
@@ -35,7 +44,34 @@ export default function MapView({ places, selectedCategories = [], className, on
   }, [places, selectedCategories]);
 
 
-  // Geolocalizzazione utente
+  // Funzione per calcolare distanza tra due punti (Haversine)
+  const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+    const R = 6371e3; // Earth radius in meters
+    const φ1 = lat1 * Math.PI / 180;
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) *
+      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c;
+  };
+
+  // Text-to-speech per istruzioni vocali
+  const speak = (text: string) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'it-IT';
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // Geolocalizzazione iniziale
   useEffect(() => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -48,6 +84,120 @@ export default function MapView({ places, selectedCategories = [], className, on
       );
     }
   }, []);
+
+  // Tracking continuo durante la navigazione
+  useEffect(() => {
+    if (!isNavigating || !currentRouteRef.current) {
+      if (watchIdRef.current) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+      return;
+    }
+
+    if ('geolocation' in navigator) {
+      watchIdRef.current = navigator.geolocation.watchPosition(
+        (position) => {
+          const newLocation: [number, number] = [position.coords.longitude, position.coords.latitude];
+          setUserLocation(newLocation);
+
+          // Aggiorna marker utente sulla mappa
+          if (mapRef.current) {
+            const userMarker = document.getElementById('user-location-marker');
+            if (userMarker) {
+              userMarker.remove();
+            }
+            
+            const el = document.createElement('div');
+            el.id = 'user-location-marker';
+            el.innerHTML = `
+              <div style="
+                width:20px;height:20px;border-radius:50%;
+                background:#3b82f6;border:3px solid white;
+                box-shadow:0 2px 4px rgba(0,0,0,0.3);
+              "></div>
+            `;
+            
+            new mapboxgl.Marker(el)
+              .setLngLat(newLocation)
+              .addTo(mapRef.current);
+          }
+
+          // Trova step corrente in base alla posizione
+          const route = currentRouteRef.current;
+          if (route && route.legs && route.legs[0] && route.legs[0].steps) {
+            const steps = route.legs[0].steps;
+            
+            for (let i = 0; i < steps.length; i++) {
+              const step = steps[i];
+              const stepCoords = step.maneuver.location;
+              const distance = calculateDistance(
+                newLocation[1], newLocation[0],
+                stepCoords[1], stepCoords[0]
+              );
+
+              // Se siamo vicini a uno step (entro 50m)
+              if (distance < 50 && i !== lastSpokenStepRef.current) {
+                setCurrentStep(step);
+                setNextStep(steps[i + 1] || null);
+                
+                // Pronuncia l'istruzione
+                const instruction = step.maneuver.instruction;
+                speak(instruction);
+                lastSpokenStepRef.current = i;
+                break;
+              }
+
+              // Calcola distanza al prossimo step
+              if (i === lastSpokenStepRef.current + 1) {
+                setDistanceToNextStep(Math.round(distance));
+                setNextStep(step);
+              }
+            }
+
+            // Ricalcola se troppo lontano dal percorso (oltre 100m)
+            const routeCoordinates = route.geometry.coordinates;
+            let minDistanceToRoute = Infinity;
+            
+            for (const coord of routeCoordinates) {
+              const dist = calculateDistance(
+                newLocation[1], newLocation[0],
+                coord[1], coord[0]
+              );
+              if (dist < minDistanceToRoute) {
+                minDistanceToRoute = dist;
+              }
+            }
+
+            if (minDistanceToRoute > 100) {
+              speak("Ricalcolo del percorso");
+              // Ricalcola percorso
+              if (directionsRef.current) {
+                const destination = routeCoordinates[routeCoordinates.length - 1];
+                directionsRef.current.setOrigin(newLocation);
+                directionsRef.current.setDestination(destination);
+              }
+            }
+          }
+        },
+        (error) => {
+          console.log('Errore tracking GPS:', error);
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: 0,
+          timeout: 5000
+        }
+      );
+    }
+
+    return () => {
+      if (watchIdRef.current) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+    };
+  }, [isNavigating]);
 
   // Inizializza mappa Mapbox
   useEffect(() => {
@@ -97,6 +247,13 @@ export default function MapView({ places, selectedCategories = [], className, on
           ]
         }
       ]
+    });
+    
+    // Listener per quando viene calcolato un percorso
+    directions.on('route', (e: any) => {
+      if (e.route && e.route[0]) {
+        currentRouteRef.current = e.route[0];
+      }
     });
     
     directionsRef.current = directions;
@@ -270,6 +427,11 @@ export default function MapView({ places, selectedCategories = [], className, on
       // Imposta origine (posizione utente) e destinazione
       directionsRef.current.setOrigin(userLocation);
       directionsRef.current.setDestination([destLng, destLat]);
+      
+      // Avvia la navigazione
+      setIsNavigating(true);
+      lastSpokenStepRef.current = -1;
+      speak("Navigazione avviata");
     };
     
     return () => {
@@ -304,6 +466,43 @@ export default function MapView({ places, selectedCategories = [], className, on
           }
         }
       `}</style>
+      
+      {/* Pannello navigatore GPS */}
+      {isNavigating && nextStep && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 bg-background/95 backdrop-blur-md rounded-2xl shadow-2xl border border-border p-6 max-w-md w-[90%]">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex-1">
+              <div className="text-5xl font-bold text-primary mb-2">
+                {distanceToNextStep}m
+              </div>
+              <div className="text-xl font-semibold">
+                {nextStep.maneuver.instruction}
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                setIsNavigating(false);
+                currentRouteRef.current = null;
+                lastSpokenStepRef.current = -1;
+                window.speechSynthesis.cancel();
+                if (directionsRef.current && mapRef.current) {
+                  directionsRef.current.removeRoutes();
+                }
+              }}
+              className="ml-4 bg-destructive text-destructive-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-destructive/90"
+            >
+              Stop
+            </button>
+          </div>
+          
+          {currentStep && (
+            <div className="text-sm text-muted-foreground mt-2 pt-2 border-t">
+              Istruzione attuale: {currentStep.maneuver.instruction}
+            </div>
+          )}
+        </div>
+      )}
+      
       <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
     </div>
   );
