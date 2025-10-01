@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef } from "react";
-import L, { Map as LeafletMap, LatLngBoundsExpression } from "leaflet";
+import mapboxgl from "mapbox-gl";
+import { MapboxSearchBox } from "@mapbox/search-js-web";
+import "mapbox-gl/dist/mapbox-gl.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 
@@ -13,10 +15,12 @@ type Props = {
   userTravellerCodes?: number[];
 };
 
+const ACCESS_TOKEN = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
+
 export default function MapView({ places, selectedCategories = [], className, onMarkerClick, favorites = [], onToggleFavorite, userTravellerCodes = [] }: Props) {
-  const mapRef = useRef<LeafletMap | null>(null);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const markersRef = useRef<L.LayerGroup | null>(null);
+  const markersRef = useRef<mapboxgl.Marker[]>([]);
 
   // Filtra solo published + categoria + coordinate valide
   const filtered = useMemo(() => {
@@ -30,31 +34,74 @@ export default function MapView({ places, selectedCategories = [], className, on
 
   // Inizializza mappa una sola volta
   useEffect(() => {
-    if (!containerRef.current) return;
-    if (!mapRef.current) {
-      const map = L.map(containerRef.current, { zoomControl: true }).setView([41.9028, 12.4964], 12);
-      mapRef.current = map;
+    if (!containerRef.current || mapRef.current) return;
 
-      // Tile layer (Carto Positron)
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-        attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-        subdomains: "abcd",
-        maxZoom: 20,
-      }).addTo(map);
-    }
+    mapboxgl.accessToken = ACCESS_TOKEN;
+    
+    const map = new mapboxgl.Map({
+      container: containerRef.current,
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [12.4964, 41.9028], // Roma
+      zoom: 12
+    });
+
+    // Aggiungi controlli di navigazione
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+    // Aggiungi search box dopo il caricamento
+    map.on('load', () => {
+      const searchBox = new MapboxSearchBox();
+      searchBox.accessToken = ACCESS_TOKEN;
+      searchBox.options = {
+        language: 'it',
+        country: 'IT'
+      };
+      searchBox.marker = true;
+      searchBox.mapboxgl = mapboxgl;
+      map.addControl(searchBox as any, 'top-left');
+    });
+
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+    };
   }, []);
+
+  // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
+  useEffect(() => {
+    if (onToggleFavorite) {
+      (window as any).toggleFavorite = onToggleFavorite;
+    }
+    
+    // Funzione globale per navigare al luogo
+    (window as any).goToPlace = (slug: string) => {
+      window.location.href = `/luogo/${slug}`;
+    };
+    
+    // Funzione globale per aprire in Google Maps
+    (window as any).openInGoogleMaps = (searchQuery: string) => {
+      const url = `https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
+      window.open(url, '_blank');
+    };
+    
+    return () => {
+      delete (window as any).toggleFavorite;
+      delete (window as any).goToPlace;
+      delete (window as any).openInGoogleMaps;
+    };
+  }, [onToggleFavorite]);
 
   // Aggiungi marker ogni volta che cambia filtered
   useEffect(() => {
     if (!mapRef.current) return;
 
-    if (markersRef.current) {
-      markersRef.current.clearLayers();
-      mapRef.current.removeLayer(markersRef.current);
-    }
-    markersRef.current = L.layerGroup().addTo(mapRef.current);
+    // Rimuovi marker esistenti
+    markersRef.current.forEach(marker => marker.remove());
+    markersRef.current = [];
 
-    const bounds: [number, number][] = [];
+    const bounds = new mapboxgl.LngLatBounds();
+    let hasValidBounds = false;
 
     filtered.forEach(p => {
       const emoji = categoryEmoji(p.category);
@@ -64,24 +111,20 @@ export default function MapView({ places, selectedCategories = [], className, on
         ? p.tp_codes.some(code => userTravellerCodes.includes(code))
         : false;
       
-      const icon = L.divIcon({
-        html: `
-          <div style="
-            width:34px;height:34px;border-radius:999px;
-            background:#fff; display:flex;align-items:center;justify-content:center;
-            box-shadow:0 1px 4px rgba(0,0,0,.25); 
-            border:${isCompatible ? '3px solid #3b82f6' : '1px solid rgba(0,0,0,.06)'};
-            animation: ${isCompatible ? 'zoom-bounce 1.2s ease-out' : 'none'};
-          ">
-            <div style="font-size:20px;line-height:20px">${emoji}</div>
-          </div>
-        `,
-        className: "poi-emoji-badge",
-        iconSize: [34, 34],
-        iconAnchor: [17, 17],
-      });
-
-      const m = L.marker([p.lat!, p.lng!], { icon });
+      // Crea elemento HTML per il marker
+      const el = document.createElement('div');
+      el.innerHTML = `
+        <div style="
+          width:34px;height:34px;border-radius:999px;
+          background:#fff; display:flex;align-items:center;justify-content:center;
+          box-shadow:0 1px 4px rgba(0,0,0,.25); 
+          border:${isCompatible ? '3px solid #3b82f6' : '1px solid rgba(0,0,0,.06)'};
+          animation: ${isCompatible ? 'zoom-bounce 1.2s ease-out' : 'none'};
+          cursor: pointer;
+        ">
+          <div style="font-size:20px;line-height:20px">${emoji}</div>
+        </div>
+      `;
 
       // Popup con bottone preferiti e bottone dettaglio
       const favoriteButton = onToggleFavorite ? `
@@ -102,7 +145,6 @@ export default function MapView({ places, selectedCategories = [], className, on
         </button>
       ` : '';
 
-      // Bottone per entrare nel luogo (per tutti i luoghi)
       const detailButton = `
         <button 
           onclick="goToPlace('${p.slug}')" 
@@ -133,7 +175,7 @@ export default function MapView({ places, selectedCategories = [], className, on
         </button>
       `;
 
-      m.bindPopup(`
+      const popupContent = `
         <div style="min-width:180px; position: relative;">
           ${favoriteButton}
           <div style="font-weight:600;margin-bottom:4px">${emoji} ${escapeHtml(p.name)}</div>
@@ -142,44 +184,32 @@ export default function MapView({ places, selectedCategories = [], className, on
           ${detailButton}
           ${googleMapsButton}
         </div>
-      `);
+      `;
 
-      if (onMarkerClick) m.on("click", () => onMarkerClick(p));
-      m.addTo(markersRef.current!);
-      bounds.push([p.lat!, p.lng!]);
+      const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupContent);
+
+      const marker = new mapboxgl.Marker(el)
+        .setLngLat([p.lng!, p.lat!])
+        .setPopup(popup)
+        .addTo(mapRef.current!);
+
+      if (onMarkerClick) {
+        el.addEventListener('click', () => onMarkerClick(p));
+      }
+
+      markersRef.current.push(marker);
+      bounds.extend([p.lng!, p.lat!]);
+      hasValidBounds = true;
     });
 
     // fit-to-bounds
-    if (bounds.length >= 2) {
-      mapRef.current.fitBounds(bounds as LatLngBoundsExpression, { padding: [32, 32] });
-    } else if (bounds.length === 1) {
-      mapRef.current.setView(bounds[0] as any, 15);
+    if (hasValidBounds) {
+      mapRef.current.fitBounds(bounds, { 
+        padding: { top: 50, bottom: 50, left: 50, right: 50 },
+        maxZoom: 15
+      });
     }
   }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes]);
-
-  // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
-  useEffect(() => {
-    if (onToggleFavorite) {
-      (window as any).toggleFavorite = onToggleFavorite;
-    }
-    
-    // Funzione globale per navigare al luogo
-    (window as any).goToPlace = (slug: string) => {
-      window.location.href = `/luogo/${slug}`;
-    };
-    
-    // Funzione globale per aprire in Google Maps
-    (window as any).openInGoogleMaps = (searchQuery: string) => {
-      const url = `https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
-      window.open(url, '_blank');
-    };
-    
-    return () => {
-      delete (window as any).toggleFavorite;
-      delete (window as any).goToPlace;
-      delete (window as any).openInGoogleMaps;
-    };
-  }, [onToggleFavorite]);
 
   return (
     <>
@@ -190,8 +220,12 @@ export default function MapView({ places, selectedCategories = [], className, on
           75% { transform: scale(1.1); }
           100% { transform: scale(1); }
         }
+        .mapboxgl-ctrl-bottom-left,
+        .mapboxgl-ctrl-bottom-right {
+          display: none;
+        }
       `}</style>
-      <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
+      <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl"} />
     </>
   );
 }
