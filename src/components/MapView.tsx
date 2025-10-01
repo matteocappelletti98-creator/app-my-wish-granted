@@ -1,9 +1,7 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import L, { Map as LeafletMap, LatLngBoundsExpression } from "leaflet";
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import 'leaflet-routing-machine';
 import 'leaflet-geosearch/dist/geosearch.css';
-import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 
@@ -21,7 +19,7 @@ export default function MapView({ places, selectedCategories = [], className, on
   const mapRef = useRef<LeafletMap | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markersRef = useRef<L.LayerGroup | null>(null);
-  const routingControlRef = useRef<any>(null);
+  const routeLayerRef = useRef<L.Polyline | null>(null);
 
   // Filtra solo published + categoria + coordinate valide
   const filtered = useMemo(() => {
@@ -80,30 +78,6 @@ export default function MapView({ places, selectedCategories = [], className, on
       });
 
       map.addControl(searchControl as any);
-
-      // Aggiungi controllo routing (indicazioni stradali)
-      // @ts-ignore
-      routingControlRef.current = L.Routing.control({
-        waypoints: [],
-        routeWhileDragging: true,
-        showAlternatives: true,
-        language: 'it',
-        lineOptions: {
-          styles: [{ color: '#3b82f6', opacity: 0.8, weight: 6 }]
-        },
-        createMarker: function(i: number, waypoint: any, n: number) {
-          const marker = L.marker(waypoint.latLng, {
-            draggable: true,
-            icon: L.divIcon({
-              html: `<div style="width:32px;height:32px;border-radius:50%;background:${i === 0 ? '#10b981' : '#ef4444'};border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:14px;">${i === 0 ? 'A' : 'B'}</div>`,
-              className: 'routing-marker',
-              iconSize: [32, 32],
-              iconAnchor: [16, 16]
-            })
-          });
-          return marker;
-        }
-      }).addTo(map);
     }
   }, []);
 
@@ -180,20 +154,6 @@ export default function MapView({ places, selectedCategories = [], className, on
         </button>
       `;
 
-      const directionsButton = `
-        <button 
-          onclick="getDirectionsTo(${p.lat}, ${p.lng}, '${escapeHtml(p.name)}')" 
-          style="
-            background: #8b5cf6; color: white; border: none; 
-            border-radius: 6px; padding: 8px 12px; margin-top: 8px;
-            font-size: 12px; cursor: pointer; width: 100%;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-          "
-          title="Ottieni indicazioni stradali"
-        >
-          🧭 Indicazioni
-        </button>
-      `;
 
       const googleMapsButton = `
         <button 
@@ -217,7 +177,6 @@ export default function MapView({ places, selectedCategories = [], className, on
           <div style="color:#555;font-size:12px">${escapeHtml(p.city)}${p.city && p.country ? ", " : ""}${escapeHtml(p.country)}</div>
           ${p.image ? `<img src="${normalizeImagePath(p.image)}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px;max-width:100%;height:auto"/>` : ""}
           ${detailButton}
-          ${directionsButton}
           ${googleMapsButton}
         </div>
       `);
@@ -246,36 +205,6 @@ export default function MapView({ places, selectedCategories = [], className, on
       window.location.href = `/luogo/${slug}`;
     };
     
-    // Funzione globale per ottenere indicazioni
-    (window as any).getDirectionsTo = (lat: number, lng: number, name: string) => {
-      if (routingControlRef.current && mapRef.current) {
-        if ('geolocation' in navigator) {
-          navigator.geolocation.getCurrentPosition((position) => {
-            const userLat = position.coords.latitude;
-            const userLng = position.coords.longitude;
-            routingControlRef.current.setWaypoints([
-              L.latLng(userLat, userLng),
-              L.latLng(lat, lng)
-            ]);
-          }, () => {
-            // Se non riesce a ottenere la posizione, usa il centro della mappa
-            const center = mapRef.current!.getCenter();
-            routingControlRef.current.setWaypoints([
-              L.latLng(center.lat, center.lng),
-              L.latLng(lat, lng)
-            ]);
-          });
-        } else {
-          // Se geolocalizzazione non disponibile, usa il centro della mappa
-          const center = mapRef.current!.getCenter();
-          routingControlRef.current.setWaypoints([
-            L.latLng(center.lat, center.lng),
-            L.latLng(lat, lng)
-          ]);
-        }
-      }
-    };
-    
     // Funzione globale per aprire in Google Maps
     (window as any).openInGoogleMaps = (searchQuery: string) => {
       const url = `https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
@@ -285,7 +214,6 @@ export default function MapView({ places, selectedCategories = [], className, on
     return () => {
       delete (window as any).toggleFavorite;
       delete (window as any).goToPlace;
-      delete (window as any).getDirectionsTo;
       delete (window as any).openInGoogleMaps;
     };
   }, [onToggleFavorite]);
@@ -311,10 +239,6 @@ export default function MapView({ places, selectedCategories = [], className, on
         .leaflet-control-geosearch .results {
           border-radius: 8px !important;
           margin-top: 4px !important;
-        }
-        .leaflet-routing-container {
-          border-radius: 12px !important;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
         }
       `}</style>
       <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
