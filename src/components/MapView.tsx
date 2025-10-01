@@ -22,7 +22,7 @@ export default function MapView({ places, selectedCategories = [], className, on
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const directionsRef = useRef<MapboxDirections | null>(null);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
-  const previousCategoriesRef = useRef<string[]>([]);
+  const isFirstLoadRef = useRef(true);
   const mapboxToken = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
 
   // Filtra solo published + categoria + coordinate valide
@@ -142,9 +142,8 @@ export default function MapView({ places, selectedCategories = [], className, on
 
     const bounds = new mapboxgl.LngLatBounds();
 
-    // Verifica se le categorie sono cambiate (per disabilitare animazione)
-    const categoriesChanged = JSON.stringify(previousCategoriesRef.current.sort()) !== JSON.stringify([...selectedCategories].sort());
-    const shouldAnimate = !categoriesChanged || previousCategoriesRef.current.length === 0;
+    // Effetto cascata solo al primissimo caricamento
+    const shouldAnimate = isFirstLoadRef.current;
     
     filtered.forEach((p, index) => {
       const emoji = categoryEmoji(p.category);
@@ -311,9 +310,11 @@ export default function MapView({ places, selectedCategories = [], className, on
       map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
     }
     
-    // Aggiorna le categorie precedenti per il prossimo render
-    previousCategoriesRef.current = [...selectedCategories];
-  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken, selectedCategories]);
+    // Disabilita l'animazione dopo il primo caricamento
+    if (isFirstLoadRef.current) {
+      isFirstLoadRef.current = false;
+    }
+  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken]);
 
   // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
   useEffect(() => {
