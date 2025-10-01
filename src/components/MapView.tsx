@@ -310,11 +310,11 @@ export default function MapView({ places, selectedCategories = [], className, on
       map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
     }
     
-    // Disabilita l'animazione dopo che è partita (con delay per assicurarsi che parta)
-    if (isFirstLoadRef.current) {
+    // Disabilita l'animazione solo dopo che i marker sono stati creati
+    if (isFirstLoadRef.current && filtered.length > 0) {
       setTimeout(() => {
         isFirstLoadRef.current = false;
-      }, 100);
+      }, 200);
     }
   }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken]);
 
