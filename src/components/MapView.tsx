@@ -3,7 +3,6 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
-import { Input } from "@/components/ui/input";
 
 type Props = {
   places: Place[];
@@ -19,9 +18,7 @@ export default function MapView({ places, selectedCategories = [], className, on
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
-  const [mapboxToken, setMapboxToken] = useState<string>(
-    localStorage.getItem('mapboxToken') || ''
-  );
+  const mapboxToken = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
 
   // Filtra solo published + categoria + coordinate valide
   const filtered = useMemo(() => {
@@ -33,12 +30,6 @@ export default function MapView({ places, selectedCategories = [], className, on
       });
   }, [places, selectedCategories]);
 
-  // Salva token in localStorage
-  useEffect(() => {
-    if (mapboxToken) {
-      localStorage.setItem('mapboxToken', mapboxToken);
-    }
-  }, [mapboxToken]);
 
   // Inizializza mappa Mapbox
   useEffect(() => {
@@ -204,29 +195,6 @@ export default function MapView({ places, selectedCategories = [], className, on
 
   return (
     <div className="relative">
-      {!mapboxToken && (
-        <div className="absolute top-4 left-4 z-10 bg-background/95 backdrop-blur-sm p-4 rounded-lg shadow-lg border max-w-md">
-          <p className="text-sm mb-2 font-medium">Inserisci il tuo Mapbox Access Token:</p>
-          <Input
-            type="text"
-            placeholder="pk.eyJ1..."
-            value={mapboxToken}
-            onChange={(e) => setMapboxToken(e.target.value)}
-            className="mb-2"
-          />
-          <p className="text-xs text-muted-foreground">
-            Ottieni il token su{' '}
-            <a 
-              href="https://account.mapbox.com/access-tokens/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-primary underline"
-            >
-              mapbox.com
-            </a>
-          </p>
-        </div>
-      )}
       <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
     </div>
   );
