@@ -158,17 +158,17 @@ export default function MapView({ places, selectedCategories = [], className, on
         <style>
           @keyframes fall-from-sky {
             0% {
-              transform: translate(1000px, -1000px) rotate(0deg) scale(0.3);
+              transform: scale(0.1) translateY(-50px);
               opacity: 0;
             }
             70% {
               opacity: 1;
             }
             85% {
-              transform: translate(0, 10px) rotate(720deg) scale(1.1);
+              transform: scale(1.1) translateY(5px);
             }
             100% {
-              transform: translate(0, 0) rotate(720deg) scale(1);
+              transform: scale(1) translateY(0);
               opacity: 1;
             }
           }
