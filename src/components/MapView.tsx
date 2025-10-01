@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -22,6 +22,7 @@ export default function MapView({ places, selectedCategories = [], className, on
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   // Filtra solo published + categoria + coordinate valide
   const filtered = useMemo(() => {
@@ -46,6 +47,11 @@ export default function MapView({ places, selectedCategories = [], className, on
       zoom: 12
     });
 
+    // Aspetta che la mappa sia caricata
+    map.on('load', () => {
+      setMapLoaded(true);
+    });
+
     // Aggiungi controlli di navigazione
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
@@ -66,6 +72,7 @@ export default function MapView({ places, selectedCategories = [], className, on
     mapRef.current = map;
 
     return () => {
+      setMapLoaded(false);
       map.remove();
     };
   }, []);
@@ -96,7 +103,7 @@ export default function MapView({ places, selectedCategories = [], className, on
 
   // Aggiungi marker ogni volta che cambia filtered
   useEffect(() => {
-    if (!mapRef.current) return;
+    if (!mapRef.current || !mapLoaded) return;
 
     // Rimuovi marker esistenti
     markersRef.current.forEach(marker => marker.remove());
@@ -211,7 +218,7 @@ export default function MapView({ places, selectedCategories = [], className, on
         maxZoom: 15
       });
     }
-  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes]);
+  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapLoaded]);
 
   return (
     <>
