@@ -308,13 +308,14 @@ export default function MapView({ places, selectedCategories = [], className, on
     // Fit bounds se ci sono markers
     if (filtered.length > 0) {
       map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
-    }
-    
-    // Disabilita l'animazione solo dopo che i marker sono stati creati
-    if (isFirstLoadRef.current && filtered.length > 0) {
-      setTimeout(() => {
-        isFirstLoadRef.current = false;
-      }, 200);
+      
+      // Disabilita l'animazione dopo il primo caricamento (quando ci sono marker da mostrare)
+      if (isFirstLoadRef.current) {
+        // Usiamo setTimeout per dare tempo ai marker di essere aggiunti al DOM
+        setTimeout(() => {
+          isFirstLoadRef.current = false;
+        }, 500);
+      }
     }
   }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken]);
 
