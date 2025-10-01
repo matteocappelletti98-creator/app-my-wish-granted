@@ -74,8 +74,8 @@ export default function MapView({ places, selectedCategories = [], className, on
       
       setTimeout(() => {
         map.flyTo({
-          center: [9.2, 45.8081], // Como spostato verso est
-          zoom: 10.5,
+          center: [9.0852, 45.8081], // Como
+          zoom: 12,
           pitch: 0,
           bearing: 1080, // 3 rotazioni complete da est verso ovest (direzione positiva)
           duration: 4500,
@@ -158,17 +158,17 @@ export default function MapView({ places, selectedCategories = [], className, on
         <style>
           @keyframes fall-from-sky {
             0% {
-              transform: translateY(-1000px) rotate(0deg) scale(0.3);
+              transform: translate(1000px, -1000px) rotate(0deg) scale(0.3);
               opacity: 0;
             }
             70% {
               opacity: 1;
             }
             85% {
-              transform: translateY(10px) rotate(720deg) scale(1.1);
+              transform: translate(0, 10px) rotate(720deg) scale(1.1);
             }
             100% {
-              transform: translateY(0) rotate(720deg) scale(1);
+              transform: translate(0, 0) rotate(720deg) scale(1);
               opacity: 1;
             }
           }
