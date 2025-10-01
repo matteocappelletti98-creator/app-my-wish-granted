@@ -154,9 +154,9 @@ export default function MapView({ places, selectedCategories = [], className, on
       el.innerHTML = `
         <div style="
           width:30px;height:30px;border-radius:999px;
-          background:#fbbf24; display:flex;align-items:center;justify-content:center;
+          background:#7dd3fc; display:flex;align-items:center;justify-content:center;
           box-shadow:0 1px 4px rgba(0,0,0,.2); 
-          border:${isCompatible ? '2.5px solid #f59e0b' : '1px solid rgba(0,0,0,.06)'};
+          border:${isCompatible ? '2.5px solid #38bdf8' : '1px solid rgba(0,0,0,.06)'};
           cursor: pointer;
         ">
           <div style="font-size:18px;line-height:18px">${emoji}</div>
