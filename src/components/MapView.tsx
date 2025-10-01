@@ -42,7 +42,7 @@ export default function MapView({ places, selectedCategories = [], className, on
     
     const map = new mapboxgl.Map({
       container: containerRef.current,
-      style: 'mapbox://styles/mapbox/streets-v12',
+      style: 'mapbox://styles/teoteoteo/cmg7lnkab002601qo6yviai9g',
       center: [12.4964, 41.9028], // Roma
       zoom: 12
     });
@@ -233,8 +233,12 @@ export default function MapView({ places, selectedCategories = [], className, on
         .mapboxgl-ctrl-bottom-right {
           display: none;
         }
+        .mapbox-container {
+          width: 100%;
+          height: 100%;
+        }
       `}</style>
-      <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl"} />
+      <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl"} style={{ minHeight: '500px' }} />
     </>
   );
 }
