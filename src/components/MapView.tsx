@@ -141,7 +141,7 @@ export default function MapView({ places, selectedCategories = [], className, on
 
     const bounds = new mapboxgl.LngLatBounds();
 
-    filtered.forEach(p => {
+    filtered.forEach((p, index) => {
       const emoji = categoryEmoji(p.category);
       
       // Controlla se il POI è compatibile con il traveller path dell'utente
@@ -149,15 +149,38 @@ export default function MapView({ places, selectedCategories = [], className, on
         ? p.tp_codes.some(code => userTravellerCodes.includes(code))
         : false;
       
-      // Crea elemento marker con cubo 4D
+      // Delay casuale per ogni marker per effetto caduta multipla
+      const delay = (index * 50) + Math.random() * 200;
+      
+      // Crea elemento marker con animazione di caduta
       const el = document.createElement('div');
       el.innerHTML = `
+        <style>
+          @keyframes fall-from-sky {
+            0% {
+              transform: translateY(-1000px) rotate(0deg) scale(0.3);
+              opacity: 0;
+            }
+            70% {
+              opacity: 1;
+            }
+            85% {
+              transform: translateY(10px) rotate(720deg) scale(1.1);
+            }
+            100% {
+              transform: translateY(0) rotate(720deg) scale(1);
+              opacity: 1;
+            }
+          }
+        </style>
         <div style="
-          width:32px;height:32px;
+          width:30px;height:30px;border-radius:999px;
           background:#fff; display:flex;align-items:center;justify-content:center;
-          box-shadow:0 2px 8px rgba(0,0,0,.3); 
+          box-shadow:0 2px 8px rgba(0,0,0,.3), 0 0 20px rgba(59, 130, 246, 0.3); 
           border:${isCompatible ? '2.5px solid #3b82f6' : '1px solid rgba(0,0,0,.1)'};
           cursor: pointer;
+          animation: fall-from-sky 2s ease-out ${delay}ms forwards;
+          opacity: 0;
         ">
           <div style="font-size:18px;line-height:18px">${emoji}</div>
         </div>
