@@ -22,6 +22,7 @@ export default function MapView({ places, selectedCategories = [], className, on
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const directionsRef = useRef<MapboxDirections | null>(null);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const mapboxToken = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
 
   // Filtra solo published + categoria + coordinate valide
@@ -149,10 +150,10 @@ export default function MapView({ places, selectedCategories = [], className, on
         ? p.tp_codes.some(code => userTravellerCodes.includes(code))
         : false;
       
-      // Delay casuale per ogni marker per effetto caduta multipla
-      const delay = (index * 50) + Math.random() * 200;
+      // Delay casuale per ogni marker per effetto caduta multipla (solo al primo caricamento)
+      const delay = isInitialLoad ? (index * 50) + Math.random() * 200 : 0;
       
-      // Crea elemento marker con animazione di caduta
+      // Crea elemento marker con animazione di caduta (solo al primo caricamento)
       const el = document.createElement('div');
       el.innerHTML = `
         <style>
@@ -179,8 +180,7 @@ export default function MapView({ places, selectedCategories = [], className, on
           box-shadow:0 2px 8px rgba(0,0,0,.3), 0 0 20px rgba(59, 130, 246, 0.3); 
           border:${isCompatible ? '2.5px solid #3b82f6' : '1px solid rgba(0,0,0,.1)'};
           cursor: pointer;
-          animation: fall-from-sky 2s ease-out ${delay}ms forwards;
-          opacity: 0;
+          ${isInitialLoad ? `animation: fall-from-sky 2s ease-out ${delay}ms forwards; opacity: 0;` : 'opacity: 1;'}
         ">
           <div style="font-size:18px;line-height:18px">${emoji}</div>
         </div>
@@ -282,7 +282,12 @@ export default function MapView({ places, selectedCategories = [], className, on
     if (filtered.length > 0) {
       map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
     }
-  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken]);
+    
+    // Dopo il primo caricamento, disabilita l'animazione
+    if (isInitialLoad) {
+      setIsInitialLoad(false);
+    }
+  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken, isInitialLoad]);
 
   // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
   useEffect(() => {
