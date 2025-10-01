@@ -60,10 +60,30 @@ export default function MapView({ places, selectedCategories = [], className, on
       container: containerRef.current,
       style: 'mapbox://styles/teoteoteo/cmg7lnkab002601qo6yviai9g',
       center: [9.0852, 45.8081], // Como, Lombardia
-      zoom: 12
+      zoom: 1.5, // Partiamo dall'atmosfera
+      pitch: 60 // Angolo iniziale per effetto più drammatico
     });
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    
+    // Effetto cinematico: zoom dall'atmosfera a Como
+    map.on('load', () => {
+      // Easing function personalizzata: veloce all'inizio, rallenta alla fine
+      const easeOutCubic = (t: number) => {
+        return 1 - Math.pow(1 - t, 3);
+      };
+      
+      setTimeout(() => {
+        map.flyTo({
+          center: [9.0852, 45.8081],
+          zoom: 12,
+          pitch: 0,
+          duration: 3500, // 3.5 secondi per l'animazione
+          easing: easeOutCubic,
+          essential: true
+        });
+      }, 500); // Piccolo delay iniziale per far caricare tutto
+    });
     
     // Inizializza Directions
     const directions = new MapboxDirections({
