@@ -61,12 +61,13 @@ export default function MapView({ places, selectedCategories = [], className, on
       style: 'mapbox://styles/teoteoteo/cmg7lnkab002601qo6yviai9g',
       center: [9.0852, 45.8081], // Como, Lombardia
       zoom: 1.5, // Partiamo dall'atmosfera
-      pitch: 60 // Angolo iniziale per effetto più drammatico
+      pitch: 60, // Angolo iniziale per effetto più drammatico
+      bearing: 0 // Partenza rotazione
     });
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     
-    // Effetto cinematico: zoom dall'atmosfera a Como
+    // Effetto cinematico: zoom dall'atmosfera a Como con rotazione della Terra
     map.on('load', () => {
       // Easing function personalizzata: veloce all'inizio, rallenta alla fine
       const easeOutCubic = (t: number) => {
@@ -78,6 +79,7 @@ export default function MapView({ places, selectedCategories = [], className, on
           center: [9.0852, 45.8081],
           zoom: 12,
           pitch: 0,
+          bearing: 720, // 2 rotazioni complete (720 gradi)
           duration: 3500, // 3.5 secondi per l'animazione
           easing: easeOutCubic,
           essential: true
