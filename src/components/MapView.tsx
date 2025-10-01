@@ -184,17 +184,17 @@ export default function MapView({ places, selectedCategories = [], className, on
               transform: translate(-1500px, -1200px) rotate(0deg) scale(0.3);
               opacity: 0;
             }
-            60% {
+            50% {
               opacity: 1;
             }
-            75% {
+            65% {
               transform: translate(0, 0) rotate(-720deg) scale(1);
             }
-            85% {
+            80% {
               transform: translate(0, 0) rotate(-720deg) scale(1);
             }
-            92% {
-              transform: translate(0, 0) rotate(-720deg) scale(1.5);
+            90% {
+              transform: translate(0, 0) rotate(-720deg) scale(2.5);
             }
             100% {
               transform: translate(0, 0) rotate(-720deg) scale(1);
@@ -208,7 +208,7 @@ export default function MapView({ places, selectedCategories = [], className, on
           box-shadow:0 2px 8px rgba(0,0,0,.3), 0 0 20px rgba(59, 130, 246, 0.3); 
           border:${isCompatible ? '2.5px solid #3b82f6' : '1px solid rgba(0,0,0,.1)'};
           cursor: pointer;
-          ${shouldAnimate ? `animation: ${animationName} 2.5s ease-out ${delay}ms forwards; opacity: 0;` : 'opacity: 1;'}
+          ${shouldAnimate ? `animation: ${animationName} ${isCompatible ? '3.5s' : '2.5s'} ease-out ${delay}ms forwards; opacity: 0;` : 'opacity: 1;'}
         ">
           <div style="font-size:18px;line-height:18px">${emoji}</div>
         </div>
