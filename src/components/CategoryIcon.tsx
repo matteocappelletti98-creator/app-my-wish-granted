@@ -3,7 +3,7 @@ import {
   Coffee, Utensils, Building2, TreePine, Beer, Hotel, ShoppingBag,
   Mountain, Waves, MapPin, BookImage, Pizza, Car, Circle, Ship,
   Dumbbell, ParkingCircle, Bike, Crown, Bus, Home, Navigation,
-  MapPinOff, IceCream, Calendar, ShoppingCart, Sparkles, LucideIcon
+  MapPinOff, IceCream, Calendar, ShoppingCart, Sparkles, ChefHat, LucideIcon
 } from "lucide-react";
 
 export type CategoryKey =
@@ -11,7 +11,7 @@ export type CategoryKey =
   | "hotel" | "shop" | "viewpoint" | "beach" | "pizza" | "taxi" | "calcio" 
   | "boat" | "attractions" | "cocktails" | "gym" | "parking" | "free_beaches" 
   | "bike" | "luxury" | "transport" | "villa" | "stroll" | "lidi" | "secret" 
-  | "gelato" | "daytrips" | "bakery" | "shopping_hq" | "wc" | "adventure" | "other";
+  | "gelato" | "daytrips" | "bakery" | "shopping_hq" | "wc" | "adventure" | "grandmas_restaurant" | "other";
 
 const ICONS: Record<CategoryKey, LucideIcon> = {
   cafe: Coffee,
@@ -46,6 +46,7 @@ const ICONS: Record<CategoryKey, LucideIcon> = {
   shopping_hq: ShoppingCart,
   wc: MapPin,
   adventure: Mountain,
+  grandmas_restaurant: ChefHat,
   other: MapPin,
 };
 
@@ -90,6 +91,7 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["shopping ( high quality )","shopping high quality","alta qualità"].includes(s)) return "shopping_hq";
   if (["wc","bagno","toilette","restroom","bathroom"].includes(s)) return "wc";
   if (["adventure","avventura","adventures"].includes(s)) return "adventure";
+  if (["grandma's restaurant","grandmas restaurant","nonna","ristorante nonna"].includes(s)) return "grandmas_restaurant";
 
   return "other";
 }
