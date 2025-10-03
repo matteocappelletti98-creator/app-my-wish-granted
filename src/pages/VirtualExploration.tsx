@@ -87,6 +87,47 @@ export default function VirtualExploration() {
     );
   };
 
+  // Mapping dei titoli delle categorie
+  const categoryTitles: Record<string, string> = {
+    cafe: "Caffè",
+    restaurant: "Ristorante",
+    museum: "Museo",
+    park: "Parco",
+    bar: "Bar",
+    hotel: "Hotel",
+    shop: "Negozio",
+    viewpoint: "Belvedere",
+    beach: "Spiaggia",
+    landmark: "Monumento",
+    market: "Mercato",
+    trail: "Sentiero",
+    culture: "Cultura",
+    pizza: "Pizza",
+    taxi: "Taxi",
+    calcio: "Calcio Como",
+    boat: "Noleggio Barche",
+    attractions: "Attrazioni",
+    cocktails: "Cocktail Bar",
+    gym: "Palestra",
+    parking: "Parcheggio",
+    free_beaches: "Spiagge Libere",
+    bike: "Bicicletta",
+    luxury: "Lusso",
+    transport: "Trasporti",
+    villa: "Villa",
+    stroll: "Passeggiata",
+    lidi: "Lidi",
+    secret: "Luoghi Segreti",
+    gelato: "Gelato",
+    daytrips: "Gite",
+    bakery: "Panetteria",
+    shopping_hq: "Shopping di Qualità",
+    wc: "WC",
+    adventure: "Avventura",
+    grandmas_restaurant: "Ristorante della Nonna",
+    other: "Altro"
+  };
+
   // Filtra solo i luoghi preferiti per la lista
   const favoritesList = useMemo(() => {
     return all.filter(p => favorites.includes(p.id));
@@ -136,7 +177,7 @@ export default function VirtualExploration() {
                       className={`text-left rounded-xl px-3 py-2 border flex items-center gap-2
                       ${selectedCategories.includes(c) ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
                       <CategoryBadge category={c} />
-                      <span className="text-sm">{c}</span>
+                      <span className="text-sm">{categoryTitles[c] || c}</span>
                       <span className="text-xs bg-blue-200/30 px-1 rounded">
                         {all.filter(p => normalizeCategory(p.category) === c).length}
                       </span>
