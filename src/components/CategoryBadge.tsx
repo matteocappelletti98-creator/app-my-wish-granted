@@ -15,7 +15,7 @@ const EMOJI: Record<CategoryKey, string> = {
   pizza:"🍕", taxi:"🚕", calcio:"⚽", boat:"🛥️", attractions:"🎢",
   cocktails:"🍸", gym:"💪", parking:"🅿️", free_beaches:"🏖️", bike:"🚴",
   luxury:"💎", transport:"🚌", villa:"⛲️", stroll:"🚶", lidi:"🏝️",
-  secret:"🤫", gelato:"🍦", daytrips:"🗓️", bakery:"🥖", shopping_hq:"👑", wc:"🚻", adventure:"🏔️", grandmas_restaurant:"👵", other:"📍",
+  secret:"🤫", gelato:"🍦", daytrips:"🗓️", bakery:"🥖", shopping_hq:"👑", wc:"🚻", adventure:"🏔️", grandmas_restaurant:"👩‍🍳", other:"📍",
 };
 
 function strip(s:string){ return s.normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
