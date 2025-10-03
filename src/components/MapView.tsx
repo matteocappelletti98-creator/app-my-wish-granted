@@ -31,7 +31,7 @@ export default function MapView({ places, selectedCategories = [], className, on
       .filter(p => p.lat != null && p.lng != null)
       .filter(p => {
         if (selectedCategories.length === 0) return true;
-        return selectedCategories.some(cat => normalizeCategory(p.category) === normalizeCategory(cat));
+        return selectedCategories.includes(normalizeCategory(p.category));
       });
   }, [places, selectedCategories]);
 
