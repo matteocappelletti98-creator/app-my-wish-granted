@@ -12,7 +12,7 @@ export default function Home() {
   useEffect(() => {
     const loadPlaces = async () => {
       try {
-        const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwPw96lY-Q5lZSwGy-cz4Fa2pVf_oo7YMZR2qlXPr8zPQaLZ9mJ8cU-3TaEYB0CWFYeMv2yvXU6FTr/pub?output=csv";
+        const sheetUrl = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
         const data = await fetchPlacesFromSheet(sheetUrl);
         const publishedPlaces = data.filter((p: any) => p.status?.toLowerCase() === "published");
         setPlaces(publishedPlaces);
