@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { MapPin, List, FileText, Star, Apple, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import MapView from "@/components/MapView";
+import PhoneMockupMap from "@/components/PhoneMockupMap";
 import { fetchPlacesFromSheet } from "@/lib/sheet";
 
 export default function Home() {
@@ -80,13 +80,10 @@ export default function Home() {
               {/* Map Container - Fully Interactive */}
               <div className="h-full w-full relative rounded-[2rem] overflow-hidden">
                 {!loading && places.length > 0 ? (
-                  <div className="absolute inset-0">
-                    <MapView 
-                      places={places}
-                      selectedCategories={[]}
-                      className="h-full w-full rounded-[2rem]"
-                    />
-                  </div>
+                  <PhoneMockupMap 
+                    places={places}
+                    className="h-full w-full"
+                  />
                 ) : (
                   <div className="h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
                     <MapPin className="w-20 h-20 text-blue-600 animate-pulse" />
