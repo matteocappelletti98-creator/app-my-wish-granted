@@ -14,21 +14,24 @@ import Privacy from "@/pages/Privacy";
 export default function App() {
   return (
     <BrowserRouter>
-      <Nav />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/virtual-exploration" element={<VirtualExploration />} />
-        <Route path="/luoghi" element={<Luoghi />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/luogo/:slug" element={<LuogoDetail />} />
-        <Route path="/articolo/:slug" element={<ArticlePage />} />
-        <Route path="/add-place" element={<AddPlace />} />
-        <Route path="/traveller-path" element={<TravellerPath />} />
-        <Route path="/impostazioni" element={<Impostazioni />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="*" element={<Navigate to="/" />} />
-        
-      </Routes>
+      <div className="min-h-screen pb-safe-bottom">
+        <Nav />
+        <main className="transition-all duration-300 ease-in-out">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/virtual-exploration" element={<VirtualExploration />} />
+            <Route path="/luoghi" element={<Luoghi />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/luogo/:slug" element={<LuogoDetail />} />
+            <Route path="/articolo/:slug" element={<ArticlePage />} />
+            <Route path="/add-place" element={<AddPlace />} />
+            <Route path="/traveller-path" element={<TravellerPath />} />
+            <Route path="/impostazioni" element={<Impostazioni />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </main>
+      </div>
     </BrowserRouter>
   );
 }
