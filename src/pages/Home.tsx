@@ -77,13 +77,10 @@ export default function Home() {
           {/* Right - Phone Mockup with Interactive Map */}
           <div className="relative flex justify-center lg:justify-end">
             <div className="relative w-[320px] h-[640px] bg-gray-900 border-[14px] border-gray-900 rounded-[3rem] shadow-2xl">
-              {/* Notch */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl z-20"></div>
-              
               {/* Map Container - Fully Interactive */}
               <div className="h-full w-full relative rounded-[2rem] overflow-hidden">
                 {!loading && places.length > 0 ? (
-                  <div className="absolute inset-0 z-10">
+                  <div className="absolute inset-0">
                     <MapView 
                       places={places}
                       selectedCategories={[]}
@@ -96,6 +93,9 @@ export default function Home() {
                   </div>
                 )}
               </div>
+              
+              {/* Notch - overlay decorativo non interattivo */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl pointer-events-none z-50"></div>
             </div>
           </div>
         </div>
