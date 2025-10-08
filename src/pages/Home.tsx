@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import PhoneMockupMap from "@/components/PhoneMockupMap";
 import { fetchPlacesFromSheet } from "@/lib/sheet";
+import logoComoComo from "@/assets/logoccomo.png";
 
 export default function Home() {
   const [places, setPlaces] = useState<any[]>([]);
@@ -131,6 +132,34 @@ export default function Home() {
             </div>
             <h3 className="font-semibold text-lg text-blue-900">Crea la tua</h3>
             <p className="text-sm text-blue-700/70">guida personalizzata</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Sponsor Section */}
+      <section className="container mx-auto px-6 py-16">
+        <div className="relative bg-gradient-to-br from-white via-blue-50/30 to-white border border-blue-100/50 rounded-3xl p-12 shadow-xl overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-100/20 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-indigo-100/20 to-transparent rounded-full blur-3xl"></div>
+          
+          <div className="relative flex flex-col md:flex-row items-center justify-center gap-8">
+            <div className="text-center md:text-right space-y-2">
+              <p className="text-sm text-blue-600/60 font-medium tracking-wider uppercase">Official Partner</p>
+              <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">
+                Calcio Como 1907
+              </h3>
+            </div>
+            
+            <div className="w-px h-16 bg-gradient-to-b from-transparent via-blue-200 to-transparent hidden md:block"></div>
+            
+            <div className="flex items-center justify-center">
+              <img 
+                src={logoComoComo} 
+                alt="Calcio Como 1907 Logo" 
+                className="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-lg hover:scale-105 transition-transform duration-300"
+              />
+            </div>
           </div>
         </div>
       </section>
