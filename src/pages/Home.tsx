@@ -30,9 +30,12 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30">
       {/* Header */}
       <header className="container mx-auto px-6 py-6">
-        <div className="flex items-center gap-2">
-          <MapPin className="w-6 h-6 text-blue-600" />
-          <span className="text-2xl font-semibold text-blue-600">explore</span>
+        <div className="flex items-center gap-3">
+          <MapPin className="w-7 h-7 text-blue-600" />
+          <div>
+            <span className="text-2xl font-bold text-blue-600">Golocal</span>
+            <p className="text-xs text-blue-600/60 font-medium">A community that maps the world</p>
+          </div>
         </div>
       </header>
 
@@ -215,9 +218,12 @@ export default function Home() {
       <footer className="border-t border-blue-100 py-12 bg-white/50">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <MapPin className="w-6 h-6 text-blue-600" />
-              <span className="text-xl font-semibold text-blue-600">explore</span>
+              <div>
+                <span className="text-xl font-bold text-blue-600">Golocal</span>
+                <p className="text-xs text-blue-600/60 hidden md:block">A community that maps the world</p>
+              </div>
             </div>
             <nav className="flex gap-8">
               <Link to="/privacy" className="text-blue-700/70 hover:text-blue-900 transition-colors">
