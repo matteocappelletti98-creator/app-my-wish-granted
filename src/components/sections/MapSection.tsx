@@ -51,10 +51,6 @@ export const MapSection = () => {
             <Layers className="h-4 w-4 mr-2" />
             Livelli
           </Button>
-          <Button size="sm" className="bg-gradient-hero">
-            <Plus className="h-4 w-4 mr-2" />
-            Aggiungi Luogo
-          </Button>
         </div>
       </div>
 

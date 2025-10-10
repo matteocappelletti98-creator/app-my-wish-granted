@@ -65,7 +65,6 @@ export default function Index() {
             <div className="text-sm text-blue-900/70">Independent local guide</div>
           </div>
           <div className="flex gap-3">
-            <Link to="/add-place" className="rounded-xl bg-blue-600 text-white px-3 py-2">+ Aggiungi luogo</Link>
             <button onClick={()=>setOverlay(true)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">🗖 Ingrandisci</button>
           </div>
         </div>
@@ -137,7 +136,6 @@ export default function Index() {
       {overlay && (
         <div className="fixed inset-0 z-50 bg-white">
           <div className="absolute right-4 top-4 flex gap-2">
-            <Link to="/add-place" className="rounded-xl bg-blue-600 text-white px-3 py-2">+ Aggiungi luogo</Link>
             <button onClick={()=>setOverlay(false)} className="rounded-xl border border-blue-600 text-blue-600 px-3 py-2">✖ Chiudi</button>
           </div>
           {/* riuso gli stessi dati/filtri correnti */}

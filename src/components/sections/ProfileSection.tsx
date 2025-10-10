@@ -118,10 +118,6 @@ export const ProfileSection = () => {
         <TabsContent value="places" className="mt-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold">Luoghi Visitati di Recente</h2>
-            <Button size="sm" className="bg-gradient-nature">
-              <Plus className="h-4 w-4 mr-2" />
-              Aggiungi Luogo
-            </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {recentPlaces.map((place) => (

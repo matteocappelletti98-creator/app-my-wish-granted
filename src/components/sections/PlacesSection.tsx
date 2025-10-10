@@ -72,10 +72,6 @@ export const PlacesSection = () => {
             Scopri i luoghi più belli organizzati per categoria
           </p>
         </div>
-        <Button size="sm" className="bg-gradient-hero">
-          <Plus className="h-4 w-4 mr-2" />
-          Aggiungi Luogo
-        </Button>
       </div>
 
       {/* Search and Filters */}

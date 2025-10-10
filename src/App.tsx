@@ -22,7 +22,7 @@ export default function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/luogo/:slug" element={<LuogoDetail />} />
         <Route path="/articolo/:slug" element={<ArticlePage />} />
-        <Route path="/add-place" element={<AddPlace />} />
+        
         <Route path="/traveller-path" element={<TravellerPath />} />
         <Route path="/impostazioni" element={<Impostazioni />} />
         <Route path="/privacy" element={<Privacy />} />
