@@ -149,12 +149,12 @@ export default function VirtualExploration() {
         <div className="mx-auto max-w-6xl pt-4">
           {/* Contenitore isolato per mappa e filtri su mobile */}
           <div className="bg-white rounded-2xl border p-4 mb-6 md:bg-transparent md:border-0 md:p-0">
-            {/* Barra categorie orizzontale scorrevole */}
-            <div className="mb-4 overflow-x-auto scrollbar-hide touch-pan-x">
-              <div className="inline-flex gap-1 min-w-full p-1.5 bg-white rounded-lg border md:bg-white">
+            {/* Barra categorie su due righe */}
+            <div className="mb-4">
+              <div className="flex flex-wrap gap-1 p-1.5 bg-white rounded-lg border md:bg-white">
               <button 
                 onClick={() => setSelectedCategories([])}
-                className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium transition-colors whitespace-nowrap flex-shrink-0
+                className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium transition-colors whitespace-nowrap
                   ${selectedCategories.length === 0 
                     ? "bg-blue-600 text-white" 
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
@@ -165,7 +165,7 @@ export default function VirtualExploration() {
                 <button 
                   key={c} 
                   onClick={() => toggleCategory(c)}
-                  className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium transition-colors whitespace-nowrap flex-shrink-0
+                  className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium transition-colors whitespace-nowrap
                     ${selectedCategories.includes(c)
                       ? "bg-blue-600 text-white" 
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
