@@ -5,6 +5,13 @@ import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   places: Place[];
@@ -24,6 +31,8 @@ export default function MapView({ places, selectedCategories = [], className, on
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const isFirstLoadRef = useRef(true);
   const mapboxToken = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  const [sheetOpen, setSheetOpen] = useState(false);
 
   // Filtra solo published + categoria + coordinate valide
   const filtered = useMemo(() => {
@@ -216,88 +225,14 @@ export default function MapView({ places, selectedCategories = [], className, on
       const marker = new mapboxgl.Marker(el)
         .setLngLat([p.lng!, p.lat!]);
 
-      // Popup con bottoni
-      const favoriteButton = onToggleFavorite ? `
-        <button 
-          onclick="toggleFavorite('${p.id}')" 
-          style="
-            position: absolute; top: 8px; right: 8px; 
-            background: rgba(255,255,255,0.9); border: none; 
-            border-radius: 50%; width: 28px; height: 28px; 
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-          "
-          title="${favorites.includes(p.id) ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}"
-        >
-          <span style="color: ${favorites.includes(p.id) ? '#ef4444' : '#9ca3af'}; font-size: 14px;">
-            ${favorites.includes(p.id) ? '❤️' : '🤍'}
-          </span>
-        </button>
-      ` : '';
-
-      const detailButton = `
-        <button 
-          onclick="goToPlace('${p.slug}')" 
-          style="
-            background: #3b82f6; color: white; border: none; 
-            border-radius: 6px; padding: 8px 12px; margin-top: 8px;
-            font-size: 12px; cursor: pointer; width: 100%;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-          "
-          title="Vai alla pagina del luogo"
-        >
-          🚪 Entra
-        </button>
-      `;
-
-      const googleMapsButton = `
-        <button 
-          onclick="openInGoogleMaps('${encodeURIComponent(p.name + ' ' + (p.address || p.city || ''))}')" 
-          style="
-            background: #34d399; color: white; border: none; 
-            border-radius: 6px; padding: 8px 12px; margin-top: 8px;
-            font-size: 12px; cursor: pointer; width: 100%;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-          "
-          title="Apri in Google Maps"
-        >
-          🗺️ Google Maps
-        </button>
-      `;
-
-      const directionsButton = userLocation ? `
-        <button 
-          onclick="getDirections(${p.lng}, ${p.lat})" 
-          style="
-            background: #8b5cf6; color: white; border: none; 
-            border-radius: 6px; padding: 8px 12px; margin-top: 8px;
-            font-size: 12px; cursor: pointer; width: 100%;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-          "
-          title="Ottieni indicazioni dalla tua posizione"
-        >
-          🧭 Indicazioni stradali
-        </button>
-      ` : '';
-
-      const popup = new mapboxgl.Popup({ offset: 25 })
-        .setHTML(`
-          <div style="min-width:180px; position: relative;">
-            ${favoriteButton}
-            <div style="font-weight:600;margin-bottom:4px">${emoji} ${escapeHtml(p.name)}</div>
-            <div style="color:#555;font-size:12px">${escapeHtml(p.city)}${p.city && p.country ? ", " : ""}${escapeHtml(p.country)}</div>
-            ${p.image ? `<img src="${normalizeImagePath(p.image)}" alt="immagine" width="200" style="display:block;border-radius:8px;margin-top:6px;max-width:100%;height:auto"/>` : ""}
-            ${detailButton}
-            ${directionsButton}
-            ${googleMapsButton}
-          </div>
-        `);
-
-      marker.setPopup(popup);
-      
-      if (onMarkerClick) {
-        marker.getElement().addEventListener('click', () => onMarkerClick(p));
-      }
+      // Quando si clicca sul marker, apri lo Sheet
+      marker.getElement().addEventListener('click', () => {
+        setSelectedPlace(p);
+        setSheetOpen(true);
+        if (onMarkerClick) {
+          onMarkerClick(p);
+        }
+      });
 
       marker.addTo(map);
       markersRef.current.push(marker);
@@ -359,31 +294,137 @@ export default function MapView({ places, selectedCategories = [], className, on
   }, [onToggleFavorite, userLocation]);
 
   return (
-    <div className="relative">
-      <style>{`
-        @media (max-width: 768px) {
-          .mapboxgl-ctrl-directions {
-            width: 100% !important;
-            max-width: 100% !important;
+    <>
+      <div className="relative">
+        <style>{`
+          @media (max-width: 768px) {
+            .mapboxgl-ctrl-directions {
+              width: 100% !important;
+              max-width: 100% !important;
+            }
+            .directions-control {
+              width: 100% !important;
+            }
+            .mapbox-directions-component {
+              width: 100% !important;
+              max-width: 100% !important;
+            }
+            .mapbox-directions-inputs {
+              width: 100% !important;
+            }
+            .mapbox-directions-instructions {
+              max-height: 40vh !important;
+              overflow-y: auto !important;
+            }
           }
-          .directions-control {
-            width: 100% !important;
-          }
-          .mapbox-directions-component {
-            width: 100% !important;
-            max-width: 100% !important;
-          }
-          .mapbox-directions-inputs {
-            width: 100% !important;
-          }
-          .mapbox-directions-instructions {
-            max-height: 40vh !important;
-            overflow-y: auto !important;
-          }
-        }
-      `}</style>
-      <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
-    </div>
+        `}</style>
+        <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
+      </div>
+
+      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+        <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl">
+          {selectedPlace && (
+            <div className="flex flex-col h-full">
+              <SheetHeader className="pb-4 border-b">
+                <SheetTitle className="flex items-center gap-2 text-2xl">
+                  <span className="text-3xl">{categoryEmoji(selectedPlace.category)}</span>
+                  <div className="flex flex-col items-start">
+                    <span>{selectedPlace.name}</span>
+                    <span className="text-sm font-normal text-muted-foreground">
+                      {selectedPlace.category}
+                    </span>
+                  </div>
+                </SheetTitle>
+              </SheetHeader>
+
+              <div className="flex-1 overflow-y-auto py-6 space-y-6">
+                {selectedPlace.image && (
+                  <div className="relative aspect-video w-full rounded-xl overflow-hidden border shadow-sm">
+                    <img 
+                      src={normalizeImagePath(selectedPlace.image)} 
+                      alt={selectedPlace.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+
+                {selectedPlace.description && (
+                  <div className="space-y-2">
+                    <h3 className="font-semibold text-lg">Descrizione</h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {selectedPlace.description}
+                    </p>
+                  </div>
+                )}
+
+                <div className="space-y-3">
+                  {selectedPlace.address && (
+                    <div className="flex items-start gap-3">
+                      <span className="text-lg">📍</span>
+                      <div>
+                        <p className="font-medium">Indirizzo</p>
+                        <p className="text-sm text-muted-foreground">{selectedPlace.address}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedPlace.city && (
+                    <div className="flex items-start gap-3">
+                      <span className="text-lg">🏙️</span>
+                      <div>
+                        <p className="font-medium">Città</p>
+                        <p className="text-sm text-muted-foreground">
+                          {selectedPlace.city}{selectedPlace.country ? `, ${selectedPlace.country}` : ''}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-4 space-y-3">
+                  <Button
+                    onClick={() => {
+                      const query = encodeURIComponent(
+                        selectedPlace.name + ' ' + (selectedPlace.address || selectedPlace.city || '')
+                      );
+                      window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+                    }}
+                    className="w-full"
+                    size="lg"
+                  >
+                    🗺️ Apri in Google Maps
+                  </Button>
+
+                  {onToggleFavorite && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        onToggleFavorite(selectedPlace.id);
+                      }}
+                      className="w-full"
+                      size="lg"
+                    >
+                      {favorites.includes(selectedPlace.id) ? '❤️ Rimuovi dai preferiti' : '🤍 Aggiungi ai preferiti'}
+                    </Button>
+                  )}
+
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      window.location.href = `/luogo/${selectedPlace.slug}`;
+                    }}
+                    className="w-full"
+                    size="lg"
+                  >
+                    👁️ Vedi dettagli completi
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
+    </>
   );
 }
 
