@@ -211,10 +211,13 @@ export default function VirtualExploration() {
             {favoritesList.length > 0 && (
               <button
                 onClick={() => {
-                  const places = favoritesList.map(p => 
-                    `${p.name}, ${p.address || p.city || ''}`
-                  ).join(' / ');
-                  const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(places)}&travelmode=driving`;
+                  const waypoints = favoritesList
+                    .map(p => {
+                      const coords = `${p.lat},${p.lng}`;
+                      return coords;
+                    })
+                    .join('/');
+                  const url = `https://www.google.com/maps/dir/${waypoints}`;
                   window.open(url, '_blank');
                 }}
                 className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
