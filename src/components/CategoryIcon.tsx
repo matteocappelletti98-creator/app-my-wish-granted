@@ -11,7 +11,7 @@ export type CategoryKey =
   | "hotel" | "shop" | "viewpoint" | "beach" | "pizza" | "taxi" | "calcio" 
   | "boat" | "attractions" | "cocktails" | "gym" | "parking" | "free_beaches" 
   | "bike" | "luxury" | "transport" | "villa" | "stroll" | "lidi" | "secret" 
-  | "gelato" | "daytrips" | "bakery" | "shopping_hq" | "wc" | "adventure" | "refuge" | "other";
+  | "gelato" | "daytrips" | "bakery" | "shopping_hq" | "wc" | "adventure" | "refuge" | "grocery" | "other";
 
 const ICONS: Record<CategoryKey, LucideIcon> = {
   cafe: Coffee,
@@ -47,6 +47,7 @@ const ICONS: Record<CategoryKey, LucideIcon> = {
   wc: MapPin,
   adventure: Mountain,
   refuge: Home,
+  grocery: ShoppingBag,
   other: MapPin,
 };
 
@@ -59,8 +60,10 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (!input) return "other";
   const s = removeDiacritics(input.trim().toLowerCase());
 
+  // Check if the string contains certain keywords (for cases like "Grandma's Restaurant")
+  if (s.includes("restaurant") || s.includes("ristorante") || s.includes("osteria") || s.includes("trattoria")) return "restaurant";
+  
   if (["cafe", "caffe", "caffè", "coffee"].includes(s)) return "cafe";
-  if (["restaurant", "ristorante", "osteria", "trattoria"].includes(s)) return "restaurant";
   if (["museum", "museo", "galleria", "gallery"].includes(s)) return "museum";
   if (["park", "parco", "giardino"].includes(s)) return "park";
   if (["bar", "pub", "winebar", "enoteca"].includes(s)) return "bar";
@@ -92,6 +95,7 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["wc","bagno","toilette","restroom","bathroom"].includes(s)) return "wc";
   if (["adventure","avventura","adventures"].includes(s)) return "adventure";
   if (["refuge","rifugio","rifugi","mountain refuge","mountain hut"].includes(s)) return "refuge";
+  if (["grocery","supermercato","alimentari","market","supermarket"].includes(s)) return "grocery";
 
   return "other";
 }
