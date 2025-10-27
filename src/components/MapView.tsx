@@ -316,77 +316,57 @@ export default function MapView({ places, selectedCategories = [], className, on
         {/* Card striscia in fondo tipo Google Maps */}
         {selectedPlace && (
           <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t shadow-lg animate-in slide-in-from-bottom duration-300">
-            <div className="container mx-auto max-w-5xl">
-              <div className="flex items-center gap-3 p-3">
-                {/* Foto piccola */}
-                {selectedPlace.image && (
-                  <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border">
-                    <img 
-                      src={normalizeImagePath(selectedPlace.image)} 
-                      alt={selectedPlace.name}
-                      className="w-full h-full object-cover"
-                    />
+            <div className="container mx-auto max-w-5xl p-4">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-start gap-3 flex-1 min-w-0">
+                  <span className="text-2xl flex-shrink-0 mt-1">{categoryEmoji(selectedPlace.category)}</span>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-lg mb-1">{selectedPlace.name}</h3>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">{selectedPlace.category}</p>
+                    {selectedPlace.description && (
+                      <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{selectedPlace.description}</p>
+                    )}
+                    {selectedPlace.address && (
+                      <p className="text-sm text-muted-foreground flex items-center gap-1">
+                        <span>📍</span> {selectedPlace.address}
+                      </p>
+                    )}
                   </div>
-                )}
+                </div>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setSelectedPlace(null)}
+                  className="flex-shrink-0"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    if (onToggleFavorite) {
+                      onToggleFavorite(selectedPlace.id);
+                    }
+                  }}
+                  className="w-full"
+                >
+                  {favorites.includes(selectedPlace.id) ? '❤️ Saved' : '🤍 Save'}
+                </Button>
                 
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start gap-2 mb-1">
-                    <span className="text-xl flex-shrink-0">{categoryEmoji(selectedPlace.category)}</span>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-base truncate">{selectedPlace.name}</h3>
-                      <p className="text-xs text-muted-foreground truncate">{selectedPlace.category}</p>
-                      {selectedPlace.address && (
-                        <p className="text-xs text-muted-foreground truncate mt-0.5">📍 {selectedPlace.address}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Azioni */}
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <Button
-                    size="sm"
-                    onClick={() => {
-                      const query = encodeURIComponent(
-                        selectedPlace.name + ' ' + (selectedPlace.address || selectedPlace.city || '')
-                      );
-                      window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
-                    }}
-                  >
-                    🗺️
-                  </Button>
-                  
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      window.location.href = `/luogo/${selectedPlace.slug}`;
-                    }}
-                  >
-                    👁️
-                  </Button>
-
-                  {onToggleFavorite && (
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => {
-                        onToggleFavorite(selectedPlace.id);
-                      }}
-                    >
-                      {favorites.includes(selectedPlace.id) ? '❤️' : '🤍'}
-                    </Button>
-                  )}
-
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setSelectedPlace(null)}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
+                <Button
+                  onClick={() => {
+                    const query = encodeURIComponent(
+                      selectedPlace.name + ' ' + (selectedPlace.address || selectedPlace.city || '')
+                    );
+                    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+                  }}
+                  className="w-full"
+                >
+                  📍 Open in Maps
+                </Button>
               </div>
             </div>
           </div>
