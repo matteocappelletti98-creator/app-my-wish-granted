@@ -146,10 +146,44 @@ export default function VirtualExploration() {
         </div>
       </header>
 
-      {/* Corpo: mappa + categorie */}
+      {/* Corpo: filtri categorie sopra + mappa */}
       <section className="px-6">
-        <div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-4 gap-4 pt-4">
-          <div className="lg:col-span-3">
+        <div className="mx-auto max-w-6xl pt-4">
+          {/* Barra categorie orizzontale scorrevole */}
+          <div className="mb-4">
+            <ScrollArea className="w-full whitespace-nowrap rounded-lg border bg-white p-3">
+              <div className="flex gap-2 pb-2">
+                <button 
+                  onClick={() => setSelectedCategories([])}
+                  className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap
+                    ${selectedCategories.length === 0 
+                      ? "bg-blue-600 text-white" 
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+                >
+                  {t('categories.all')}
+                </button>
+                {categories.map(c => (
+                  <button 
+                    key={c} 
+                    onClick={() => toggleCategory(c)}
+                    className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap
+                      ${selectedCategories.includes(c)
+                        ? "bg-blue-600 text-white" 
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+                  >
+                    <CategoryBadge category={c} />
+                    <span>{categoryTitles[c] || c}</span>
+                    <span className={`text-xs px-1.5 py-0.5 rounded ${selectedCategories.includes(c) ? 'bg-white/20' : 'bg-white'}`}>
+                      {all.filter(p => normalizeCategory(p.category) === c).length}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </ScrollArea>
+          </div>
+
+          {/* Mappa */}
+          <div>
             {loading ? (
               <div className="h-[70vh] w-full rounded-2xl border bg-slate-50" />
             ) : (
@@ -163,33 +197,6 @@ export default function VirtualExploration() {
               />
             )}
           </div>
-          <aside className="lg:col-span-1">
-            <div className="rounded-2xl border p-4 bg-white">
-              <h3 className="font-semibold mb-2">{t('categories.title')}</h3>
-              <ScrollArea className="h-[400px]">
-                <div className="flex flex-col gap-2 pr-4">
-                  <button onClick={() => setSelectedCategories([])}
-                    className={`text-left rounded-xl px-3 py-2 border ${selectedCategories.length === 0 ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
-                    {t('categories.all')}
-                  </button>
-                  {categories.map(c => (
-                    <button key={c} onClick={() => toggleCategory(c)}
-                      className={`text-left rounded-xl px-3 py-2 border flex items-center gap-2
-                      ${selectedCategories.includes(c) ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
-                      <CategoryBadge category={c} />
-                      <span className="text-sm">{categoryTitles[c] || c}</span>
-                      <span className="text-xs bg-blue-200/30 px-1 rounded">
-                        {all.filter(p => normalizeCategory(p.category) === c).length}
-                      </span>
-                      {selectedCategories.includes(c) && (
-                        <span className="ml-auto text-xs bg-white/20 px-1 rounded">✓</span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </ScrollArea>
-            </div>
-          </aside>
         </div>
       </section>
 
