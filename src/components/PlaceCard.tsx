@@ -2,7 +2,7 @@ import React from "react";
 import { MapPin } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import CategoryBadge from "./CategoryBadge";
+import CategoryBadge, { normalizeCategory } from "./CategoryBadge";
 import type { Place } from "@/lib/sheet";
 
 type PlaceCardProps = {
@@ -122,7 +122,7 @@ export default function PlaceCard({
               e.stopPropagation();
               onCategoryClick?.(p.category);
             }}
-            aria-label={`Vedi categoria ${p.category ?? "tutte"}`}
+            aria-label={`Vedi categoria ${normalizeCategory(p.category)}`}
             className="rounded-full shadow hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             title="Filtra per categoria"
           >
