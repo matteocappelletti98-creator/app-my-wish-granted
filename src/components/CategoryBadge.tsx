@@ -10,13 +10,13 @@ export type CategoryKey =
   | "refuge" | "grocery" | "nightlife" | "streetfood" | "luggage" | "atm" | "other";
 
 const EMOJI: Record<CategoryKey, string> = {
-  cafe:"☕", restaurant:"🍽️", museum:"🏛️", culture:"🖼️", bar:"🍺",
+  cafe:"☕️", restaurant:"👨‍🍳", museum:"🏛️", culture:"🖼️", bar:"🍺",
   hotel:"🛎️", shop:"🛍️", viewpoint:"🗻", beach:"🏖️", park:"🌳", 
   pizza:"🍕", taxi:"🚕", calcio:"⚽", boat:"🛥️", attractions:"🎢",
   cocktails:"🍸", gym:"💪", parking:"🅿️", free_beaches:"🏖️", bike:"🚴",
   luxury:"💎", transport:"🚌", villa:"⛲️", stroll:"🚶", lidi:"🏝️",
-  secret:"🤫", gelato:"🍦", daytrips:"🗓️", bakery:"🥖", shopping_hq:"👑", 
-  wc:"🚻", adventure:"🏔️", refuge:"🏠", grocery:"🛒", nightlife:"🌙",
+  secret:"🤫", gelato:"🍦", daytrips:"🗓️", bakery:"🥨", shopping_hq:"👑", 
+  wc:"🚻", adventure:"🏔️", refuge:"🍲", grocery:"💈", nightlife:"🌙",
   streetfood:"🌮", luggage:"🧳", atm:"🏧", other:"📍",
 };
 
