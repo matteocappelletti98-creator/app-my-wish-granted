@@ -144,12 +144,14 @@ export default function VirtualExploration() {
         </div>
       </header>
 
-      {/* Corpo: filtri categorie sopra + mappa */}
+      {/* Corpo: filtri categorie sopra + mappa - Isolato per mobile */}
       <section className="px-6">
         <div className="mx-auto max-w-6xl pt-4">
-          {/* Barra categorie orizzontale scorrevole */}
-          <div className="mb-4 overflow-x-auto scrollbar-hide">
-            <div className="inline-flex gap-1 min-w-full p-1.5 bg-white rounded-lg border">
+          {/* Contenitore isolato per mappa e filtri su mobile */}
+          <div className="bg-white rounded-2xl border p-4 mb-6 md:bg-transparent md:border-0 md:p-0">
+            {/* Barra categorie orizzontale scorrevole */}
+            <div className="mb-4 overflow-x-auto scrollbar-hide touch-pan-x">
+              <div className="inline-flex gap-1 min-w-full p-1.5 bg-white rounded-lg border md:bg-white">
               <button 
                 onClick={() => setSelectedCategories([])}
                 className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium transition-colors whitespace-nowrap flex-shrink-0
@@ -178,8 +180,8 @@ export default function VirtualExploration() {
             </div>
           </div>
 
-          {/* Mappa */}
-          <div>
+          {/* Mappa isolata con touch-action per evitare scroll interferenza */}
+          <div className="touch-none md:touch-auto">
             {loading ? (
               <div className="h-[70vh] w-full rounded-2xl border bg-slate-50" />
             ) : (
@@ -192,6 +194,7 @@ export default function VirtualExploration() {
                 userTravellerCodes={userTravellerCodes}
               />
             )}
+          </div>
           </div>
         </div>
       </section>

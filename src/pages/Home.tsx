@@ -156,11 +156,12 @@ export default function Home() {
       <main className="relative z-10 px-6 pb-20">
         <div className="mx-auto max-w-6xl">
           
-          {/* Navigation Grid Enhanced */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+          {/* Navigation Grid Enhanced - Scrollabile orizzontalmente su mobile */}
+          <div className="overflow-x-auto md:overflow-visible pb-4 mb-20 scrollbar-hide">
+            <div className="flex md:grid md:grid-cols-2 gap-8 min-w-max md:min-w-0">
             
             {/* Virtual exploration */}
-            <Link to="/virtual-exploration" className="group">
+            <Link to="/virtual-exploration" className="group flex-shrink-0 w-72 md:w-auto">
               <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-12 text-center border border-white/50 hover:bg-white/80 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative z-10">
@@ -174,7 +175,7 @@ export default function Home() {
             </Link>
 
             {/* Luoghi */}
-            <Link to="/luoghi" className="group">
+            <Link to="/luoghi" className="group flex-shrink-0 w-72 md:w-auto">
               <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-12 text-center border border-white/50 hover:bg-white/80 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative z-10">
@@ -188,7 +189,7 @@ export default function Home() {
             </Link>
 
             {/* Blog */}
-            <Link to="/blog" className="group">
+            <Link to="/blog" className="group flex-shrink-0 w-72 md:w-auto">
               <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-12 text-center border border-white/50 hover:bg-white/80 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative z-10">
@@ -202,7 +203,7 @@ export default function Home() {
             </Link>
 
             {/* Traveller Path */}
-            <div className="relative group">
+            <div className="relative group flex-shrink-0 w-72 md:w-auto">
               <Link 
                 to="/traveller-path" 
                 className="block"
@@ -262,6 +263,7 @@ export default function Home() {
                 </div>
               )}
             </div>
+          </div>
           </div>
 
           {/* Bottom Message Enhanced */}
