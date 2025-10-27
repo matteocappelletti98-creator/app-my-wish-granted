@@ -90,7 +90,7 @@ export default function VirtualExploration() {
   // Mapping dei titoli delle categorie
   const categoryTitles: Record<string, string> = {
     culture: "Art & Culture",
-    bakery: "Bakery",
+    bakery: "Bakery and Pastry",
     pizza: "Pizza",
     transport: "Public Transport",
     wc: "Public Toilets",

@@ -72,7 +72,7 @@ export default function CategoryBadge({ category, showLabel=false }:{
     pizza:"Pizza", taxi:"Taxi", calcio:"Calcio Como", boat:"Noleggio Barche", attractions:"Attrazioni",
     cocktails:"Cocktail Bar", gym:"Palestra", parking:"Parcheggio", free_beaches:"Spiagge Libere", bike:"Bicicletta",
     luxury:"Lusso", transport:"Trasporti", villa:"Villa", stroll:"Passeggiata", lidi:"Lidi",
-    secret:"Luoghi Segreti", gelato:"Gelato", daytrips:"Gite", bakery:"Panetteria", shopping_hq:"Shopping di Qualità", wc:"WC", adventure:"Avventura", other:"Altro"
+    secret:"Luoghi Segreti", gelato:"Gelato", daytrips:"Gite", bakery:"Bakery and Pastry", shopping_hq:"Shopping di Qualità", wc:"WC", adventure:"Avventura", other:"Altro"
   };
   return (
     <span className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-2.5 py-1 text-gray-700">
