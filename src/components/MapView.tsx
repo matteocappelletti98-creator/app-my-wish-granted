@@ -6,7 +6,7 @@ import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { X, MapPin } from "lucide-react";
 
 type Props = {
   places: Place[];
@@ -381,9 +381,10 @@ export default function MapView({ places, selectedCategories = [], className, on
                     );
                     window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
                   }}
-                  className="w-full bg-black text-white hover:bg-black/90"
+                  className="w-full bg-black text-white hover:bg-black/90 flex items-center gap-2"
                 >
-                  📍 Maps
+                  <MapPin className="w-4 h-4" />
+                  Maps
                 </Button>
               </div>
             </div>

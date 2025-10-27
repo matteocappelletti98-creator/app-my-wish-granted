@@ -4,7 +4,7 @@ import MapView from "@/components/MapView";
 import PlaceCard from "@/components/PlaceCard";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
 import { Link } from "react-router-dom";
-import { Heart } from "lucide-react";
+import { Heart, MapPin } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -233,7 +233,8 @@ export default function VirtualExploration() {
                 }}
                 className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-black/90 transition-colors text-sm font-medium"
               >
-                🗺️ Apri tutti in Google Maps {favoritesList.length > 10 && `(primi 10)`}
+                <MapPin className="w-4 h-4" />
+                Apri tutti in Google Maps {favoritesList.length > 10 && `(primi 10)`}
               </button>
             )}
           </div>
