@@ -231,7 +231,7 @@ export default function VirtualExploration() {
                     window.open(url, '_blank');
                   }
                 }}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-black/90 transition-colors text-sm font-medium"
               >
                 🗺️ Apri tutti in Google Maps {favoritesList.length > 10 && `(primi 10)`}
               </button>
