@@ -5,13 +5,8 @@ import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 type Props = {
   places: Place[];
@@ -32,7 +27,6 @@ export default function MapView({ places, selectedCategories = [], className, on
   const isFirstLoadRef = useRef(true);
   const mapboxToken = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
-  const [sheetOpen, setSheetOpen] = useState(false);
 
   // Filtra solo published + categoria + coordinate valide
   const filtered = useMemo(() => {
@@ -225,10 +219,9 @@ export default function MapView({ places, selectedCategories = [], className, on
       const marker = new mapboxgl.Marker(el)
         .setLngLat([p.lng!, p.lat!]);
 
-      // Quando si clicca sul marker, apri lo Sheet
+      // Quando si clicca sul marker, mostra la card
       marker.getElement().addEventListener('click', () => {
         setSelectedPlace(p);
-        setSheetOpen(true);
         if (onMarkerClick) {
           onMarkerClick(p);
         }
@@ -319,27 +312,15 @@ export default function MapView({ places, selectedCategories = [], className, on
           }
         `}</style>
         <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
-      </div>
-
-      <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl">
-          {selectedPlace && (
-            <div className="flex flex-col h-full">
-              <SheetHeader className="pb-4 border-b">
-                <SheetTitle className="flex items-center gap-2 text-2xl">
-                  <span className="text-3xl">{categoryEmoji(selectedPlace.category)}</span>
-                  <div className="flex flex-col items-start">
-                    <span>{selectedPlace.name}</span>
-                    <span className="text-sm font-normal text-muted-foreground">
-                      {selectedPlace.category}
-                    </span>
-                  </div>
-                </SheetTitle>
-              </SheetHeader>
-
-              <div className="flex-1 overflow-y-auto py-6 space-y-6">
+        
+        {/* Card striscia in fondo tipo Google Maps */}
+        {selectedPlace && (
+          <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t shadow-lg animate-in slide-in-from-bottom duration-300">
+            <div className="container mx-auto max-w-5xl">
+              <div className="flex items-center gap-3 p-3">
+                {/* Foto piccola */}
                 {selectedPlace.image && (
-                  <div className="relative aspect-video w-full rounded-xl overflow-hidden border shadow-sm">
+                  <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border">
                     <img 
                       src={normalizeImagePath(selectedPlace.image)} 
                       alt={selectedPlace.name}
@@ -347,83 +328,70 @@ export default function MapView({ places, selectedCategories = [], className, on
                     />
                   </div>
                 )}
-
-                {selectedPlace.description && (
-                  <div className="space-y-2">
-                    <h3 className="font-semibold text-lg">Descrizione</h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {selectedPlace.description}
-                    </p>
+                
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start gap-2 mb-1">
+                    <span className="text-xl flex-shrink-0">{categoryEmoji(selectedPlace.category)}</span>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-base truncate">{selectedPlace.name}</h3>
+                      <p className="text-xs text-muted-foreground truncate">{selectedPlace.category}</p>
+                      {selectedPlace.address && (
+                        <p className="text-xs text-muted-foreground truncate mt-0.5">📍 {selectedPlace.address}</p>
+                      )}
+                    </div>
                   </div>
-                )}
-
-                <div className="space-y-3">
-                  {selectedPlace.address && (
-                    <div className="flex items-start gap-3">
-                      <span className="text-lg">📍</span>
-                      <div>
-                        <p className="font-medium">Indirizzo</p>
-                        <p className="text-sm text-muted-foreground">{selectedPlace.address}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedPlace.city && (
-                    <div className="flex items-start gap-3">
-                      <span className="text-lg">🏙️</span>
-                      <div>
-                        <p className="font-medium">Città</p>
-                        <p className="text-sm text-muted-foreground">
-                          {selectedPlace.city}{selectedPlace.country ? `, ${selectedPlace.country}` : ''}
-                        </p>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
-                <div className="pt-4 space-y-3">
+                {/* Azioni */}
+                <div className="flex items-center gap-2 flex-shrink-0">
                   <Button
+                    size="sm"
                     onClick={() => {
                       const query = encodeURIComponent(
                         selectedPlace.name + ' ' + (selectedPlace.address || selectedPlace.city || '')
                       );
                       window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
                     }}
-                    className="w-full"
-                    size="lg"
                   >
-                    🗺️ Apri in Google Maps
+                    🗺️
                   </Button>
-
-                  {onToggleFavorite && (
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        onToggleFavorite(selectedPlace.id);
-                      }}
-                      className="w-full"
-                      size="lg"
-                    >
-                      {favorites.includes(selectedPlace.id) ? '❤️ Rimuovi dai preferiti' : '🤍 Aggiungi ai preferiti'}
-                    </Button>
-                  )}
-
+                  
                   <Button
+                    size="sm"
                     variant="outline"
                     onClick={() => {
                       window.location.href = `/luogo/${selectedPlace.slug}`;
                     }}
-                    className="w-full"
-                    size="lg"
                   >
-                    👁️ Vedi dettagli completi
+                    👁️
+                  </Button>
+
+                  {onToggleFavorite && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        onToggleFavorite(selectedPlace.id);
+                      }}
+                    >
+                      {favorites.includes(selectedPlace.id) ? '❤️' : '🤍'}
+                    </Button>
+                  )}
+
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setSelectedPlace(null)}
+                  >
+                    <X className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
             </div>
-          )}
-        </SheetContent>
-      </Sheet>
+          </div>
+        )}
+      </div>
     </>
   );
 }
