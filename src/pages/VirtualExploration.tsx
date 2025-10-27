@@ -123,8 +123,7 @@ export default function VirtualExploration() {
     adventure: "Adventure",
     gelato: "Gelato",
     daytrips: "Day Trips",
-    grocery: "Grocery",
-    other: "Other"
+    grocery: "Grocery"
   };
 
   // Filtra solo i luoghi preferiti per la lista
