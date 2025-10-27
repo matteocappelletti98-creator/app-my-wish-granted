@@ -211,14 +211,15 @@ export default function VirtualExploration() {
             {favoritesList.length > 0 && (
               <button
                 onClick={() => {
-                  const waypoints = favoritesList
-                    .map(p => {
-                      const coords = `${p.lat},${p.lng}`;
-                      return coords;
-                    })
-                    .join('/');
-                  const url = `https://www.google.com/maps/dir/${waypoints}`;
-                  window.open(url, '_blank');
+                  // Crea un itinerario con punti di passaggio
+                  const origin = favoritesList[0];
+                  const destination = favoritesList[favoritesList.length - 1];
+                  const waypoints = favoritesList.slice(1, -1)
+                    .map(p => `${p.lat},${p.lng}`)
+                    .join('|');
+                  
+                  const url = `https://www.google.com/maps/dir/?api=1&origin=${origin.lat},${origin.lng}&destination=${destination.lat},${destination.lng}${waypoints ? `&waypoints=${waypoints}` : ''}&travelmode=driving`;
+                  window.open(url, '_blank', 'noopener,noreferrer');
                 }}
                 className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
               >
