@@ -343,7 +343,7 @@ export default function MapView({ places, selectedCategories = [], className, on
                 </Button>
               </div>
               
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 <Button
                   variant="outline"
                   onClick={() => {
@@ -353,7 +353,17 @@ export default function MapView({ places, selectedCategories = [], className, on
                   }}
                   className="w-full"
                 >
-                  {favorites.includes(selectedPlace.id) ? '❤️ Saved' : '🤍 Save'}
+                  {favorites.includes(selectedPlace.id) ? '❤️' : '🤍'}
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    window.location.href = `/luogo/${selectedPlace.slug}`;
+                  }}
+                  className="w-full"
+                >
+                  👁️ View
                 </Button>
                 
                 <Button
@@ -365,7 +375,7 @@ export default function MapView({ places, selectedCategories = [], className, on
                   }}
                   className="w-full"
                 >
-                  📍 Open in Maps
+                  📍 Maps
                 </Button>
               </div>
             </div>
