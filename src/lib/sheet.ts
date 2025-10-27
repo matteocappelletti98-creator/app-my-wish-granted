@@ -113,6 +113,13 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
       ? rec.tp_codes.split(',').map((code: string) => parseInt(code.trim())).filter((code: number) => !isNaN(code))
       : [];
 
+    const originalCategory = rec.category || "";
+    const normalizedCategory = normalizeCategory(originalCategory);
+    
+    if (originalCategory && normalizedCategory === "other") {
+      console.log(`⚠️ Categoria non riconosciuta: "${originalCategory}" per ${name}`);
+    }
+
     out.push({
       id, slug,
       name,
@@ -121,7 +128,7 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
       description: rec.description || "",
       image: imagePath,
       status: (rec.status || "").toLowerCase(),
-      category: normalizeCategory(rec.category),
+      category: normalizedCategory,
       address: rec.address || "",
       lat: isFinite(lat!) ? lat : undefined,
       lng: isFinite(lng!) ? lng : undefined,
