@@ -17,7 +17,7 @@ const EMOJI: Record<CategoryKey, string> = {
   luxury:"💎", transport:"🚌", villa:"⛲️", stroll:"🚶", lidi:"🏝️",
   secret:"🤫", gelato:"🍦", daytrips:"🗓️", bakery:"🥨", shopping_hq:"👑", 
   wc:"🚻", adventure:"🏔️", refuge:"🍲", grocery:"💈", nightlife:"🌙",
-  streetfood:"🌮", luggage:"🧳", atm:"🏧", other:"📍",
+  streetfood:"🌮", luggage:"🛄", atm:"🏧", other:"📍",
 };
 
 function strip(s:string){ return s.normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
