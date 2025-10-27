@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 export type CategoryKey =
-  | "cafe" | "restaurant" | "museum" | "park" | "bar" | "culture"
+  | "cafe" | "restaurant" | "museum" | "park" | "bar" | "pub" | "culture"
   | "hotel" | "shop" | "viewpoint" | "beach" | "pizza" | "taxi" | "calcio" 
   | "boat" | "attractions" | "cocktails" | "gym" | "parking" | "free_beaches" 
   | "bike" | "luxury" | "transport" | "villa" | "stroll" | "lidi" | "secret" 
@@ -20,6 +20,7 @@ const ICONS: Record<CategoryKey, LucideIcon> = {
   museum: Building2,
   park: TreePine,
   bar: Beer,
+  pub: Beer,
   hotel: Hotel,
   shop: ShoppingBag,
   viewpoint: Mountain,
@@ -97,7 +98,8 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["cafe","caffe","caffè","coffee"].includes(s)) return "cafe";
   if (["museum", "museo", "galleria", "gallery"].includes(s)) return "museum";
   if (["park", "parco", "giardino"].includes(s)) return "park";
-  if (["bar", "pub", "winebar", "enoteca"].includes(s)) return "bar";
+  if (["bar", "winebar", "enoteca"].includes(s)) return "bar";
+  if (["pub"].includes(s)) return "pub";
   if (["culture","art ","chiese"].includes(s)) return "culture";
   if (["hotel", "bnb", "b&b", "hostel"].includes(s)) return "hotel";
   if (["shop", "negozio", "boutique", "store"].includes(s)) return "shop";

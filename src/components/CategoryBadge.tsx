@@ -2,7 +2,7 @@
 import React from "react";
 
 export type CategoryKey =
-  | "cafe" | "restaurant" | "museum" | "park" | "bar" | "culture"
+  | "cafe" | "restaurant" | "museum" | "park" | "bar" | "pub" | "culture"
   | "hotel" | "shop" | "viewpoint" | "beach" | "pizza" | "taxi" | "calcio" 
   | "boat" | "attractions" | "cocktails" | "gym" | "parking" | "free_beaches" 
   | "bike" | "luxury" | "transport" | "villa" | "stroll" | "lidi" | "secret" 
@@ -10,7 +10,7 @@ export type CategoryKey =
   | "refuge" | "grocery" | "nightlife" | "streetfood" | "luggage" | "atm" | "other";
 
 const EMOJI: Record<CategoryKey, string> = {
-  cafe:"☕️", restaurant:"👨‍🍳", museum:"🏛️", culture:"🖼️", bar:"🍺",
+  cafe:"☕️", restaurant:"👨‍🍳", museum:"🏛️", culture:"🖼️", bar:"🍺", pub:"🍻",
   hotel:"🛎️", shop:"🛍️", viewpoint:"🗻", beach:"🏖️", park:"🌳", 
   pizza:"🍕", taxi:"🚕", calcio:"⚽", boat:"🛥️", attractions:"🎢",
   cocktails:"🍸", gym:"💪", parking:"🅿️", free_beaches:"🏖️", bike:"🚴",
@@ -55,7 +55,8 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["restaurant","ristorante","osteria","trattoria"].includes(s)) return "restaurant";
   if (["museum","museo","galleria","gallery"].includes(s)) return "museum";
   if (["park","parco","giardino"].includes(s)) return "park";
-  if (["bar","pub","winebar","enoteca"].includes(s)) return "bar";
+  if (["bar","winebar","enoteca"].includes(s)) return "bar";
+  if (["pub"].includes(s)) return "pub";
   if (["culture","art","chiese"].includes(s)) return "culture";
   if (["hotel","bnb","b&b","hostel"].includes(s)) return "hotel";
   if (["shop","negozio","boutique","store"].includes(s)) return "shop";
@@ -99,7 +100,7 @@ export default function CategoryBadge({ category, showLabel=false }:{
   const emoji = EMOJI[key];
   const labelMap: Record<CategoryKey,string> = {
     cafe:"Café", restaurant:"Restaurants", museum:"Museo", park:"Parco",
-    bar:"Bar", hotel:"Hotel", shop:"Shopping", viewpoint:"Belvedere",
+    bar:"Bar", pub:"Pub", hotel:"Hotel", shop:"Shopping", viewpoint:"Belvedere",
     beach:"Spiaggia", culture:"Art & Culture",
     pizza:"Pizza", taxi:"Taxi & Private Transport", calcio:"Calcio Como", boat:"Boat Rental", attractions:"Attractions",
     cocktails:"Bars & Cocktails", gym:"Gym", parking:"Parking", free_beaches:"Free Beaches", bike:"Bike Riding",
