@@ -151,10 +151,10 @@ export default function VirtualExploration() {
         <div className="mx-auto max-w-6xl pt-4">
           {/* Barra categorie orizzontale scorrevole */}
           <div className="mb-4 overflow-x-auto scrollbar-hide">
-            <div className="inline-flex gap-1.5 min-w-full p-2 bg-white rounded-lg border">
+            <div className="inline-flex gap-1 min-w-full p-1.5 bg-white rounded-lg border">
               <button 
                 onClick={() => setSelectedCategories([])}
-                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
+                className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium transition-colors whitespace-nowrap flex-shrink-0
                   ${selectedCategories.length === 0 
                     ? "bg-blue-600 text-white" 
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
@@ -165,14 +165,14 @@ export default function VirtualExploration() {
                 <button 
                   key={c} 
                   onClick={() => toggleCategory(c)}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
+                  className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium transition-colors whitespace-nowrap flex-shrink-0
                     ${selectedCategories.includes(c)
                       ? "bg-blue-600 text-white" 
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
                 >
                   <CategoryBadge category={c} />
                   <span>{categoryTitles[c] || c}</span>
-                  <span className={`text-[10px] px-1 py-0.5 rounded ${selectedCategories.includes(c) ? 'bg-white/20' : 'bg-white'}`}>
+                  <span className={`text-[9px] px-1 rounded ${selectedCategories.includes(c) ? 'bg-white/20' : 'bg-white'}`}>
                     {all.filter(p => normalizeCategory(p.category) === c).length}
                   </span>
                 </button>
