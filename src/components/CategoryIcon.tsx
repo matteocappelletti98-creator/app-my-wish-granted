@@ -11,7 +11,8 @@ export type CategoryKey =
   | "hotel" | "shop" | "viewpoint" | "beach" | "pizza" | "taxi" | "calcio" 
   | "boat" | "attractions" | "cocktails" | "gym" | "parking" | "free_beaches" 
   | "bike" | "luxury" | "transport" | "villa" | "stroll" | "lidi" | "secret" 
-  | "gelato" | "daytrips" | "bakery" | "shopping_hq" | "wc" | "adventure" | "refuge" | "grocery" | "other";
+  | "gelato" | "daytrips" | "bakery" | "shopping_hq" | "wc" | "adventure" 
+  | "refuge" | "grocery" | "nightlife" | "streetfood" | "luggage" | "atm" | "other";
 
 const ICONS: Record<CategoryKey, LucideIcon> = {
   cafe: Coffee,
@@ -48,6 +49,10 @@ const ICONS: Record<CategoryKey, LucideIcon> = {
   adventure: Mountain,
   refuge: Home,
   grocery: ShoppingBag,
+  nightlife: Beer,
+  streetfood: Pizza,
+  luggage: ShoppingBag,
+  atm: MapPin,
   other: MapPin,
 };
 
@@ -60,10 +65,36 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (!input) return "other";
   const s = removeDiacritics(input.trim().toLowerCase());
 
-  // Check if the string contains certain keywords (for cases like "Grandma's Restaurant")
+  // Exact matches from CSV
+  if (s === "art & culture" || s === "art&culture") return "culture";
+  if (s === "bakery" || s === "bakery and pastry") return "bakery";
+  if (s === "public transport") return "transport";
+  if (s === "public toilets") return "wc";
+  if (s === "restaurants") return "restaurant";
+  if (s === "bars & cocktails" || s === "bars&cocktails") return "cocktails";
+  if (s === "cafe") return "cafe";
+  if (s === "street food") return "streetfood";
+  if (s === "bike riding") return "bike";
+  if (s === "luggage storage") return "luggage";
+  if (s === "taxi & private transport" || s === "taxi&private transport") return "taxi";
+  if (s === "atm") return "atm";
+  if (s === "boat rental") return "boat";
+  if (s === "night life" || s === "nightlife") return "nightlife";
+  if (s === "shopping") return "shop";
+  if (s === "luxury shopping") return "shopping_hq";
+  if (s === "private & luxury" || s === "private&luxury") return "luxury";
+  if (s === "mountain refuge") return "refuge";
+  if (s === "strolls") return "stroll";
+  if (s === "beach resorts") return "lidi";
+  if (s === "secret places") return "secret";
+  if (s === "day trips") return "daytrips";
+  if (s === "grocery") return "grocery";
+
+  // Check if string contains keywords
   if (s.includes("restaurant") || s.includes("ristorante") || s.includes("osteria") || s.includes("trattoria")) return "restaurant";
   
-  if (["cafe", "caffe", "caffè", "coffee"].includes(s)) return "cafe";
+  // Fallback synonyms
+  if (["cafe","caffe","caffè","coffee"].includes(s)) return "cafe";
   if (["museum", "museo", "galleria", "gallery"].includes(s)) return "museum";
   if (["park", "parco", "giardino"].includes(s)) return "park";
   if (["bar", "pub", "winebar", "enoteca"].includes(s)) return "bar";
@@ -94,8 +125,11 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["shopping ( high quality )","shopping high quality","alta qualità"].includes(s)) return "shopping_hq";
   if (["wc","bagno","toilette","restroom","bathroom"].includes(s)) return "wc";
   if (["adventure","avventura","adventures"].includes(s)) return "adventure";
-  if (["refuge","rifugio","rifugi","mountain refuge","mountain hut"].includes(s)) return "refuge";
-  if (["grocery","supermercato","alimentari","market","supermarket"].includes(s)) return "grocery";
+  if (["refuge","rifugio","rifugi","mountain hut"].includes(s)) return "refuge";
+  if (["supermercato","alimentari","market","supermarket"].includes(s)) return "grocery";
+  if (["nightlife","vita notturna","night"].includes(s)) return "nightlife";
+  if (["street food","cibo di strada"].includes(s)) return "streetfood";
+  if (["luggage","bagagli","deposito bagagli"].includes(s)) return "luggage";
 
   return "other";
 }
