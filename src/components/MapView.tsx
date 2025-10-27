@@ -313,6 +313,14 @@ export default function MapView({ places, selectedCategories = [], className, on
         `}</style>
         <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
         
+        {/* Overlay scuro quando viene selezionato un POI */}
+        {selectedPlace && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-40 animate-in fade-in duration-300"
+            onClick={() => setSelectedPlace(null)}
+          />
+        )}
+        
         {/* Card striscia in fondo tipo Google Maps */}
         {selectedPlace && (
           <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t shadow-lg animate-in slide-in-from-bottom duration-300">
