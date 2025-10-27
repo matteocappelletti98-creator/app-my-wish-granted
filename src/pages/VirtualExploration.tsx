@@ -201,10 +201,27 @@ export default function VirtualExploration() {
       {/* I tuoi luoghi preferiti */}
       <section className="px-6 pb-12">
         <div className="mx-auto max-w-6xl mt-6">
-          <div className="flex items-center gap-2 mb-3">
-            <Heart className="w-5 h-5 text-red-500" />
-            <h2 className="text-xl font-semibold text-blue-600">My favorites</h2>
-            <span className="text-sm text-gray-500">({favorites.length})</span>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Heart className="w-5 h-5 text-red-500" />
+              <h2 className="text-xl font-semibold text-blue-600">My favorites</h2>
+              <span className="text-sm text-gray-500">({favorites.length})</span>
+            </div>
+            
+            {favoritesList.length > 0 && (
+              <button
+                onClick={() => {
+                  const places = favoritesList.map(p => 
+                    `${p.name}, ${p.address || p.city || ''}`
+                  ).join(' / ');
+                  const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(places)}&travelmode=driving`;
+                  window.open(url, '_blank');
+                }}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+              >
+                🗺️ Apri tutti in Google Maps
+              </button>
+            )}
           </div>
           
           {favoritesList.length === 0 ? (
@@ -214,37 +231,61 @@ export default function VirtualExploration() {
               <p className="text-sm">{t('virtualExploration.noFavoritesDescription')}</p>
             </div>
           ) : (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {favoritesList.map(p => (
-                <div key={p.id} className="relative">
-                  <PlaceCard place={p} />
-                  <div className="absolute top-3 right-3 flex gap-2">
-                    <a
-                      href={`/luogo/${p.slug}`}
-                      className="p-2 bg-blue-600 text-white rounded-full shadow-sm hover:bg-blue-700 transition-colors"
-                      title={t('virtualExploration.visit')}
-                    >
-                      <span className="text-xs">👁️</span>
-                    </a>
-                    <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' ' + (p.address || p.city || ''))}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 bg-green-600 text-white rounded-full shadow-sm hover:bg-green-700 transition-colors"
-                      title={t('virtualExploration.maps')}
-                    >
-                      <span className="text-xs">🗺️</span>
-                    </a>
-                    <button
-                      onClick={() => toggleFavorite(p.id)}
-                      className="p-2 bg-white/90 rounded-full shadow-sm hover:bg-white transition-colors"
-                      title={t('virtualExploration.removeFromFavorites')}
-                    >
-                      <Heart className="w-4 h-4 text-red-500 fill-current" />
-                    </button>
+            <div className="rounded-2xl border bg-white overflow-hidden">
+              <div className="divide-y">
+                {favoritesList.map(p => (
+                  <div key={p.id} className="p-4 hover:bg-gray-50 transition-colors">
+                    <div className="flex items-start gap-4">
+                      {p.image && (
+                        <img 
+                          src={p.image} 
+                          alt={p.name}
+                          className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+                        />
+                      )}
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <h3 className="font-semibold text-gray-900 mb-1">{p.name}</h3>
+                            <p className="text-sm text-gray-600 mb-2">
+                              {p.city}{p.country ? `, ${p.country}` : ''}
+                            </p>
+                            {p.address && (
+                              <p className="text-xs text-gray-500 mb-2">📍 {p.address}</p>
+                            )}
+                          </div>
+                          
+                          <button
+                            onClick={() => toggleFavorite(p.id)}
+                            className="p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
+                            title={t('virtualExploration.removeFromFavorites')}
+                          >
+                            <Heart className="w-5 h-5 text-red-500 fill-current" />
+                          </button>
+                        </div>
+                        
+                        <div className="flex flex-wrap gap-2">
+                          <a
+                            href={`/luogo/${p.slug}`}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs font-medium"
+                          >
+                            👁️ Dettagli
+                          </a>
+                          <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' ' + (p.address || p.city || ''))}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs font-medium"
+                          >
+                            🗺️ Maps
+                          </a>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
         </div>
