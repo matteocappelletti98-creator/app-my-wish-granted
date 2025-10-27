@@ -285,7 +285,7 @@ export default function VirtualExploration() {
                             href={`/luogo/${p.slug}`}
                             className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs font-medium"
                           >
-                            👁️ Dettagli
+                            Pagina luogo
                           </a>
                           <a
                             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' ' + (p.address || p.city || ''))}`}
