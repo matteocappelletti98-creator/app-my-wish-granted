@@ -375,14 +375,13 @@ export default function MapView({ places, selectedCategories = [], className, on
                 </Button>
                 
                 <Button
-                  variant="outline"
                   onClick={() => {
                     const query = encodeURIComponent(
                       selectedPlace.name + ' ' + (selectedPlace.address || selectedPlace.city || '')
                     );
                     window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
                   }}
-                  className="w-full"
+                  className="w-full bg-black text-white hover:bg-black/90"
                 >
                   📍 Maps
                 </Button>
