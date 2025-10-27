@@ -6,7 +6,7 @@ export type CategoryKey =
   | "hotel" | "shop" | "viewpoint" | "beach" | "landmark" | "market" | "trail" | "culture" 
   | "pizza" | "taxi" | "calcio" | "boat" | "attractions" | "cocktails" | "gym" 
   | "parking" | "free_beaches" | "bike" | "luxury" | "transport" | "villa" 
-  | "stroll" | "lidi" | "secret" | "gelato" | "daytrips" | "bakery" | "shopping_hq" | "wc" | "adventure" | "grandmas_restaurant" | "other";
+  | "stroll" | "lidi" | "secret" | "gelato" | "daytrips" | "bakery" | "shopping_hq" | "wc" | "adventure" | "other";
 
 const EMOJI: Record<CategoryKey, string> = {
   cafe:"☕", restaurant:"🍽️", museum:"🏛️", culture:"🖼️", bar:"🍺",
@@ -15,7 +15,7 @@ const EMOJI: Record<CategoryKey, string> = {
   pizza:"🍕", taxi:"🚕", calcio:"⚽", boat:"🛥️", attractions:"🎢",
   cocktails:"🍸", gym:"💪", parking:"🅿️", free_beaches:"🏖️", bike:"🚴",
   luxury:"💎", transport:"🚌", villa:"⛲️", stroll:"🚶", lidi:"🏝️",
-  secret:"🤫", gelato:"🍦", daytrips:"🗓️", bakery:"🥖", shopping_hq:"👑", wc:"🚻", adventure:"🏔️", grandmas_restaurant:"👵🏻", other:"📍",
+  secret:"🤫", gelato:"🍦", daytrips:"🗓️", bakery:"🥖", shopping_hq:"👑", wc:"🚻", adventure:"🏔️", other:"📍",
 };
 
 function strip(s:string){ return s.normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
@@ -57,7 +57,6 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["shopping ( high quality )","shopping high quality","alta qualità"].includes(s)) return "shopping_hq";
   if (["wc","bagno","toilette","restroom","bathroom"].includes(s)) return "wc";
   if (["adventure","avventura","adventures"].includes(s)) return "adventure";
-  if (["grandma's restaurant","grandmas restaurant","nonna","ristorante nonna"].includes(s)) return "grandmas_restaurant";
   return "other";
 }
 
@@ -73,7 +72,7 @@ export default function CategoryBadge({ category, showLabel=false }:{
     pizza:"Pizza", taxi:"Taxi", calcio:"Calcio Como", boat:"Noleggio Barche", attractions:"Attrazioni",
     cocktails:"Cocktail Bar", gym:"Palestra", parking:"Parcheggio", free_beaches:"Spiagge Libere", bike:"Bicicletta",
     luxury:"Lusso", transport:"Trasporti", villa:"Villa", stroll:"Passeggiata", lidi:"Lidi",
-    secret:"Luoghi Segreti", gelato:"Gelato", daytrips:"Gite", bakery:"Panetteria", shopping_hq:"Shopping di Qualità", wc:"WC", adventure:"Avventura", grandmas_restaurant:"Ristorante della Nonna", other:"Altro"
+    secret:"Luoghi Segreti", gelato:"Gelato", daytrips:"Gite", bakery:"Panetteria", shopping_hq:"Shopping di Qualità", wc:"WC", adventure:"Avventura", other:"Altro"
   };
   return (
     <span className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-2.5 py-1 text-gray-700">
