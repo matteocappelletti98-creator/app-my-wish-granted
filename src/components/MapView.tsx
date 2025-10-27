@@ -33,6 +33,8 @@ export default function MapView({ places, selectedCategories = [], className, on
   const isFirstLoadRef = useRef(true);
   const mapboxToken = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   // Funzione per navigare tra i luoghi della stessa categoria
   const navigateCategory = (direction: 'prev' | 'next') => {
@@ -80,6 +82,33 @@ export default function MapView({ places, selectedCategories = [], className, on
       total: sameCategoryPlaces.length,
       hasMultiple: sameCategoryPlaces.length > 1
     };
+  };
+
+  // Gestione swipe orizzontale
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe) {
+      navigateCategory('next');
+    }
+    if (isRightSwipe) {
+      navigateCategory('prev');
+    }
   };
 
   // Funzione helper per validare le coordinate
@@ -375,7 +404,12 @@ export default function MapView({ places, selectedCategories = [], className, on
       </div>
       
       <Drawer open={!!selectedPlace} onOpenChange={(open) => !open && setSelectedPlace(null)}>
-        <DrawerContent className="max-w-5xl mx-auto">
+        <DrawerContent 
+          className="max-w-5xl mx-auto"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <DrawerHeader className="px-4 pb-2">
             {getCategoryNavInfo()?.hasMultiple && (
               <div className="flex items-center justify-between mb-3 pb-2 border-b">
