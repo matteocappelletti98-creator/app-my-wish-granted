@@ -116,8 +116,10 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
     const originalCategory = rec.category || "";
     const normalizedCategory = normalizeCategory(originalCategory);
     
+    console.log(`📍 ${name}: "${originalCategory}" -> ${normalizedCategory}`);
+    
     if (originalCategory && normalizedCategory === "other") {
-      console.log(`⚠️ Categoria non riconosciuta: "${originalCategory}" per ${name}`);
+      console.log(`⚠️ CATEGORIA NON RICONOSCIUTA: "${originalCategory}" per ${name}`);
     }
 
     out.push({
