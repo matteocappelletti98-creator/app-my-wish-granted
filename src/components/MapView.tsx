@@ -6,7 +6,7 @@ import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 import { Button } from "@/components/ui/button";
-import { X, MapPin } from "lucide-react";
+import { X, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
 
 type Props = {
   places: Place[];
@@ -27,6 +27,54 @@ export default function MapView({ places, selectedCategories = [], className, on
   const isFirstLoadRef = useRef(true);
   const mapboxToken = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+
+  // Funzione per navigare tra i luoghi della stessa categoria
+  const navigateCategory = (direction: 'prev' | 'next') => {
+    if (!selectedPlace) return;
+    
+    // Filtra luoghi della stessa categoria
+    const sameCategoryPlaces = filtered.filter(p => 
+      normalizeCategory(p.category) === normalizeCategory(selectedPlace.category)
+    );
+    
+    const currentIndex = sameCategoryPlaces.findIndex(p => p.id === selectedPlace.id);
+    if (currentIndex === -1) return;
+    
+    let nextIndex: number;
+    if (direction === 'next') {
+      nextIndex = (currentIndex + 1) % sameCategoryPlaces.length;
+    } else {
+      nextIndex = currentIndex === 0 ? sameCategoryPlaces.length - 1 : currentIndex - 1;
+    }
+    
+    setSelectedPlace(sameCategoryPlaces[nextIndex]);
+    
+    // Centra la mappa sul nuovo luogo
+    if (mapRef.current && sameCategoryPlaces[nextIndex].lat && sameCategoryPlaces[nextIndex].lng) {
+      mapRef.current.flyTo({
+        center: [sameCategoryPlaces[nextIndex].lng!, sameCategoryPlaces[nextIndex].lat!],
+        zoom: 15,
+        duration: 1000
+      });
+    }
+  };
+
+  // Calcola info di navigazione
+  const getCategoryNavInfo = () => {
+    if (!selectedPlace) return null;
+    
+    const sameCategoryPlaces = filtered.filter(p => 
+      normalizeCategory(p.category) === normalizeCategory(selectedPlace.category)
+    );
+    
+    const currentIndex = sameCategoryPlaces.findIndex(p => p.id === selectedPlace.id);
+    
+    return {
+      current: currentIndex + 1,
+      total: sameCategoryPlaces.length,
+      hasMultiple: sameCategoryPlaces.length > 1
+    };
+  };
 
   // Funzione helper per validare le coordinate
   const isValidCoordinate = (lat?: number, lng?: number): boolean => {
@@ -331,12 +379,39 @@ export default function MapView({ places, selectedCategories = [], className, on
         {selectedPlace && (
           <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t shadow-lg animate-in slide-in-from-bottom duration-300">
             <div className="container mx-auto max-w-5xl p-4">
+              {/* Header con navigazione categoria */}
+              {getCategoryNavInfo()?.hasMultiple && (
+                <div className="flex items-center justify-between mb-3 pb-2 border-b">
+                  <span className="text-xs text-muted-foreground">
+                    {getCategoryNavInfo()?.current} di {getCategoryNavInfo()?.total} in {normalizeCategory(selectedPlace.category)}
+                  </span>
+                  <div className="flex gap-1">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => navigateCategory('prev')}
+                      className="h-7 w-7 p-0"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => navigateCategory('next')}
+                      className="h-7 w-7 p-0"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+              
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-start gap-3 flex-1 min-w-0">
                   <span className="text-2xl flex-shrink-0 mt-1">{categoryEmoji(selectedPlace.category)}</span>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-lg mb-1">{selectedPlace.name}</h3>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">{selectedPlace.category}</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">{normalizeCategory(selectedPlace.category)}</p>
                     {selectedPlace.description && (
                       <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{selectedPlace.description}</p>
                     )}
