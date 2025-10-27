@@ -291,9 +291,10 @@ export default function VirtualExploration() {
                             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' ' + (p.address || p.city || ''))}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs font-medium"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-black text-white rounded-lg hover:bg-black/90 transition-colors text-xs font-medium"
                           >
-                            🗺️ Maps
+                            <MapPin className="w-3 h-3" />
+                            Maps
                           </a>
                         </div>
                       </div>
