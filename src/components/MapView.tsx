@@ -7,6 +7,12 @@ import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 import { Button } from "@/components/ui/button";
 import { X, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 
 type Props = {
   places: Place[];
@@ -366,112 +372,100 @@ export default function MapView({ places, selectedCategories = [], className, on
           }
         `}</style>
         <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
-        
-        {/* Overlay scuro quando viene selezionato un POI */}
-        {selectedPlace && (
-          <div 
-            className="fixed inset-0 bg-black/50 z-40 animate-in fade-in duration-300"
-            onClick={() => setSelectedPlace(null)}
-          />
-        )}
-        
-        {/* Card striscia in fondo tipo Google Maps */}
-        {selectedPlace && (
-          <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t shadow-lg animate-in slide-in-from-bottom duration-300">
-            <div className="container mx-auto max-w-5xl p-4">
-              {/* Header con navigazione categoria */}
-              {getCategoryNavInfo()?.hasMultiple && (
-                <div className="flex items-center justify-between mb-3 pb-2 border-b">
-                  <span className="text-xs text-muted-foreground">
-                    {getCategoryNavInfo()?.current} di {getCategoryNavInfo()?.total} in {normalizeCategory(selectedPlace.category)}
-                  </span>
-                  <div className="flex gap-1">
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => navigateCategory('prev')}
-                      className="h-7 w-7 p-0"
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => navigateCategory('next')}
-                      className="h-7 w-7 p-0"
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </div>
+      </div>
+      
+      <Drawer open={!!selectedPlace} onOpenChange={(open) => !open && setSelectedPlace(null)}>
+        <DrawerContent className="max-w-5xl mx-auto">
+          <DrawerHeader className="px-4 pb-2">
+            {getCategoryNavInfo()?.hasMultiple && (
+              <div className="flex items-center justify-between mb-3 pb-2 border-b">
+                <span className="text-xs text-muted-foreground">
+                  {getCategoryNavInfo()?.current} di {getCategoryNavInfo()?.total} in {normalizeCategory(selectedPlace?.category || '')}
+                </span>
+                <div className="flex gap-1">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => navigateCategory('prev')}
+                    className="h-7 w-7 p-0"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => navigateCategory('next')}
+                    className="h-7 w-7 p-0"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
                 </div>
-              )}
-              
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-start gap-3 flex-1 min-w-0">
-                  <span className="text-2xl flex-shrink-0 mt-1">{categoryEmoji(selectedPlace.category)}</span>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-lg mb-1">{selectedPlace.name}</h3>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">{normalizeCategory(selectedPlace.category)}</p>
-                    {selectedPlace.description && (
-                      <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{selectedPlace.description}</p>
-                    )}
-                    {selectedPlace.address && (
-                      <p className="text-sm text-muted-foreground flex items-center gap-1">
-                        <span>📍</span> {selectedPlace.address}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setSelectedPlace(null)}
-                  className="flex-shrink-0"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
               </div>
+            )}
+            
+            <div className="flex items-start gap-3">
+              <span className="text-2xl flex-shrink-0 mt-1">{categoryEmoji(selectedPlace?.category || '')}</span>
+              <div className="flex-1 min-w-0">
+                <DrawerTitle className="text-lg mb-1">{selectedPlace?.name}</DrawerTitle>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">{normalizeCategory(selectedPlace?.category || '')}</p>
+              </div>
+            </div>
+          </DrawerHeader>
+          
+          <div className="px-4 pb-6 space-y-3">
+            {selectedPlace?.description && (
+              <p className="text-sm text-muted-foreground">{selectedPlace.description}</p>
+            )}
+            
+            {selectedPlace?.address && (
+              <p className="text-sm text-muted-foreground flex items-center gap-1">
+                <span>📍</span> {selectedPlace.address}
+              </p>
+            )}
+            
+            <div className="grid grid-cols-3 gap-2 pt-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (onToggleFavorite && selectedPlace) {
+                    onToggleFavorite(selectedPlace.id);
+                  }
+                }}
+                className="w-full"
+              >
+                {favorites.includes(selectedPlace?.id || '') ? '❤️' : '🤍'}
+              </Button>
               
-              <div className="grid grid-cols-3 gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    if (onToggleFavorite) {
-                      onToggleFavorite(selectedPlace.id);
-                    }
-                  }}
-                  className="w-full"
-                >
-                  {favorites.includes(selectedPlace.id) ? '❤️' : '🤍'}
-                </Button>
-                
-                <Button
-                  variant="outline"
-                  onClick={() => {
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (selectedPlace) {
                     window.location.href = `/luogo/${selectedPlace.slug}`;
-                  }}
-                  className="w-full"
-                >
-                  Pagina luogo
-                </Button>
-                
-                <Button
-                  onClick={() => {
+                  }
+                }}
+                className="w-full"
+              >
+                Pagina luogo
+              </Button>
+              
+              <Button
+                onClick={() => {
+                  if (selectedPlace) {
                     const query = encodeURIComponent(
                       selectedPlace.name + ' ' + (selectedPlace.address || selectedPlace.city || '')
                     );
                     window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
-                  }}
-                  className="w-full bg-black text-white hover:bg-black/90 flex items-center gap-2"
-                >
-                  <MapPin className="w-4 h-4" />
-                  Maps
-                </Button>
-              </div>
+                  }
+                }}
+                className="w-full bg-black text-white hover:bg-black/90 flex items-center gap-2"
+              >
+                <MapPin className="w-4 h-4" />
+                Maps
+              </Button>
             </div>
           </div>
-        )}
-      </div>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 }
