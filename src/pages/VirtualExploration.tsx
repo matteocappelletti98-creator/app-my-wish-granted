@@ -211,19 +211,31 @@ export default function VirtualExploration() {
             {favoritesList.length > 0 && (
               <button
                 onClick={() => {
-                  // Crea un itinerario con punti di passaggio
-                  const origin = favoritesList[0];
-                  const destination = favoritesList[favoritesList.length - 1];
-                  const waypoints = favoritesList.slice(1, -1)
-                    .map(p => `${p.lat},${p.lng}`)
-                    .join('|');
-                  
-                  const url = `https://www.google.com/maps/dir/?api=1&origin=${origin.lat},${origin.lng}&destination=${destination.lat},${destination.lng}${waypoints ? `&waypoints=${waypoints}` : ''}&travelmode=driving`;
-                  window.open(url, '_blank', 'noopener,noreferrer');
+                  if (favoritesList.length === 1) {
+                    // Se c'è solo un luogo, apri la ricerca
+                    const p = favoritesList[0];
+                    const url = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+                    window.open(url, '_blank');
+                  } else {
+                    // Limita a massimo 9 waypoints (limite di Google Maps)
+                    const maxPlaces = Math.min(favoritesList.length, 10); // 1 origin + 8 waypoints + 1 destination = 10
+                    const limitedList = favoritesList.slice(0, maxPlaces);
+                    
+                    const origin = limitedList[0];
+                    const destination = limitedList[limitedList.length - 1];
+                    
+                    // Waypoints intermedi (escludi origin e destination)
+                    const waypoints = limitedList.slice(1, -1)
+                      .map(p => `${p.lat},${p.lng}`)
+                      .join('|');
+                    
+                    const url = `https://www.google.com/maps/dir/?api=1&origin=${origin.lat},${origin.lng}&destination=${destination.lat},${destination.lng}${waypoints ? `&waypoints=${waypoints}` : ''}`;
+                    window.open(url, '_blank');
+                  }
                 }}
                 className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
               >
-                🗺️ Apri tutti in Google Maps
+                🗺️ Apri tutti in Google Maps {favoritesList.length > 10 && `(primi 10)`}
               </button>
             )}
           </div>
