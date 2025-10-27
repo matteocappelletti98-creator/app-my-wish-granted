@@ -1,4 +1,6 @@
 // src/lib/sheet.ts
+import { normalizeCategory } from "@/components/CategoryIcon";
+
 export type Place = {
   id: string;
   slug: string;
@@ -119,7 +121,7 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
       description: rec.description || "",
       image: imagePath,
       status: (rec.status || "").toLowerCase(),
-      category: (rec.category || "other"),
+      category: normalizeCategory(rec.category),
       address: rec.address || "",
       lat: isFinite(lat!) ? lat : undefined,
       lng: isFinite(lng!) ? lng : undefined,
