@@ -28,10 +28,16 @@ export default function MapView({ places, selectedCategories = [], className, on
   const mapboxToken = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
+  // Funzione helper per validare le coordinate
+  const isValidCoordinate = (lat?: number, lng?: number): boolean => {
+    if (lat == null || lng == null) return false;
+    return lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+  };
+
   // Filtra solo published + categoria + coordinate valide
   const filtered = useMemo(() => {
     return places
-      .filter(p => p.lat != null && p.lng != null)
+      .filter(p => isValidCoordinate(p.lat, p.lng))
       .filter(p => {
         if (selectedCategories.length === 0) return true;
         return selectedCategories.includes(normalizeCategory(p.category));
