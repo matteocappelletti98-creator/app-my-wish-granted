@@ -75,9 +75,10 @@ export function normalizeImagePath(imagePath: string): string {
 }
 
 export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
-  const res = await fetch(csvUrl);
-  if (!res.ok) throw new Error("Impossibile leggere il CSV del foglio");
-  const text = await res.text();
+  try {
+    const res = await fetch(csvUrl);
+    if (!res.ok) throw new Error("Impossibile leggere il CSV del foglio");
+    const text = await res.text();
   const rows = parseCSV(text);
   if (rows.length < 2) return [];
   const headers = rows[0].map(normHeader);
@@ -93,8 +94,12 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
     const id = rec.id || toSlug(`${name}-${city}`) || `row-${i}`;
     const slug = toSlug(`${name}-${city}`) || id;
 
-    const lat = rec.lat ? Number(rec.lat) : undefined;
-    const lng = rec.lng ? Number(rec.lng) : undefined;
+    // Pulisci e valida le coordinate - rimuovi caratteri non numerici eccetto punto e segno negativo
+    const cleanLat = rec.lat ? rec.lat.replace(/[^\d.-]/g, '') : '';
+    const cleanLng = rec.lng ? rec.lng.replace(/[^\d.-]/g, '') : '';
+    
+    const lat = cleanLat ? Number(cleanLat) : undefined;
+    const lng = cleanLng ? Number(cleanLng) : undefined;
 
     console.log(`Parsing ${name}: lat=${rec.lat} -> ${lat}, lng=${rec.lng} -> ${lng}`);
 
@@ -124,4 +129,8 @@ export async function fetchPlacesFromSheet(csvUrl: string): Promise<Place[]> {
   
   console.log("Luoghi con coordinate:", out.filter(p => p.lat && p.lng));
   return out;
+  } catch (error) {
+    console.error("Errore nel caricamento dei luoghi:", error);
+    throw error;
+  }
 }
