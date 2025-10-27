@@ -371,10 +371,11 @@ export default function MapView({ places, selectedCategories = [], className, on
                   }}
                   className="w-full"
                 >
-                  👁️ View
+                  Pagina luogo
                 </Button>
                 
                 <Button
+                  variant="outline"
                   onClick={() => {
                     const query = encodeURIComponent(
                       selectedPlace.name + ' ' + (selectedPlace.address || selectedPlace.city || '')
