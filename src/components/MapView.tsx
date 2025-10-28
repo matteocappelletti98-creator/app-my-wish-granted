@@ -6,13 +6,15 @@ import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 import { Button } from "@/components/ui/button";
-import { X, MapPin, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, MapPin, ChevronLeft, ChevronRight, Upload, Trash2 } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 type Props = {
   places: Place[];
@@ -35,6 +37,9 @@ export default function MapView({ places, selectedCategories = [], className, on
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [placePhotos, setPlacePhotos] = useState<{ id: string; image_url: string }[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Funzione per navigare tra i luoghi della stessa categoria
   const navigateCategory = (direction: 'prev' | 'next') => {
@@ -108,6 +113,117 @@ export default function MapView({ places, selectedCategories = [], className, on
     }
     if (isRightSwipe) {
       navigateCategory('prev');
+    }
+  };
+
+  // Carica le foto del luogo
+  useEffect(() => {
+    const loadPhotos = async () => {
+      if (!selectedPlace?.id) {
+        setPlacePhotos([]);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('place_photos')
+        .select('id, image_url')
+        .eq('place_id', selectedPlace.id)
+        .order('order_index', { ascending: true });
+
+      if (error) {
+        console.error('Error loading photos:', error);
+        return;
+      }
+
+      setPlacePhotos(data || []);
+    };
+
+    loadPhotos();
+  }, [selectedPlace?.id]);
+
+  // Upload foto
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || !selectedPlace) return;
+
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+
+    try {
+      // Upload file to storage
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${selectedPlace.id}/${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('place-photos')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('place-photos')
+        .getPublicUrl(fileName);
+
+      // Save to database
+      const { error: dbError } = await supabase
+        .from('place_photos')
+        .insert({
+          place_id: selectedPlace.id,
+          image_url: publicUrl,
+          order_index: placePhotos.length
+        });
+
+      if (dbError) throw dbError;
+
+      // Reload photos
+      const { data } = await supabase
+        .from('place_photos')
+        .select('id, image_url')
+        .eq('place_id', selectedPlace.id)
+        .order('order_index', { ascending: true });
+
+      setPlacePhotos(data || []);
+      toast.success('Foto caricata!');
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      toast.error('Errore nel caricamento');
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  // Delete foto
+  const handleDeletePhoto = async (photoId: string, imageUrl: string) => {
+    try {
+      // Extract file path from URL
+      const urlParts = imageUrl.split('/place-photos/');
+      if (urlParts.length === 2) {
+        const filePath = urlParts[1].split('?')[0];
+        
+        // Delete from storage
+        await supabase.storage
+          .from('place-photos')
+          .remove([filePath]);
+      }
+
+      // Delete from database
+      const { error } = await supabase
+        .from('place_photos')
+        .delete()
+        .eq('id', photoId);
+
+      if (error) throw error;
+
+      setPlacePhotos(placePhotos.filter(p => p.id !== photoId));
+      toast.success('Foto eliminata');
+    } catch (error) {
+      console.error('Error deleting photo:', error);
+      toast.error('Errore nell\'eliminazione');
     }
   };
 
@@ -456,6 +572,50 @@ export default function MapView({ places, selectedCategories = [], className, on
                 <span>📍</span> {selectedPlace.address}
               </p>
             )}
+
+            {/* Photo Gallery */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-medium">Galleria foto</h4>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="h-7 px-2 text-xs"
+                >
+                  <Upload className="h-3 w-3 mr-1" />
+                  {uploading ? 'Caricamento...' : 'Carica'}
+                </Button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoUpload}
+                  className="hidden"
+                />
+              </div>
+              
+              {placePhotos.length > 0 && (
+                <div className="grid grid-cols-4 gap-2">
+                  {placePhotos.map((photo) => (
+                    <div key={photo.id} className="relative aspect-square group">
+                      <img
+                        src={photo.image_url}
+                        alt="Place photo"
+                        className="w-full h-full object-cover rounded-md"
+                      />
+                      <button
+                        onClick={() => handleDeletePhoto(photo.id, photo.image_url)}
+                        className="absolute top-1 right-1 bg-destructive/90 text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             
             <div className="grid grid-cols-3 gap-2 pt-2">
               <Button
