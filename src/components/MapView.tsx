@@ -13,6 +13,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -40,6 +41,7 @@ export default function MapView({ places, selectedCategories = [], className, on
   const [placePhotos, setPlacePhotos] = useState<{ id: string; image_url: string }[]>([]);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [enlargedPhoto, setEnlargedPhoto] = useState<string | null>(null);
 
   // Funzione per navigare tra i luoghi della stessa categoria
   const navigateCategory = (direction: 'prev' | 'next') => {
@@ -599,14 +601,21 @@ export default function MapView({ places, selectedCategories = [], className, on
               {placePhotos.length > 0 && (
                 <div className="grid grid-cols-4 gap-2">
                   {placePhotos.map((photo) => (
-                    <div key={photo.id} className="relative aspect-square group">
+                    <div 
+                      key={photo.id} 
+                      className="relative aspect-square group cursor-pointer"
+                      onClick={() => setEnlargedPhoto(photo.image_url)}
+                    >
                       <img
                         src={photo.image_url}
                         alt="Place photo"
                         className="w-full h-full object-cover rounded-md"
                       />
                       <button
-                        onClick={() => handleDeletePhoto(photo.id, photo.image_url)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeletePhoto(photo.id, photo.image_url);
+                        }}
                         className="absolute top-1 right-1 bg-destructive/90 text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <Trash2 className="h-3 w-3" />
@@ -660,6 +669,18 @@ export default function MapView({ places, selectedCategories = [], className, on
           </div>
         </DrawerContent>
       </Drawer>
+
+      <Dialog open={!!enlargedPhoto} onOpenChange={() => setEnlargedPhoto(null)}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 border-0 bg-background/95">
+          <div className="relative w-full h-full flex items-center justify-center p-4">
+            <img
+              src={enlargedPhoto || ""}
+              alt="Enlarged"
+              className="max-w-full max-h-[90vh] object-contain rounded-lg"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
