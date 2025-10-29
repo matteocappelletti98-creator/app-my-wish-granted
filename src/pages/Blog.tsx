@@ -3,15 +3,29 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Calendar, User } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { Search, Calendar, User, Languages } from "lucide-react";
+import { useLanguage, type Language } from "@/contexts/LanguageContext";
 import { getAllArticles, type ArticleMeta } from "@/lib/articles";
 import { Link } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Blog() {
-  const { t, language } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<("faq" | "daytrip" | "tip")[]>(["faq"]);
+
+  const languageLabels: Record<Language, string> = {
+    it: "🇮🇹 Italiano",
+    en: "🇬🇧 English",
+    fr: "🇫🇷 Français",
+    de: "🇩🇪 Deutsch",
+    es: "🇪🇸 Español",
+  };
   
   const toggleCategory = (category: "faq" | "daytrip" | "tip") => {
     setSelectedCategories(prev => 
@@ -128,9 +142,38 @@ export default function Blog() {
         <div className="px-6 py-16">
           <div className="mx-auto max-w-6xl">
             <div className="text-center mb-16">
-              <h1 className="text-8xl md:text-9xl font-extralight text-blue-900 mb-8 tracking-wider">
-                Blog
-              </h1>
+              <div className="flex items-center justify-center gap-4 mb-8">
+                <h1 className="text-8xl md:text-9xl font-extralight text-blue-900 tracking-wider">
+                  Blog
+                </h1>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="lg"
+                      className="bg-white/80 backdrop-blur-sm border-blue-100/50 hover:bg-blue-50 rounded-2xl px-6 py-6 text-lg"
+                    >
+                      <Languages className="w-5 h-5 mr-2" />
+                      {languageLabels[language]}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-white/95 backdrop-blur-sm border-blue-100/50 rounded-xl">
+                    {(Object.keys(languageLabels) as Language[]).map((lang) => (
+                      <DropdownMenuItem
+                        key={lang}
+                        onClick={() => setLanguage(lang)}
+                        className={`cursor-pointer rounded-lg px-4 py-3 text-base ${
+                          language === lang 
+                            ? "bg-blue-100/50 text-blue-900 font-medium" 
+                            : "text-blue-600 hover:bg-blue-50"
+                        }`}
+                      >
+                        {languageLabels[lang]}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               
               {/* Category Navigation Buttons */}
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
