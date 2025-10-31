@@ -233,7 +233,7 @@ export default function Profile() {
               <Heart className="h-16 w-16 mx-auto mb-4 text-muted-foreground/30" />
               <h3 className="text-lg font-medium mb-2">La tua mappa è vuota</h3>
               <p className="text-sm text-muted-foreground">
-                Aggiungi i tuoi luoghi preferiti dalla mappa di Virtual Exploration
+                Scorri i luoghi qui sotto e aggiungili alla tua mappa personale
               </p>
             </div>
           </div>
@@ -247,16 +247,12 @@ export default function Profile() {
         )}
       </div>
 
-      {/* 
-      ============================================
-      SEZIONE LUOGHI TEMPORANEAMENTE RIMOSSA
-      ============================================
-      
       {/* Places List */}
-      {/* <div className="px-4 py-4">
+      <div className="px-4 py-4">
         <div className="mb-4">
           <h2 className="text-lg font-semibold mb-3">Aggiungi Luoghi</h2>
           
+          {/* Search */}
           <Input
             type="search"
             placeholder="Cerca luoghi..."
@@ -265,6 +261,7 @@ export default function Profile() {
             className="mb-3"
           />
 
+          {/* Category filters */}
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
             <button
               onClick={() => setSelectedCategories([])}
@@ -293,6 +290,7 @@ export default function Profile() {
           </div>
         </div>
 
+        {/* Places Grid */}
         <div className="grid gap-3">
           {filteredPlaces.map(place => {
             const isFavorite = favorites.includes(place.id);
@@ -300,6 +298,7 @@ export default function Profile() {
               <Card key={place.id} className="overflow-hidden">
                 <CardContent className="p-4">
                   <div className="flex gap-3 items-center">
+                    {/* Category Icon */}
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <span className="text-2xl">
                         <CategoryBadge category={place.category} />
@@ -347,7 +346,7 @@ export default function Profile() {
             <p>Nessun luogo trovato</p>
           </div>
         )}
-      </div> */}
+      </div>
     </div>
   );
 }
