@@ -87,8 +87,8 @@ export default function Nav() {
           <img 
             src={tpIcon} 
             alt="Traveller Path" 
-            className={`w-5 h-5 transition-all ${
-              active("/traveller-path") ? "brightness-0 invert" : "opacity-70"
+            className={`w-6 h-6 transition-all ${
+              active("/traveller-path") ? "opacity-100 scale-110" : "opacity-70"
             }`}
           />
         </Link>

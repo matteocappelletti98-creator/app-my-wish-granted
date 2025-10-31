@@ -303,7 +303,7 @@ export default function TravellerPath() {
               <img 
                 src={tpIcon} 
                 alt="Traveller Path" 
-                className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-6 animate-pulse"
+                className="w-48 h-48 md:w-56 md:h-56 mx-auto mb-6 animate-pulse"
               />
               <h1 className="text-6xl md:text-7xl font-bebas text-blue-900 mb-4 tracking-wide">
                 TRAVELLER PATH
