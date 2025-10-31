@@ -280,7 +280,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-white pb-20">
       {/* Header */}
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b">
         <div className="px-4 py-3 flex items-center justify-between">
@@ -302,7 +302,7 @@ export default function Profile() {
                 Stampa
               </Button>
             )}
-            {user ? (
+            {user && (
               <Button
                 onClick={handleSignOut}
                 variant="outline"
@@ -311,14 +311,6 @@ export default function Profile() {
               >
                 <LogOut className="h-4 w-4" />
                 Esci
-              </Button>
-            ) : (
-              <Button
-                onClick={() => navigate("/user-auth")}
-                variant="outline"
-                size="sm"
-              >
-                Accedi
               </Button>
             )}
           </div>
