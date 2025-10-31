@@ -342,21 +342,25 @@ export default function TravellerPath() {
         
         {/* Header */}
         <div className="mb-4 md:mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-3 md:mb-4">
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Home</span>
-          </Link>
+          <div className="flex items-center justify-between mb-3 md:mb-4">
+            <Link to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors">
+              <ArrowLeft className="w-4 h-4" />
+              <span className="text-sm">Home</span>
+            </Link>
+            
+            <button
+              onClick={() => {
+                localStorage.removeItem('traveller-path-intro-seen');
+                setShowIntro(true);
+              }}
+              className="text-xs text-blue-600/70 hover:text-blue-800 transition-colors"
+            >
+              ← Torna all'inizio
+            </button>
+          </div>
           
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bebas text-blue-900 mb-1 tracking-wide">TRAVELLER PATH</h1>
-              {getAnsweredQuestionsCount() > 0 && getAnsweredQuestionsCount() < questions.length && (
-                <p className="text-orange-600 text-xs md:text-sm flex items-center gap-1">
-                  <Clock className="w-3 h-3" />
-                  In corso...
-                </p>
-              )}
-            </div>
+            <h1 className="text-3xl md:text-4xl font-bebas text-blue-900 tracking-wide">TRAVELLER PATH</h1>
             
             <div className="text-xs md:text-sm text-blue-600/70 font-medium">
               {getAnsweredQuestionsCount()} / {questions.length}
