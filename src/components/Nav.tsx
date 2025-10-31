@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Map, List, FileText, User } from "lucide-react";
+import { Home, Map, FileText, User } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Nav() {
@@ -40,22 +40,6 @@ export default function Nav() {
               active("/virtual-exploration") ? "text-white" : "text-blue-400"
             }`}
             strokeWidth={active("/virtual-exploration") ? 2 : 1.5}
-          />
-        </Link>
-
-        <Link
-          to="/luoghi"
-          className={`flex items-center justify-center w-12 h-12 rounded-xl transition-all active:scale-90 ${
-            active("/luoghi")
-              ? "bg-blue-600"
-              : ""
-          }`}
-        >
-          <List
-            className={`w-5 h-5 ${
-              active("/luoghi") ? "text-white" : "text-blue-400"
-            }`}
-            strokeWidth={active("/luoghi") ? 2 : 1.5}
           />
         </Link>
 
