@@ -3,6 +3,7 @@ import { Map, List, FileText, Route, MapPin, Globe, Info, Clock, AlertCircle, Se
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import comoSponsor from "@/assets/como-sponsor.png";
 
 export default function Home() {
   const { language, setLanguage, t } = useLanguage();
@@ -105,31 +106,25 @@ export default function Home() {
           {/* Centered App Title */}
           <div className="text-center mb-16">
             <h1 className="text-6xl md:text-8xl font-extralight text-blue-900 mb-6 tracking-wider">
-              {t('home.title')}
+              true local
             </h1>
-            <p className="text-xl text-blue-700/70 font-light tracking-wide mb-8">{t('home.subtitle')}</p>
+            <p className="text-xl text-blue-700/70 font-light tracking-wide mb-8">discover the city</p>
             <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent mx-auto"></div>
           </div>
 
           {/* Selectors Container */}
           <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            {/* City Selector */}
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-blue-100/50">
-              <div className="flex items-center gap-3 mb-4">
-                <MapPin className="w-5 h-5 text-blue-600" />
-                <h3 className="text-lg font-medium text-blue-900">{t('home.selectCity')}</h3>
+            {/* Sponsor Section */}
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-blue-100/50 flex items-center justify-center">
+              <div className="text-center">
+                <p className="text-sm text-blue-600/70 font-light mb-4">Official Sponsor</p>
+                <img 
+                  src={comoSponsor} 
+                  alt="Calcio Como 1907" 
+                  className="w-48 h-auto mx-auto"
+                />
               </div>
-              <select
-                value={selectedCity}
-                onChange={(e) => setSelectedCity(e.target.value)}
-                className="w-full px-4 py-3 bg-white/80 border border-blue-100 rounded-xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
-              >
-                <option value="">{t('home.allCities')}</option>
-                {cities.map(city => (
-                  <option key={city.value} value={city.value}>{city.label}</option>
-                ))}
-              </select>
             </div>
 
             {/* Language Selector */}
