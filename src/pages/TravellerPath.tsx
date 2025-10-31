@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Check, ArrowLeft, Clock, Compass } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, ArrowLeft, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import tpIcon from "@/assets/tp-icon.png";
 
 interface Question {
   id: string;
@@ -299,7 +300,11 @@ export default function TravellerPath() {
 
           <div className="text-center animate-fade-in">
             <div className="mb-8">
-              <Compass className="w-20 h-20 md:w-24 md:h-24 mx-auto text-blue-600 mb-6 animate-pulse" />
+              <img 
+                src={tpIcon} 
+                alt="Traveller Path" 
+                className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-6 animate-pulse"
+              />
               <h1 className="text-6xl md:text-7xl font-bebas text-blue-900 mb-4 tracking-wide">
                 TRAVELLER PATH
               </h1>
