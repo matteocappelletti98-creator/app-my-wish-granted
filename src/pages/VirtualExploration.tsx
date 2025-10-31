@@ -167,7 +167,7 @@ export default function VirtualExploration() {
       </div>
 
       {/* Mappa - Occupa la viewport disponibile */}
-      <div className="h-[calc(100vh-8rem)] touch-none md:touch-auto relative">
+      <div className="relative" style={{ height: 'calc(100vh - 8rem)' }}>
         {loading ? (
           <div className="absolute inset-0 bg-slate-50 flex items-center justify-center">
             <div className="text-gray-500">Caricamento...</div>
@@ -176,7 +176,7 @@ export default function VirtualExploration() {
           <MapView 
             places={all.filter(p => p.status === "published")} 
             selectedCategories={selectedCategories} 
-            className="w-full h-full"
+            className="absolute inset-0 w-full h-full"
             favorites={favorites}
             onToggleFavorite={toggleFavorite}
             userTravellerCodes={userTravellerCodes}
