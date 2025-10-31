@@ -284,13 +284,17 @@ export default function Profile() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b">
         <div className="px-4 py-3 flex items-center justify-between">
-          <h1 className="text-4xl md:text-5xl font-bebas font-normal text-blue-900 tracking-wider">Create your own guide</h1>
+          <div className="flex-1 text-center">
+            <h1 className="text-4xl md:text-5xl font-bebas font-normal text-blue-900 tracking-wider">
+              Create your <span className="text-orange-700">own</span> guide
+            </h1>
+          </div>
           {user && (
             <Button
               onClick={handleSignOut}
               variant="outline"
               size="sm"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 absolute right-4"
             >
               <LogOut className="h-4 w-4" />
               Esci
