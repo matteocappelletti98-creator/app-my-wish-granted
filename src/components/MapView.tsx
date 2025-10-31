@@ -495,7 +495,7 @@ export default function MapView({ places, selectedCategories = [], className, on
 
   return (
     <>
-      <div className="relative">
+      <div className={className ?? "relative h-[70vh] w-full"}>
         <style>{`
           @media (max-width: 768px) {
             .mapboxgl-ctrl-directions {
@@ -518,7 +518,7 @@ export default function MapView({ places, selectedCategories = [], className, on
             }
           }
         `}</style>
-        <div ref={containerRef} className={className ?? "h-[70vh] w-full rounded-2xl border"} />
+        <div ref={containerRef} className="absolute inset-0 w-full h-full rounded-2xl border" />
       </div>
       
       <Drawer open={!!selectedPlace} onOpenChange={(open) => !open && setSelectedPlace(null)}>
