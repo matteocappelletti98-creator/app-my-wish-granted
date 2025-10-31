@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Map, FileText, User } from "lucide-react";
+import { Home, Map, FileText, User, Footprints } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Nav() {
@@ -44,6 +44,22 @@ export default function Nav() {
         </Link>
 
         <Link
+          to="/profile"
+          className={`flex items-center justify-center w-12 h-12 rounded-xl transition-all active:scale-90 ${
+            active("/profile")
+              ? "bg-blue-600"
+              : ""
+          }`}
+        >
+          <User
+            className={`w-5 h-5 ${
+              active("/profile") ? "text-white" : "text-blue-400"
+            }`}
+            strokeWidth={active("/profile") ? 2 : 1.5}
+          />
+        </Link>
+
+        <Link
           to="/blog"
           className={`flex items-center justify-center w-12 h-12 rounded-xl transition-all active:scale-90 ${
             active("/blog")
@@ -60,18 +76,18 @@ export default function Nav() {
         </Link>
 
         <Link
-          to="/profile"
+          to="/traveller-path"
           className={`flex items-center justify-center w-12 h-12 rounded-xl transition-all active:scale-90 ${
-            active("/profile")
+            active("/traveller-path")
               ? "bg-blue-600"
               : ""
           }`}
         >
-          <User
+          <Footprints
             className={`w-5 h-5 ${
-              active("/profile") ? "text-white" : "text-blue-400"
+              active("/traveller-path") ? "text-white" : "text-blue-400"
             }`}
-            strokeWidth={active("/profile") ? 2 : 1.5}
+            strokeWidth={active("/traveller-path") ? 2 : 1.5}
           />
         </Link>
       </div>
