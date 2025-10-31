@@ -1,5 +1,4 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Map, FileText, User, Footprints } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Nav() {
@@ -19,12 +18,7 @@ export default function Nav() {
               : ""
           }`}
         >
-          <Home
-            className={`w-5 h-5 ${
-              active("/") ? "text-white" : "text-blue-400"
-            }`}
-            strokeWidth={active("/") ? 2 : 1.5}
-          />
+          <span className="text-2xl">🏠</span>
         </Link>
 
         <Link
@@ -35,12 +29,7 @@ export default function Nav() {
               : ""
           }`}
         >
-          <Map
-            className={`w-5 h-5 ${
-              active("/virtual-exploration") ? "text-white" : "text-blue-400"
-            }`}
-            strokeWidth={active("/virtual-exploration") ? 2 : 1.5}
-          />
+          <span className="text-2xl">🗺️</span>
         </Link>
 
         <Link
@@ -51,12 +40,7 @@ export default function Nav() {
               : ""
           }`}
         >
-          <User
-            className={`w-5 h-5 ${
-              active("/profile") ? "text-white" : "text-blue-400"
-            }`}
-            strokeWidth={active("/profile") ? 2 : 1.5}
-          />
+          <span className="text-2xl">👤</span>
         </Link>
 
         <Link
@@ -67,12 +51,7 @@ export default function Nav() {
               : ""
           }`}
         >
-          <FileText
-            className={`w-5 h-5 ${
-              active("/blog") ? "text-white" : "text-blue-400"
-            }`}
-            strokeWidth={active("/blog") ? 2 : 1.5}
-          />
+          <span className="text-2xl">📝</span>
         </Link>
 
         <Link
@@ -83,12 +62,7 @@ export default function Nav() {
               : ""
           }`}
         >
-          <Footprints
-            className={`w-5 h-5 ${
-              active("/traveller-path") ? "text-white" : "text-blue-400"
-            }`}
-            strokeWidth={active("/traveller-path") ? 2 : 1.5}
-          />
+          <span className="text-2xl">👣</span>
         </Link>
       </div>
     </nav>
