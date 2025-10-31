@@ -327,12 +327,24 @@ export default function Profile() {
 
       {/* User's Map */}
       <div ref={mapContainerRef} className="relative h-[50vh] border-b">
-        <MapView 
-          places={allPlaces}
-          className="absolute inset-0 w-full h-full"
-          favorites={favorites}
-          onToggleFavorite={toggleFavorite}
-        />
+        {favoritePlaces.length === 0 ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-muted/20">
+            <div className="text-center p-8">
+              <Heart className="h-16 w-16 mx-auto mb-4 text-muted-foreground/30" />
+              <h3 className="text-lg font-medium mb-2">La tua mappa è vuota</h3>
+              <p className="text-sm text-muted-foreground">
+                Scorri i luoghi qui sotto e aggiungili alla tua mappa personale
+              </p>
+            </div>
+          </div>
+        ) : (
+          <MapView 
+            places={favoritePlaces}
+            className="absolute inset-0 w-full h-full"
+            favorites={favorites}
+            onToggleFavorite={toggleFavorite}
+          />
+        )}
       </div>
 
       {/* Places List */}
