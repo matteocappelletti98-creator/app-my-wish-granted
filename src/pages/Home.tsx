@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import comoSponsor from "@/assets/como-sponsor.png";
+import valeoSponsor from "@/assets/valeo-sponsor.jpg";
 
 export default function Home() {
   const { language, setLanguage, t } = useLanguage();
@@ -94,9 +94,9 @@ export default function Home() {
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-blue-100/50 text-center mb-6">
             <p className="text-xs text-blue-600/70 font-light mb-4">Official Sponsor</p>
             <img 
-              src={comoSponsor} 
-              alt="Calcio Como 1907" 
-              className="w-40 h-auto mx-auto"
+              src={valeoSponsor} 
+              alt="Valeo Digital SA" 
+              className="w-48 h-auto mx-auto"
             />
           </div>
 
