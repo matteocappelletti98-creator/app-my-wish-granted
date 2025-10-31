@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { Map, List, FileText, Footprints, Clock, Settings, ChevronDown } from "lucide-react";
+import { Map, List, FileText, Footprints, Clock, Settings, ChevronDown, Instagram } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -105,6 +106,17 @@ export default function Home() {
               WE'VE MAPPED THE BEST OF COMO — EXPLORE IT, CREATE YOUR OWN GUIDE, READ OUR TIPS AND THE TRAVELER QUIZ
             </h2>
             <div className="mt-6 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
+            
+            {/* Join Community Button */}
+            <div className="mt-8">
+              <Button
+                onClick={() => window.open('https://www.instagram.com/truelocalcomo/', '_blank')}
+                className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 text-white font-medium px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
+              >
+                <Instagram className="w-6 h-6 mr-2" />
+                Join the Community
+              </Button>
+            </div>
           </div>
         </div>
       </header>
