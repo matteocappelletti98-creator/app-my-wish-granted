@@ -346,7 +346,69 @@ export default function Profile() {
             <h2 className="text-lg font-semibold">Aggiungi Luoghi</h2>
             
             <Dialog open={suggestionDialogOpen} onOpenChange={setSuggestionDialogOpen}>
-...
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" />
+                  sei un local?
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Suggerisci un Luogo</DialogTitle>
+                  <DialogDescription>
+                    Condividi con noi un posto speciale che conosci
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="suggestion-name">Nome *</Label>
+                    <Input
+                      id="suggestion-name"
+                      value={suggestionName}
+                      onChange={(e) => setSuggestionName(e.target.value)}
+                      placeholder="Il tuo nome"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="suggestion-email">Email *</Label>
+                    <Input
+                      id="suggestion-email"
+                      type="email"
+                      value={suggestionEmail}
+                      onChange={(e) => setSuggestionEmail(e.target.value)}
+                      placeholder="tua@email.com"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="suggestion-place">Nome del Luogo *</Label>
+                    <Input
+                      id="suggestion-place"
+                      value={suggestionPlace}
+                      onChange={(e) => setSuggestionPlace(e.target.value)}
+                      placeholder="Nome del posto"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="suggestion-message">Messaggio (opzionale)</Label>
+                    <Textarea
+                      id="suggestion-message"
+                      value={suggestionMessage}
+                      onChange={(e) => setSuggestionMessage(e.target.value)}
+                      placeholder="Raccontaci perché questo posto è speciale..."
+                      rows={4}
+                    />
+                  </div>
+                  
+                  <Button onClick={handleSendSuggestion} className="w-full">
+                    <Mail className="h-4 w-4 mr-2" />
+                    Invia Suggerimento
+                  </Button>
+                </div>
+              </DialogContent>
             </Dialog>
           </div>
           
