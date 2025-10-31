@@ -195,7 +195,7 @@ export default function Blog() {
                       : "bg-white/80 text-green-600 border border-green-200 hover:bg-green-50"
                   }`}
                 >
-                  Day Trip
+                  City+
                 </Button>
                 <Button 
                   onClick={() => toggleCategory("tip")}
