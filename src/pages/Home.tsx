@@ -101,9 +101,8 @@ export default function Home() {
 
           {/* Manifesto */}
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-blue-100/50 text-center">
-            <h2 className="text-5xl md:text-6xl font-bebas font-normal text-blue-900 leading-tight tracking-wide">
-              BE A TRAVELER<br />
-              NOT A TOURIST
+            <h2 className="text-3xl md:text-4xl font-bebas font-normal text-blue-900 leading-tight tracking-wide">
+              WE'VE MAPPED THE BEST OF COMO — EXPLORE IT, CREATE YOUR OWN GUIDE, AND TAKE THE TRAVELER QUIZ
             </h2>
             <div className="mt-6 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
           </div>

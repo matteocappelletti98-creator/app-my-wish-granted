@@ -1,10 +1,10 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LogOut, Heart, Plus, X, Mail } from "lucide-react";
+import { LogOut, Heart, Plus, X, Mail, Download } from "lucide-react";
 import { toast } from "sonner";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import MapView from "@/components/MapView";
@@ -14,6 +14,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
 
@@ -31,6 +33,7 @@ export default function Profile() {
   const [suggestionName, setSuggestionName] = useState("");
   const [suggestionPlace, setSuggestionPlace] = useState("");
   const [suggestionMessage, setSuggestionMessage] = useState("");
+  const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Set up auth state listener
@@ -210,6 +213,64 @@ export default function Profile() {
     setSuggestionDialogOpen(false);
   };
 
+  const handlePrintMap = async () => {
+    if (favoritePlaces.length === 0) {
+      toast.error("Aggiungi prima alcuni luoghi alla tua mappa");
+      return;
+    }
+
+    try {
+      toast.loading("Generazione PDF in corso...");
+      
+      if (!mapContainerRef.current) return;
+
+      // Cattura la mappa
+      const canvas = await html2canvas(mapContainerRef.current, {
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#ffffff",
+        scale: 2
+      });
+
+      // Crea il PDF
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "px",
+        format: [canvas.width, canvas.height]
+      });
+
+      pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+      
+      // Aggiungi lista dei luoghi
+      pdf.addPage();
+      pdf.setFontSize(20);
+      pdf.text("La Mia Guida", 40, 40);
+      
+      pdf.setFontSize(12);
+      let yPosition = 80;
+      favoritePlaces.forEach((place, index) => {
+        if (yPosition > 550) {
+          pdf.addPage();
+          yPosition = 40;
+        }
+        pdf.text(`${index + 1}. ${place.name}`, 40, yPosition);
+        pdf.setFontSize(10);
+        pdf.text(`   ${normalizeCategory(place.category)} - ${place.city || ""}`, 40, yPosition + 15);
+        yPosition += 40;
+        pdf.setFontSize(12);
+      });
+
+      pdf.save("la-mia-mappa-como.pdf");
+      toast.dismiss();
+      toast.success("PDF generato con successo!");
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.dismiss();
+      toast.error("Errore nella generazione del PDF");
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -229,30 +290,43 @@ export default function Profile() {
               {favorites.length} {favorites.length === 1 ? 'luogo selezionato' : 'luoghi selezionati'}
             </p>
           </div>
-          {user ? (
-            <Button
-              onClick={handleSignOut}
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <LogOut className="h-4 w-4" />
-              Esci
-            </Button>
-          ) : (
-            <Button
-              onClick={() => navigate("/user-auth")}
-              variant="outline"
-              size="sm"
-            >
-              Accedi
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            {favoritePlaces.length > 0 && (
+              <Button
+                onClick={handlePrintMap}
+                variant="default"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <Download className="h-4 w-4" />
+                Stampa
+              </Button>
+            )}
+            {user ? (
+              <Button
+                onClick={handleSignOut}
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                Esci
+              </Button>
+            ) : (
+              <Button
+                onClick={() => navigate("/user-auth")}
+                variant="outline"
+                size="sm"
+              >
+                Accedi
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
       {/* User's Map */}
-      <div className="relative h-[50vh] border-b">
+      <div ref={mapContainerRef} className="relative h-[50vh] border-b">
         {favoritePlaces.length === 0 ? (
           <div className="absolute inset-0 flex items-center justify-center bg-muted/20">
             <div className="text-center p-8">
