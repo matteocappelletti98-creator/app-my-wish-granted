@@ -8,7 +8,7 @@ export default function Nav() {
   const active = (p: string): boolean => location.pathname === p;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-t border-blue-100/30">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-blue-50/60 to-transparent backdrop-blur-md">
       <div className="flex justify-around items-center h-14 px-2 max-w-md mx-auto">
         <Link
           to="/"
