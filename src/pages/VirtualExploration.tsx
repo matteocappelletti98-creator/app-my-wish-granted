@@ -3,16 +3,20 @@ import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import MapView from "@/components/MapView";
 import PlaceCard from "@/components/PlaceCard";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
-import { Link } from "react-router-dom";
-import { Heart, MapPin } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Heart, MapPin, User } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { supabase } from "@/integrations/supabase/client";
+import { User as SupabaseUser, Session } from "@supabase/supabase-js";
+import { Button } from "@/components/ui/button";
 
 // Tuo CSV pubblicato
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
 
 export default function VirtualExploration() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [all, setAll] = useState<Place[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -20,26 +24,104 @@ export default function VirtualExploration() {
   const [overlay, setOverlay] = useState(false); // fullscreen overlay
   const [favorites, setFavorites] = useState<string[]>([]);
   const [userTravellerCodes, setUserTravellerCodes] = useState<number[]>([]);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
 
-  // Carica preferiti dal localStorage
+  // Auth listener
   useEffect(() => {
-    const saved = localStorage.getItem('explore-favorites');
-    if (saved) {
-      setFavorites(JSON.parse(saved));
-    }
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        setUser(session?.user ?? null);
+      }
+    );
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  // Salva preferiti nel localStorage
-  const saveFavorites = (newFavorites: string[]) => {
+  // Carica preferiti (database se loggato, altrimenti localStorage)
+  useEffect(() => {
+    const loadFavorites = async () => {
+      if (user) {
+        // Carica dal database
+        const { data, error } = await supabase
+          .from("user_favorites")
+          .select("place_id")
+          .eq("user_id", user.id);
+
+        if (error) {
+          console.error("Error loading favorites:", error);
+        } else {
+          setFavorites(data.map(f => f.place_id));
+        }
+      } else {
+        // Carica da localStorage
+        const saved = localStorage.getItem('explore-favorites');
+        if (saved) {
+          setFavorites(JSON.parse(saved));
+        }
+      }
+    };
+
+    loadFavorites();
+  }, [user]);
+
+  // Salva preferiti (database se loggato, altrimenti localStorage)
+  const saveFavorites = async (newFavorites: string[]) => {
     setFavorites(newFavorites);
-    localStorage.setItem('explore-favorites', JSON.stringify(newFavorites));
+    
+    if (user) {
+      // Non usiamo direttamente saveFavorites per il database
+      // La logica è gestita in toggleFavorite
+    } else {
+      localStorage.setItem('explore-favorites', JSON.stringify(newFavorites));
+    }
   };
 
-  const toggleFavorite = (placeId: string) => {
-    const newFavorites = favorites.includes(placeId)
-      ? favorites.filter(id => id !== placeId)
-      : [...favorites, placeId];
-    saveFavorites(newFavorites);
+  const toggleFavorite = async (placeId: string) => {
+    if (!user) {
+      // Non loggato: usa localStorage
+      const newFavorites = favorites.includes(placeId)
+        ? favorites.filter(id => id !== placeId)
+        : [...favorites, placeId];
+      setFavorites(newFavorites);
+      localStorage.setItem('explore-favorites', JSON.stringify(newFavorites));
+      return;
+    }
+
+    // Loggato: usa database
+    const isCurrentlyFavorite = favorites.includes(placeId);
+    
+    if (isCurrentlyFavorite) {
+      // Rimuovi dai preferiti
+      const { error } = await supabase
+        .from("user_favorites")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("place_id", placeId);
+
+      if (error) {
+        console.error("Error removing favorite:", error);
+      } else {
+        setFavorites(favorites.filter(id => id !== placeId));
+      }
+    } else {
+      // Aggiungi ai preferiti
+      const { error } = await supabase
+        .from("user_favorites")
+        .insert({ user_id: user.id, place_id: placeId });
+
+      if (error) {
+        console.error("Error adding favorite:", error);
+      } else {
+        setFavorites([...favorites, placeId]);
+      }
+    }
   };
 
   useEffect(() => {
@@ -135,9 +217,22 @@ export default function VirtualExploration() {
     <div className="min-h-screen bg-white">
       {/* Filtri categorie in alto - Sticky */}
       <div className="sticky top-0 z-40 bg-white border-b">
-        <div className="px-4 py-3 overflow-x-auto scrollbar-hide touch-pan-x">
-          <div className="inline-flex gap-1 min-w-full">
-            <button 
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-lg font-semibold text-gray-900">Esplora</h1>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => user ? navigate("/profile") : navigate("/user-auth")}
+              className="flex items-center gap-2"
+            >
+              <User className="h-4 w-4" />
+              {user ? "Profilo" : "Accedi"}
+            </Button>
+          </div>
+          <div className="overflow-x-auto scrollbar-hide touch-pan-x">
+            <div className="inline-flex gap-1 min-w-full">
+              <button
               onClick={() => setSelectedCategories([])}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
                 ${selectedCategories.length === 0 
@@ -162,6 +257,7 @@ export default function VirtualExploration() {
                 </span>
               </button>
             ))}
+            </div>
           </div>
         </div>
       </div>
