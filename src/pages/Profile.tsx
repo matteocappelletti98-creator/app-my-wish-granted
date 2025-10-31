@@ -427,17 +427,27 @@ export default function Profile() {
                         </Button>
                       </div>
                       
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-2 mb-2">
                         <span className="text-xs text-muted-foreground">
                           {normalizeCategory(place.category)}
                         </span>
                       </div>
                       
-                      {place.city && (
-                        <p className="text-xs text-muted-foreground truncate">
-                          📍 {place.city}
-                        </p>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {place.city && (
+                          <p className="text-xs text-muted-foreground truncate flex-1">
+                            📍 {place.city}
+                          </p>
+                        )}
+                        
+                        <Button
+                          size="sm"
+                          onClick={() => navigate(`/luogo/${place.slug}`)}
+                          className="bg-black hover:bg-black/90 text-white h-7 px-3 text-xs"
+                        >
+                          Apri luogo
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
