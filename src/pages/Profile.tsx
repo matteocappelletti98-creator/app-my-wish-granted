@@ -34,6 +34,7 @@ export default function Profile() {
   const [suggestionPlace, setSuggestionPlace] = useState("");
   const [suggestionMessage, setSuggestionMessage] = useState("");
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const [togglingFavorite, setTogglingFavorite] = useState<string | null>(null);
 
   useEffect(() => {
     // Set up auth state listener
@@ -100,54 +101,70 @@ export default function Profile() {
     navigate("/");
   };
 
-  const toggleFavorite = async (placeId: string) => {
-    const isCurrentlyFavorite = favorites.includes(placeId);
+  const toggleFavorite = async (placeId: string, event?: React.MouseEvent | React.TouchEvent) => {
+    // Previeni interazioni multiple
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     
-    if (!user) {
-      // Non-logged user: use localStorage
-      const newFavorites = isCurrentlyFavorite
-        ? favorites.filter(id => id !== placeId)
-        : [...favorites, placeId];
-      setFavorites(newFavorites);
-      localStorage.setItem('explore-favorites', JSON.stringify(newFavorites));
-      
-      if (isCurrentlyFavorite) {
-        toast.success("Rimosso dai preferiti");
-      } else {
-        toast.success("Aggiunto ai preferiti");
-      }
+    // Previeni doppi click
+    if (togglingFavorite === placeId) {
       return;
     }
-
-    // Logged user: use database
-    if (isCurrentlyFavorite) {
-      // Remove from favorites
-      const { error } = await supabase
-        .from("user_favorites")
-        .delete()
-        .eq("user_id", user.id)
-        .eq("place_id", placeId);
-
-      if (error) {
-        console.error("Error removing favorite:", error);
-        toast.error("Errore nella rimozione");
-      } else {
-        setFavorites(favorites.filter(id => id !== placeId));
-        toast.success("Rimosso dai preferiti");
+    
+    setTogglingFavorite(placeId);
+    const isCurrentlyFavorite = favorites.includes(placeId);
+    
+    try {
+      if (!user) {
+        // Non-logged user: use localStorage
+        const newFavorites = isCurrentlyFavorite
+          ? favorites.filter(id => id !== placeId)
+          : [...favorites, placeId];
+        setFavorites(newFavorites);
+        localStorage.setItem('explore-favorites', JSON.stringify(newFavorites));
+        
+        if (isCurrentlyFavorite) {
+          toast.success("Rimosso dai preferiti");
+        } else {
+          toast.success("Aggiunto ai preferiti");
+        }
+        return;
       }
-    } else {
-      // Add to favorites
-      const { error } = await supabase
-        .from("user_favorites")
-        .insert({ user_id: user.id, place_id: placeId });
 
-      if (error) {
-        console.error("Error adding favorite:", error);
-        toast.error("Errore nell'aggiunta");
+      // Logged user: use database
+      if (isCurrentlyFavorite) {
+        // Remove from favorites
+        const { error } = await supabase
+          .from("user_favorites")
+          .delete()
+          .eq("user_id", user.id)
+          .eq("place_id", placeId);
+
+        if (error) {
+          console.error("Error removing favorite:", error);
+          toast.error("Errore nella rimozione");
+        } else {
+          setFavorites(favorites.filter(id => id !== placeId));
+          toast.success("Rimosso dai preferiti");
+        }
       } else {
-        setFavorites([...favorites, placeId]);
-        toast.success("Aggiunto ai preferiti");
+        // Add to favorites
+        const { error } = await supabase
+          .from("user_favorites")
+          .insert({ user_id: user.id, place_id: placeId });
+
+        if (error) {
+          console.error("Error adding favorite:", error);
+          toast.error("Errore nell'aggiunta");
+        } else {
+          setFavorites([...favorites, placeId]);
+          toast.success("Aggiunto ai preferiti");
+        }
       }
+    } finally {
+      setTogglingFavorite(null);
     }
   };
 
@@ -458,10 +475,11 @@ export default function Profile() {
                         <Button
                           size="sm"
                           variant={isFavorite ? "default" : "outline"}
-                          onClick={() => toggleFavorite(place.id)}
-                          className="flex-shrink-0 h-8 w-8 p-0"
+                          onClick={(e) => toggleFavorite(place.id, e)}
+                          disabled={togglingFavorite === place.id}
+                          className="flex-shrink-0 h-10 w-10 p-0 touch-manipulation active:scale-95 transition-transform"
                         >
-                          <Heart className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />
+                          <Heart className={`h-5 w-5 ${isFavorite ? 'fill-current' : ''}`} />
                         </Button>
                       </div>
                       

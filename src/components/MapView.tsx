@@ -7,7 +7,7 @@ import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { X, MapPin, ChevronLeft, ChevronRight, Upload, Trash2, Search } from "lucide-react";
+import { X, MapPin, ChevronLeft, ChevronRight, Upload, Trash2, Search, Heart } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
@@ -822,14 +822,16 @@ export default function MapView({ places, selectedCategories = [], className, on
             <div className="grid grid-cols-3 gap-2 pt-2">
               <Button
                 variant="outline"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                   if (onToggleFavorite && selectedPlace) {
                     onToggleFavorite(selectedPlace.id);
                   }
                 }}
-                className="w-full"
+                className="w-full touch-manipulation active:scale-95 transition-transform min-h-[44px]"
               >
-                {favorites.includes(selectedPlace?.id || '') ? '❤️' : '🤍'}
+                <Heart className={`h-5 w-5 ${favorites.includes(selectedPlace?.id || '') ? 'fill-current' : ''}`} />
               </Button>
               
               <Button
