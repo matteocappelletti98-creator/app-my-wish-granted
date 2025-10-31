@@ -22,11 +22,11 @@ export default function Home() {
   }, []);
 
   const languages = [
-    { value: "it", label: "🇮🇹" },
-    { value: "en", label: "🇬🇧" },
-    { value: "fr", label: "🇫🇷" },
-    { value: "de", label: "🇩🇪" },
-    { value: "es", label: "🇪🇸" }
+    { value: "it", label: "IT" },
+    { value: "en", label: "EN" },
+    { value: "fr", label: "FR" },
+    { value: "de", label: "DE" },
+    { value: "es", label: "ES" }
   ];
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 relative overflow-hidden pb-20">
@@ -37,19 +37,41 @@ export default function Home() {
       </div>
 
       {/* Header - Mobile Optimized */}
-      <header className="relative z-10 px-4 py-6">
+      <header className="relative z-10 px-4 py-4">
         <div className="mx-auto max-w-md">
-          {/* Language Selector - Top Right */}
-          <div className="flex justify-end mb-6">
+          {/* Top Bar: Auth Buttons & Settings */}
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex gap-2">
+              <Link to="/auth">
+                <button className="px-4 py-2 text-sm text-blue-600 font-medium hover:text-blue-800 transition-colors active:scale-95">
+                  Accedi
+                </button>
+              </Link>
+              <Link to="/auth">
+                <button className="px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all active:scale-95">
+                  Registrati
+                </button>
+              </Link>
+            </div>
+            
+            <Link to="/impostazioni">
+              <button className="p-2 text-blue-600 hover:text-blue-800 transition-colors active:scale-95">
+                <Settings className="w-5 h-5" />
+              </button>
+            </Link>
+          </div>
+
+          {/* Language Selector */}
+          <div className="flex justify-center mb-6">
             <div className="flex gap-1 bg-white/70 backdrop-blur-sm rounded-xl p-1 border border-blue-100/50">
               {languages.map(lang => (
                 <button
                   key={lang.value}
                   onClick={() => setLanguage(lang.value as any)}
-                  className={`w-9 h-9 rounded-lg flex items-center justify-center text-lg transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                     language === lang.value 
-                      ? 'bg-blue-600 scale-105' 
-                      : 'bg-transparent hover:bg-blue-50'
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-transparent text-blue-600 hover:bg-blue-50'
                   }`}
                 >
                   {lang.label}

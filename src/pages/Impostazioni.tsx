@@ -3,97 +3,97 @@ import { ArrowLeft, Shield, User, Bell, Globe, Palette } from "lucide-react";
 
 export default function Impostazioni() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 pt-24 pb-8">
-      <div className="max-w-4xl mx-auto px-6">
-        {/* Header */}
-        <div className="mb-8">
-          <Link 
-            to="/" 
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-6"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Torna alla home
-          </Link>
-          <h1 className="text-4xl font-extralight text-blue-900 mb-2 tracking-wide">
-            Impostazioni
-          </h1>
-          <p className="text-blue-700/70 font-light">
-            Gestisci le tue preferenze e impostazioni dell'account
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 relative overflow-hidden pb-20">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-100/30 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-100/30 rounded-full blur-3xl"></div>
+      </div>
 
-        {/* Settings Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
-          {/* Privacy */}
-          <Link to="/privacy" className="group">
-            <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-8 border border-white/50 hover:bg-white/80 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Shield className="w-6 h-6 text-green-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-medium text-blue-900">Privacy</h3>
-                  <p className="text-blue-600/70 text-sm">Gestisci i tuoi consensi</p>
+      <div className="relative z-10 px-4 py-8">
+        <div className="mx-auto max-w-md">
+          {/* Header */}
+          <div className="mb-8">
+            <Link 
+              to="/" 
+              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-6 active:scale-95"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span className="text-sm font-medium">Indietro</span>
+            </Link>
+            <h1 className="text-4xl font-extralight text-blue-900 mb-2 tracking-wide">
+              Impostazioni
+            </h1>
+            <p className="text-blue-700/70 font-light text-sm">
+              Gestisci le tue preferenze
+            </p>
+          </div>
+
+          {/* Settings List */}
+          <div className="space-y-3">
+            
+            {/* Privacy */}
+            <Link to="/privacy">
+              <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-white/50 active:bg-white/90 shadow-lg transition-all active:scale-95">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Shield className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-medium text-blue-900">Privacy & Cookies</h3>
+                    <p className="text-blue-600/70 text-sm">Gestisci i tuoi consensi</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
+            </Link>
 
-          {/* Account */}
-          <div className="group cursor-pointer">
-            <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-8 border border-white/50 hover:bg-white/80 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            {/* Account */}
+            <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-white/50 active:bg-white/90 shadow-lg transition-all active:scale-95">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <User className="w-6 h-6 text-blue-600" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-medium text-blue-900">Account</h3>
+                <div className="flex-1">
+                  <h3 className="text-lg font-medium text-blue-900">Account</h3>
                   <p className="text-blue-600/70 text-sm">Informazioni personali</p>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Notifiche */}
-          <div className="group cursor-pointer">
-            <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-8 border border-white/50 hover:bg-white/80 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            {/* Notifiche */}
+            <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-white/50 active:bg-white/90 shadow-lg transition-all active:scale-95">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Bell className="w-6 h-6 text-orange-600" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-medium text-blue-900">Notifiche</h3>
+                <div className="flex-1">
+                  <h3 className="text-lg font-medium text-blue-900">Notifiche</h3>
                   <p className="text-blue-600/70 text-sm">Preferenze di notifica</p>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Lingua */}
-          <div className="group cursor-pointer">
-            <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-8 border border-white/50 hover:bg-white/80 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            {/* Lingua */}
+            <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-white/50 active:bg-white/90 shadow-lg transition-all active:scale-95">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Globe className="w-6 h-6 text-purple-600" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-medium text-blue-900">Lingua</h3>
+                <div className="flex-1">
+                  <h3 className="text-lg font-medium text-blue-900">Lingua</h3>
                   <p className="text-blue-600/70 text-sm">Preferenze linguistiche</p>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Tema */}
-          <div className="group cursor-pointer">
-            <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-8 border border-white/50 hover:bg-white/80 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-gray-100 to-slate-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            {/* Tema */}
+            <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-white/50 active:bg-white/90 shadow-lg transition-all active:scale-95">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-gray-100 to-slate-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Palette className="w-6 h-6 text-gray-600" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-medium text-blue-900">Tema</h3>
+                <div className="flex-1">
+                  <h3 className="text-lg font-medium text-blue-900">Tema</h3>
                   <p className="text-blue-600/70 text-sm">Aspetto dell'app</p>
                 </div>
               </div>
