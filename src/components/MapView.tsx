@@ -15,6 +15,19 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -44,6 +57,7 @@ export default function MapView({ places, selectedCategories = [], className, on
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [enlargedPhoto, setEnlargedPhoto] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
 
   // Funzione per navigare tra i luoghi della stessa categoria
   const navigateCategory = (direction: 'prev' | 'next') => {
@@ -495,56 +509,91 @@ export default function MapView({ places, selectedCategories = [], className, on
     };
   }, [onToggleFavorite, userLocation]);
 
-  // Funzione per cercare luoghi
-  const handleSearch = () => {
-    if (!searchQuery.trim() || !mapRef.current) return;
+  // Funzione per selezionare un luogo
+  const handleSelectPlace = (place: Place) => {
+    if (!mapRef.current) return;
+    
+    // Centra la mappa sul luogo selezionato
+    mapRef.current.flyTo({
+      center: [place.lng!, place.lat!],
+      zoom: 15,
+      duration: 1500
+    });
+    
+    // Apri il drawer del luogo
+    setSelectedPlace(place);
+    setSearchOpen(false);
+    setSearchQuery("");
+  };
+
+  // Filtra i luoghi per la ricerca
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return filtered;
     
     const query = searchQuery.toLowerCase();
-    const results = filtered.filter(p => 
+    return filtered.filter(p => 
       p.name.toLowerCase().includes(query) || 
       p.description?.toLowerCase().includes(query) ||
       p.address?.toLowerCase().includes(query) ||
       p.city?.toLowerCase().includes(query) ||
       normalizeCategory(p.category).toLowerCase().includes(query)
     );
-    
-    if (results.length > 0) {
-      const firstResult = results[0];
-      
-      // Centra la mappa sul primo risultato
-      mapRef.current.flyTo({
-        center: [firstResult.lng!, firstResult.lat!],
-        zoom: 15,
-        duration: 1500
-      });
-      
-      // Apri il drawer del primo risultato
-      setSelectedPlace(firstResult);
-    }
-  };
+  }, [searchQuery, filtered]);
 
   return (
     <>
       <div className={className ?? "relative h-[70vh] w-full"}>
         {/* Search Bar */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-md px-4">
-          <div className="flex gap-2 bg-background/95 backdrop-blur-sm rounded-full shadow-lg border p-2">
-            <Input
-              type="text"
-              placeholder="Cerca luoghi nella guida..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
-            />
-            <Button 
-              size="icon"
-              onClick={handleSearch}
-              className="rounded-full flex-shrink-0"
-            >
-              <Search className="h-4 w-4" />
-            </Button>
-          </div>
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-sm px-4">
+          <Popover open={searchOpen} onOpenChange={setSearchOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={searchOpen}
+                className="w-full justify-between bg-background/95 backdrop-blur-sm shadow-lg h-9 text-sm hover:bg-primary/10 border-primary/20"
+                onClick={() => setSearchOpen(true)}
+              >
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <Search className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+                  <span className="truncate text-muted-foreground">
+                    {searchQuery || "Cerca luoghi..."}
+                  </span>
+                </div>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+              <Command>
+                <CommandInput 
+                  placeholder="Cerca luoghi..." 
+                  value={searchQuery}
+                  onValueChange={setSearchQuery}
+                />
+                <CommandList>
+                  <CommandEmpty>Nessun luogo trovato.</CommandEmpty>
+                  <CommandGroup>
+                    {searchResults.slice(0, 10).map((place) => (
+                      <CommandItem
+                        key={place.id}
+                        value={place.name}
+                        onSelect={() => handleSelectPlace(place)}
+                        className="cursor-pointer"
+                      >
+                        <span className="mr-2">{categoryEmoji(place.category)}</span>
+                        <div className="flex flex-col flex-1 min-w-0">
+                          <span className="font-medium truncate">{place.name}</span>
+                          <span className="text-xs text-muted-foreground truncate">
+                            {normalizeCategory(place.category)}
+                            {place.city && ` • ${place.city}`}
+                          </span>
+                        </div>
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
         </div>
         
         <style>{`
