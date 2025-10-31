@@ -54,12 +54,12 @@ export default function Home() {
             </Link>
             <div className="flex gap-2">
               <Link to="/auth">
-                <button className="px-4 py-2 text-sm text-blue-600 font-medium hover:text-blue-800 transition-colors active:scale-95">
+                <button className="px-4 py-2 text-sm text-blue-900 font-bebas tracking-wide hover:text-blue-800 transition-colors active:scale-95">
                   Accedi
                 </button>
               </Link>
               <Link to="/auth">
-                <button className="px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all active:scale-95">
+                <button className="px-4 py-2 text-sm bg-blue-900 text-white font-bebas tracking-wide rounded-xl hover:bg-blue-800 transition-all active:scale-95">
                   Registrati
                 </button>
               </Link>
@@ -71,7 +71,7 @@ export default function Home() {
             <h1 className="text-6xl font-bebas font-normal text-blue-900 mb-3 tracking-wider">
               TRUE LOCAL
             </h1>
-            <p className="text-base text-blue-700/70 font-light tracking-wide mb-4">discover the city</p>
+            <p className="text-base text-blue-900 font-bebas tracking-wide mb-4">discover the city</p>
             
             {/* Language Selector Dropdown */}
             <div className="flex justify-center">
@@ -92,7 +92,7 @@ export default function Home() {
 
           {/* Sponsor Section */}
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-blue-100/50 text-center mb-6">
-            <p className="text-xs text-blue-600/70 font-light mb-4">Official Sponsor</p>
+            <p className="text-sm text-blue-900 font-bebas tracking-wide mb-4">Official Sponsor</p>
             <img 
               src={valeoSponsor} 
               alt="Valeo Digital SA" 
