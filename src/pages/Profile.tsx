@@ -346,80 +346,7 @@ export default function Profile() {
             <h2 className="text-lg font-semibold">Aggiungi Luoghi</h2>
             
             <Dialog open={suggestionDialogOpen} onOpenChange={setSuggestionDialogOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  Sei un local?
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-md">
-                <DialogHeader>
-                  <DialogTitle>Raccomanda un Luogo</DialogTitle>
-                  <DialogDescription>
-                    Sei un local e vuoi raccomandare un luogo? Inviaci il tuo suggerimento!
-                  </DialogDescription>
-                </DialogHeader>
-                
-                <div className="space-y-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="suggestion-name">
-                      Nome <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="suggestion-name"
-                      placeholder="Il tuo nome"
-                      value={suggestionName}
-                      onChange={(e) => setSuggestionName(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="suggestion-email">
-                      Email <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="suggestion-email"
-                      type="email"
-                      placeholder="tua@email.com"
-                      value={suggestionEmail}
-                      onChange={(e) => setSuggestionEmail(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="suggestion-place">
-                      Nome del Luogo <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="suggestion-place"
-                      placeholder="Es. Ristorante Da Mario"
-                      value={suggestionPlace}
-                      onChange={(e) => setSuggestionPlace(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="suggestion-message">
-                      Messaggio (opzionale)
-                    </Label>
-                    <Textarea
-                      id="suggestion-message"
-                      placeholder="Descrivi il luogo, cosa lo rende speciale, indirizzo..."
-                      value={suggestionMessage}
-                      onChange={(e) => setSuggestionMessage(e.target.value)}
-                      rows={4}
-                    />
-                  </div>
-
-                  <Button 
-                    onClick={handleSendSuggestion} 
-                    className="w-full"
-                  >
-                    <Mail className="h-4 w-4 mr-2" />
-                    Invia Suggerimento
-                  </Button>
-                </div>
-              </DialogContent>
+...
             </Dialog>
           </div>
           
@@ -461,9 +388,10 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Places Grid */}
-        <div className="grid gap-3">
-          {filteredPlaces.map(place => {
+        {/* Places Grid in ScrollArea */}
+        <ScrollArea className="h-[calc(100vh-28rem)]">
+          <div className="grid gap-3 pr-4">
+            {filteredPlaces.map(place => {
             const isFavorite = favorites.includes(place.id);
             return (
               <Card key={place.id} className="overflow-hidden">
@@ -520,7 +448,8 @@ export default function Profile() {
               </Card>
             );
           })}
-        </div>
+          </div>
+        </ScrollArea>
 
         {filteredPlaces.length === 0 && (
           <div className="text-center py-12 text-muted-foreground">
