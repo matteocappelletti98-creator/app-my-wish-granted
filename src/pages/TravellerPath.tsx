@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Check, ArrowLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, ArrowLeft, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link } from "react-router-dom";
@@ -276,41 +276,35 @@ export default function TravellerPath() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 pb-20">
+      <div className="max-w-4xl mx-auto px-4 py-4 md:py-8">
         
         {/* Header */}
-        <div className="mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-4">
+        <div className="mb-4 md:mb-8">
+          <Link to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-3 md:mb-4">
             <ArrowLeft className="w-4 h-4" />
-            {t('travellerPath.backToHome')}
+            <span className="text-sm">Home</span>
           </Link>
           
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
             <div>
-              <h1 className="text-3xl font-light text-blue-900 mb-2">{t('travellerPath.title')}</h1>
-              <p className="text-blue-600/70">{t('travellerPath.subtitle')}</p>
+              <h1 className="text-3xl md:text-4xl font-bebas text-blue-900 mb-1 tracking-wide">TRAVELLER PATH</h1>
               {getAnsweredQuestionsCount() > 0 && getAnsweredQuestionsCount() < questions.length && (
-                <p className="text-orange-600 text-sm mt-1">
-                  {t('travellerPath.continuing')}
+                <p className="text-orange-600 text-xs md:text-sm flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  In corso...
                 </p>
               )}
             </div>
             
-            <div className="text-sm text-blue-600/70">
-              {getAnsweredQuestionsCount()} / {questions.length} {t('travellerPath.questionsCompleted')}
+            <div className="text-xs md:text-sm text-blue-600/70 font-medium">
+              {getAnsweredQuestionsCount()} / {questions.length}
             </div>
           </div>
         </div>
 
         {/* Progress Bar */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-blue-600/70">{t('travellerPath.progress')}</span>
-            <span className="text-sm text-blue-600/70">
-              {Math.round((currentQuestionIndex + 1) / questions.length * 100)}%
-            </span>
-          </div>
+        <div className="mb-4 md:mb-8">
           <div className="w-full bg-blue-100/50 rounded-full h-2">
             <div 
               className="bg-gradient-to-r from-blue-600 to-indigo-600 h-2 rounded-full transition-all duration-300"
@@ -320,36 +314,40 @@ export default function TravellerPath() {
         </div>
 
         {/* Question Card */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-blue-100/50 shadow-lg">
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 md:p-8 border border-blue-100/50 shadow-lg">
           
           {/* Category */}
-          <div className="mb-6">
-            <span className="inline-block px-4 py-2 bg-blue-100/50 text-blue-700 rounded-full text-sm font-medium">
+          <div className="mb-4 md:mb-6">
+            <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-blue-100/50 text-blue-700 rounded-full text-xs md:text-sm font-medium">
               {currentQuestion.category}
             </span>
           </div>
 
           {/* Question */}
-          <h2 className="text-2xl font-light text-blue-900 mb-8">
+          <h2 className="text-xl md:text-2xl font-bebas text-blue-900 mb-6 md:mb-8 tracking-wide">
             {currentQuestion.question}
           </h2>
 
           {/* Answer Options */}
-          <div className="mb-8">
+          <div className="mb-6 md:mb-8">
             {currentQuestion.multiple ? (
-              <div className="space-y-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
                 {currentQuestion.options.map((option) => (
                   <label
                     key={option.value}
-                    className="flex items-center gap-3 p-4 bg-white/50 rounded-xl border border-blue-100/30 hover:bg-blue-50/50 transition-colors cursor-pointer"
+                    className={`flex items-center justify-center gap-2 p-3 md:p-4 rounded-xl border transition-all cursor-pointer text-center ${
+                      (currentAnswer as string[] || []).includes(option.value)
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                        : 'bg-white/50 text-blue-900 border-blue-100/30 hover:bg-blue-50/50'
+                    }`}
                   >
                     <input
                       type="checkbox"
                       checked={(currentAnswer as string[] || []).includes(option.value)}
                       onChange={() => handleAnswerChange(option.value)}
-                      className="w-4 h-4 text-blue-600 rounded border-blue-300 focus:ring-blue-200"
+                      className="hidden"
                     />
-                    <span className="text-blue-900">{option.label}</span>
+                    <span className="text-sm md:text-base font-medium">{option.label}</span>
                   </label>
                 ))}
               </div>
@@ -357,15 +355,19 @@ export default function TravellerPath() {
               <RadioGroup
                 value={currentAnswer as string || ""}
                 onValueChange={handleAnswerChange}
-                className="space-y-3"
+                className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3"
               >
                 {currentQuestion.options.map((option) => (
                   <label
                     key={option.value}
-                    className="flex items-center gap-3 p-4 bg-white/50 rounded-xl border border-blue-100/30 hover:bg-blue-50/50 transition-colors cursor-pointer"
+                    className={`flex items-center justify-center gap-2 p-3 md:p-4 rounded-xl border transition-all cursor-pointer text-center ${
+                      currentAnswer === option.value
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                        : 'bg-white/50 text-blue-900 border-blue-100/30 hover:bg-blue-50/50'
+                    }`}
                   >
-                    <RadioGroupItem value={option.value} />
-                    <span className="text-blue-900">{option.label}</span>
+                    <RadioGroupItem value={option.value} className="hidden" />
+                    <span className="text-sm md:text-base font-medium">{option.label}</span>
                   </label>
                 ))}
               </RadioGroup>
@@ -373,25 +375,26 @@ export default function TravellerPath() {
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <Button
               variant="outline"
               onClick={goToPreviousQuestion}
               disabled={currentQuestionIndex === 0}
-              className="flex items-center gap-2"
+              className="h-9 px-3 md:h-10 md:px-4"
+              size="sm"
             >
               <ChevronLeft className="w-4 h-4" />
-              {t('travellerPath.previous')}
             </Button>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
                 onClick={goToNextQuestion}
                 disabled={currentQuestionIndex === questions.length - 1}
-                className="text-blue-600"
+                className="text-blue-600 text-xs md:text-sm h-9 px-3 md:h-10 md:px-4"
+                size="sm"
               >
-                {t('travellerPath.skip')}
+                Skip
               </Button>
 
               {currentQuestionIndex === questions.length - 1 ? (
@@ -400,18 +403,19 @@ export default function TravellerPath() {
                     const codes = convertAnswersToCodes(answers);
                     alert(`Traveller Path completato! I tuoi codici: ${codes.join(', ')}`);
                   }}
-                  className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+                  className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 h-9 px-3 md:h-10 md:px-4 text-xs md:text-sm"
+                  size="sm"
                 >
                   <Check className="w-4 h-4" />
-                  {t('travellerPath.complete')}
+                  Completa
                 </Button>
               ) : (
                 <Button
                   onClick={goToNextQuestion}
                   disabled={currentQuestionIndex === questions.length - 1}
-                  className="flex items-center gap-2"
+                  className="h-9 px-3 md:h-10 md:px-4"
+                  size="sm"
                 >
-                  {t('travellerPath.next')}
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               )}
@@ -420,13 +424,13 @@ export default function TravellerPath() {
         </div>
 
         {/* Question Navigation Dots */}
-        <div className="mt-8 flex justify-center">
-          <div className="flex gap-2">
+        <div className="mt-6 md:mt-8 flex justify-center">
+          <div className="flex gap-1.5 md:gap-2 flex-wrap justify-center max-w-full px-2">
             {questions.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentQuestionIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
+                className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all flex-shrink-0 ${
                   index === currentQuestionIndex
                     ? 'bg-blue-600 scale-125'
                     : answers[questions[index].id]
