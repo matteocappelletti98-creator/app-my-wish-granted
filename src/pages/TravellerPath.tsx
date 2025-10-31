@@ -303,8 +303,8 @@ export default function TravellerPath() {
               <h1 className="text-6xl md:text-7xl font-bebas text-blue-900 mb-4 tracking-wide">
                 TRAVELLER PATH
               </h1>
-              <p className="text-lg md:text-xl text-blue-700 font-medium">
-                Il tuo viaggio personalizzato inizia qui
+              <p className="text-base md:text-lg text-blue-900 font-light max-w-lg mx-auto">
+                Answer a few quick questions and get a <span className="text-orange-700 font-medium">personalized</span> selection of places made just for you.
               </p>
             </div>
 
