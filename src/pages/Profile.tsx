@@ -195,8 +195,16 @@ export default function Profile() {
       );
     }
 
-    return filtered;
-  }, [allPlaces, searchQuery, selectedCategories]);
+    // Sort: favorites first
+    return filtered.sort((a, b) => {
+      const aIsFavorite = favorites.includes(a.id);
+      const bIsFavorite = favorites.includes(b.id);
+      
+      if (aIsFavorite && !bIsFavorite) return -1;
+      if (!aIsFavorite && bIsFavorite) return 1;
+      return 0;
+    });
+  }, [allPlaces, searchQuery, selectedCategories, favorites]);
 
   // Get unique categories
   const categories = useMemo(() => {
@@ -436,7 +444,7 @@ export default function Profile() {
             >
               Tutti
             </button>
-            {categories.slice(0, 10).map(cat => (
+            {categories.map(cat => (
               <button
                 key={cat}
                 onClick={() => toggleCategory(cat)}
