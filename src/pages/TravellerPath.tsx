@@ -314,7 +314,7 @@ export default function TravellerPath() {
         </div>
 
         {/* Question Card */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 md:p-8 border border-blue-100/50 shadow-lg flex flex-col min-h-[600px]">
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 md:p-8 border border-blue-100/50 shadow-lg flex flex-col" style={{ minHeight: 'calc(100vh - 250px)' }}>
           
           {/* Category */}
           <div className="mb-4 md:mb-6">
