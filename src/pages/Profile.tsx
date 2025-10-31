@@ -284,36 +284,18 @@ export default function Profile() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b">
         <div className="px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="text-4xl md:text-5xl font-bebas font-normal text-blue-900 tracking-wider">Create your own guide</h1>
-            <p className="text-xs text-muted-foreground whitespace-nowrap">
-              {favorites.length} {favorites.length === 1 ? 'luogo' : 'luoghi'}
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            {favoritePlaces.length > 0 && (
-              <Button
-                onClick={handlePrintMap}
-                variant="default"
-                size="sm"
-                className="flex items-center gap-2"
-              >
-                <Download className="h-4 w-4" />
-                Stampa
-              </Button>
-            )}
-            {user && (
-              <Button
-                onClick={handleSignOut}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-2"
-              >
-                <LogOut className="h-4 w-4" />
-                Esci
-              </Button>
-            )}
-          </div>
+          <h1 className="text-4xl md:text-5xl font-bebas font-normal text-blue-900 tracking-wider">Create your own guide</h1>
+          {user && (
+            <Button
+              onClick={handleSignOut}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              Esci
+            </Button>
+          )}
         </div>
       </div>
 
