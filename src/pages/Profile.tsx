@@ -286,7 +286,7 @@ export default function Profile() {
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex-1 text-center">
             <h1 className="text-4xl md:text-5xl font-bebas font-normal text-blue-900 tracking-wider">
-              Create your <span className="text-orange-700">own</span> guide
+              Create your <span className="text-orange-500">own</span> guide
             </h1>
           </div>
           {user && (
