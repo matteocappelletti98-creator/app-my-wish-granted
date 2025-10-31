@@ -217,22 +217,9 @@ export default function VirtualExploration() {
     <div className="min-h-screen bg-white">
       {/* Filtri categorie in alto - Sticky */}
       <div className="sticky top-0 z-40 bg-white border-b">
-        <div className="px-4 py-3">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-lg font-semibold text-gray-900">Esplora</h1>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => user ? navigate("/profile") : navigate("/user-auth")}
-              className="flex items-center gap-2"
-            >
-              <User className="h-4 w-4" />
-              {user ? "Profilo" : "Accedi"}
-            </Button>
-          </div>
-          <div className="overflow-x-auto scrollbar-hide touch-pan-x">
-            <div className="inline-flex gap-1 min-w-full">
-              <button
+        <div className="px-4 py-3 overflow-x-auto scrollbar-hide touch-pan-x">
+          <div className="inline-flex gap-1 min-w-full">
+            <button
               onClick={() => setSelectedCategories([])}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
                 ${selectedCategories.length === 0 
@@ -257,9 +244,20 @@ export default function VirtualExploration() {
                 </span>
               </button>
             ))}
-            </div>
           </div>
         </div>
+      </div>
+
+      {/* Fixed bottom button for user profile */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <Button
+          size="lg"
+          onClick={() => user ? navigate("/profile") : navigate("/user-auth")}
+          className="rounded-full shadow-lg flex items-center gap-2 bg-primary hover:bg-primary/90"
+        >
+          <User className="h-5 w-5" />
+          {user ? "Il Mio Profilo" : "Accedi"}
+        </Button>
       </div>
 
       {/* Mappa - Occupa la viewport disponibile */}

@@ -44,18 +44,25 @@ export default function Home() {
       {/* Header - Mobile Optimized */}
       <header className="relative z-10 px-4 py-4">
         <div className="mx-auto max-w-md">
-          {/* Top Bar: Auth Buttons */}
-          <div className="flex justify-end gap-2 mb-8">
-            <Link to="/auth">
-              <button className="px-4 py-2 text-sm text-blue-600 font-medium hover:text-blue-800 transition-colors active:scale-95">
-                Accedi
+          {/* Top Bar: Auth Buttons and Settings */}
+          <div className="flex justify-between items-center gap-2 mb-8">
+            <Link to="/impostazioni">
+              <button className="p-2 text-blue-600 hover:text-blue-800 transition-colors active:scale-95">
+                <Settings className="w-5 h-5" />
               </button>
             </Link>
-            <Link to="/auth">
-              <button className="px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all active:scale-95">
-                Registrati
-              </button>
-            </Link>
+            <div className="flex gap-2">
+              <Link to="/auth">
+                <button className="px-4 py-2 text-sm text-blue-600 font-medium hover:text-blue-800 transition-colors active:scale-95">
+                  Accedi
+                </button>
+              </Link>
+              <Link to="/auth">
+                <button className="px-4 py-2 text-sm bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all active:scale-95">
+                  Registrati
+                </button>
+              </Link>
+            </div>
           </div>
 
           {/* App Title */}

@@ -1,25 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, Heart, User as UserIcon, Mail } from "lucide-react";
+import { LogOut, Heart, Plus, X } from "lucide-react";
 import { toast } from "sonner";
-import { Place } from "@/lib/sheet";
-import PlaceCard from "@/components/PlaceCard";
+import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
+import MapView from "@/components/MapView";
+import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
 
 export default function Profile() {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [fullName, setFullName] = useState("");
-  const [saving, setSaving] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [allPlaces, setAllPlaces] = useState<Place[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   useEffect(() => {
     // Set up auth state listener
@@ -29,7 +32,7 @@ export default function Profile() {
         setUser(session?.user ?? null);
         
         if (!session) {
-          navigate("/auth");
+          navigate("/user-auth");
         }
       }
     );
@@ -41,33 +44,26 @@ export default function Profile() {
       setLoading(false);
       
       if (!session) {
-        navigate("/auth");
+        navigate("/user-auth");
       }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  // Load profile data
+  // Load all places
   useEffect(() => {
-    if (!user) return;
-
-    const loadProfile = async () => {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .maybeSingle();
-
-      if (error) {
-        console.error("Error loading profile:", error);
-      } else if (data) {
-        setFullName(data.full_name || "");
+    const loadPlaces = async () => {
+      try {
+        const data = await fetchPlacesFromSheet(CSV_URL);
+        setAllPlaces(data.filter(p => p.status === "published"));
+      } catch (error) {
+        console.error("Error loading places:", error);
       }
     };
 
-    loadProfile();
-  }, [user]);
+    loadPlaces();
+  }, []);
 
   // Load favorites
   useEffect(() => {
@@ -89,30 +85,89 @@ export default function Profile() {
     loadFavorites();
   }, [user]);
 
-  const handleUpdateProfile = async () => {
-    if (!user) return;
-
-    setSaving(true);
-    try {
-      const { error } = await supabase
-        .from("profiles")
-        .update({ full_name: fullName })
-        .eq("id", user.id);
-
-      if (error) throw error;
-
-      toast.success("Profilo aggiornato!");
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      toast.error("Errore nell'aggiornamento del profilo");
-    } finally {
-      setSaving(false);
-    }
-  };
-
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/");
+  };
+
+  const toggleFavorite = async (placeId: string) => {
+    if (!user) return;
+
+    const isCurrentlyFavorite = favorites.includes(placeId);
+    
+    if (isCurrentlyFavorite) {
+      // Remove from favorites
+      const { error } = await supabase
+        .from("user_favorites")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("place_id", placeId);
+
+      if (error) {
+        console.error("Error removing favorite:", error);
+        toast.error("Errore nella rimozione");
+      } else {
+        setFavorites(favorites.filter(id => id !== placeId));
+        toast.success("Rimosso dai preferiti");
+      }
+    } else {
+      // Add to favorites
+      const { error } = await supabase
+        .from("user_favorites")
+        .insert({ user_id: user.id, place_id: placeId });
+
+      if (error) {
+        console.error("Error adding favorite:", error);
+        toast.error("Errore nell'aggiunta");
+      } else {
+        setFavorites([...favorites, placeId]);
+        toast.success("Aggiunto ai preferiti");
+      }
+    }
+  };
+
+  // Get favorite places for the map
+  const favoritePlaces = useMemo(() => {
+    return allPlaces.filter(p => favorites.includes(p.id));
+  }, [allPlaces, favorites]);
+
+  // Filter places based on search and categories
+  const filteredPlaces = useMemo(() => {
+    let filtered = allPlaces;
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(p => 
+        p.name.toLowerCase().includes(query) ||
+        p.city?.toLowerCase().includes(query) ||
+        p.description?.toLowerCase().includes(query) ||
+        normalizeCategory(p.category).toLowerCase().includes(query)
+      );
+    }
+
+    // Category filter
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(p => 
+        selectedCategories.includes(normalizeCategory(p.category))
+      );
+    }
+
+    return filtered;
+  }, [allPlaces, searchQuery, selectedCategories]);
+
+  // Get unique categories
+  const categories = useMemo(() => {
+    const cats = new Set(allPlaces.map(p => normalizeCategory(p.category)).filter(Boolean));
+    return Array.from(cats);
+  }, [allPlaces]);
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories(prev => 
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
   };
 
   if (loading) {
@@ -125,124 +180,152 @@ export default function Profile() {
 
   if (!user) return null;
 
-  const initials = fullName
-    ? fullName.split(" ").map(n => n[0]).join("").toUpperCase()
-    : user.email?.[0].toUpperCase() || "U";
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 py-8 px-4">
-      <div className="max-w-4xl mx-auto space-y-6">
-        {/* Profile Card */}
-        <Card>
-          <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              <Avatar className="h-24 w-24">
-                <AvatarImage src="" />
-                <AvatarFallback className="text-2xl bg-primary text-primary-foreground">
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
-            </div>
-            <CardTitle className="text-2xl">Il Mio Profilo</CardTitle>
-            <CardDescription>Gestisci il tuo account e i tuoi luoghi preferiti</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Email (read-only) */}
-            <div className="space-y-2">
-              <Label htmlFor="email" className="flex items-center gap-2">
-                <Mail className="h-4 w-4" />
-                Email
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                value={user.email || ""}
-                disabled
-                className="bg-muted"
-              />
-            </div>
+    <div className="min-h-screen bg-background pb-20">
+      {/* Header */}
+      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b">
+        <div className="px-4 py-3 flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold">La Mia Mappa</h1>
+            <p className="text-xs text-muted-foreground">
+              {favorites.length} {favorites.length === 1 ? 'luogo selezionato' : 'luoghi selezionati'}
+            </p>
+          </div>
+          <Button
+            onClick={handleSignOut}
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-2"
+          >
+            <LogOut className="h-4 w-4" />
+            Esci
+          </Button>
+        </div>
+      </div>
 
-            {/* Full Name */}
-            <div className="space-y-2">
-              <Label htmlFor="fullName" className="flex items-center gap-2">
-                <UserIcon className="h-4 w-4" />
-                Nome Completo
-              </Label>
-              <Input
-                id="fullName"
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Inserisci il tuo nome"
-              />
+      {/* User's Map */}
+      <div className="relative h-[50vh] border-b">
+        {favoritePlaces.length === 0 ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-muted/20">
+            <div className="text-center p-8">
+              <Heart className="h-16 w-16 mx-auto mb-4 text-muted-foreground/30" />
+              <h3 className="text-lg font-medium mb-2">La tua mappa è vuota</h3>
+              <p className="text-sm text-muted-foreground">
+                Scorri i luoghi qui sotto e aggiungili alla tua mappa personale
+              </p>
             </div>
+          </div>
+        ) : (
+          <MapView 
+            places={favoritePlaces}
+            className="absolute inset-0 w-full h-full"
+            favorites={favorites}
+            onToggleFavorite={toggleFavorite}
+          />
+        )}
+      </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-3 pt-4">
-              <Button
-                onClick={handleUpdateProfile}
-                disabled={saving}
-                className="flex-1"
+      {/* Places List */}
+      <div className="px-4 py-4">
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold mb-3">Aggiungi Luoghi</h2>
+          
+          {/* Search */}
+          <Input
+            type="search"
+            placeholder="Cerca luoghi..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="mb-3"
+          />
+
+          {/* Category filters */}
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            <button
+              onClick={() => setSelectedCategories([])}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                selectedCategories.length === 0
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted hover:bg-muted/80'
+              }`}
+            >
+              Tutti
+            </button>
+            {categories.slice(0, 10).map(cat => (
+              <button
+                key={cat}
+                onClick={() => toggleCategory(cat)}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors flex items-center gap-1 ${
+                  selectedCategories.includes(cat)
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted hover:bg-muted/80'
+                }`}
               >
-                {saving ? "Salvataggio..." : "Salva Modifiche"}
-              </Button>
-              <Button
-                onClick={handleSignOut}
-                variant="outline"
-                className="flex items-center gap-2"
-              >
-                <LogOut className="h-4 w-4" />
-                Esci
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+                <CategoryBadge category={cat} />
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
 
-        {/* Favorites Card */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Heart className="h-5 w-5 text-red-500 fill-current" />
-              I Miei Luoghi Preferiti
-              <span className="text-sm text-muted-foreground font-normal">
-                ({favorites.length})
-              </span>
-            </CardTitle>
-            <CardDescription>
-              Luoghi che hai salvato come preferiti
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {favorites.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground">
-                <Heart className="h-12 w-12 mx-auto mb-3 opacity-20" />
-                <p className="text-lg font-medium mb-2">Nessun luogo preferito</p>
-                <p className="text-sm">
-                  Esplora la mappa e salva i tuoi luoghi preferiti
-                </p>
-                <Button
-                  onClick={() => navigate("/virtual-exploration")}
-                  className="mt-4"
-                  variant="outline"
-                >
-                  Esplora Ora
-                </Button>
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-muted-foreground mb-4">
-                  Hai {favorites.length} {favorites.length === 1 ? 'luogo preferito' : 'luoghi preferiti'}
-                </p>
-                <Button
-                  onClick={() => navigate("/virtual-exploration")}
-                  variant="outline"
-                >
-                  Vedi sulla Mappa
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        {/* Places Grid */}
+        <div className="grid gap-3">
+          {filteredPlaces.map(place => {
+            const isFavorite = favorites.includes(place.id);
+            return (
+              <Card key={place.id} className="overflow-hidden">
+                <CardContent className="p-4">
+                  <div className="flex gap-3">
+                    {place.image && (
+                      <img
+                        src={place.image}
+                        alt={place.name}
+                        className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+                      />
+                    )}
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <h3 className="font-semibold text-sm truncate">{place.name}</h3>
+                        <Button
+                          size="sm"
+                          variant={isFavorite ? "default" : "outline"}
+                          onClick={() => toggleFavorite(place.id)}
+                          className="flex-shrink-0 h-8 w-8 p-0"
+                        >
+                          {isFavorite ? (
+                            <X className="h-4 w-4" />
+                          ) : (
+                            <Plus className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 mb-1">
+                        <CategoryBadge category={place.category} />
+                        <span className="text-xs text-muted-foreground">
+                          {normalizeCategory(place.category)}
+                        </span>
+                      </div>
+                      
+                      {place.city && (
+                        <p className="text-xs text-muted-foreground truncate">
+                          📍 {place.city}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+
+        {filteredPlaces.length === 0 && (
+          <div className="text-center py-12 text-muted-foreground">
+            <p>Nessun luogo trovato</p>
+          </div>
+        )}
       </div>
     </div>
   );
