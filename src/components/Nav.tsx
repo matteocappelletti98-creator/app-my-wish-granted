@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Map, User, FileText } from "lucide-react";
+import { Home, Map, User, FileText, Compass } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import tpIcon from "@/assets/tp-icon.png";
 
 export default function Nav() {
   const location = useLocation();
@@ -84,12 +83,11 @@ export default function Nav() {
               : ""
           }`}
         >
-          <img 
-            src={tpIcon} 
-            alt="Traveller Path" 
-            className={`w-6 h-6 transition-all ${
-              active("/traveller-path") ? "opacity-100 scale-110" : "opacity-70"
+          <Compass
+            className={`w-5 h-5 ${
+              active("/traveller-path") ? "text-white" : "text-blue-400"
             }`}
+            strokeWidth={active("/traveller-path") ? 2 : 1.5}
           />
         </Link>
       </div>
