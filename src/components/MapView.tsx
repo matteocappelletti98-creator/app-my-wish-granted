@@ -58,6 +58,19 @@ export default function MapView({ places, selectedCategories = [], className, on
   const [enlargedPhoto, setEnlargedPhoto] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+  const [userAnswers, setUserAnswers] = useState<Record<string, any>>({});
+
+  // Carica le risposte del traveller path
+  useEffect(() => {
+    const savedAnswers = localStorage.getItem('traveller-path-answers');
+    if (savedAnswers) {
+      try {
+        setUserAnswers(JSON.parse(savedAnswers));
+      } catch (err) {
+        console.error("Errore caricamento risposte:", err);
+      }
+    }
+  }, []);
 
   // Funzione per navigare tra i luoghi della stessa categoria
   const navigateCategory = (direction: 'prev' | 'next') => {
@@ -540,6 +553,65 @@ export default function MapView({ places, selectedCategories = [], className, on
     );
   }, [searchQuery, filtered]);
 
+  // Trova la connessione TP per il luogo selezionato
+  const getTpConnection = () => {
+    if (!selectedPlace || !selectedPlace.tp_codes || selectedPlace.tp_codes.length === 0) {
+      return null;
+    }
+
+    // Mappa dei codici alle domande del Traveller Path
+    const codeToQuestionMap: Record<number, { question: string; label: string }> = {
+      1: { question: "Profilo", label: "Local" },
+      2: { question: "Profilo", label: "Traveler" },
+      10: { question: "Genere", label: "Maschio" },
+      11: { question: "Genere", label: "Femmina" },
+      12: { question: "Genere", label: "Altro" },
+      20: { question: "Età", label: "<18" },
+      21: { question: "Età", label: "18–24" },
+      22: { question: "Età", label: "25–34" },
+      23: { question: "Età", label: "35–49" },
+      24: { question: "Età", label: "50–64" },
+      25: { question: "Età", label: ">65" },
+      30: { question: "Inclinazione", label: "Avventura" },
+      31: { question: "Inclinazione", label: "Relax" },
+      32: { question: "Inclinazione", label: "Cultura" },
+      33: { question: "Inclinazione", label: "Shopping" },
+      34: { question: "Inclinazione", label: "Nightlife" },
+      35: { question: "Inclinazione", label: "Socializing" },
+      90: { question: "Nazionalità", label: "Europa" },
+      91: { question: "Nazionalità", label: "USA" },
+      92: { question: "Nazionalità", label: "Sud America" },
+      93: { question: "Nazionalità", label: "Asia" },
+      94: { question: "Nazionalità", label: "Africa" },
+      95: { question: "Nazionalità", label: "Middle East" },
+      110: { question: "Composizione", label: "Solo" },
+      111: { question: "Composizione", label: "Coppia" },
+      112: { question: "Composizione", label: "Gruppo" },
+      113: { question: "Composizione", label: "Famiglia" },
+      120: { question: "Budget", label: "Low" },
+      121: { question: "Budget", label: "Medium" },
+      122: { question: "Budget", label: "Premium" },
+    };
+
+    // Trova i codici che corrispondono tra il luogo e l'utente
+    const matchingCodes = selectedPlace.tp_codes.filter(code => 
+      userTravellerCodes.includes(code)
+    );
+
+    if (matchingCodes.length === 0) return null;
+
+    // Prendi il primo codice corrispondente
+    const matchingCode = matchingCodes[0];
+    const connection = codeToQuestionMap[matchingCode];
+
+    if (!connection) return null;
+
+    return {
+      question: connection.question,
+      answer: connection.label
+    };
+  };
+
   return (
     <>
       <div className={className ?? "relative h-[70vh] w-full"}>
@@ -674,6 +746,27 @@ export default function MapView({ places, selectedCategories = [], className, on
                 <span>📍</span> {selectedPlace.address}
               </p>
             )}
+
+            {/* TP Connection */}
+            {(() => {
+              const tpConnection = getTpConnection();
+              if (tpConnection) {
+                return (
+                  <div className="bg-primary/10 rounded-lg p-3 border border-primary/20">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs font-semibold text-primary uppercase tracking-wide">
+                        ✨ TP Connection
+                      </span>
+                    </div>
+                    <p className="text-sm text-foreground">
+                      <span className="font-medium">{tpConnection.question}:</span>{' '}
+                      <span className="text-muted-foreground">{tpConnection.answer}</span>
+                    </p>
+                  </div>
+                );
+              }
+              return null;
+            })()}
 
             {/* Photo Gallery */}
             <div className="space-y-2">
