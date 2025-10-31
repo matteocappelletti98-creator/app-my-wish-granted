@@ -250,7 +250,10 @@ export default function Profile() {
       {/* Places List */}
       <div className="px-4 py-4">
         <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-3">Aggiungi Luoghi</h2>
+          <h2 className="text-lg font-semibold mb-1">Aggiungi Luoghi</h2>
+          <p className="text-sm text-muted-foreground mb-3">
+            Sei un local e vuoi raccomandare un luogo?
+          </p>
           
           {/* Search */}
           <Input
