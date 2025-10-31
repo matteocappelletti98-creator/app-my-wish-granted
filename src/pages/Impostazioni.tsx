@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, Shield, User, Bell, Globe, Palette } from "lucide-react";
+import { ArrowLeft, Shield, User, Globe } from "lucide-react";
 
 export default function Impostazioni() {
   return (
@@ -60,19 +60,6 @@ export default function Impostazioni() {
               </div>
             </div>
 
-            {/* Notifiche */}
-            <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-white/50 active:bg-white/90 shadow-lg transition-all active:scale-95">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-100 to-yellow-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Bell className="w-6 h-6 text-orange-600" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-medium text-blue-900">Notifiche</h3>
-                  <p className="text-blue-600/70 text-sm">Preferenze di notifica</p>
-                </div>
-              </div>
-            </div>
-
             {/* Lingua */}
             <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-white/50 active:bg-white/90 shadow-lg transition-all active:scale-95">
               <div className="flex items-center gap-4">
@@ -82,19 +69,6 @@ export default function Impostazioni() {
                 <div className="flex-1">
                   <h3 className="text-lg font-medium text-blue-900">Lingua</h3>
                   <p className="text-blue-600/70 text-sm">Preferenze linguistiche</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Tema */}
-            <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-white/50 active:bg-white/90 shadow-lg transition-all active:scale-95">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-gray-100 to-slate-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Palette className="w-6 h-6 text-gray-600" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-medium text-blue-900">Tema</h3>
-                  <p className="text-blue-600/70 text-sm">Aspetto dell'app</p>
                 </div>
               </div>
             </div>
