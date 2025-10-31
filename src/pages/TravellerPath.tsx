@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Check, ArrowLeft, Clock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, ArrowLeft, Clock, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link } from "react-router-dom";
@@ -290,61 +290,46 @@ export default function TravellerPath() {
   // Show intro screen
   if (showIntro) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 pb-20">
-        <div className="max-w-3xl mx-auto px-4 py-8 md:py-16">
-          <Link to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-8">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 pb-20 flex items-center justify-center">
+        <div className="max-w-2xl mx-auto px-4">
+          <Link to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-8 absolute top-8 left-4">
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm">Home</span>
           </Link>
 
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 md:p-12 border border-blue-100/50 shadow-lg">
-            <div className="text-center mb-8">
-              <h1 className="text-5xl md:text-6xl font-bebas text-blue-900 mb-4 tracking-wide">
+          <div className="text-center animate-fade-in">
+            <div className="mb-8">
+              <Compass className="w-20 h-20 md:w-24 md:h-24 mx-auto text-blue-600 mb-6 animate-pulse" />
+              <h1 className="text-6xl md:text-7xl font-bebas text-blue-900 mb-4 tracking-wide">
                 TRAVELLER PATH
               </h1>
-              <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto rounded-full mb-8" />
+              <p className="text-lg md:text-xl text-blue-700 font-medium">
+                Il tuo viaggio personalizzato inizia qui
+              </p>
             </div>
 
-            <div className="space-y-6 text-blue-900/80 leading-relaxed">
-              <p className="text-lg md:text-xl text-center">
-                Benvenuto nel <strong className="text-blue-700">Traveller Path</strong>, 
-                il percorso personalizzato che ci aiuta a conoscerti meglio.
-              </p>
-              
-              <div className="bg-blue-50/50 rounded-xl p-6 border border-blue-100/50">
-                <h2 className="text-xl font-semibold text-blue-800 mb-3">
-                  Come funziona?
-                </h2>
-                <ul className="space-y-3 text-base">
-                  <li className="flex items-start gap-3">
-                    <span className="text-blue-600 font-bold mt-1">1.</span>
-                    <span>Rispondi ad alcune domande sulle tue preferenze di viaggio</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-blue-600 font-bold mt-1">2.</span>
-                    <span>Condividi i tuoi gusti in fatto di cucina, cultura e attività</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="text-blue-600 font-bold mt-1">3.</span>
-                    <span>Ricevi suggerimenti personalizzati su misura per te</span>
-                  </li>
-                </ul>
+            <div className="grid grid-cols-3 gap-4 md:gap-6 mb-12 max-w-lg mx-auto">
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-blue-100/50 hover:scale-105 transition-transform">
+                <div className="text-3xl md:text-4xl font-bebas text-blue-600 mb-1">12</div>
+                <div className="text-xs md:text-sm text-blue-700">Domande</div>
               </div>
-
-              <p className="text-center text-sm text-blue-600/70">
-                Le tue risposte verranno salvate automaticamente. Puoi completare il questionario in qualsiasi momento.
-              </p>
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-blue-100/50 hover:scale-105 transition-transform">
+                <div className="text-3xl md:text-4xl font-bebas text-blue-600 mb-1">3</div>
+                <div className="text-xs md:text-sm text-blue-700">Minuti</div>
+              </div>
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-blue-100/50 hover:scale-105 transition-transform">
+                <div className="text-3xl md:text-4xl font-bebas text-blue-600 mb-1">∞</div>
+                <div className="text-xs md:text-sm text-blue-700">Esperienze</div>
+              </div>
             </div>
 
-            <div className="mt-10 flex justify-center">
-              <Button
-                onClick={handleStartQuestionnaire}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
-              >
-                Inizia il Percorso
-                <ChevronRight className="w-5 h-5 ml-2" />
-              </Button>
-            </div>
+            <Button
+              onClick={handleStartQuestionnaire}
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-12 py-7 text-xl font-bebas rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all tracking-wide"
+            >
+              INIZIA
+              <ChevronRight className="w-6 h-6 ml-2" />
+            </Button>
           </div>
         </div>
       </div>
