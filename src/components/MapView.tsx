@@ -6,7 +6,8 @@ import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 import { Button } from "@/components/ui/button";
-import { X, MapPin, ChevronLeft, ChevronRight, Upload, Trash2 } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { X, MapPin, ChevronLeft, ChevronRight, Upload, Trash2, Search } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
@@ -42,6 +43,7 @@ export default function MapView({ places, selectedCategories = [], className, on
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [enlargedPhoto, setEnlargedPhoto] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Funzione per navigare tra i luoghi della stessa categoria
   const navigateCategory = (direction: 'prev' | 'next') => {
@@ -493,9 +495,58 @@ export default function MapView({ places, selectedCategories = [], className, on
     };
   }, [onToggleFavorite, userLocation]);
 
+  // Funzione per cercare luoghi
+  const handleSearch = () => {
+    if (!searchQuery.trim() || !mapRef.current) return;
+    
+    const query = searchQuery.toLowerCase();
+    const results = filtered.filter(p => 
+      p.name.toLowerCase().includes(query) || 
+      p.description?.toLowerCase().includes(query) ||
+      p.address?.toLowerCase().includes(query) ||
+      p.city?.toLowerCase().includes(query) ||
+      normalizeCategory(p.category).toLowerCase().includes(query)
+    );
+    
+    if (results.length > 0) {
+      const firstResult = results[0];
+      
+      // Centra la mappa sul primo risultato
+      mapRef.current.flyTo({
+        center: [firstResult.lng!, firstResult.lat!],
+        zoom: 15,
+        duration: 1500
+      });
+      
+      // Apri il drawer del primo risultato
+      setSelectedPlace(firstResult);
+    }
+  };
+
   return (
     <>
       <div className={className ?? "relative h-[70vh] w-full"}>
+        {/* Search Bar */}
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-md px-4">
+          <div className="flex gap-2 bg-background/95 backdrop-blur-sm rounded-full shadow-lg border p-2">
+            <Input
+              type="text"
+              placeholder="Cerca luoghi nella guida..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+            />
+            <Button 
+              size="icon"
+              onClick={handleSearch}
+              className="rounded-full flex-shrink-0"
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+        
         <style>{`
           @media (max-width: 768px) {
             .mapboxgl-ctrl-directions {
