@@ -18,22 +18,23 @@ export default function App() {
   return (
     <BrowserRouter>
       <Nav />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/virtual-exploration" element={<VirtualExploration />} />
-        <Route path="/luoghi" element={<Luoghi />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/luogo/:slug" element={<LuogoDetail />} />
-        <Route path="/articolo/:slug" element={<ArticlePage />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/user-auth" element={<UserAuth />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/traveller-path" element={<TravellerPath />} />
-        <Route path="/impostazioni" element={<Impostazioni />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="*" element={<Navigate to="/" />} />
-        
-      </Routes>
+      <div className="pb-20">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/virtual-exploration" element={<VirtualExploration />} />
+          <Route path="/luoghi" element={<Luoghi />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/luogo/:slug" element={<LuogoDetail />} />
+          <Route path="/articolo/:slug" element={<ArticlePage />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/user-auth" element={<UserAuth />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/traveller-path" element={<TravellerPath />} />
+          <Route path="/impostazioni" element={<Impostazioni />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }
