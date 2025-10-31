@@ -335,7 +335,7 @@ export default function TravellerPath() {
                 {currentQuestion.options.map((option) => (
                   <label
                     key={option.value}
-                    className={`flex items-center justify-center gap-2 p-3 md:p-4 rounded-xl border transition-all cursor-pointer text-center ${
+                    className={`flex items-center justify-center gap-2 p-4 md:p-6 rounded-xl border transition-all cursor-pointer text-center min-h-[60px] md:min-h-[80px] ${
                       (currentAnswer as string[] || []).includes(option.value)
                         ? 'bg-blue-600 text-white border-blue-600 shadow-md'
                         : 'bg-white/50 text-blue-900 border-blue-100/30 hover:bg-blue-50/50'
@@ -360,7 +360,7 @@ export default function TravellerPath() {
                 {currentQuestion.options.map((option) => (
                   <label
                     key={option.value}
-                    className={`flex items-center justify-center gap-2 p-3 md:p-4 rounded-xl border transition-all cursor-pointer text-center ${
+                    className={`flex items-center justify-center gap-2 p-4 md:p-6 rounded-xl border transition-all cursor-pointer text-center min-h-[60px] md:min-h-[80px] ${
                       currentAnswer === option.value
                         ? 'bg-blue-600 text-white border-blue-600 shadow-md'
                         : 'bg-white/50 text-blue-900 border-blue-100/30 hover:bg-blue-50/50'
