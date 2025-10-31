@@ -297,14 +297,13 @@ export default function Profile() {
             return (
               <Card key={place.id} className="overflow-hidden">
                 <CardContent className="p-4">
-                  <div className="flex gap-3">
-                    {place.image && (
-                      <img
-                        src={place.image}
-                        alt={place.name}
-                        className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
-                      />
-                    )}
+                  <div className="flex gap-3 items-center">
+                    {/* Category Icon */}
+                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <span className="text-2xl">
+                        <CategoryBadge category={place.category} />
+                      </span>
+                    </div>
                     
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2 mb-1">
@@ -324,7 +323,6 @@ export default function Profile() {
                       </div>
                       
                       <div className="flex items-center gap-2 mb-1">
-                        <CategoryBadge category={place.category} />
                         <span className="text-xs text-muted-foreground">
                           {normalizeCategory(place.category)}
                         </span>
