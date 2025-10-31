@@ -198,7 +198,7 @@ export default function Profile() {
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b">
         <div className="px-4 py-3 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold">La Mia Mappa</h1>
+            <h1 className="text-xl font-semibold">Create your own guide</h1>
             <p className="text-xs text-muted-foreground">
               {favorites.length} {favorites.length === 1 ? 'luogo selezionato' : 'luoghi selezionati'}
             </p>
