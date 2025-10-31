@@ -60,17 +60,17 @@ export default function Blog() {
     const filteredArticles = filterArticles(categoryArticles);
     
     return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {filteredArticles.length === 0 ? (
-        <div className="col-span-full text-center py-12">
-          <p className="text-blue-700/70 text-lg font-light">
+        <div className="col-span-full text-center py-8 sm:py-12">
+          <p className="text-blue-700/70 text-base sm:text-lg font-light px-4">
             {searchQuery.trim() ? "Nessun articolo trovato per la ricerca" : "Nessun articolo disponibile in questa categoria"}
           </p>
         </div>
       ) : (
         filteredArticles.map(article => (
           <Link key={article.id} to={`/articolo/${article.slug}`}>
-            <Card className="group overflow-hidden bg-white/60 backdrop-blur-lg border border-blue-100/50 hover:bg-white/80 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-2 rounded-3xl h-full">
+            <Card className="group overflow-hidden bg-white/60 backdrop-blur-lg border border-blue-100/50 hover:bg-white/80 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-1 sm:hover:-translate-y-2 rounded-3xl h-full">
               {article.cover && (
                 <div className="aspect-[4/3] overflow-hidden">
                   <img 
@@ -80,8 +80,8 @@ export default function Blog() {
                   />
                 </div>
               )}
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg font-light leading-tight text-blue-900 hover:text-blue-600 cursor-pointer transition-colors duration-300 tracking-wide">
+              <CardHeader className="pb-3 px-4 sm:px-6">
+                <CardTitle className="text-base sm:text-lg font-light leading-tight text-blue-900 hover:text-blue-600 cursor-pointer transition-colors duration-300 tracking-wide">
                   {article.titolo}
                 </CardTitle>
                 {article.tags && article.tags.length > 0 && (
@@ -94,8 +94,8 @@ export default function Blog() {
                   </div>
                 )}
               </CardHeader>
-              <CardContent className="space-y-3 pt-0">
-                <div className="flex items-center gap-3 text-xs text-blue-600/60">
+              <CardContent className="space-y-3 pt-0 px-4 sm:px-6 pb-4">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-blue-600/60">
                   {article.autore && (
                     <div className="flex items-center gap-1">
                       <User className="w-3 h-3" />
@@ -116,7 +116,7 @@ export default function Blog() {
                       {article.tipo}
                     </Badge>
                   </div>
-                  <Button variant="outline" size="sm" className="bg-white/80 border-blue-100/50 text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 rounded-xl font-light">
+                  <Button variant="outline" size="sm" className="bg-white/80 border-blue-100/50 text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 rounded-xl font-light text-xs sm:text-sm">
                     {t('blog.read')}
                   </Button>
                 </div>
@@ -139,21 +139,21 @@ export default function Blog() {
 
       {/* Header */}
       <header className="relative z-10 bg-white/70 backdrop-blur-sm border-b border-blue-100/50">
-        <div className="px-6 py-16">
+        <div className="px-4 sm:px-6 py-8 sm:py-16">
           <div className="mx-auto max-w-6xl">
-            <div className="text-center mb-16">
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <h1 className="text-8xl md:text-9xl font-extralight text-blue-900 tracking-wider">
+            <div className="text-center mb-8 sm:mb-16">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+                <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bebas font-normal text-blue-900 tracking-wider">
                   Blog
                 </h1>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button 
                       variant="outline" 
-                      size="lg"
-                      className="bg-white/80 backdrop-blur-sm border-blue-100/50 hover:bg-blue-50 rounded-2xl px-6 py-6 text-lg"
+                      size="sm"
+                      className="bg-white/80 backdrop-blur-sm border-blue-100/50 hover:bg-blue-50 rounded-2xl px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base"
                     >
-                      <Languages className="w-5 h-5 mr-2" />
+                      <Languages className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                       {languageLabels[language]}
                     </Button>
                   </DropdownMenuTrigger>
@@ -176,10 +176,10 @@ export default function Blog() {
               </div>
               
               {/* Category Navigation Buttons */}
-              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center mb-8 sm:mb-12 px-4 sm:px-0">
                 <Button 
                   onClick={() => toggleCategory("faq")}
-                  className={`font-medium tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl ${
+                  className={`w-full sm:w-auto font-bebas font-normal tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-8 sm:px-12 py-4 sm:py-6 text-xl sm:text-2xl ${
                     selectedCategories.includes("faq") 
                       ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700" 
                       : "bg-white/80 text-blue-600 border border-blue-200 hover:bg-blue-50"
@@ -189,7 +189,7 @@ export default function Blog() {
                 </Button>
                 <Button 
                   onClick={() => toggleCategory("daytrip")}
-                  className={`font-medium tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl ${
+                  className={`w-full sm:w-auto font-bebas font-normal tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-8 sm:px-12 py-4 sm:py-6 text-xl sm:text-2xl ${
                     selectedCategories.includes("daytrip") 
                       ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700" 
                       : "bg-white/80 text-green-600 border border-green-200 hover:bg-green-50"
@@ -199,7 +199,7 @@ export default function Blog() {
                 </Button>
                 <Button 
                   onClick={() => toggleCategory("tip")}
-                  className={`font-medium tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-12 py-6 text-2xl ${
+                  className={`w-full sm:w-auto font-bebas font-normal tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-8 sm:px-12 py-4 sm:py-6 text-xl sm:text-2xl ${
                     selectedCategories.includes("tip") 
                       ? "bg-gradient-to-r from-purple-600 to-violet-600 text-white hover:from-purple-700 hover:to-violet-700" 
                       : "bg-white/80 text-purple-600 border border-purple-200 hover:bg-purple-50"
@@ -211,14 +211,14 @@ export default function Blog() {
             </div>
             
             {/* Search */}
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-2xl mx-auto px-4 sm:px-0">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-600/40 w-5 h-5" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-600/40 w-4 h-4 sm:w-5 sm:h-5" />
                 <Input
                   placeholder="Cerca articoli..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 py-4 bg-white/80 backdrop-blur-sm border-blue-100/50 rounded-2xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
+                  className="pl-10 sm:pl-12 py-3 sm:py-4 bg-white/80 backdrop-blur-sm border-blue-100/50 rounded-2xl text-blue-900 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
                 />
               </div>
             </div>
@@ -227,7 +227,7 @@ export default function Blog() {
       </header>
 
       {/* Content */}
-      <main className="relative z-10 px-6 py-12">
+      <main className="relative z-10 px-4 sm:px-6 py-8 sm:py-12">
         <div className="mx-auto max-w-6xl">
           {/* Render articles based on selected categories */}
           <div className="space-y-8">
