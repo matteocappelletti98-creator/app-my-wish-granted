@@ -314,12 +314,12 @@ export default function TravellerPath() {
                 <div className="text-xs md:text-sm text-blue-700">Domande</div>
               </div>
               <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-blue-100/50 hover:scale-105 transition-transform">
-                <div className="text-3xl md:text-4xl font-bebas text-blue-600 mb-1">3</div>
-                <div className="text-xs md:text-sm text-blue-700">Minuti</div>
+                <div className="text-3xl md:text-4xl font-bebas text-blue-600 mb-1">98</div>
+                <div className="text-xs md:text-sm text-blue-700">Associazioni</div>
               </div>
               <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-blue-100/50 hover:scale-105 transition-transform">
-                <div className="text-3xl md:text-4xl font-bebas text-blue-600 mb-1">∞</div>
-                <div className="text-xs md:text-sm text-blue-700">Esperienze</div>
+                <div className="text-3xl md:text-4xl font-bebas text-blue-600 mb-1">0</div>
+                <div className="text-xs md:text-sm text-blue-700">Errori</div>
               </div>
             </div>
 
