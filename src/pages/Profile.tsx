@@ -4,13 +4,16 @@ import { User, Session } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LogOut, Heart, Plus, X } from "lucide-react";
+import { LogOut, Heart, Plus, X, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import MapView from "@/components/MapView";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
 
@@ -23,6 +26,11 @@ export default function Profile() {
   const [allPlaces, setAllPlaces] = useState<Place[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [suggestionDialogOpen, setSuggestionDialogOpen] = useState(false);
+  const [suggestionEmail, setSuggestionEmail] = useState("");
+  const [suggestionName, setSuggestionName] = useState("");
+  const [suggestionPlace, setSuggestionPlace] = useState("");
+  const [suggestionMessage, setSuggestionMessage] = useState("");
 
   useEffect(() => {
     // Set up auth state listener
@@ -184,6 +192,24 @@ export default function Profile() {
     );
   };
 
+  const handleSendSuggestion = async () => {
+    if (!suggestionEmail || !suggestionName || !suggestionPlace) {
+      toast.error("Compila tutti i campi obbligatori");
+      return;
+    }
+
+    // Per ora solo mostriamo un messaggio di successo
+    // In futuro si potrà collegare a un edge function con Resend
+    toast.success("Suggerimento inviato! Ti contatteremo presto.");
+    
+    // Reset form
+    setSuggestionEmail("");
+    setSuggestionName("");
+    setSuggestionPlace("");
+    setSuggestionMessage("");
+    setSuggestionDialogOpen(false);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -250,10 +276,86 @@ export default function Profile() {
       {/* Places List */}
       <div className="px-4 py-4">
         <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-1">Aggiungi Luoghi</h2>
-          <p className="text-sm text-muted-foreground mb-3">
-            Sei un local e vuoi raccomandare un luogo?
-          </p>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold">Aggiungi Luoghi</h2>
+            
+            <Dialog open={suggestionDialogOpen} onOpenChange={setSuggestionDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  Sei un local?
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Raccomanda un Luogo</DialogTitle>
+                  <DialogDescription>
+                    Sei un local e vuoi raccomandare un luogo? Inviaci il tuo suggerimento!
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="suggestion-name">
+                      Nome <span className="text-destructive">*</span>
+                    </Label>
+                    <Input
+                      id="suggestion-name"
+                      placeholder="Il tuo nome"
+                      value={suggestionName}
+                      onChange={(e) => setSuggestionName(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="suggestion-email">
+                      Email <span className="text-destructive">*</span>
+                    </Label>
+                    <Input
+                      id="suggestion-email"
+                      type="email"
+                      placeholder="tua@email.com"
+                      value={suggestionEmail}
+                      onChange={(e) => setSuggestionEmail(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="suggestion-place">
+                      Nome del Luogo <span className="text-destructive">*</span>
+                    </Label>
+                    <Input
+                      id="suggestion-place"
+                      placeholder="Es. Ristorante Da Mario"
+                      value={suggestionPlace}
+                      onChange={(e) => setSuggestionPlace(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="suggestion-message">
+                      Messaggio (opzionale)
+                    </Label>
+                    <Textarea
+                      id="suggestion-message"
+                      placeholder="Descrivi il luogo, cosa lo rende speciale, indirizzo..."
+                      value={suggestionMessage}
+                      onChange={(e) => setSuggestionMessage(e.target.value)}
+                      rows={4}
+                    />
+                  </div>
+
+                  <Button 
+                    onClick={handleSendSuggestion} 
+                    className="w-full"
+                  >
+                    <Mail className="h-4 w-4 mr-2" />
+                    Invia Suggerimento
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
           
           {/* Search */}
           <Input
