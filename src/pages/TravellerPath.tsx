@@ -314,7 +314,7 @@ export default function TravellerPath() {
         </div>
 
         {/* Question Card */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 md:p-8 border border-blue-100/50 shadow-lg">
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 md:p-8 border border-blue-100/50 shadow-lg flex flex-col min-h-[600px]">
           
           {/* Category */}
           <div className="mb-4 md:mb-6">
@@ -329,13 +329,13 @@ export default function TravellerPath() {
           </h2>
 
           {/* Answer Options */}
-          <div className="mb-6 md:mb-8 min-h-[400px] md:min-h-[500px]">
+          <div className="flex-1 mb-6 md:mb-8">
             {currentQuestion.multiple ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 h-full content-start">
                 {currentQuestion.options.map((option) => (
                   <label
                     key={option.value}
-                    className={`flex items-center justify-center gap-2 p-4 md:p-6 rounded-xl border transition-all cursor-pointer text-center min-h-[60px] md:min-h-[80px] ${
+                    className={`flex items-center justify-center gap-2 p-4 md:p-6 rounded-xl border transition-all cursor-pointer text-center ${
                       (currentAnswer as string[] || []).includes(option.value)
                         ? 'bg-blue-600 text-white border-blue-600 shadow-md'
                         : 'bg-white/50 text-blue-900 border-blue-100/30 hover:bg-blue-50/50'
@@ -355,12 +355,12 @@ export default function TravellerPath() {
               <RadioGroup
                 value={currentAnswer as string || ""}
                 onValueChange={handleAnswerChange}
-                className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3"
+                className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 h-full content-start"
               >
                 {currentQuestion.options.map((option) => (
                   <label
                     key={option.value}
-                    className={`flex items-center justify-center gap-2 p-4 md:p-6 rounded-xl border transition-all cursor-pointer text-center min-h-[60px] md:min-h-[80px] ${
+                    className={`flex items-center justify-center gap-2 p-4 md:p-6 rounded-xl border transition-all cursor-pointer text-center ${
                       currentAnswer === option.value
                         ? 'bg-blue-600 text-white border-blue-600 shadow-md'
                         : 'bg-white/50 text-blue-900 border-blue-100/30 hover:bg-blue-50/50'
