@@ -284,10 +284,10 @@ export default function Profile() {
       {/* Header */}
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b">
         <div className="px-4 py-3 flex items-center justify-between">
-          <div>
-            <h1 className="text-6xl font-bebas font-normal text-blue-900 tracking-wider">Create your own guide</h1>
-            <p className="text-xs text-muted-foreground">
-              {favorites.length} {favorites.length === 1 ? 'luogo selezionato' : 'luoghi selezionati'}
+          <div className="flex items-center gap-3">
+            <h1 className="text-4xl md:text-5xl font-bebas font-normal text-blue-900 tracking-wider">Create your own guide</h1>
+            <p className="text-xs text-muted-foreground whitespace-nowrap">
+              {favorites.length} {favorites.length === 1 ? 'luogo' : 'luoghi'}
             </p>
           </div>
           <div className="flex items-center gap-2">
