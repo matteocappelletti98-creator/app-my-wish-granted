@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Map, List, FileText, MapPin } from "lucide-react";
+import { Home, Map, List, FileText, Settings } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Nav() {
@@ -76,18 +76,18 @@ export default function Nav() {
         </Link>
 
         <Link
-          to="/traveller-path"
+          to="/impostazioni"
           className={`flex items-center justify-center w-12 h-12 rounded-xl transition-all active:scale-90 ${
-            active("/traveller-path")
+            active("/impostazioni")
               ? "bg-blue-600"
               : ""
           }`}
         >
-          <MapPin
+          <Settings
             className={`w-5 h-5 ${
-              active("/traveller-path") ? "text-white" : "text-blue-400"
+              active("/impostazioni") ? "text-white" : "text-blue-400"
             }`}
-            strokeWidth={active("/traveller-path") ? 2 : 1.5}
+            strokeWidth={active("/impostazioni") ? 2 : 1.5}
           />
         </Link>
       </div>
