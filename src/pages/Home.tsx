@@ -60,8 +60,8 @@ export default function Home() {
 
           {/* App Title */}
           <div className="text-center mb-6">
-            <h1 className="text-5xl font-playfair font-bold text-blue-900 mb-3 tracking-wide">
-              True Local
+            <h1 className="text-6xl font-bebas font-normal text-blue-900 mb-3 tracking-wider">
+              TRUE LOCAL
             </h1>
             <p className="text-base text-blue-700/70 font-light tracking-wide mb-4">discover the city</p>
             

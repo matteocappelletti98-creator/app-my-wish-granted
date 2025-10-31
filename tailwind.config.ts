@@ -88,7 +88,7 @@ export default {
 			},
 			fontFamily: {
 				'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
-				'playfair': ['Playfair Display', 'serif'],
+				'bebas': ['Bebas Neue', 'cursive'],
 			},
 			keyframes: {
 				'accordion-down': {

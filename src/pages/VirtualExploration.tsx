@@ -132,29 +132,16 @@ export default function VirtualExploration() {
   }, [all, favorites]);
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header stile home */}
-      <header className="px-6 py-12 border-b bg-white">
-        <div className="mx-auto max-w-6xl flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-light tracking-wide text-gray-900">
-              Exploration
-            </h1>
-          </div>
-        </div>
-      </header>
-
-      {/* Corpo: filtri categorie sopra + mappa - Isolato per mobile */}
-      <section className="px-6">
-        <div className="mx-auto max-w-6xl pt-4">
-          {/* Contenitore isolato per mappa e filtri su mobile */}
-          <div className="bg-white rounded-2xl border p-4 mb-6 md:bg-transparent md:border-0 md:p-0">
-            {/* Barra categorie orizzontale scorrevole */}
-            <div className="mb-4 overflow-x-auto scrollbar-hide touch-pan-x">
-              <div className="inline-flex gap-1 min-w-full p-1.5 bg-white rounded-lg border md:bg-white">
+    <div className="min-h-screen bg-white pb-16">
+      {/* Corpo: filtri categorie sopra + mappa fullscreen */}
+      <section className="fixed top-0 left-0 right-0 bottom-16 flex flex-col">
+        <div className="flex-1 flex flex-col">
+          {/* Barra categorie orizzontale scorrevole - Fixed in alto */}
+          <div className="flex-shrink-0 px-4 py-3 bg-white border-b overflow-x-auto scrollbar-hide touch-pan-x">
+            <div className="inline-flex gap-1 min-w-full">
               <button 
                 onClick={() => setSelectedCategories([])}
-                className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium transition-colors whitespace-nowrap flex-shrink-0
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
                   ${selectedCategories.length === 0 
                     ? "bg-blue-600 text-white" 
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
@@ -165,7 +152,7 @@ export default function VirtualExploration() {
                 <button 
                   key={c} 
                   onClick={() => toggleCategory(c)}
-                  className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium transition-colors whitespace-nowrap flex-shrink-0
+                  className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
                     ${selectedCategories.includes(c)
                       ? "bg-blue-600 text-white" 
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
@@ -180,136 +167,135 @@ export default function VirtualExploration() {
             </div>
           </div>
 
-          {/* Mappa isolata con touch-action per evitare scroll interferenza */}
-          <div className="touch-none md:touch-auto">
+          {/* Mappa fullscreen */}
+          <div className="flex-1 touch-none md:touch-auto relative">
             {loading ? (
-              <div className="h-[70vh] w-full rounded-2xl border bg-slate-50" />
+              <div className="absolute inset-0 bg-slate-50 flex items-center justify-center">
+                <div className="text-gray-500">Caricamento...</div>
+              </div>
             ) : (
               <MapView 
                 places={all.filter(p => p.status === "published")} 
                 selectedCategories={selectedCategories} 
-                className="h-[70vh] w-full rounded-2xl border"
+                className="absolute inset-0 w-full h-full"
                 favorites={favorites}
                 onToggleFavorite={toggleFavorite}
                 userTravellerCodes={userTravellerCodes}
               />
             )}
           </div>
-          </div>
         </div>
       </section>
 
-      {/* I tuoi luoghi preferiti */}
-      <section className="px-6 pb-12">
-        <div className="mx-auto max-w-6xl mt-6">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <Heart className="w-5 h-5 text-red-500" />
-              <h2 className="text-xl font-semibold text-blue-600">My favorites</h2>
-              <span className="text-sm text-gray-500">({favorites.length})</span>
+      {/* I tuoi luoghi preferiti - Scrollabile separato (nascosto di default, accessibile con scroll) */}
+      <div className="relative z-50 bg-white">
+        <section className="px-4 pb-6 pt-6">
+          <div className="mx-auto max-w-6xl">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Heart className="w-5 h-5 text-red-500" />
+                <h2 className="text-xl font-semibold text-blue-600">My favorites</h2>
+                <span className="text-sm text-gray-500">({favorites.length})</span>
+              </div>
+              
+              {favoritesList.length > 0 && (
+                <button
+                  onClick={() => {
+                    if (favoritesList.length === 1) {
+                      const p = favoritesList[0];
+                      const url = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+                      window.open(url, '_blank');
+                    } else {
+                      const maxPlaces = Math.min(favoritesList.length, 10);
+                      const limitedList = favoritesList.slice(0, maxPlaces);
+                      
+                      const origin = limitedList[0];
+                      const destination = limitedList[limitedList.length - 1];
+                      
+                      const waypoints = limitedList.slice(1, -1)
+                        .map(p => `${p.lat},${p.lng}`)
+                        .join('|');
+                      
+                      const url = `https://www.google.com/maps/dir/?api=1&origin=${origin.lat},${origin.lng}&destination=${destination.lat},${destination.lng}${waypoints ? `&waypoints=${waypoints}` : ''}`;
+                      window.open(url, '_blank');
+                    }
+                  }}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-black text-white rounded-lg hover:bg-black/90 transition-colors text-xs font-medium"
+                >
+                  <MapPin className="w-4 h-4" />
+                  Apri in Maps
+                </button>
+              )}
             </div>
             
-            {favoritesList.length > 0 && (
-              <button
-                onClick={() => {
-                  if (favoritesList.length === 1) {
-                    // Se c'è solo un luogo, apri la ricerca
-                    const p = favoritesList[0];
-                    const url = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
-                    window.open(url, '_blank');
-                  } else {
-                    // Limita a massimo 9 waypoints (limite di Google Maps)
-                    const maxPlaces = Math.min(favoritesList.length, 10); // 1 origin + 8 waypoints + 1 destination = 10
-                    const limitedList = favoritesList.slice(0, maxPlaces);
-                    
-                    const origin = limitedList[0];
-                    const destination = limitedList[limitedList.length - 1];
-                    
-                    // Waypoints intermedi (escludi origin e destination)
-                    const waypoints = limitedList.slice(1, -1)
-                      .map(p => `${p.lat},${p.lng}`)
-                      .join('|');
-                    
-                    const url = `https://www.google.com/maps/dir/?api=1&origin=${origin.lat},${origin.lng}&destination=${destination.lat},${destination.lng}${waypoints ? `&waypoints=${waypoints}` : ''}`;
-                    window.open(url, '_blank');
-                  }
-                }}
-                className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-black/90 transition-colors text-sm font-medium"
-              >
-                <MapPin className="w-4 h-4" />
-                Apri tutti in Google Maps {favoritesList.length > 10 && `(primi 10)`}
-              </button>
-            )}
-          </div>
-          
-          {favoritesList.length === 0 ? (
-            <div className="rounded-2xl border bg-white p-8 text-center text-gray-600">
-              <Heart className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-              <p className="text-lg font-medium mb-2">{t('virtualExploration.noFavorites')}</p>
-              <p className="text-sm">{t('virtualExploration.noFavoritesDescription')}</p>
-            </div>
-          ) : (
-            <div className="rounded-2xl border bg-white overflow-hidden">
-              <div className="divide-y">
-                {favoritesList.map(p => (
-                  <div key={p.id} className="p-4 hover:bg-gray-50 transition-colors">
-                    <div className="flex items-start gap-4">
-                      {p.image && (
-                        <img 
-                          src={p.image} 
-                          alt={p.name}
-                          className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
-                        />
-                      )}
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <h3 className="font-semibold text-gray-900 mb-1">{p.name}</h3>
-                            <p className="text-sm text-gray-600 mb-2">
-                              {p.city}{p.country ? `, ${p.country}` : ''}
-                            </p>
-                            {p.address && (
-                              <p className="text-xs text-gray-500 mb-2">📍 {p.address}</p>
-                            )}
+            {favoritesList.length === 0 ? (
+              <div className="rounded-2xl border bg-white p-8 text-center text-gray-600">
+                <Heart className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                <p className="text-lg font-medium mb-2">{t('virtualExploration.noFavorites')}</p>
+                <p className="text-sm">{t('virtualExploration.noFavoritesDescription')}</p>
+              </div>
+            ) : (
+              <div className="rounded-2xl border bg-white overflow-hidden">
+                <div className="divide-y max-h-96 overflow-y-auto">
+                  {favoritesList.map(p => (
+                    <div key={p.id} className="p-4 hover:bg-gray-50 transition-colors">
+                      <div className="flex items-start gap-4">
+                        {p.image && (
+                          <img 
+                            src={p.image} 
+                            alt={p.name}
+                            className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+                          />
+                        )}
+                        
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <h3 className="font-semibold text-gray-900 mb-1">{p.name}</h3>
+                              <p className="text-sm text-gray-600 mb-2">
+                                {p.city}{p.country ? `, ${p.country}` : ''}
+                              </p>
+                              {p.address && (
+                                <p className="text-xs text-gray-500 mb-2">📍 {p.address}</p>
+                              )}
+                            </div>
+                            
+                            <button
+                              onClick={() => toggleFavorite(p.id)}
+                              className="p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
+                              title={t('virtualExploration.removeFromFavorites')}
+                            >
+                              <Heart className="w-5 h-5 text-red-500 fill-current" />
+                            </button>
                           </div>
                           
-                          <button
-                            onClick={() => toggleFavorite(p.id)}
-                            className="p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
-                            title={t('virtualExploration.removeFromFavorites')}
-                          >
-                            <Heart className="w-5 h-5 text-red-500 fill-current" />
-                          </button>
-                        </div>
-                        
-                        <div className="flex flex-wrap gap-2">
-                          <a
-                            href={`/luogo/${p.slug}`}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs font-medium"
-                          >
-                            Pagina luogo
-                          </a>
-                          <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' ' + (p.address || p.city || ''))}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-black text-white rounded-lg hover:bg-black/90 transition-colors text-xs font-medium"
-                          >
-                            <MapPin className="w-3 h-3" />
-                            Maps
-                          </a>
+                          <div className="flex flex-wrap gap-2">
+                            <a
+                              href={`/luogo/${p.slug}`}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs font-medium"
+                            >
+                              Pagina luogo
+                            </a>
+                            <a
+                              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' ' + (p.address || p.city || ''))}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-black text-white rounded-lg hover:bg-black/90 transition-colors text-xs font-medium"
+                            >
+                              <MapPin className="w-3 h-3" />
+                              Maps
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      </section>
-
+            )}
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
