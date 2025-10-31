@@ -18,7 +18,7 @@ export default function Nav() {
               : ""
           }`}
         >
-          <span className="text-2xl">🏠</span>
+          <span className="text-2xl">🏡</span>
         </Link>
 
         <Link
@@ -29,7 +29,7 @@ export default function Nav() {
               : ""
           }`}
         >
-          <span className="text-2xl">🗺️</span>
+          <span className="text-2xl">🌎</span>
         </Link>
 
         <Link
@@ -40,7 +40,7 @@ export default function Nav() {
               : ""
           }`}
         >
-          <span className="text-2xl">👤</span>
+          <span className="text-2xl">💙</span>
         </Link>
 
         <Link
@@ -51,7 +51,7 @@ export default function Nav() {
               : ""
           }`}
         >
-          <span className="text-2xl">📝</span>
+          <span className="text-2xl">✏️</span>
         </Link>
 
         <Link
@@ -62,7 +62,7 @@ export default function Nav() {
               : ""
           }`}
         >
-          <span className="text-2xl">👣</span>
+          <span className="text-2xl">🧞</span>
         </Link>
       </div>
     </nav>
