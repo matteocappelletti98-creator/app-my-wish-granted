@@ -329,7 +329,7 @@ export default function TravellerPath() {
           </h2>
 
           {/* Answer Options */}
-          <div className="mb-6 md:mb-8">
+          <div className="mb-6 md:mb-8 min-h-[400px] md:min-h-[500px]">
             {currentQuestion.multiple ? (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
                 {currentQuestion.options.map((option) => (
