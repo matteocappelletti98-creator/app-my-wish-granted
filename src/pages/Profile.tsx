@@ -413,11 +413,7 @@ export default function Profile() {
                           onClick={() => toggleFavorite(place.id)}
                           className="flex-shrink-0 h-8 w-8 p-0"
                         >
-                          {isFavorite ? (
-                            <X className="h-4 w-4" />
-                          ) : (
-                            <Plus className="h-4 w-4" />
-                          )}
+                          <Heart className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />
                         </Button>
                       </div>
                       
