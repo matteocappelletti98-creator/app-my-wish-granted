@@ -196,10 +196,17 @@ export default function TravellerPath() {
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
 
   // Load saved answers from localStorage and find the first unanswered question
   useEffect(() => {
+    const hasSeenIntro = localStorage.getItem('traveller-path-intro-seen');
     const savedAnswers = localStorage.getItem('traveller-path-answers');
+    
+    if (hasSeenIntro) {
+      setShowIntro(false);
+    }
+    
     if (savedAnswers) {
       const parsedAnswers = JSON.parse(savedAnswers);
       setAnswers(parsedAnswers);
@@ -266,11 +273,80 @@ export default function TravellerPath() {
     );
   };
 
+  const handleStartQuestionnaire = () => {
+    localStorage.setItem('traveller-path-intro-seen', 'true');
+    setShowIntro(false);
+  };
+
   // Don't render until data is loaded
   if (!isLoaded) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 flex items-center justify-center">
         <div className="text-blue-600">{t('travellerPath.loading')}</div>
+      </div>
+    );
+  }
+
+  // Show intro screen
+  if (showIntro) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 pb-20">
+        <div className="max-w-3xl mx-auto px-4 py-8 md:py-16">
+          <Link to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-8">
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm">Home</span>
+          </Link>
+
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 md:p-12 border border-blue-100/50 shadow-lg">
+            <div className="text-center mb-8">
+              <h1 className="text-5xl md:text-6xl font-bebas text-blue-900 mb-4 tracking-wide">
+                TRAVELLER PATH
+              </h1>
+              <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto rounded-full mb-8" />
+            </div>
+
+            <div className="space-y-6 text-blue-900/80 leading-relaxed">
+              <p className="text-lg md:text-xl text-center">
+                Benvenuto nel <strong className="text-blue-700">Traveller Path</strong>, 
+                il percorso personalizzato che ci aiuta a conoscerti meglio.
+              </p>
+              
+              <div className="bg-blue-50/50 rounded-xl p-6 border border-blue-100/50">
+                <h2 className="text-xl font-semibold text-blue-800 mb-3">
+                  Come funziona?
+                </h2>
+                <ul className="space-y-3 text-base">
+                  <li className="flex items-start gap-3">
+                    <span className="text-blue-600 font-bold mt-1">1.</span>
+                    <span>Rispondi ad alcune domande sulle tue preferenze di viaggio</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-blue-600 font-bold mt-1">2.</span>
+                    <span>Condividi i tuoi gusti in fatto di cucina, cultura e attività</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="text-blue-600 font-bold mt-1">3.</span>
+                    <span>Ricevi suggerimenti personalizzati su misura per te</span>
+                  </li>
+                </ul>
+              </div>
+
+              <p className="text-center text-sm text-blue-600/70">
+                Le tue risposte verranno salvate automaticamente. Puoi completare il questionario in qualsiasi momento.
+              </p>
+            </div>
+
+            <div className="mt-10 flex justify-center">
+              <Button
+                onClick={handleStartQuestionnaire}
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
+              >
+                Inizia il Percorso
+                <ChevronRight className="w-5 h-5 ml-2" />
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
