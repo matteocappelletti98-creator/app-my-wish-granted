@@ -303,24 +303,9 @@ export default function TravellerPath() {
               <h1 className="text-6xl md:text-7xl font-bebas text-blue-900 mb-4 tracking-wide">
                 TRAVELLER PATH
               </h1>
-              <p className="text-base md:text-lg text-blue-900 font-light max-w-lg mx-auto">
-                Answer a few quick questions and get a <span className="text-orange-700 font-medium">personalized</span> selection of places made just for you.
+              <p className="text-xl md:text-2xl font-bebas text-blue-900 tracking-wide max-w-lg mx-auto mb-12">
+                Answer a few quick questions and get a <span className="text-orange-700">personalized</span> selection of places made just for you.
               </p>
-            </div>
-
-            <div className="grid grid-cols-3 gap-4 md:gap-6 mb-12 max-w-lg mx-auto">
-              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-blue-100/50 hover:scale-105 transition-transform">
-                <div className="text-3xl md:text-4xl font-bebas text-blue-600 mb-1">12</div>
-                <div className="text-xs md:text-sm text-blue-700">Domande</div>
-              </div>
-              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-blue-100/50 hover:scale-105 transition-transform">
-                <div className="text-3xl md:text-4xl font-bebas text-blue-600 mb-1">98</div>
-                <div className="text-xs md:text-sm text-blue-700">Associazioni</div>
-              </div>
-              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-blue-100/50 hover:scale-105 transition-transform">
-                <div className="text-3xl md:text-4xl font-bebas text-blue-600 mb-1">0</div>
-                <div className="text-xs md:text-sm text-blue-700">Errori</div>
-              </div>
             </div>
 
             <Button
