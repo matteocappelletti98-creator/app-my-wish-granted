@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { Home, Map, User, FileText, Compass } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Nav() {
@@ -18,7 +19,12 @@ export default function Nav() {
               : ""
           }`}
         >
-          <span className="text-2xl">🏡</span>
+          <Home
+            className={`w-5 h-5 ${
+              active("/") ? "text-white" : "text-blue-400"
+            }`}
+            strokeWidth={active("/") ? 2 : 1.5}
+          />
         </Link>
 
         <Link
@@ -29,7 +35,12 @@ export default function Nav() {
               : ""
           }`}
         >
-          <span className="text-2xl">🌎</span>
+          <Map
+            className={`w-5 h-5 ${
+              active("/virtual-exploration") ? "text-white" : "text-blue-400"
+            }`}
+            strokeWidth={active("/virtual-exploration") ? 2 : 1.5}
+          />
         </Link>
 
         <Link
@@ -40,7 +51,12 @@ export default function Nav() {
               : ""
           }`}
         >
-          <span className="text-2xl">💙</span>
+          <User
+            className={`w-5 h-5 ${
+              active("/profile") ? "text-white" : "text-blue-400"
+            }`}
+            strokeWidth={active("/profile") ? 2 : 1.5}
+          />
         </Link>
 
         <Link
@@ -51,7 +67,12 @@ export default function Nav() {
               : ""
           }`}
         >
-          <span className="text-2xl">✏️</span>
+          <FileText
+            className={`w-5 h-5 ${
+              active("/blog") ? "text-white" : "text-blue-400"
+            }`}
+            strokeWidth={active("/blog") ? 2 : 1.5}
+          />
         </Link>
 
         <Link
@@ -62,7 +83,12 @@ export default function Nav() {
               : ""
           }`}
         >
-          <span className="text-2xl">🧞</span>
+          <Compass
+            className={`w-5 h-5 ${
+              active("/traveller-path") ? "text-white" : "text-blue-400"
+            }`}
+            strokeWidth={active("/traveller-path") ? 2 : 1.5}
+          />
         </Link>
       </div>
     </nav>
