@@ -30,10 +30,6 @@ export default function Profile() {
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        
-        if (!session) {
-          navigate("/user-auth");
-        }
       }
     );
 
@@ -42,10 +38,6 @@ export default function Profile() {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
-      
-      if (!session) {
-        navigate("/user-auth");
-      }
     });
 
     return () => subscription.unsubscribe();
@@ -65,20 +57,27 @@ export default function Profile() {
     loadPlaces();
   }, []);
 
-  // Load favorites
+  // Load favorites (localStorage for non-logged users, database for logged users)
   useEffect(() => {
-    if (!user) return;
-
     const loadFavorites = async () => {
-      const { data, error } = await supabase
-        .from("user_favorites")
-        .select("place_id")
-        .eq("user_id", user.id);
+      if (user) {
+        // Load from database
+        const { data, error } = await supabase
+          .from("user_favorites")
+          .select("place_id")
+          .eq("user_id", user.id);
 
-      if (error) {
-        console.error("Error loading favorites:", error);
+        if (error) {
+          console.error("Error loading favorites:", error);
+        } else {
+          setFavorites(data.map(f => f.place_id));
+        }
       } else {
-        setFavorites(data.map(f => f.place_id));
+        // Load from localStorage
+        const saved = localStorage.getItem('explore-favorites');
+        if (saved) {
+          setFavorites(JSON.parse(saved));
+        }
       }
     };
 
@@ -91,10 +90,25 @@ export default function Profile() {
   };
 
   const toggleFavorite = async (placeId: string) => {
-    if (!user) return;
-
     const isCurrentlyFavorite = favorites.includes(placeId);
     
+    if (!user) {
+      // Non-logged user: use localStorage
+      const newFavorites = isCurrentlyFavorite
+        ? favorites.filter(id => id !== placeId)
+        : [...favorites, placeId];
+      setFavorites(newFavorites);
+      localStorage.setItem('explore-favorites', JSON.stringify(newFavorites));
+      
+      if (isCurrentlyFavorite) {
+        toast.success("Rimosso dai preferiti");
+      } else {
+        toast.success("Aggiunto ai preferiti");
+      }
+      return;
+    }
+
+    // Logged user: use database
     if (isCurrentlyFavorite) {
       // Remove from favorites
       const { error } = await supabase
@@ -175,10 +189,8 @@ export default function Profile() {
       <div className="min-h-screen flex items-center justify-center">
         <div>Caricamento...</div>
       </div>
-    );
+      );
   }
-
-  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -191,15 +203,25 @@ export default function Profile() {
               {favorites.length} {favorites.length === 1 ? 'luogo selezionato' : 'luoghi selezionati'}
             </p>
           </div>
-          <Button
-            onClick={handleSignOut}
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-2"
-          >
-            <LogOut className="h-4 w-4" />
-            Esci
-          </Button>
+          {user ? (
+            <Button
+              onClick={handleSignOut}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              Esci
+            </Button>
+          ) : (
+            <Button
+              onClick={() => navigate("/user-auth")}
+              variant="outline"
+              size="sm"
+            >
+              Accedi
+            </Button>
+          )}
         </div>
       </div>
 

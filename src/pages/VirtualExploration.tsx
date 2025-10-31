@@ -248,18 +248,6 @@ export default function VirtualExploration() {
         </div>
       </div>
 
-      {/* Fixed bottom button for user profile */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <Button
-          size="lg"
-          onClick={() => user ? navigate("/profile") : navigate("/user-auth")}
-          className="rounded-full shadow-lg flex items-center gap-2 bg-primary hover:bg-primary/90"
-        >
-          <User className="h-5 w-5" />
-          {user ? "Il Mio Profilo" : "Accedi"}
-        </Button>
-      </div>
-
       {/* Mappa - Occupa la viewport disponibile */}
       <div className="relative" style={{ height: 'calc(100vh - 8rem)' }}>
         {loading ? (
@@ -267,7 +255,7 @@ export default function VirtualExploration() {
             <div className="text-gray-500">Caricamento...</div>
           </div>
         ) : (
-          <MapView 
+          <MapView
             places={all.filter(p => p.status === "published")} 
             selectedCategories={selectedCategories} 
             className="absolute inset-0 w-full h-full"
