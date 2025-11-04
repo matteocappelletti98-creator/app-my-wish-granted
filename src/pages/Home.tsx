@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
-import { Map, List, FileText, Footprints, Clock, Settings, ChevronDown, Instagram } from "lucide-react";
+import { Map, List, FileText, Footprints, Clock, Settings, ChevronDown, Instagram, Send } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -23,6 +26,9 @@ export default function Home() {
   const { language, setLanguage, t } = useLanguage();
   const [hasIncompleteSurvey, setHasIncompleteSurvey] = useState(false);
   const [contactDialogOpen, setContactDialogOpen] = useState(false);
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
 
   // Check for incomplete survey on component mount
   useEffect(() => {
@@ -132,12 +138,58 @@ export default function Home() {
               Hai un&apos;attività e lavori con gli stessi criteri della mission di true local: autenticità, qualità ed identità. Ma non sei presente nella guida? Contattaci e valuteremo il tuo ingresso, ricorda non siamo una guida pay to enter e non lo saremo mai! Quindi l&apos;ingresso è completamente gratuito.
             </DialogDescription>
           </DialogHeader>
-          <div className="flex justify-center pt-4">
-            <Link to="/profile" onClick={() => setContactDialogOpen(false)}>
-              <Button className="px-6 md:px-8 py-2.5 md:py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all text-sm md:text-base">
-                Vai al Profilo
-              </Button>
-            </Link>
+          
+          <div className="space-y-4 pt-4">
+            <div>
+              <Label htmlFor="contact-name" className="text-blue-900 font-medium">Nome *</Label>
+              <Input
+                id="contact-name"
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                placeholder="Il tuo nome"
+                className="mt-1 border-blue-200 focus:border-blue-400"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="contact-email" className="text-blue-900 font-medium">Email *</Label>
+              <Input
+                id="contact-email"
+                type="email"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                placeholder="tua@email.com"
+                className="mt-1 border-blue-200 focus:border-blue-400"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="contact-message" className="text-blue-900 font-medium">Messaggio *</Label>
+              <Textarea
+                id="contact-message"
+                value={contactMessage}
+                onChange={(e) => setContactMessage(e.target.value)}
+                placeholder="Raccontaci della tua attività..."
+                rows={4}
+                className="mt-1 border-blue-200 focus:border-blue-400"
+              />
+            </div>
+            
+            <Button 
+              onClick={() => {
+                // TODO: Implementare invio email
+                console.log({ contactName, contactEmail, contactMessage });
+                setContactDialogOpen(false);
+                setContactName("");
+                setContactEmail("");
+                setContactMessage("");
+              }}
+              className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
+              disabled={!contactName || !contactEmail || !contactMessage}
+            >
+              <Send className="w-4 h-4" />
+              Invia Messaggio
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
