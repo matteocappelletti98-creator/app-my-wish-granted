@@ -48,18 +48,6 @@ export default function Home() {
           {/* Top Bar: Auth Buttons and Settings */}
           <div className="flex justify-between items-center gap-2 mb-8">
             <div className="flex gap-2">
-              <Link to="/impostazioni">
-                <button className="p-2 text-blue-600 hover:text-blue-800 transition-colors active:scale-95">
-                  <Settings className="w-5 h-5" />
-                </button>
-              </Link>
-              <Link to="/profile">
-                <button className="px-3 py-2 text-sm text-blue-900 font-bebas tracking-wide hover:text-blue-600 transition-colors active:scale-95">
-                  Contattaci
-                </button>
-              </Link>
-            </div>
-            <div className="flex gap-2">
               <Link to="/auth">
                 <button className="px-4 py-2 text-sm text-blue-900 font-bebas tracking-wide hover:text-blue-800 transition-colors active:scale-95">
                   Accedi
@@ -68,6 +56,18 @@ export default function Home() {
               <Link to="/auth">
                 <button className="px-4 py-2 text-sm bg-blue-900 text-white font-bebas tracking-wide rounded-xl hover:bg-blue-800 transition-all active:scale-95">
                   Registrati
+                </button>
+              </Link>
+            </div>
+            <div className="flex gap-2">
+              <Link to="/profile">
+                <button className="px-3 py-2 text-sm text-blue-900 font-bebas tracking-wide hover:text-blue-600 transition-colors active:scale-95">
+                  Contattaci
+                </button>
+              </Link>
+              <Link to="/impostazioni">
+                <button className="p-2 text-blue-600 hover:text-blue-800 transition-colors active:scale-95">
+                  <Settings className="w-5 h-5" />
                 </button>
               </Link>
             </div>
