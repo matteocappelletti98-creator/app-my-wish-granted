@@ -54,7 +54,7 @@ export default function Home() {
                 </button>
               </Link>
               <Link to="/profile">
-                <button className="px-3 py-2 text-sm text-blue-900 font-bebas tracking-wide border border-blue-600 rounded-xl hover:bg-blue-50 transition-all active:scale-95">
+                <button className="px-3 py-2 text-sm text-blue-900 font-bebas tracking-wide hover:text-blue-600 transition-colors active:scale-95">
                   Contattaci
                 </button>
               </Link>
@@ -79,22 +79,6 @@ export default function Home() {
               TRUE LOCAL
             </h1>
             <p className="text-base text-blue-900 font-bebas tracking-wide mb-4">discover the city</p>
-            
-            {/* Language Selector Dropdown */}
-            <div className="flex justify-center">
-              <Select value={language} onValueChange={(value) => setLanguage(value as any)}>
-                <SelectTrigger className="w-48 bg-white/70 backdrop-blur-sm border-blue-100/50 rounded-xl">
-                  <SelectValue placeholder="Seleziona lingua" />
-                </SelectTrigger>
-                <SelectContent className="bg-white/95 backdrop-blur-sm border-blue-100/50 rounded-xl">
-                  {languages.map(lang => (
-                    <SelectItem key={lang.value} value={lang.value} className="cursor-pointer">
-                      {lang.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
           </div>
 
           {/* Sponsor Section */}
