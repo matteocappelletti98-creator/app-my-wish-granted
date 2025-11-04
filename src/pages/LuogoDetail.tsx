@@ -161,7 +161,7 @@ export default function LuogoDetail() {
                       const query = encodeURIComponent(place.address || `${place.name}, ${place.city}, ${place.country}`);
                       window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
                     }}
-                    className="px-3 py-2 md:px-4 md:py-2 bg-green-600/90 backdrop-blur-md rounded-xl hover:bg-green-700/90 transition-all text-white font-medium flex items-center gap-2 text-sm md:text-base"
+                    className="px-3 py-2 md:px-4 md:py-2 bg-black/90 backdrop-blur-md rounded-xl hover:bg-black transition-all text-white font-medium flex items-center gap-2 text-sm md:text-base"
                   >
                     <ExternalLink className="w-3 h-3 md:w-4 md:h-4" />
                     Google Maps
