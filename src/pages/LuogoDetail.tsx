@@ -183,17 +183,6 @@ export default function LuogoDetail() {
         </div>
       </section>
 
-      {/* Photo Counter Card - Simple & Clean */}
-      <section className="px-4 md:px-6 -mt-12 md:-mt-16 relative z-10 mb-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-blue-100/50 text-center max-w-xs mx-auto">
-            <Camera className="w-6 h-6 md:w-8 md:h-8 text-blue-600 mx-auto mb-2" />
-            <div className="text-base md:text-lg font-medium text-blue-900">Foto condivise</div>
-            <div className="text-xl md:text-2xl font-light text-blue-700">245</div>
-          </div>
-        </div>
-      </section>
-
       {/* POI Article Section - Mobile Optimized */}
       {poiArticle && (
         <section className="px-4 md:px-6 py-8 md:py-16">
@@ -249,69 +238,6 @@ export default function LuogoDetail() {
           </div>
         </section>
       )}
-
-      {/* Editorial Articles Section - Mobile Optimized */}
-      <section className="px-4 md:px-6 py-8 md:py-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-3xl font-light text-blue-900 mb-3 md:mb-4 tracking-wide">
-              Articoli correlati
-            </h2>
-            <p className="text-sm md:text-lg text-blue-700/70 font-light max-w-2xl mx-auto px-4">
-              Approfondimenti e guide locali per scoprire ogni segreto di questo luogo
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {articles.map((article) => (
-              <a key={article.id} href={`/articolo/${article.id}`} className="group cursor-pointer block">
-                <article className="bg-white/70 backdrop-blur-sm rounded-3xl border border-blue-100/50 overflow-hidden hover:bg-white/90 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-2">
-                  {/* Article Image */}
-                  <div className="aspect-[4/3] overflow-hidden relative">
-                    <img 
-                      src={article.image} 
-                      alt={article.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-blue-600/90 text-white text-xs font-medium rounded-full backdrop-blur-sm">
-                        {article.category}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  {/* Article Content */}
-                  <div className="p-4 md:p-6">
-                    <h3 className="text-lg md:text-xl font-medium text-blue-900 mb-2 md:mb-3 line-clamp-2 group-hover:text-blue-700 transition-colors">
-                      {article.title}
-                    </h3>
-                    <p className="text-blue-700/80 font-light text-xs md:text-sm line-clamp-2 md:line-clamp-3 mb-3 md:mb-4 leading-relaxed">
-                      {article.excerpt}
-                    </p>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                          <span className="text-blue-600 text-xs font-medium">
-                            {article.author.split(' ').map(n => n[0]).join('')}
-                          </span>
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium text-blue-900">{article.author}</div>
-                          <div className="text-xs text-blue-600/70">{article.date}</div>
-                        </div>
-                      </div>
-                      <div className="text-xs text-blue-600/70 font-medium">
-                        {article.readTime}
-                      </div>
-                    </div>
-                  </div>
-                </article>
-                </a>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section - Mobile Optimized */}
       <section className="px-4 md:px-6 pb-8 md:pb-16">
