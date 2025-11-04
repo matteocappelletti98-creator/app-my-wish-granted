@@ -242,23 +242,18 @@ export default function LuogoDetail() {
       {/* CTA Section - Mobile Optimized */}
       <section className="px-4 md:px-6 pb-8 md:pb-16">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl md:rounded-3xl p-6 md:p-12 text-white relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
-            <div className="relative z-10">
-              <h3 className="text-xl md:text-2xl font-light mb-3 md:mb-4 tracking-wide">
-                Hai visitato {place.name}?
-              </h3>
-              <p className="text-sm md:text-base text-blue-100 font-light mb-6 md:mb-8 max-w-2xl mx-auto px-2">
-                Condividi la tua esperienza e aiuta altri viaggiatori a scoprire questo luogo
-              </p>
-              <div className="flex gap-4 justify-center">
-                <button 
-                  className="px-6 md:px-8 py-2 md:py-3 bg-white text-blue-600 font-medium rounded-xl hover:bg-blue-50 transition-colors text-sm md:text-base"
-                >
-                  Scrivi una recensione
-                </button>
-              </div>
-            </div>
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl md:rounded-3xl p-6 md:p-12 border border-blue-100/50">
+            <h3 className="text-2xl md:text-3xl font-bebas text-blue-900 mb-3 md:mb-4 tracking-wide">
+              HAI VISITATO {place.name.toUpperCase()}?
+            </h3>
+            <p className="text-sm md:text-base text-blue-700/70 font-light mb-6 md:mb-8 max-w-2xl mx-auto">
+              Condividi la tua esperienza e aiuta altri viaggiatori a scoprire questo luogo
+            </p>
+            <button 
+              className="px-6 md:px-8 py-2.5 md:py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all text-sm md:text-base border border-blue-600 hover:border-blue-700"
+            >
+              Scrivi una recensione
+            </button>
           </div>
         </div>
       </section>
