@@ -4,6 +4,13 @@ import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -15,6 +22,7 @@ import valeoSponsor from "@/assets/valeo-sponsor.jpg";
 export default function Home() {
   const { language, setLanguage, t } = useLanguage();
   const [hasIncompleteSurvey, setHasIncompleteSurvey] = useState(false);
+  const [contactDialogOpen, setContactDialogOpen] = useState(false);
 
   // Check for incomplete survey on component mount
   useEffect(() => {
@@ -60,11 +68,12 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex gap-2">
-              <Link to="/profile">
-                <button className="px-3 py-2 text-sm text-blue-900 font-bebas tracking-wide hover:text-blue-600 transition-colors active:scale-95">
-                  Contattaci
-                </button>
-              </Link>
+              <button 
+                onClick={() => setContactDialogOpen(true)}
+                className="px-3 py-2 text-sm text-blue-900 font-bebas tracking-wide hover:text-blue-600 transition-colors active:scale-95"
+              >
+                Contattaci
+              </button>
               <Link to="/impostazioni">
                 <button className="p-2 text-blue-600 hover:text-blue-800 transition-colors active:scale-95">
                   <Settings className="w-5 h-5" />
@@ -111,6 +120,27 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      {/* Contact Dialog */}
+      <Dialog open={contactDialogOpen} onOpenChange={setContactDialogOpen}>
+        <DialogContent className="bg-white/95 backdrop-blur-sm border-blue-100/50 rounded-2xl max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl md:text-3xl font-bebas text-blue-900 tracking-wide text-center">
+              HAI UN&apos;ATTIVITÀ?
+            </DialogTitle>
+            <DialogDescription className="text-sm md:text-base text-blue-700/80 font-light leading-relaxed text-center pt-4">
+              Hai un&apos;attività e lavori con gli stessi criteri della mission di true local: autenticità, qualità ed identità. Ma non sei presente nella guida? Contattaci e valuteremo il tuo ingresso, ricorda non siamo una guida pay to enter e non lo saremo mai! Quindi l&apos;ingresso è completamente gratuito.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-center pt-4">
+            <Link to="/profile" onClick={() => setContactDialogOpen(false)}>
+              <Button className="px-6 md:px-8 py-2.5 md:py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all text-sm md:text-base">
+                Vai al Profilo
+              </Button>
+            </Link>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
