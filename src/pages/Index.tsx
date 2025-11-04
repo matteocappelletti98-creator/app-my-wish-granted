@@ -132,6 +132,26 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Sezione Contattaci per attività */}
+      <section className="px-6 pb-12">
+        <div className="mx-auto max-w-4xl">
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl md:rounded-3xl p-6 md:p-12 border border-blue-100/50 text-center">
+            <h3 className="text-2xl md:text-3xl font-bebas text-blue-900 mb-4 tracking-wide">
+              HAI UN&apos;ATTIVITÀ?
+            </h3>
+            <p className="text-sm md:text-base text-blue-700/80 font-light mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">
+              Hai un&apos;attività e lavori con gli stessi criteri della mission di true local: autenticità, qualità ed identità. Ma non sei presente nella guida? Contattaci e valuteremo il tuo ingresso, ricorda non siamo una guida pay to enter e non lo saremo mai! Quindi l&apos;ingresso è completamente gratuito.
+            </p>
+            <Link 
+              to="/profile"
+              className="inline-block px-6 md:px-8 py-2.5 md:py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all text-sm md:text-base border border-blue-600 hover:border-blue-700"
+            >
+              Contattaci
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Overlay fullscreen mappa */}
       {overlay && (
         <div className="fixed inset-0 z-50 bg-white">
