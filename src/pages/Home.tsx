@@ -47,11 +47,18 @@ export default function Home() {
         <div className="mx-auto max-w-md">
           {/* Top Bar: Auth Buttons and Settings */}
           <div className="flex justify-between items-center gap-2 mb-8">
-            <Link to="/impostazioni">
-              <button className="p-2 text-blue-600 hover:text-blue-800 transition-colors active:scale-95">
-                <Settings className="w-5 h-5" />
-              </button>
-            </Link>
+            <div className="flex gap-2">
+              <Link to="/impostazioni">
+                <button className="p-2 text-blue-600 hover:text-blue-800 transition-colors active:scale-95">
+                  <Settings className="w-5 h-5" />
+                </button>
+              </Link>
+              <Link to="/profile">
+                <button className="px-3 py-2 text-sm text-blue-900 font-bebas tracking-wide border border-blue-600 rounded-xl hover:bg-blue-50 transition-all active:scale-95">
+                  Contattaci
+                </button>
+              </Link>
+            </div>
             <div className="flex gap-2">
               <Link to="/auth">
                 <button className="px-4 py-2 text-sm text-blue-900 font-bebas tracking-wide hover:text-blue-800 transition-colors active:scale-95">
