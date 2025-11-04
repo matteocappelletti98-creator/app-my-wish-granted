@@ -772,23 +772,6 @@ export default function MapView({ places, selectedCategories = [], className, on
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <h4 className="text-sm font-medium">Galleria foto</h4>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploading}
-                  className="h-7 px-2 text-xs"
-                >
-                  <Upload className="h-3 w-3 mr-1" />
-                  {uploading ? 'Caricamento...' : 'Carica'}
-                </Button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoUpload}
-                  className="hidden"
-                />
               </div>
               
               {placePhotos.length > 0 && (
