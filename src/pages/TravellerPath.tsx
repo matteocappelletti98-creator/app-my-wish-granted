@@ -140,19 +140,6 @@ const questions: Question[] = [
       { value: "nuts_free", label: "Nuts free", code: 86 }
     ]
   },
-  // Alloggio
-  {
-    id: "accommodation_zone",
-    category: "Alloggio",
-    question: "Zona di pernottamento",
-    options: [
-      { value: "z1", label: "Z1", code: 60 },
-      { value: "z2", label: "Z2", code: 61 },
-      { value: "z3", label: "Z3", code: 62 },
-      { value: "z4", label: "Z4", code: 63 },
-      { value: "z5", label: "Z5", code: 64 }
-    ]
-  },
   // Accessibilità
   {
     id: "accessibility",
