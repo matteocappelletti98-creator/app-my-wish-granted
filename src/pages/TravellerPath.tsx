@@ -187,8 +187,8 @@ export default function TravellerPath() {
 
   // Load saved answers from localStorage and find the first unanswered question
   useEffect(() => {
-    const hasSeenIntro = localStorage.getItem('traveller-path-intro-seen');
-    const savedAnswers = localStorage.getItem('traveller-path-answers');
+    const hasSeenIntro = localStorage.getItem('traveler-path-intro-seen');
+    const savedAnswers = localStorage.getItem('traveler-path-answers');
     
     if (hasSeenIntro) {
       setShowIntro(false);
@@ -213,11 +213,11 @@ export default function TravellerPath() {
   // Save answers to localStorage whenever they change (but only after initial load)
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem('traveller-path-answers', JSON.stringify(answers));
+      localStorage.setItem('traveler-path-answers', JSON.stringify(answers));
       // Salva anche i codici numerici
       const codes = convertAnswersToCodes(answers);
-      localStorage.setItem('traveller-path-codes', JSON.stringify(codes));
-      console.log('Codici traveller path salvati:', codes);
+      localStorage.setItem('traveler-path-codes', JSON.stringify(codes));
+      console.log('Codici traveler path salvati:', codes);
     }
   }, [answers, isLoaded]);
 
@@ -261,7 +261,7 @@ export default function TravellerPath() {
   };
 
   const handleStartQuestionnaire = () => {
-    localStorage.setItem('traveller-path-intro-seen', 'true');
+    localStorage.setItem('traveler-path-intro-seen', 'true');
     setShowIntro(false);
   };
 
@@ -288,7 +288,7 @@ export default function TravellerPath() {
             <div className="mb-8">
               <Compass className="w-24 h-24 md:w-28 md:h-28 mx-auto mb-6 text-blue-600" />
               <h1 className="text-6xl md:text-7xl font-bebas text-blue-900 mb-4 tracking-wide">
-                TRAVELLER PATH
+                TRAVELER PATH
               </h1>
               <p className="text-xl md:text-2xl font-bebas text-blue-900 tracking-wide max-w-lg mx-auto mb-12">
                 Answer a few quick questions and get a <span className="text-orange-700">personalized</span> selection of places made just for you.
@@ -322,7 +322,7 @@ export default function TravellerPath() {
             
             <button
               onClick={() => {
-                localStorage.removeItem('traveller-path-intro-seen');
+                localStorage.removeItem('traveler-path-intro-seen');
                 setShowIntro(true);
               }}
               className="text-xs text-blue-600/70 hover:text-blue-800 transition-colors"
@@ -332,7 +332,7 @@ export default function TravellerPath() {
           </div>
           
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-            <h1 className="text-3xl md:text-4xl font-bebas text-blue-900 tracking-wide">TRAVELLER PATH</h1>
+            <h1 className="text-3xl md:text-4xl font-bebas text-blue-900 tracking-wide">TRAVELER PATH</h1>
             
             <div className="text-xs md:text-sm text-blue-600/70 font-medium">
               {getAnsweredQuestionsCount()} / {questions.length}
@@ -438,7 +438,7 @@ export default function TravellerPath() {
                 <Button
                   onClick={() => {
                     const codes = convertAnswersToCodes(answers);
-                    alert(`Traveller Path completato! I tuoi codici: ${codes.join(', ')}`);
+                    alert(`Traveler Path completato! I tuoi codici: ${codes.join(', ')}`);
                   }}
                   className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 h-9 px-3 md:h-10 md:px-4 text-xs md:text-sm"
                   size="sm"
