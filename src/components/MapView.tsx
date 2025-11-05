@@ -770,9 +770,7 @@ export default function MapView({ places, selectedCategories = [], className, on
 
             {/* Photo Gallery */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <h4 className="text-sm font-medium">Galleria foto</h4>
-              </div>
+              <h4 className="text-sm font-medium">Galleria foto</h4>
               
               {placePhotos.length > 0 && (
                 <div className="grid grid-cols-4 gap-2">
