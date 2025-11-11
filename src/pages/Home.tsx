@@ -109,7 +109,7 @@ export default function Home() {
           {/* Manifesto */}
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-blue-100/50 text-center">
             <h2 className="text-3xl md:text-4xl font-bebas font-normal text-blue-900 leading-tight tracking-wide">
-              We've gathered the best of Como — explore the map, discover the blog, follow your path, and become your <span className="text-sunset-orange">own</span> guide. Because we're <span className="text-sunset-orange">just</span> True Local.
+              We've gathered the best of Como — explore the map, discover the blog, follow your path, and become your <span className="text-orange-700">own</span> guide. Because we're <span className="text-orange-700">just</span> True Local.
             </h2>
             <div className="mt-6 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
             
