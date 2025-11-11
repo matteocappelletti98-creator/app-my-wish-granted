@@ -94,9 +94,6 @@ export default function Home() {
               TRUE LOCAL
             </h1>
             <p className="text-base text-blue-900 font-bebas tracking-wide mb-4">discover the city</p>
-            <p className="text-lg text-sunset-orange font-bebas tracking-wide leading-relaxed">
-              We've gathered the best of Como — explore the map, discover the blog, follow your path, and become your own guide. Because we're just True Local.
-            </p>
           </div>
 
           {/* Sponsor Section */}
@@ -112,7 +109,7 @@ export default function Home() {
           {/* Manifesto */}
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-blue-100/50 text-center">
             <h2 className="text-3xl md:text-4xl font-bebas font-normal text-blue-900 leading-tight tracking-wide">
-              WE'VE MAPPED THE BEST OF COMO — EXPLORE, CREATE YOUR OWN GUIDE, READ OUR TIPS AND DISCOVER YOUR "TRAVELER PATH"
+              We've gathered the best of Como — explore the map, discover the blog, follow your path, and become your own guide. Because we're <span className="text-sunset-orange">just</span> True Local.
             </h2>
             <div className="mt-6 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
             
