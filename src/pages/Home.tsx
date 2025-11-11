@@ -94,6 +94,9 @@ export default function Home() {
               TRUE LOCAL
             </h1>
             <p className="text-base text-blue-900 font-bebas tracking-wide mb-4">discover the city</p>
+            <p className="text-lg text-sunset-orange font-bebas tracking-wide leading-relaxed">
+              We've gathered the best of Como — explore the map, discover the blog, follow your path, and become your own guide. Because we're just True Local.
+            </p>
           </div>
 
           {/* Sponsor Section */}
