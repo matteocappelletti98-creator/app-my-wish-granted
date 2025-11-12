@@ -430,13 +430,17 @@ export default function TravellerPath() {
             
             <div className="flex items-center gap-3">
               <Select value={tpLanguage} onValueChange={(value) => setTpLanguage(value as TPLanguage)}>
-                <SelectTrigger className="w-[140px] h-8 text-xs border-blue-200 bg-white/70">
-                  <Globe className="w-3 h-3 mr-1" />
+                <SelectTrigger className="w-[140px] h-9 text-xs font-medium border-2 border-primary/20 bg-gradient-to-r from-white/90 to-sky-light/40 backdrop-blur-sm hover:border-ocean-blue hover:shadow-md transition-all rounded-lg">
+                  <Globe className="w-3.5 h-3.5 mr-1.5 text-ocean-blue" />
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-white/95 backdrop-blur-sm border-blue-100/50 z-50">
+                <SelectContent className="bg-white/95 backdrop-blur-md border-2 border-ocean-blue/30 shadow-xl z-50 rounded-lg">
                   {Object.entries(languageLabels).map(([code, label]) => (
-                    <SelectItem key={code} value={code} className="text-xs">
+                    <SelectItem 
+                      key={code} 
+                      value={code} 
+                      className="text-xs font-medium cursor-pointer hover:bg-sky-light/50 focus:bg-sky-light/60 transition-colors rounded-md"
+                    >
                       {label}
                     </SelectItem>
                   ))}
@@ -448,7 +452,7 @@ export default function TravellerPath() {
                   localStorage.removeItem('traveler-path-intro-seen');
                   setShowIntro(true);
                 }}
-                className="text-xs text-blue-600/70 hover:text-blue-800 transition-colors"
+                className="text-xs font-medium text-primary/60 hover:text-ocean-blue hover:scale-105 transition-all"
               >
                 ← Torna all'inizio
               </button>
