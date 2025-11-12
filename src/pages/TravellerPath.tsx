@@ -1,158 +1,245 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Check, ArrowLeft, Clock, Compass } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, ArrowLeft, Clock, Compass, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link } from "react-router-dom";
-import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+type TPLanguage = "it" | "en" | "es" | "fr" | "de";
 
 interface Question {
   id: string;
-  category: string;
-  question: string;
-  options: { value: string; label: string; code: number }[];
+  category: {
+    it: string;
+    en: string;
+    es: string;
+    fr: string;
+    de: string;
+  };
+  question: {
+    it: string;
+    en: string;
+    es: string;
+    fr: string;
+    de: string;
+  };
+  options: {
+    value: string;
+    label: {
+      it: string;
+      en: string;
+      es: string;
+      fr: string;
+      de: string;
+    };
+    code: number;
+  }[];
   multiple?: boolean;
 }
 
 const questions: Question[] = [
-  // Profilo
   {
     id: "profile_type",
-    category: "Profilo",
-    question: "Sei un Local o un Traveler?",
+    category: { it: "Profilo", en: "Profile", es: "Perfil", fr: "Profil", de: "Profil" },
+    question: {
+      it: "Sei local o viaggiatore?",
+      en: "Are you a local or a traveler?",
+      es: "¿Eres local o viajero?",
+      fr: "Tu es local ou voyageur ?",
+      de: "Bist du ein Local oder ein Reisender?"
+    },
     options: [
-      { value: "local", label: "Local", code: 1 },
-      { value: "traveler", label: "Traveler", code: 2 }
+      { value: "local", label: { it: "local", en: "local", es: "local", fr: "local", de: "local" }, code: 1 },
+      { value: "traveler", label: { it: "viaggiatore", en: "traveler", es: "viajero", fr: "voyageur", de: "reisender" }, code: 2 }
     ]
   },
   {
     id: "gender",
-    category: "Profilo",
-    question: "Genere",
+    category: { it: "Profilo", en: "Profile", es: "Perfil", fr: "Profil", de: "Profil" },
+    question: {
+      it: "Genere",
+      en: "Gender",
+      es: "Genre",
+      fr: "Genre",
+      de: "Geschlecht"
+    },
     options: [
-      { value: "male", label: "Maschio", code: 10 },
-      { value: "female", label: "Femmina", code: 11 },
-      { value: "other", label: "Altro", code: 12 }
+      { value: "male", label: { it: "Uomo", en: "Man", es: "Hombre", fr: "Homme", de: "Mann" }, code: 3 },
+      { value: "female", label: { it: "Donna", en: "Woman", es: "Mujer", fr: "Femme", de: "Frau" }, code: 4 },
+      { value: "other", label: { it: "Altro", en: "Other", es: "Otro", fr: "Autre", de: "Andere" }, code: 5 }
     ]
   },
   {
     id: "age",
-    category: "Profilo",
-    question: "Età",
+    category: { it: "Profilo", en: "Profile", es: "Perfil", fr: "Profil", de: "Profil" },
+    question: {
+      it: "Età",
+      en: "Age",
+      es: "Edad",
+      fr: "Âge",
+      de: "Alter"
+    },
     options: [
-      { value: "under_18", label: "<18", code: 20 },
-      { value: "18_24", label: "18–24", code: 21 },
-      { value: "25_34", label: "25–34", code: 22 },
-      { value: "35_49", label: "35–49", code: 23 },
-      { value: "50_64", label: "50–64", code: 24 },
-      { value: "over_65", label: ">65", code: 25 }
+      { value: "under_18", label: { it: "Minore di 18", en: "Under 18", es: "Menores de 18", fr: "Moins de 18", de: "Unter 18" }, code: 6 },
+      { value: "18_24", label: { it: "18 - 24", en: "18 - 24", es: "18 - 24", fr: "18 - 24", de: "18 - 24" }, code: 7 },
+      { value: "25_34", label: { it: "25 - 34", en: "25 - 34", es: "25 - 34", fr: "25 - 34", de: "25 - 34" }, code: 8 },
+      { value: "35_49", label: { it: "35 - 49", en: "35 - 49", es: "35 - 49", fr: "35 - 49", de: "35 - 49" }, code: 9 },
+      { value: "50_64", label: { it: "50 - 64", en: "50 - 64", es: "50 - 64", fr: "50 - 64", de: "50 - 64" }, code: 10 },
+      { value: "over_64", label: { it: "maggiore di 64", en: "Over 64", es: "Más de 64", fr: "Plus de 64", de: "Über 64" }, code: 11 }
     ]
   },
   {
-    id: "nationality",
-    category: "Profilo",
-    question: "Nazionalità",
+    id: "inclination",
+    category: { it: "Interessi", en: "Interests", es: "Intereses", fr: "Centres d'intérêt", de: "Interessen" },
+    question: {
+      it: "Inclinazione",
+      en: "Interests",
+      es: "Intereses",
+      fr: "Centres d'intérêt",
+      de: "Interessen"
+    },
+    multiple: true,
     options: [
-      { value: "europe", label: "Europa", code: 90 },
-      { value: "usa", label: "USA", code: 91 },
-      { value: "south_america", label: "Sud America", code: 92 },
-      { value: "asia", label: "Asia", code: 93 },
-      { value: "africa", label: "Africa", code: 94 },
-      { value: "middle_east", label: "Middle East", code: 95 }
+      { value: "adventure", label: { it: "Avventura", en: "Adventure", es: "Aventura", fr: "Aventure", de: "Abenteuer" }, code: 12 },
+      { value: "relax", label: { it: "Relax", en: "Relax", es: "Relax", fr: "Détente", de: "Entspannung" }, code: 13 },
+      { value: "culture", label: { it: "Cultura", en: "Culture", es: "Cultura", fr: "Culture", de: "Kultur" }, code: 14 },
+      { value: "shopping", label: { it: "Shopping", en: "Shopping", es: "Shopping", fr: "Shopping", de: "Shopping" }, code: 15 },
+      { value: "nightlife", label: { it: "Night life", en: "Night life", es: "Vida nocturna", fr: "Vie nocturne", de: "Nachtleben" }, code: 16 },
+      { value: "foodie", label: { it: "Foodie", en: "Foodie", es: "Foodie", fr: "Foodie", de: "Foodie" }, code: 17 },
+      { value: "luxury", label: { it: "Lusso", en: "Luxury", es: "Lujo", fr: "Luxe", de: "Luxus" }, code: 18 }
     ]
   },
-  // Composizione del viaggio
   {
-    id: "travel_composition",
-    category: "Composizione del viaggio",
-    question: "Composizione",
+    id: "cuisine_style",
+    category: { it: "Cucina", en: "Cuisine", es: "Cocina", fr: "Cuisine", de: "Küche" },
+    question: {
+      it: "Stile di cucina",
+      en: "Cuisine Style",
+      es: "Estilo de cocina",
+      fr: "Style de cuisine",
+      de: "Küchenstil"
+    },
+    multiple: true,
     options: [
-      { value: "solo", label: "Solo", code: 110 },
-      { value: "couple", label: "Coppia", code: 111 },
-      { value: "group", label: "Gruppo", code: 112 },
-      { value: "family", label: "Famiglia", code: 113 }
+      { value: "traditional", label: { it: "Tradizionale", en: "Traditional", es: "Tradicional", fr: "Traditionnel", de: "Traditionell" }, code: 19 },
+      { value: "fine_dining", label: { it: "Alta cucina", en: "Fine dining", es: "Alta cocina", fr: "Haute cuisine", de: "Feine Küche" }, code: 20 },
+      { value: "fusion", label: { it: "Fusion", en: "Fusion", es: "Fusion", fr: "Fusion", de: "Fusionsküche" }, code: 21 },
+      { value: "wine_pairing", label: { it: "Wine paring", en: "Wine paring", es: "Maridaje de vinos", fr: "Accords mets-vins", de: "Weinbegleitung" }, code: 22 },
+      { value: "street_food", label: { it: "Street food", en: "Street food", es: "Street food", fr: "Street food", de: "Street food" }, code: 23 }
+    ]
+  },
+  {
+    id: "food_preferences",
+    category: { it: "Cucina", en: "Cuisine", es: "Cocina", fr: "Cuisine", de: "Küche" },
+    question: {
+      it: "Preferenza culinaria",
+      en: "Food Preferences",
+      es: "Preferencias culinarias",
+      fr: "Préférences culinaire",
+      de: "Kulinarische Vorlieben"
+    },
+    multiple: true,
+    options: [
+      { value: "vegan", label: { it: "Vegana", en: "Vegan", es: "Vegano", fr: "Vegan", de: "Vegan" }, code: 24 },
+      { value: "vegetarian", label: { it: "Vegetariana", en: "Vegetarian", es: "Vegetariano", fr: "Végétarien", de: "Vegetarisch" }, code: 25 },
+      { value: "gluten_free", label: { it: "Senza glutine", en: "Gluten-free", es: "Sin gluten", fr: "Sans gluten", de: "Glutenfrei" }, code: 26 },
+      { value: "organic", label: { it: "Biologico", en: "Organic", es: "Orgánico", fr: "Biologique", de: "Bio" }, code: 27 },
+      { value: "fish", label: { it: "Pesce", en: "Fish", es: "Pescado", fr: "Poisson", de: "Fisch" }, code: 28 },
+      { value: "meat", label: { it: "Carne", en: "Meat", es: "Carne", fr: "Viande", de: "Fleisch" }, code: 29 },
+      { value: "brunch", label: { it: "Brunch spot", en: "Brunch spot", es: "Brunch", fr: "Brunch", de: "Brunch" }, code: 30 },
+      { value: "quick_bite", label: { it: "Quick Bite", en: "Quick Bite", es: "Quick Bite", fr: "Quick Bite", de: "Quick Bite" }, code: 31 }
+    ]
+  },
+  {
+    id: "origin",
+    category: { it: "Provenienza", en: "Origin", es: "Procedencia", fr: "Provenance", de: "Herkunft" },
+    question: {
+      it: "Provenienza",
+      en: "Origin",
+      es: "Procedencia",
+      fr: "Provenance",
+      de: "Herkunft"
+    },
+    options: [
+      { value: "europe", label: { it: "Europa", en: "Europe", es: "Europa", fr: "Europe", de: "Europa" }, code: 32 },
+      { value: "north_america", label: { it: "Nord America", en: "North America", es: "Norteamérica", fr: "Amérique du Nord", de: "Nord-Amerika" }, code: 33 },
+      { value: "south_america", label: { it: "Sud America", en: "South America", es: "América del Sur", fr: "Amérique du Sud", de: "Südamerika" }, code: 34 },
+      { value: "asia", label: { it: "Asia", en: "Asia", es: "Asia", fr: "Asie", de: "Asien" }, code: 35 },
+      { value: "africa", label: { it: "Africa", en: "Africa", es: "África", fr: "Afrique", de: "Afrika" }, code: 36 },
+      { value: "middle_east", label: { it: "Medio Oriente", en: "Middle East", es: "Oriente Próximo", fr: "Moyen-Orient", de: "Naher Osten" }, code: 37 },
+      { value: "oceania", label: { it: "Oceania", en: "Oceania", es: "Oceanía", fr: "Océanie", de: "Ozeanien" }, code: 38 }
     ]
   },
   {
     id: "budget",
-    category: "Budget",
-    question: "Budget indicativo",
+    category: { it: "Budget", en: "Budget", es: "Presupuesto", fr: "Budget", de: "Budget" },
+    question: {
+      it: "Budget indicativo",
+      en: "Indicative budget",
+      es: "Presupuesto orientativo",
+      fr: "Budget indicatif",
+      de: "Geschätztes Budget"
+    },
     options: [
-      { value: "low", label: "Low", code: 120 },
-      { value: "medium", label: "Medium", code: 121 },
-      { value: "premium", label: "Premium", code: 122 }
-    ]
-  },
-  // Viaggio
-  {
-    id: "travel_inclination",
-    category: "Viaggio",
-    question: "Inclinazione",
-    multiple: true,
-    options: [
-      { value: "adventure", label: "Avventura", code: 30 },
-      { value: "relax", label: "Relax", code: 31 },
-      { value: "culture", label: "Cultura", code: 32 },
-      { value: "shopping", label: "Shopping", code: 33 },
-      { value: "nightlife", label: "Nightlife", code: 34 },
-      { value: "socializing", label: "Socializing", code: 35 }
+      { value: "low", label: { it: "Basso", en: "Low", es: "Bajo", fr: "Bas", de: "Niedrig" }, code: 39 },
+      { value: "medium", label: { it: "Medio", en: "Medium", es: "Medio", fr: "Moyen", de: "Mittel" }, code: 40 },
+      { value: "premium", label: { it: "Premium", en: "Premium", es: "Premium", fr: "Premium", de: "Premium" }, code: 41 }
     ]
   },
   {
     id: "duration",
-    category: "Viaggio",
-    question: "Tempo di permanenza",
+    category: { it: "Durata", en: "Duration", es: "Duración", fr: "Durée", de: "Dauer" },
+    question: {
+      it: "Tempo di permanenza",
+      en: "Length of Stay",
+      es: "Duración de la estancia",
+      fr: "Durée du séjour",
+      de: "Aufenthaltsdauer"
+    },
     options: [
-      { value: "1_day", label: "1 giorno", code: 40 },
-      { value: "2_days", label: "2 giorni", code: 41 },
-      { value: "3_7_days", label: "3–7 giorni", code: 42 },
-      { value: "over_7_days", label: ">7 giorni", code: 43 }
+      { value: "1_day", label: { it: "1 giorno", en: "1 day", es: "1 día", fr: "1 jour", de: "1 Tag" }, code: 42 },
+      { value: "2_days", label: { it: "2 giorni", en: "2 days", es: "2 días", fr: "2 jours", de: "2 Tage" }, code: 43 },
+      { value: "3_7_days", label: { it: "3 - 7 giorni", en: "3 - 7 days", es: "3 - 7 días", fr: "3 - 7 jours", de: "3 - 7 Tage" }, code: 44 },
+      { value: "over_7_days", label: { it: "Oltre 7 giorni", en: "Over 7 days", es: "Más de 7 días", fr: "Plus de 7 jours", de: "Über 7 Tage" }, code: 45 }
+    ]
+  },
+  {
+    id: "composition",
+    category: { it: "Composizione", en: "Composition", es: "Composición", fr: "Composition", de: "Zusammensetzung" },
+    question: {
+      it: "Composizione",
+      en: "Group type",
+      es: "Composición",
+      fr: "Composition",
+      de: "Zusammensetzung"
+    },
+    options: [
+      { value: "solo", label: { it: "Solo", en: "Solo", es: "Solo", fr: "Seul(e)", de: "Allein" }, code: 46 },
+      { value: "couple", label: { it: "Coppia", en: "Couple", es: "Pareja", fr: "Couple", de: "Paar" }, code: 47 },
+      { value: "group", label: { it: "Gruppo", en: "Group", es: "Grupo", fr: "Groupe", de: "Gruppe" }, code: 48 },
+      { value: "family", label: { it: "Famiglia", en: "Family", es: "Familia", fr: "Famille", de: "Familia" }, code: 49 }
     ]
   },
   {
     id: "transport",
-    category: "Viaggio",
-    question: "Mezzo di trasporto",
-    multiple: true,
+    category: { it: "Trasporto", en: "Transport", es: "Transporte", fr: "Transport", de: "Transport" },
+    question: {
+      it: "Mezzo di trasporto",
+      en: "Means of Transport",
+      es: "Medio de transporte",
+      fr: "Moyen de transport",
+      de: "Transportmittel"
+    },
     options: [
-      { value: "own", label: "Proprio", code: 70 },
-      { value: "none", label: "No", code: 71 },
-      { value: "rental", label: "Vorrei noleggiarlo", code: 72 }
-    ]
-  },
-  // Cucina
-  {
-    id: "cuisine",
-    category: "Cucina / preferenze culinarie",
-    question: "Preferenze culinarie",
-    multiple: true,
-    options: [
-      { value: "homemade", label: "Casereccia", code: 50 },
-      { value: "fine_dining", label: "Fine dining", code: 51 },
-      { value: "healthy", label: "Healthy", code: 52 },
-      { value: "wine_pairing", label: "Wine pairing", code: 53 },
-      { value: "street_food", label: "Street food", code: 54 },
-      { value: "late_night", label: "Late-night eats", code: 55 },
-      { value: "vegan", label: "Vegano", code: 80 },
-      { value: "vegetarian", label: "Vegetariano", code: 81 },
-      { value: "gluten_free", label: "Gluten free", code: 82 },
-      { value: "organic", label: "Organic", code: 83 },
-      { value: "dairy_free", label: "Dairy free", code: 84 },
-      { value: "halal", label: "Halal", code: 85 },
-      { value: "nuts_free", label: "Nuts free", code: 86 }
-    ]
-  },
-  // Accessibilità
-  {
-    id: "accessibility",
-    category: "Accessibilità / categorie fragili",
-    question: "Necessità specifiche",
-    multiple: true,
-    options: [
-      { value: "reduced_mobility", label: "Mobilità ridotta", code: 100 },
-      { value: "odorophobia", label: "Odorofobia", code: 101 },
-      { value: "elderly", label: "Anziani", code: 102 },
-      { value: "pregnant", label: "Donne incinta", code: 103 },
-      { value: "mental_wellness", label: "Benessere mentale", code: 104 }
+      { value: "own", label: { it: "Proprio", en: "My own", es: "Personnel", fr: "Seul(e)", de: "Eigenes" }, code: 50 },
+      { value: "none", label: { it: "Nessuno", en: "None", es: "Ninguno", fr: "Aucun", de: "Keines" }, code: 51 },
+      { value: "rental", label: { it: "Vorrei noleggiarlo", en: "I'd like to rent one", es: "Me gustaría alquilar uno", fr: "Je voudrais en louer un", de: "Ich möchte eines mieten" }, code: 52 }
     ]
   }
 ];
@@ -180,19 +267,24 @@ const convertAnswersToCodes = (answers: Record<string, string | string[]>): numb
 };
 
 export default function TravellerPath() {
-  const { t } = useLanguage();
+  const [tpLanguage, setTpLanguage] = useState<TPLanguage>("it");
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
 
-  // Load saved answers from localStorage and find the first unanswered question
+  // Load saved answers and language from localStorage and find the first unanswered question
   useEffect(() => {
     const hasSeenIntro = localStorage.getItem('traveler-path-intro-seen');
     const savedAnswers = localStorage.getItem('traveler-path-answers');
+    const savedLanguage = localStorage.getItem('traveler-path-language');
     
     if (hasSeenIntro) {
       setShowIntro(false);
+    }
+    
+    if (savedLanguage) {
+      setTpLanguage(savedLanguage as TPLanguage);
     }
     
     if (savedAnswers) {
@@ -210,6 +302,13 @@ export default function TravellerPath() {
     }
     setIsLoaded(true);
   }, []);
+
+  // Save language to localStorage whenever it changes
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem('traveler-path-language', tpLanguage);
+    }
+  }, [tpLanguage, isLoaded]);
 
   // Save answers to localStorage whenever they change (but only after initial load)
   useEffect(() => {
@@ -266,11 +365,19 @@ export default function TravellerPath() {
     setShowIntro(false);
   };
 
+  const languageLabels = {
+    it: "Italiano",
+    en: "English",
+    es: "Español",
+    fr: "Français",
+    de: "Deutsch"
+  };
+
   // Don't render until data is loaded
   if (!isLoaded) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 flex items-center justify-center">
-        <div className="text-blue-600">{t('travellerPath.loading')}</div>
+        <div className="text-blue-600">Loading...</div>
       </div>
     );
   }
@@ -321,15 +428,31 @@ export default function TravellerPath() {
               <span className="text-sm">Home</span>
             </Link>
             
-            <button
-              onClick={() => {
-                localStorage.removeItem('traveler-path-intro-seen');
-                setShowIntro(true);
-              }}
-              className="text-xs text-blue-600/70 hover:text-blue-800 transition-colors"
-            >
-              ← Torna all'inizio
-            </button>
+            <div className="flex items-center gap-3">
+              <Select value={tpLanguage} onValueChange={(value) => setTpLanguage(value as TPLanguage)}>
+                <SelectTrigger className="w-[140px] h-8 text-xs border-blue-200 bg-white/70">
+                  <Globe className="w-3 h-3 mr-1" />
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-white/95 backdrop-blur-sm border-blue-100/50 z-50">
+                  {Object.entries(languageLabels).map(([code, label]) => (
+                    <SelectItem key={code} value={code} className="text-xs">
+                      {label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <button
+                onClick={() => {
+                  localStorage.removeItem('traveler-path-intro-seen');
+                  setShowIntro(true);
+                }}
+                className="text-xs text-blue-600/70 hover:text-blue-800 transition-colors"
+              >
+                ← Torna all'inizio
+              </button>
+            </div>
           </div>
           
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
@@ -357,13 +480,13 @@ export default function TravellerPath() {
           {/* Category */}
           <div className="mb-4 md:mb-6">
             <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-blue-100/50 text-blue-700 rounded-full text-xs md:text-sm font-medium">
-              {currentQuestion.category}
+              {currentQuestion.category[tpLanguage]}
             </span>
           </div>
 
           {/* Question */}
           <h2 className="text-xl md:text-2xl font-bebas text-blue-900 mb-6 md:mb-8 tracking-wide">
-            {currentQuestion.question}
+            {currentQuestion.question[tpLanguage]}
           </h2>
 
           {/* Answer Options */}
@@ -385,7 +508,7 @@ export default function TravellerPath() {
                       onChange={() => handleAnswerChange(option.value)}
                       className="hidden"
                     />
-                    <span className="text-sm md:text-base font-medium">{option.label}</span>
+                    <span className="text-sm md:text-base font-medium">{option.label[tpLanguage]}</span>
                   </label>
                 ))}
               </div>
@@ -405,7 +528,7 @@ export default function TravellerPath() {
                     }`}
                   >
                     <RadioGroupItem value={option.value} className="hidden" />
-                    <span className="text-sm md:text-base font-medium">{option.label}</span>
+                    <span className="text-sm md:text-base font-medium">{option.label[tpLanguage]}</span>
                   </label>
                 ))}
               </RadioGroup>
