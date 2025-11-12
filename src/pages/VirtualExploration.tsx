@@ -146,10 +146,46 @@ export default function VirtualExploration() {
     }
   }, []);
 
+  // Tutte le categorie da visualizzare, anche se vuote
+  const allCategories = [
+    'restaurant',
+    'culture',
+    'shopping',
+    'attractions',
+    'info',
+    'taxi',
+    'boat',
+    'cafe',
+    'villa',
+    'adventure',
+    'transport',
+    'lidi',
+    'bar',
+    'cinema',
+    'stroll',
+    'wc',
+    'free_beaches',
+    'secret',
+    'gelato',
+    'refuge',
+    'luggage',
+    'rent',
+    'bakery',
+    'local',
+    'parking',
+    'private_luxury',
+    'pizza',
+    'gym',
+    'pub',
+    'nightlife',
+    'late_night',
+    'wine_bar',
+    'gastronomy'
+  ];
+
   const categories = useMemo(() => {
-    const s = new Set(all.map(p => normalizeCategory(p.category)).filter(Boolean));
-    return Array.from(s);
-  }, [all]);
+    return allCategories;
+  }, []);
 
   const filtered = useMemo(() => {
     const needle = search.toLowerCase();
@@ -171,41 +207,39 @@ export default function VirtualExploration() {
 
   // Mapping dei titoli delle categorie
   const categoryTitles: Record<string, string> = {
-    culture: "Art & Culture",
-    bakery: "Bakery and Pastry",
-    pizza: "Pizza",
-    transport: "Public Transport",
-    wc: "Public Toilets",
-    restaurant: "Restaurants",
-    bar: "Bars & Cocktails",
-    cocktails: "Bars & Cocktails",
-    cafe: "Café",
-    street_food: "Street Food",
-    bike: "Bike Riding",
-    luggage: "Luggage Storage",
-    taxi: "Taxi & Private Transport",
-    atm: "ATM",
-    boat: "Boat Rental",
-    attractions: "Attractions",
-    nightlife: "Night Life",
-    shop: "Shopping",
+    restaurant: "Ristoranti",
+    culture: "Art and Culture",
     shopping: "Shopping",
-    luxury: "Luxury Shopping",
-    shopping_hq: "Luxury Shopping",
-    gym: "Gym",
-    parking: "Parking",
-    free_beaches: "Free Beaches",
-    private_luxury: "Private & Luxury",
-    refuge: "Mountain Refuge",
+    attractions: "Attractions",
+    info: "Info Point",
+    taxi: "Taxi",
+    boat: "Boat Rental",
+    cafe: "Cafè",
     villa: "Villa",
-    stroll: "Strolls",
-    lidi: "Beach Resorts",
-    beach: "Beach Resorts",
-    secret: "Secret Places",
     adventure: "Adventure",
+    transport: "Public Transport",
+    lidi: "Lidi",
+    bar: "Bar and Cocktail's",
+    cinema: "Cinemas & Bookstores",
+    stroll: "Stroll",
+    wc: "WC",
+    free_beaches: "Free Beaches",
+    secret: "Secret Places",
     gelato: "Gelato",
-    daytrips: "Day Trips",
-    grocery: "Grocery"
+    refuge: "Mountain Refuge",
+    luggage: "Luggage Storage",
+    rent: "Rent a Ride",
+    bakery: "Bakery and Pastry",
+    local: "Local Life",
+    parking: "Parking",
+    private_luxury: "Private and Luxury",
+    pizza: "Pizzerie",
+    gym: "Gym",
+    pub: "Pub",
+    nightlife: "Night Life",
+    late_night: "Late Night Eats",
+    wine_bar: "Wine Bar",
+    gastronomy: "Gastronomie"
   };
 
   // Filtra solo i luoghi preferiti per la lista
