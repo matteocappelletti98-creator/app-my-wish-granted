@@ -247,7 +247,7 @@ export default function LuogoDetail() {
               HAI VISITATO {place.name.toUpperCase()}?
             </h3>
             <p className="text-sm md:text-base text-blue-700/70 font-light mb-6 md:mb-8 max-w-2xl mx-auto">
-              Condividi la tua esperienza e aiuta altri viaggiatori a scoprire questo luogo
+              Condividi la tua esperienza e aiutaci a mantenere viva l'autenticità di True Local.
             </p>
             <button 
               className="px-6 md:px-8 py-2.5 md:py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all text-sm md:text-base border border-blue-600 hover:border-blue-700"
