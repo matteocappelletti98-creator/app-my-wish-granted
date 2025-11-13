@@ -298,49 +298,26 @@ export default function LuogoDetail() {
                   <DialogTitle className="text-2xl font-light text-blue-900">
                     Valuta {place.name}
                   </DialogTitle>
-                  <DialogDescription className="text-blue-700/70">
-                    Condividi la tua esperienza con altri viaggiatori
-                  </DialogDescription>
                 </DialogHeader>
                 
                 <div className="space-y-6 py-4">
-                  {/* Rating selector */}
-                  <div>
-                    <label className="text-sm font-medium text-blue-900 mb-3 block">
-                      Valutazione (1-10)
-                    </label>
-                    <div className="grid grid-cols-10 gap-2">
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                        <button
-                          key={num}
-                          type="button"
-                          onClick={() => setRating(num)}
-                          className={`aspect-square rounded-lg font-medium transition-all ${
-                            rating === num
-                              ? "bg-blue-600 text-white scale-110 shadow-lg"
-                              : "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                          }`}
-                        >
-                          {num}
-                        </button>
-                      ))}
-                    </div>
+                  <div className="grid grid-cols-10 gap-2">
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                      <button
+                        key={num}
+                        type="button"
+                        onClick={() => setRating(num)}
+                        className={`aspect-square rounded-lg font-medium transition-all ${
+                          rating === num
+                            ? "bg-blue-600 text-white scale-110 shadow-lg"
+                            : "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                        }`}
+                      >
+                        {num}
+                      </button>
+                    ))}
                   </div>
 
-                  {/* Review text */}
-                  <div>
-                    <label className="text-sm font-medium text-blue-900 mb-2 block">
-                      La tua recensione (facoltativo)
-                    </label>
-                    <Textarea
-                      placeholder="Condividi i dettagli della tua esperienza..."
-                      value={reviewText}
-                      onChange={(e) => setReviewText(e.target.value)}
-                      className="min-h-[120px] resize-none"
-                    />
-                  </div>
-
-                  {/* Submit button */}
                   <Button
                     onClick={handleSubmitReview}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white"
