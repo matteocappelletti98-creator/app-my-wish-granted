@@ -142,7 +142,7 @@ export default function Blog() {
                       : "bg-white/80 text-blue-600 border border-blue-200 hover:bg-blue-50"
                   }`}
                 >
-                  FAQ
+                  day trip
                 </Button>
                 <Button 
                   onClick={() => toggleCategory("daytrip")}
