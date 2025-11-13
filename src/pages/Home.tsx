@@ -49,11 +49,11 @@ export default function Home() {
     { value: "es", label: "Español" }
   ];
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 relative overflow-hidden pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-primary/10 relative overflow-hidden pb-24">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-100/30 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-100/30 rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/15 rounded-full blur-3xl"></div>
       </div>
 
       {/* Header - Mobile Optimized */}
@@ -63,12 +63,12 @@ export default function Home() {
           <div className="flex justify-between items-center gap-2 mb-8">
             <div className="flex gap-2">
               <Link to="/auth">
-                <button className="px-4 py-2 text-sm text-blue-900 font-bebas tracking-wide hover:text-blue-800 transition-colors active:scale-95">
+                <button className="px-4 py-2 text-sm text-primary font-bebas tracking-wide hover:text-primary/80 transition-colors active:scale-95">
                   Accedi
                 </button>
               </Link>
               <Link to="/auth">
-                <button className="px-4 py-2 text-sm bg-blue-900 text-white font-bebas tracking-wide rounded-xl hover:bg-blue-800 transition-all active:scale-95">
+                <button className="px-4 py-2 text-sm bg-primary text-primary-foreground font-bebas tracking-wide rounded-xl hover:bg-primary/90 transition-all active:scale-95">
                   Registrati
                 </button>
               </Link>
@@ -76,12 +76,12 @@ export default function Home() {
             <div className="flex gap-2">
               <button 
                 onClick={() => setContactDialogOpen(true)}
-                className="px-3 py-2 text-sm text-blue-900 font-bebas tracking-wide hover:text-blue-600 transition-colors active:scale-95"
+                className="px-3 py-2 text-sm text-primary font-bebas tracking-wide hover:text-primary/80 transition-colors active:scale-95"
               >
                 Contattaci
               </button>
               <Link to="/impostazioni">
-                <button className="p-2 text-blue-600 hover:text-blue-800 transition-colors active:scale-95">
+                <button className="p-2 text-primary hover:text-primary/80 transition-colors active:scale-95">
                   <Settings className="w-5 h-5" />
                 </button>
               </Link>
@@ -90,15 +90,15 @@ export default function Home() {
 
           {/* App Title */}
           <div className="text-center mb-6">
-            <h1 className="text-6xl font-bebas font-normal text-blue-900 mb-3 tracking-wider">
+            <h1 className="text-6xl font-bebas font-normal text-primary mb-3 tracking-wider">
               TRUE LOCAL
             </h1>
-            <p className="text-base text-blue-900 font-bebas tracking-wide mb-4">discover the city</p>
+            <p className="text-base text-primary font-bebas tracking-wide mb-4">discover the city</p>
           </div>
 
           {/* Sponsor Section */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-blue-100/50 text-center mb-6">
-            <p className="text-sm text-blue-900 font-bebas tracking-wide mb-4">Official Sponsor</p>
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-primary/10 text-center mb-6">
+            <p className="text-sm text-primary font-bebas tracking-wide mb-4">Official Sponsor</p>
             <img 
               src={valeoSponsor} 
               alt="Valeo Digital SA" 
@@ -107,8 +107,8 @@ export default function Home() {
           </div>
 
           {/* Manifesto */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-blue-100/50 text-center">
-            <h2 className="text-3xl md:text-4xl font-bebas font-normal text-blue-900 leading-tight tracking-wide">
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-primary/10 text-center">
+            <h2 className="text-3xl md:text-4xl font-bebas font-normal text-primary leading-tight tracking-wide">
               {t('home.manifesto').split(' ').map((word, i) => {
                 const lowerWord = word.toLowerCase();
                 if (['explore', 'esplora', 'explora', 'explorez', 'erkunde', 'discover', 'scopri', 'descubre', 'découvrez', 'entdecke', 'follow', 'segui', 'sigue', 'suivez', 'finde', 'become', 'diventa', 'conviértete', 'devenez', 'werde'].some(w => lowerWord.startsWith(w))) {
@@ -117,7 +117,7 @@ export default function Home() {
                 return <span key={i}>{word} </span>;
               })}
             </h2>
-            <div className="mt-6 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
+            <div className="mt-6 h-1 w-24 bg-primary mx-auto rounded-full"></div>
             
             {/* Join Community Button */}
             <div className="mt-8">
@@ -135,49 +135,49 @@ export default function Home() {
 
       {/* Contact Dialog */}
       <Dialog open={contactDialogOpen} onOpenChange={setContactDialogOpen}>
-        <DialogContent className="bg-white/95 backdrop-blur-sm border-blue-100/50 rounded-2xl max-w-md">
+        <DialogContent className="bg-white/95 backdrop-blur-sm border-primary/10 rounded-2xl max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-2xl md:text-3xl font-bebas text-blue-900 tracking-wide text-center">
+            <DialogTitle className="text-2xl md:text-3xl font-bebas text-primary tracking-wide text-center">
               HAI UN&apos;ATTIVITÀ?
             </DialogTitle>
-            <DialogDescription className="text-sm md:text-base text-blue-700/80 font-light leading-relaxed text-center pt-4">
+            <DialogDescription className="text-sm md:text-base text-primary/70 font-light leading-relaxed text-center pt-4">
               Hai un&apos;attività e lavori con gli stessi criteri della mission di true local: autenticità, qualità ed identità. Ma non sei presente nella guida? Contattaci e valuteremo il tuo ingresso, ricorda non siamo una guida pay to enter e non lo saremo mai! Quindi l&apos;ingresso è completamente gratuito.
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4 pt-4">
             <div>
-              <Label htmlFor="contact-name" className="text-blue-900 font-medium">Nome *</Label>
+              <Label htmlFor="contact-name" className="text-primary font-medium">Nome *</Label>
               <Input
                 id="contact-name"
                 value={contactName}
                 onChange={(e) => setContactName(e.target.value)}
                 placeholder="Il tuo nome"
-                className="mt-1 border-blue-200 focus:border-blue-400"
+                className="mt-1 border-primary/20 focus:border-primary"
               />
             </div>
             
             <div>
-              <Label htmlFor="contact-email" className="text-blue-900 font-medium">Email *</Label>
+              <Label htmlFor="contact-email" className="text-primary font-medium">Email *</Label>
               <Input
                 id="contact-email"
                 type="email"
                 value={contactEmail}
                 onChange={(e) => setContactEmail(e.target.value)}
                 placeholder="tua@email.com"
-                className="mt-1 border-blue-200 focus:border-blue-400"
+                className="mt-1 border-primary/20 focus:border-primary"
               />
             </div>
             
             <div>
-              <Label htmlFor="contact-message" className="text-blue-900 font-medium">Messaggio *</Label>
+              <Label htmlFor="contact-message" className="text-primary font-medium">Messaggio *</Label>
               <Textarea
                 id="contact-message"
                 value={contactMessage}
                 onChange={(e) => setContactMessage(e.target.value)}
                 placeholder="Raccontaci della tua attività..."
                 rows={4}
-                className="mt-1 border-blue-200 focus:border-blue-400"
+                className="mt-1 border-primary/20 focus:border-primary"
               />
             </div>
             
@@ -190,7 +190,7 @@ export default function Home() {
                 setContactEmail("");
                 setContactMessage("");
               }}
-              className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
+              className="w-full px-6 py-3 bg-primary text-primary-foreground font-medium rounded-xl hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
               disabled={!contactName || !contactEmail || !contactMessage}
             >
               <Send className="w-4 h-4" />
