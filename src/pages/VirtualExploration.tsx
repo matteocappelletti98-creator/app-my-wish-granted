@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import MapView from "@/components/MapView";
-import PlaceCard from "@/components/PlaceCard";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
 import { Link, useNavigate } from "react-router-dom";
 import { Heart, MapPin, User } from "lucide-react";
