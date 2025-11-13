@@ -249,7 +249,7 @@ export default function LuogoDetail() {
                 
                 {/* Article Body */}
                 <div 
-                  className="prose prose-blue max-w-none text-blue-800/90 font-light leading-relaxed"
+                  className="prose prose-blue max-w-none text-foreground font-light leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: poiArticle.html }}
                 />
                 
