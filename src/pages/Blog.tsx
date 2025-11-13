@@ -152,7 +152,7 @@ export default function Blog() {
                       : "bg-white/80 text-green-600 border border-green-200 hover:bg-green-50"
                   }`}
                 >
-                  ChéngCity+
+                  City+
                 </Button>
                 <Button 
                   onClick={() => toggleCategory("tip")}
