@@ -109,7 +109,13 @@ export default function Home() {
           {/* Manifesto */}
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-blue-100/50 text-center">
             <h2 className="text-3xl md:text-4xl font-bebas font-normal text-blue-900 leading-tight tracking-wide">
-              We've pinned Como's best. <span className="text-orange-700">Explore</span> the map, <span className="text-orange-700">discover</span> the blog, <span className="text-orange-700">follow</span> your path, and <span className="text-orange-700">become</span> your own guide.
+              {t('home.manifesto').split(' ').map((word, i) => {
+                const lowerWord = word.toLowerCase();
+                if (['explore', 'esplora', 'explora', 'explorez', 'erkunde', 'discover', 'scopri', 'descubre', 'découvrez', 'entdecke', 'follow', 'segui', 'sigue', 'suivez', 'finde', 'become', 'diventa', 'conviértete', 'devenez', 'werde'].some(w => lowerWord.startsWith(w))) {
+                  return <span key={i} className="text-orange-700">{word} </span>;
+                }
+                return <span key={i}>{word} </span>;
+              })}
             </h2>
             <div className="mt-6 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
             

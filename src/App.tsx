@@ -9,6 +9,7 @@ import ArticlePage from "@/pages/ArticlePage";
 import AddPlace from "@/pages/AddPlace";
 import TravellerPath from "@/pages/TravellerPath";
 import Impostazioni from "@/pages/Impostazioni";
+import Lingua from "@/pages/Lingua";
 import Privacy from "@/pages/Privacy";
 import Auth from "@/pages/Auth";
 import Profile from "@/pages/Profile";
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/traveller-path" element={<TravellerPath />} />
         <Route path="/impostazioni" element={<Impostazioni />} />
+        <Route path="/lingua" element={<Lingua />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

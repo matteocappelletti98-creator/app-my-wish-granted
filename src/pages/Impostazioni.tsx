@@ -61,17 +61,19 @@ export default function Impostazioni() {
             </div>
 
             {/* Lingua */}
-            <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-white/50 active:bg-white/90 shadow-lg transition-all active:scale-95">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Globe className="w-6 h-6 text-purple-600" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-medium text-blue-900">Lingua</h3>
-                  <p className="text-blue-600/70 text-sm">Preferenze linguistiche</p>
+            <Link to="/lingua">
+              <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-white/50 active:bg-white/90 shadow-lg transition-all active:scale-95">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Globe className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-medium text-blue-900">Lingua</h3>
+                    <p className="text-blue-600/70 text-sm">Preferenze linguistiche</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
