@@ -342,7 +342,7 @@ export default function Profile() {
       <div className="px-4 py-4">
         <div className="mb-4">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold">Scorri e aggiungi i luoghi</h2>
+            <h2 className="text-lg font-semibold">Esplora e salva</h2>
             
             <Dialog open={suggestionDialogOpen} onOpenChange={setSuggestionDialogOpen}>
               <DialogTrigger asChild>
