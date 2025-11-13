@@ -4,6 +4,17 @@ import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import { getPOIArticleByPoiId, POIArticle } from "@/lib/articles";
 import { ArrowLeft, MapPin, Share2, Bookmark, Camera, ExternalLink } from "lucide-react";
 import CategoryBadge from "@/components/CategoryBadge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/hooks/use-toast";
 
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
 
@@ -48,6 +59,9 @@ export default function LuogoDetail() {
   const [poiArticle, setPOIArticle] = useState<POIArticle | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
+  const [rating, setRating] = useState<number | null>(null);
+  const [reviewText, setReviewText] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -92,6 +106,27 @@ export default function LuogoDetail() {
   }
 
   const articles = getEditorialArticles(place.name);
+
+  const handleSubmitReview = () => {
+    if (rating === null) {
+      toast({
+        title: "Attenzione",
+        description: "Seleziona una valutazione prima di inviare.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // TODO: Salvare la recensione nel database
+    toast({
+      title: "Recensione inviata!",
+      description: "Grazie per aver condiviso la tua esperienza.",
+    });
+    
+    setIsReviewOpen(false);
+    setRating(null);
+    setReviewText("");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/30 via-white to-blue-100/20">
@@ -249,11 +284,72 @@ export default function LuogoDetail() {
             <p className="text-sm md:text-base text-blue-700/70 font-light mb-6 md:mb-8 max-w-2xl mx-auto">
               Condividi la tua esperienza e aiutaci a mantenere viva l'autenticità di True Local.
             </p>
-            <button 
-              className="px-6 md:px-8 py-2.5 md:py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all text-sm md:text-base border border-blue-600 hover:border-blue-700"
-            >
-              Scrivi una recensione
-            </button>
+            
+            <Dialog open={isReviewOpen} onOpenChange={setIsReviewOpen}>
+              <DialogTrigger asChild>
+                <button 
+                  className="px-6 md:px-8 py-2.5 md:py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all text-sm md:text-base border border-blue-600 hover:border-blue-700"
+                >
+                  Scrivi una recensione
+                </button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-light text-blue-900">
+                    Valuta {place.name}
+                  </DialogTitle>
+                  <DialogDescription className="text-blue-700/70">
+                    Condividi la tua esperienza con altri viaggiatori
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="space-y-6 py-4">
+                  {/* Rating selector */}
+                  <div>
+                    <label className="text-sm font-medium text-blue-900 mb-3 block">
+                      Valutazione (1-10)
+                    </label>
+                    <div className="grid grid-cols-10 gap-2">
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                        <button
+                          key={num}
+                          type="button"
+                          onClick={() => setRating(num)}
+                          className={`aspect-square rounded-lg font-medium transition-all ${
+                            rating === num
+                              ? "bg-blue-600 text-white scale-110 shadow-lg"
+                              : "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                          }`}
+                        >
+                          {num}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Review text */}
+                  <div>
+                    <label className="text-sm font-medium text-blue-900 mb-2 block">
+                      La tua recensione (facoltativo)
+                    </label>
+                    <Textarea
+                      placeholder="Condividi i dettagli della tua esperienza..."
+                      value={reviewText}
+                      onChange={(e) => setReviewText(e.target.value)}
+                      className="min-h-[120px] resize-none"
+                    />
+                  </div>
+
+                  {/* Submit button */}
+                  <Button
+                    onClick={handleSubmitReview}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Invia recensione
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </section>
