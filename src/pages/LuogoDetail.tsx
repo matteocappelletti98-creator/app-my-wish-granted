@@ -4,6 +4,7 @@ import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import { getPOIArticleByPoiId, POIArticle } from "@/lib/articles";
 import { ArrowLeft, MapPin, Share2, Bookmark, Camera, ExternalLink } from "lucide-react";
 import CategoryBadge from "@/components/CategoryBadge";
+import LinkifiedText from "@/components/LinkifiedText";
 import {
   Dialog,
   DialogContent,
@@ -183,7 +184,7 @@ export default function LuogoDetail() {
                 </div>
                 {place.description && (
                   <p className="text-sm md:text-lg font-light text-white/90 max-w-2xl leading-relaxed line-clamp-3 md:line-clamp-none">
-                    {place.description}
+                    <LinkifiedText text={place.description} />
                   </p>
                 )}
               </div>

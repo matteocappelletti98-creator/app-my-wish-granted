@@ -1,6 +1,7 @@
 import { Place } from "@/lib/sheet";
 import { Card } from "@/components/ui/card";
 import CategoryBadge from "./CategoryBadge";
+import LinkifiedText from "./LinkifiedText";
 import { MapPin } from "lucide-react";
 
 interface PlaceCardProps {
@@ -32,7 +33,7 @@ export default function PlaceCard({ place }: PlaceCardProps) {
         
         {place.description && (
           <p className="text-sm text-gray-700 line-clamp-2">
-            {place.description}
+            <LinkifiedText text={place.description} />
           </p>
         )}
       </div>
