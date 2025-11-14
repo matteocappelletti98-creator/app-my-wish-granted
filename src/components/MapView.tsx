@@ -5,6 +5,7 @@ import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-direct
 import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
+import LinkifiedText from "@/components/LinkifiedText";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { X, MapPin, ChevronLeft, ChevronRight, Upload, Trash2, Search, Heart } from "lucide-react";
@@ -738,7 +739,9 @@ export default function MapView({ places, selectedCategories = [], className, on
           
           <div className="px-4 pb-6 space-y-3">
             {selectedPlace?.description && (
-              <p className="text-sm text-muted-foreground">{selectedPlace.description}</p>
+              <p className="text-sm text-muted-foreground">
+                <LinkifiedText text={selectedPlace.description} />
+              </p>
             )}
             
             {selectedPlace?.address && (
