@@ -8,7 +8,7 @@ import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 import LinkifiedText from "@/components/LinkifiedText";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { X, MapPin, ChevronLeft, ChevronRight, Upload, Trash2, Search, Heart } from "lucide-react";
+import { X, MapPin, ChevronLeft, ChevronRight, Upload, Trash2, Search, Heart, Map } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
@@ -29,6 +29,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -60,6 +67,7 @@ export default function MapView({ places, selectedCategories = [], className, on
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [userAnswers, setUserAnswers] = useState<Record<string, any>>({});
+  const [selectedMapStyle, setSelectedMapStyle] = useState("prova1");
 
   // Carica le risposte del traveller path
   useEffect(() => {
@@ -299,7 +307,7 @@ export default function MapView({ places, selectedCategories = [], className, on
     
     const map = new mapboxgl.Map({
       container: containerRef.current,
-      style: 'mapbox://styles/teoteoteo/cmg7lnkab002601qo6yviai9g',
+      style: `mapbox://styles/teoteoteo/${selectedMapStyle}`,
       center: [0, 20], // Partiamo da una vista globale centrata
       zoom: 0.8, // Zoom molto lontano per vedere il globo intero
       pitch: 0,
@@ -372,7 +380,7 @@ export default function MapView({ places, selectedCategories = [], className, on
       mapRef.current = null;
       directionsRef.current = null;
     };
-  }, [mapboxToken]);
+  }, [mapboxToken, selectedMapStyle]);
 
   // Aggiungi marker ogni volta che cambia filtered
   useEffect(() => {
@@ -671,7 +679,21 @@ export default function MapView({ places, selectedCategories = [], className, on
             </PopoverContent>
           </Popover>
         </div>
-        
+
+        {/* Selettore Mappa */}
+        <div className="absolute top-4 right-4 z-10">
+          <Select value={selectedMapStyle} onValueChange={setSelectedMapStyle}>
+            <SelectTrigger className="w-[180px] bg-background/95 backdrop-blur-sm shadow-lg border-primary/20 h-9">
+              <Map className="w-4 h-4 mr-2" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="prova1">Mappa 1 - Prova1</SelectItem>
+              <SelectItem value="prova2">Mappa 2 - Prova2</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         <style>{`
           @media (max-width: 768px) {
             .mapboxgl-ctrl-directions {
