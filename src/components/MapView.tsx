@@ -445,14 +445,14 @@ export default function MapView({ places, selectedCategories = [], className, on
           }
         </style>
         <div style="
-          width:30px;height:30px;border-radius:999px;
+          width:24px;height:24px;border-radius:999px;
           background:#fff; display:flex;align-items:center;justify-content:center;
           box-shadow:${isCompatible ? '0 0 20px 4px rgba(59, 130, 246, 0.8), 0 0 40px 8px rgba(59, 130, 246, 0.5), 0 0 60px 12px rgba(59, 130, 246, 0.3), 0 2px 8px rgba(0,0,0,.3)' : '0 2px 8px rgba(0,0,0,.3), 0 0 20px rgba(59, 130, 246, 0.3)'}; 
           border:${isCompatible ? '3px solid #3b82f6' : '1px solid rgba(0,0,0,.1)'};
           cursor: pointer;
           ${shouldAnimate ? `animation: ${animationName} ${isCompatible ? '3.5s' : '2.5s'} ease-out ${delay}ms forwards; opacity: 0;` : 'opacity: 1;'}
         ">
-          <div style="font-size:18px;line-height:18px">${emoji}</div>
+          <div style="font-size:14px;line-height:14px">${emoji}</div>
         </div>
       `;
 
