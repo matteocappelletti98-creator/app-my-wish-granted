@@ -632,6 +632,7 @@ export default function MapView({ places, selectedCategories = [], className, on
             <SelectContent>
               <SelectItem value="cmg7lnkab002601qo6yviai9g">Mappa 1 - Prova1</SelectItem>
               <SelectItem value="cmi7ipg2b00de01sehe83hav9">Mappa 2 - Prova2</SelectItem>
+              <SelectItem value="cmi7jnne9000001sk04x0evzp">Mappa 3 - Prova3</SelectItem>
             </SelectContent>
           </Select>
         </div>
