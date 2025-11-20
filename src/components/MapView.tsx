@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import MapboxDirections from "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions";
-import "@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
 import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 import LinkifiedText from "@/components/LinkifiedText";
@@ -53,7 +51,6 @@ export default function MapView({ places, selectedCategories = [], className, on
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
-  const directionsRef = useRef<MapboxDirections | null>(null);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const isFirstLoadRef = useRef(true);
   const mapboxToken = 'pk.eyJ1IjoidGVvdGVvdGVvIiwiYSI6ImNtZjI5dHo1ajFwZW8ycnM3M3FhanR5dnUifQ.crUxO5_GUe8d5htizwYyOw';
@@ -334,51 +331,11 @@ export default function MapView({ places, selectedCategories = [], className, on
       }, 500);
     });
     
-    // Inizializza Directions
-    const directions = new MapboxDirections({
-      accessToken: mapboxToken,
-      unit: 'metric',
-      profile: 'mapbox/walking',
-      language: 'it',
-      controls: {
-        inputs: true,
-        instructions: true,
-        profileSwitcher: true,
-      },
-      interactive: true,
-      styles: [
-        {
-          'id': 'directions-route-line',
-          'type': 'line',
-          'source': 'directions',
-          'layout': {
-            'line-cap': 'round',
-            'line-join': 'round'
-          },
-          'paint': {
-            'line-color': '#3b82f6',
-            'line-width': 5
-          },
-          'filter': [
-            'all',
-            ['in', '$type', 'LineString'],
-            ['in', 'route', 'selected']
-          ]
-        }
-      ]
-    });
-    
-    directionsRef.current = directions;
-    
-    // Aggiungi il controllo directions alla mappa
-    map.addControl(directions, 'top-left');
-    
     mapRef.current = map;
 
     return () => {
       map.remove();
       mapRef.current = null;
-      directionsRef.current = null;
     };
   }, [mapboxToken, selectedMapStyle]);
 
@@ -512,27 +469,12 @@ export default function MapView({ places, selectedCategories = [], className, on
       window.open(url, '_blank');
     };
     
-    // Funzione globale per ottenere indicazioni
-    (window as any).getDirections = (destLng: number, destLat: number) => {
-      if (!mapRef.current || !directionsRef.current || !userLocation) return;
-      
-      // Aggiungi il controllo directions alla mappa se non è già stato aggiunto
-      if (!mapRef.current.hasControl(directionsRef.current)) {
-        mapRef.current.addControl(directionsRef.current, 'top-left');
-      }
-      
-      // Imposta origine (posizione utente) e destinazione
-      directionsRef.current.setOrigin(userLocation);
-      directionsRef.current.setDestination([destLng, destLat]);
-    };
-    
     return () => {
       delete (window as any).toggleFavorite;
       delete (window as any).goToPlace;
       delete (window as any).openInGoogleMaps;
-      delete (window as any).getDirections;
     };
-  }, [onToggleFavorite, userLocation]);
+  }, [onToggleFavorite]);
 
   // Funzione per selezionare un luogo
   const handleSelectPlace = (place: Place) => {
