@@ -362,6 +362,9 @@ export default function MapView({ places, selectedCategories = [], className, on
     
     directionsRef.current = directions;
     
+    // Aggiungi il controllo directions alla mappa
+    map.addControl(directions, 'top-left');
+    
     mapRef.current = map;
 
     return () => {
