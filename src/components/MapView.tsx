@@ -67,7 +67,7 @@ export default function MapView({ places, selectedCategories = [], className, on
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [userAnswers, setUserAnswers] = useState<Record<string, any>>({});
-  const [selectedMapStyle, setSelectedMapStyle] = useState("prova1");
+  const [selectedMapStyle, setSelectedMapStyle] = useState("cmg7lnkab002601qo6yviai9g");
 
   // Carica le risposte del traveller path
   useEffect(() => {
@@ -688,8 +688,8 @@ export default function MapView({ places, selectedCategories = [], className, on
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="prova1">Mappa 1 - Prova1</SelectItem>
-              <SelectItem value="prova2">Mappa 2 - Prova2</SelectItem>
+              <SelectItem value="cmg7lnkab002601qo6yviai9g">Mappa 1 - Prova1</SelectItem>
+              <SelectItem value="cmi7ipg2b00de01sehe83hav9">Mappa 2 - Prova2</SelectItem>
             </SelectContent>
           </Select>
         </div>
