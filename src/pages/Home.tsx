@@ -94,9 +94,9 @@ export default function Home() {
             <img 
               src={trueLocalLogo} 
               alt="True Local" 
-              className="w-48 h-auto mx-auto mb-3"
+              className="w-72 h-auto mx-auto mb-3"
             />
-            <p className="text-base text-white font-bebas tracking-wide mb-4">discover the city</p>
+            <p className="text-xl text-white font-bebas tracking-wide mb-4">discover the city</p>
           </div>
 
           {/* Sponsor Section */}
