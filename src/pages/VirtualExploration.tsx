@@ -247,16 +247,16 @@ export default function VirtualExploration() {
   }, [all, favorites]);
 
   return (
-    <div className="min-h-screen bg-primary">
+    <div className="min-h-screen bg-[#288cbd]">
       {/* Filtri categorie in alto - Sticky */}
-      <div className="sticky top-0 z-40 bg-primary/95 backdrop-blur-sm border-b border-white/20">
+      <div className="sticky top-0 z-40 bg-[#288cbd]/95 backdrop-blur-sm border-b border-white/20">
         <div className="px-4 py-3 overflow-x-auto scrollbar-hide touch-pan-x">
           <div className="inline-flex gap-1 min-w-full">
             <button
               onClick={() => setSelectedCategories([])}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
                 ${selectedCategories.length === 0 
-                  ? "bg-white text-primary" 
+                  ? "bg-white text-[#288cbd]" 
                   : "bg-white/20 text-white hover:bg-white/30"}`}
             >
               {t('categories.all')}
@@ -267,12 +267,12 @@ export default function VirtualExploration() {
                 onClick={() => toggleCategory(c)}
                 className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
                   ${selectedCategories.includes(c)
-                    ? "bg-white text-primary" 
+                    ? "bg-white text-[#288cbd]" 
                     : "bg-white/20 text-white hover:bg-white/30"}`}
               >
                 <CategoryBadge category={c} />
                 <span>{categoryTitles[c] || c}</span>
-                <span className={`text-[9px] px-1 rounded ${selectedCategories.includes(c) ? 'bg-primary/20' : 'bg-white/20'}`}>
+                <span className={`text-[9px] px-1 rounded ${selectedCategories.includes(c) ? 'bg-[#288cbd]/20' : 'bg-white/20'}`}>
                   {all.filter(p => normalizeCategory(p.category) === c).length}
                 </span>
               </button>
@@ -284,7 +284,7 @@ export default function VirtualExploration() {
       {/* Mappa - Occupa la viewport disponibile */}
       <div className="relative" style={{ height: 'calc(100vh - 8rem)' }}>
         {loading ? (
-          <div className="absolute inset-0 bg-primary flex items-center justify-center">
+          <div className="absolute inset-0 bg-[#288cbd] flex items-center justify-center">
             <div className="text-white">Caricamento...</div>
           </div>
         ) : (
