@@ -50,11 +50,11 @@ export default function Home() {
     { value: "es", label: "Español" }
   ];
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50/40 via-white to-amber-50/30 relative overflow-hidden pb-24">
+    <div className="min-h-screen bg-primary relative overflow-hidden pb-24">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-orange-100/30 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-amber-100/30 rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
       </div>
 
       {/* Header - Mobile Optimized */}
@@ -64,12 +64,12 @@ export default function Home() {
           <div className="flex justify-between items-center gap-2 mb-8">
             <div className="flex gap-2">
               <Link to="/auth">
-                <button className="px-4 py-2 text-sm text-primary font-bebas tracking-wide hover:text-primary/80 transition-colors active:scale-95">
+                <button className="px-4 py-2 text-sm text-white font-bebas tracking-wide hover:text-white/80 transition-colors active:scale-95">
                   Accedi
                 </button>
               </Link>
               <Link to="/auth">
-                <button className="px-4 py-2 text-sm bg-primary text-white font-bebas tracking-wide rounded-xl hover:bg-primary/90 transition-all active:scale-95">
+                <button className="px-4 py-2 text-sm bg-white text-primary font-bebas tracking-wide rounded-xl hover:bg-white/90 transition-all active:scale-95">
                   Registrati
                 </button>
               </Link>
@@ -77,12 +77,12 @@ export default function Home() {
             <div className="flex gap-2">
               <button 
                 onClick={() => setContactDialogOpen(true)}
-                className="px-3 py-2 text-sm text-primary font-bebas tracking-wide hover:text-primary/70 transition-colors active:scale-95"
+                className="px-3 py-2 text-sm text-white font-bebas tracking-wide hover:text-white/70 transition-colors active:scale-95"
               >
                 Contattaci
               </button>
               <Link to="/impostazioni">
-                <button className="p-2 text-primary hover:text-primary/80 transition-colors active:scale-95">
+                <button className="p-2 text-white hover:text-white/80 transition-colors active:scale-95">
                   <Settings className="w-5 h-5" />
                 </button>
               </Link>
@@ -96,12 +96,12 @@ export default function Home() {
               alt="True Local" 
               className="w-48 h-auto mx-auto mb-3"
             />
-            <p className="text-base text-foreground font-bebas tracking-wide mb-4">discover the city</p>
+            <p className="text-base text-white font-bebas tracking-wide mb-4">discover the city</p>
           </div>
 
           {/* Sponsor Section */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-primary/20 text-center mb-6">
-            <p className="text-sm text-foreground font-bebas tracking-wide mb-4">Official Sponsor</p>
+          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 border border-white/30 text-center mb-6">
+            <p className="text-sm text-white font-bebas tracking-wide mb-4">Official Sponsor</p>
             <img 
               src={valeoSponsor} 
               alt="Valeo Digital SA" 
@@ -110,23 +110,19 @@ export default function Home() {
           </div>
 
           {/* Manifesto */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-primary/20 text-center">
-            <h2 className="text-3xl md:text-4xl font-bebas font-normal text-foreground leading-tight tracking-wide">
+          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-12 border border-white/30 text-center">
+            <h2 className="text-3xl md:text-4xl font-bebas font-normal text-white leading-tight tracking-wide">
               {t('home.manifesto').split(' ').map((word, i) => {
-                const lowerWord = word.toLowerCase();
-                if (['explore', 'esplora', 'explora', 'explorez', 'erkunde', 'discover', 'scopri', 'descubre', 'découvrez', 'entdecke', 'follow', 'segui', 'sigue', 'suivez', 'finde', 'become', 'diventa', 'conviértete', 'devenez', 'werde'].some(w => lowerWord.startsWith(w))) {
-                  return <span key={i} className="text-primary">{word} </span>;
-                }
                 return <span key={i}>{word} </span>;
               })}
             </h2>
-            <div className="mt-6 h-1 w-24 bg-primary mx-auto rounded-full"></div>
+            <div className="mt-6 h-1 w-24 bg-white mx-auto rounded-full"></div>
             
             {/* Join Community Button */}
             <div className="mt-8">
               <Button
                 onClick={() => window.open('https://www.instagram.com/truelocalcomo/', '_blank')}
-                className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 text-white font-medium px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
+                className="bg-white text-primary hover:bg-white/90 font-medium px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
               >
                 <Instagram className="w-6 h-6 mr-2" />
                 Join the Community
