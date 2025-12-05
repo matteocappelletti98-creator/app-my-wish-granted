@@ -112,7 +112,7 @@ export default function Home() {
               {t('home.manifesto').split(' ').map((word, i) => {
                 const lowerWord = word.toLowerCase();
                 if (['explore', 'esplora', 'explora', 'explorez', 'erkunde', 'discover', 'scopri', 'descubre', 'découvrez', 'entdecke', 'follow', 'segui', 'sigue', 'suivez', 'finde', 'become', 'diventa', 'conviértete', 'devenez', 'werde'].some(w => lowerWord.startsWith(w))) {
-                  return <span key={i} className="text-orange-700">{word} </span>;
+                  return <span key={i} className="text-sunset-orange">{word} </span>;
                 }
                 return <span key={i}>{word} </span>;
               })}
