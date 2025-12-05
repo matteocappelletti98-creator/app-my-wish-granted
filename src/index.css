@@ -17,7 +17,7 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 24 20% 15%;
 
-    --primary: 221 83% 16%;
+    --primary: 30 100% 50%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 197 84% 88%;
@@ -34,7 +34,7 @@ All colors MUST be HSL.
 
     --border: 30 28% 88%;
     --input: 30 28% 88%;
-    --ring: 221 83% 16%;
+    --ring: 30 100% 50%;
 
     /* Travel-inspired colors */
     --nature-green: 142 76% 36%;
