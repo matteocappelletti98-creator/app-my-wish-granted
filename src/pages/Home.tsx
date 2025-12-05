@@ -100,8 +100,8 @@ export default function Home() {
           </div>
 
           {/* Sponsor Section */}
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-8 border border-white/30 text-center mb-6">
-            <p className="text-sm text-white font-bebas tracking-wide mb-4">Official Sponsor</p>
+          <div className="text-center mb-8">
+            <p className="text-sm text-white/80 font-bebas tracking-wide mb-4">Official Sponsor</p>
             <img 
               src={valeoSponsor} 
               alt="Valeo Digital SA" 
@@ -110,7 +110,7 @@ export default function Home() {
           </div>
 
           {/* Manifesto */}
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-12 border border-white/30 text-center">
+          <div className="text-center px-4">
             <h2 className="text-3xl md:text-4xl font-bebas font-normal text-white leading-tight tracking-wide">
               {t('home.manifesto').split(' ').map((word, i) => {
                 return <span key={i}>{word} </span>;
