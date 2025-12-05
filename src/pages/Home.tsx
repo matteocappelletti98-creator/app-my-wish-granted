@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import valeoSponsor from "@/assets/valeo-sponsor.jpg";
-import trueLocalLogo from "@/assets/true-local-logo.png";
+import trueLocalLogo from "@/assets/true-local-logo-white.png";
 
 export default function Home() {
   const { language, setLanguage, t } = useLanguage();
