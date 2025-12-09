@@ -103,21 +103,23 @@ export default function Index() {
             <div className="rounded-2xl border p-4 bg-white">
               <h3 className="font-semibold mb-2">Categorie</h3>
               <div className="flex flex-col gap-2">
-                <button onClick={()=>setCat("")}
-                  className={`text-left rounded-xl px-3 py-2 border ${cat==="" ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
-                  Tutte
-                </button>
-                
-                {/* Categoria speciale Traveller Path */}
+                {/* Categoria speciale Traveller Path - Prima posizione con glow */}
                 {userTravellerCodes.length > 0 && (
                   <button 
                     onClick={()=> setCat(cat === "traveller-path" ? "" : "traveller-path")}
-                    className={`text-left rounded-xl px-3 py-2 border flex items-center gap-2
-                    ${cat === "traveller-path" ? "bg-sunset-orange text-white border-sunset-orange" : "bg-white hover:bg-slate-50 border-sunset-orange/50"}`}>
+                    className={`text-left rounded-xl px-3 py-2 border-2 flex items-center gap-2 transition-all duration-300
+                    ${cat === "traveller-path" 
+                      ? "bg-sunset-orange text-white border-sunset-orange shadow-[0_0_15px_hsl(var(--sunset-orange)/0.6)]" 
+                      : "bg-white hover:bg-sunset-orange/5 border-sunset-orange shadow-[0_0_10px_hsl(var(--sunset-orange)/0.4)] animate-pulse"}`}>
                     <span>🧭</span>
                     <span className="text-sm font-medium">Traveller Path</span>
                   </button>
                 )}
+                
+                <button onClick={()=>setCat("")}
+                  className={`text-left rounded-xl px-3 py-2 border ${cat==="" ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
+                  Tutte
+                </button>
                 
                 {categories.map(c => (
                   <button key={c} onClick={()=> setCat(c===cat?"":c)}
