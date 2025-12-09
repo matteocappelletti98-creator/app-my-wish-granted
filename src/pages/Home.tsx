@@ -124,7 +124,7 @@ export default function Home() {
                 }}
               />
             </div>
-            <p className="text-base text-black font-karantina tracking-wide mb-4">discover the city</p>
+            <p className="text-base text-black font-karantina tracking-wide mb-4 uppercase">DISCOVER THE CITY</p>
           </div>
 
           {/* Como Lake Image */}
@@ -138,14 +138,8 @@ export default function Home() {
 
           {/* Manifesto */}
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-blue-100/50 text-center">
-            <h2 className="text-3xl md:text-4xl font-karantina font-normal text-black leading-tight tracking-wide">
-              {t('home.manifesto').split(' ').map((word, i) => {
-                const lowerWord = word.toLowerCase();
-                if (['explore', 'esplora', 'explora', 'explorez', 'erkunde', 'discover', 'scopri', 'descubre', 'découvrez', 'entdecke', 'follow', 'segui', 'sigue', 'suivez', 'finde', 'become', 'diventa', 'conviértete', 'devenez', 'werde'].some(w => lowerWord.startsWith(w))) {
-                  return <span key={i} className="text-orange-600">{word} </span>;
-                }
-                return <span key={i}>{word} </span>;
-              })}
+            <h2 className="text-3xl md:text-4xl font-karantina font-normal text-black leading-tight tracking-wide uppercase">
+              {t('home.manifesto')}
             </h2>
             <div className="mt-6 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
             
