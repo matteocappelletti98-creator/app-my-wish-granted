@@ -92,7 +92,7 @@ export default function Home() {
 
           {/* App Title */}
           <div className="text-center mb-6">
-            <div className="flex items-end justify-center gap-2 mb-3">
+            <div className="flex flex-col items-center gap-0 mb-3">
               <div 
                 className="h-14 w-28"
                 style={{
@@ -107,7 +107,7 @@ export default function Home() {
                   maskPosition: 'center',
                 }}
               />
-              <img src={localLogo} alt="LOCAL" className="h-10 w-auto" />
+              <img src={localLogo} alt="LOCAL" className="h-8 w-auto" />
             </div>
             <p className="text-base text-blue-900 font-bebas tracking-wide mb-4">discover the city</p>
           </div>
