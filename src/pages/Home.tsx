@@ -127,14 +127,21 @@ export default function Home() {
             <p className="text-base text-black font-karantina tracking-wide mb-4 uppercase">DISCOVER THE CITY</p>
           </div>
 
-          {/* Como Lake Image */}
-          <div className="rounded-2xl overflow-hidden mb-6">
-            <img 
-              src={comoLake} 
-              alt="Lake Como" 
-              className="w-full h-48 object-cover"
-            />
-          </div>
+        </div>
+      </header>
+
+      {/* Como Lake Image - Full Width */}
+      <div className="w-full mb-6">
+        <img 
+          src={comoLake} 
+          alt="Lake Como" 
+          className="w-full h-48 object-cover"
+        />
+      </div>
+
+      {/* Content Container */}
+      <div className="relative z-10 px-4">
+        <div className="mx-auto max-w-md">
 
           {/* Manifesto */}
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-blue-100/50 text-center">
@@ -155,7 +162,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Contact Dialog */}
       <Dialog open={contactDialogOpen} onOpenChange={setContactDialogOpen}>
