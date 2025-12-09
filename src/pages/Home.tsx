@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import valeoSponsor from "@/assets/valeo-sponsor.jpg";
+import comoLake from "@/assets/como-lake.jpg";
 import trueLogo from "@/assets/true-logo.png";
 import localLogo from "@/assets/local-logo.png";
 
@@ -127,13 +127,12 @@ export default function Home() {
             <p className="text-base text-white font-bebas tracking-wide mb-4">discover the city</p>
           </div>
 
-          {/* Sponsor Section */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-blue-100/50 text-center mb-6">
-            <p className="text-sm text-blue-900 font-bebas tracking-wide mb-4">Official Sponsor</p>
+          {/* Como Lake Image */}
+          <div className="rounded-2xl overflow-hidden mb-6">
             <img 
-              src={valeoSponsor} 
-              alt="Valeo Digital SA" 
-              className="w-48 h-auto mx-auto"
+              src={comoLake} 
+              alt="Lake Como" 
+              className="w-full h-48 object-cover"
             />
           </div>
 
