@@ -186,15 +186,26 @@ export default function VirtualExploration() {
     return allCategories;
   }, []);
 
+  // Stato per filtro Traveller Path
+  const [tpFilterActive, setTpFilterActive] = useState(false);
+
   const filtered = useMemo(() => {
     const needle = search.toLowerCase();
     return all.filter(p => {
       const t = `${p.name} ${p.city} ${p.description}`.toLowerCase();
       const okText = !needle || t.includes(needle);
+      
+      // Se filtro Traveller Path attivo
+      if (tpFilterActive) {
+        if (!userTravellerCodes.length || !p.tp_codes?.length) return false;
+        const hasMatch = p.tp_codes.some(code => userTravellerCodes.includes(code));
+        return okText && hasMatch;
+      }
+      
       const okCat = selectedCategories.length === 0 || selectedCategories.some(cat => normalizeCategory(p.category) === cat);
       return okText && okCat;
     });
-  }, [all, search, selectedCategories]);
+  }, [all, search, selectedCategories, tpFilterActive, userTravellerCodes]);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories(prev => 
@@ -252,10 +263,27 @@ export default function VirtualExploration() {
       <div className="sticky top-0 z-40 bg-white border-b">
         <div className="px-4 py-3 overflow-x-auto scrollbar-hide touch-pan-x">
           <div className="inline-flex gap-1 min-w-full">
+            {/* Traveller Path - Prima posizione con glow */}
+            {userTravellerCodes.length > 0 && (
+              <button
+                onClick={() => {
+                  setTpFilterActive(!tpFilterActive);
+                  if (!tpFilterActive) setSelectedCategories([]);
+                }}
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 border-2
+                  ${tpFilterActive 
+                    ? "bg-sunset-orange text-white border-sunset-orange shadow-[0_0_12px_hsl(var(--sunset-orange)/0.6)]" 
+                    : "bg-white text-sunset-orange border-sunset-orange shadow-[0_0_8px_hsl(var(--sunset-orange)/0.4)] animate-pulse"}`}
+              >
+                <span>🧭</span>
+                <span>Traveller Path</span>
+              </button>
+            )}
+            
             <button
-              onClick={() => setSelectedCategories([])}
+              onClick={() => { setSelectedCategories([]); setTpFilterActive(false); }}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
-                ${selectedCategories.length === 0 
+                ${selectedCategories.length === 0 && !tpFilterActive
                   ? "bg-blue-600 text-white" 
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
             >
@@ -264,7 +292,7 @@ export default function VirtualExploration() {
             {categories.map(c => (
               <button 
                 key={c} 
-                onClick={() => toggleCategory(c)}
+                onClick={() => { toggleCategory(c); setTpFilterActive(false); }}
                 className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
                   ${selectedCategories.includes(c)
                     ? "bg-blue-600 text-white" 
