@@ -51,11 +51,13 @@ export default function Home() {
     { value: "es", label: "Español" }
   ];
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-900 via-blue-600 to-white relative overflow-hidden pb-24">
+    <div className="min-h-screen bg-white relative overflow-hidden pb-24">
+      {/* Blue gradient strip at top */}
+      <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-blue-900 via-blue-600 to-transparent pointer-events-none"></div>
+      
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-800/30 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200/30 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-100/30 rounded-full blur-3xl"></div>
       </div>
 
       {/* Header - Mobile Optimized */}
