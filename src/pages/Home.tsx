@@ -92,9 +92,22 @@ export default function Home() {
 
           {/* App Title */}
           <div className="text-center mb-6">
-            <div className="flex flex-col items-center gap-1 mb-3">
-              <img src={trueLogo} alt="TRUE" className="h-16 w-auto" />
-              <img src={localLogo} alt="LOCAL" className="h-12 w-auto" />
+            <div className="flex items-end justify-center gap-2 mb-3">
+              <div 
+                className="h-14 w-28"
+                style={{
+                  backgroundColor: '#288cbd',
+                  WebkitMaskImage: `url(${trueLogo})`,
+                  maskImage: `url(${trueLogo})`,
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'center',
+                  maskPosition: 'center',
+                }}
+              />
+              <img src={localLogo} alt="LOCAL" className="h-10 w-auto" />
             </div>
             <p className="text-base text-blue-900 font-bebas tracking-wide mb-4">discover the city</p>
           </div>
