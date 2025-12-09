@@ -51,11 +51,11 @@ export default function Home() {
     { value: "es", label: "Español" }
   ];
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 relative overflow-hidden pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-blue-900 via-blue-600 to-white relative overflow-hidden pb-24">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-100/30 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-100/30 rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-800/30 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200/30 rounded-full blur-3xl"></div>
       </div>
 
       {/* Header - Mobile Optimized */}
@@ -96,7 +96,7 @@ export default function Home() {
               <div 
                 className="h-14 w-28"
                 style={{
-                  backgroundColor: '#1e3a8a',
+                  backgroundColor: '#ffffff',
                   WebkitMaskImage: `url(${trueLogo})`,
                   maskImage: `url(${trueLogo})`,
                   WebkitMaskSize: 'contain',
@@ -107,9 +107,22 @@ export default function Home() {
                   maskPosition: 'center',
                 }}
               />
-              <img src={localLogo} alt="LOCAL" className="h-8 w-auto" />
+              <div 
+                className="h-8 w-20"
+                style={{
+                  backgroundColor: '#ffffff',
+                  WebkitMaskImage: `url(${localLogo})`,
+                  maskImage: `url(${localLogo})`,
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'center',
+                  maskPosition: 'center',
+                }}
+              />
             </div>
-            <p className="text-base text-blue-900 font-bebas tracking-wide mb-4">discover the city</p>
+            <p className="text-base text-white font-bebas tracking-wide mb-4">discover the city</p>
           </div>
 
           {/* Sponsor Section */}
