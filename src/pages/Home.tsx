@@ -21,6 +21,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import valeoSponsor from "@/assets/valeo-sponsor.jpg";
+import trueLogo from "@/assets/true-logo.png";
+import localLogo from "@/assets/local-logo.png";
 
 export default function Home() {
   const { language, setLanguage, t } = useLanguage();
@@ -90,9 +92,10 @@ export default function Home() {
 
           {/* App Title */}
           <div className="text-center mb-6">
-            <h1 className="text-6xl font-bebas font-normal text-blue-900 mb-3 tracking-wider">
-              TRUE LOCAL
-            </h1>
+            <div className="flex flex-col items-center gap-1 mb-3">
+              <img src={trueLogo} alt="TRUE" className="h-16 w-auto" />
+              <img src={localLogo} alt="LOCAL" className="h-12 w-auto" />
+            </div>
             <p className="text-base text-blue-900 font-bebas tracking-wide mb-4">discover the city</p>
           </div>
 
