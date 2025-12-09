@@ -96,7 +96,7 @@ export default function Home() {
               <div 
                 className="h-14 w-28"
                 style={{
-                  backgroundColor: '#288cbd',
+                  backgroundColor: '#1a5a7a',
                   WebkitMaskImage: `url(${trueLogo})`,
                   maskImage: `url(${trueLogo})`,
                   WebkitMaskSize: 'contain',
