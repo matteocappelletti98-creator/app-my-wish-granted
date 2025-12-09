@@ -72,7 +72,7 @@ export default function Home() {
                 </button>
               </Link>
               <Link to="/auth">
-                <button className="px-4 py-2 text-sm bg-white text-[#288cbd] font-bebas tracking-wide rounded-xl hover:bg-white/90 transition-all active:scale-95">
+                <button className="px-4 py-2 text-sm text-white font-bebas tracking-wide hover:text-white/80 transition-colors active:scale-95">
                   Registrati
                 </button>
               </Link>
@@ -143,7 +143,7 @@ export default function Home() {
               {t('home.manifesto').split(' ').map((word, i) => {
                 const lowerWord = word.toLowerCase();
                 if (['explore', 'esplora', 'explora', 'explorez', 'erkunde', 'discover', 'scopri', 'descubre', 'découvrez', 'entdecke', 'follow', 'segui', 'sigue', 'suivez', 'finde', 'become', 'diventa', 'conviértete', 'devenez', 'werde'].some(w => lowerWord.startsWith(w))) {
-                  return <span key={i} className="text-sunset-orange">{word} </span>;
+                  return <span key={i} className="text-orange-600">{word} </span>;
                 }
                 return <span key={i}>{word} </span>;
               })}
@@ -154,7 +154,7 @@ export default function Home() {
             <div className="mt-8">
               <Button
                 onClick={() => window.open('https://www.instagram.com/truelocalcomo/', '_blank')}
-                className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 text-white font-medium px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
+                className="bg-[#288cbd] hover:bg-[#288cbd]/90 text-white font-medium px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
               >
                 <Instagram className="w-6 h-6 mr-2" />
                 Join the Community
