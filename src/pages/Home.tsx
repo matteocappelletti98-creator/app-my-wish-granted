@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import homeHero from "@/assets/home-hero.png";
+import comoLake from "@/assets/como-lake.jpg";
 import trueLogo from "@/assets/true-logo.png";
 import localLogo from "@/assets/local-logo.png";
 
@@ -133,7 +133,7 @@ export default function Home() {
       {/* Como Lake Image - Full Width */}
       <div className="w-full mb-6">
         <img 
-          src={homeHero} 
+          src={comoLake} 
           alt="Lake Como" 
           className="w-full h-48 object-cover"
         />
