@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import comoLake from "@/assets/como-lake.jpg";
+import comoSponsor from "@/assets/como-sponsor.png";
 import trueLogo from "@/assets/true-logo.png";
 import localLogo from "@/assets/local-logo.png";
 
@@ -128,12 +128,12 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Como Lake Image - Full Width */}
+      {/* Como Sponsor Image - Full Width */}
       <div className="w-full mb-6">
         <img 
-          src={comoLake} 
-          alt="Lake Como" 
-          className="w-full h-48 object-cover"
+          src={comoSponsor} 
+          alt="Como Calcio Sponsor" 
+          className="w-full h-48 object-contain bg-white"
         />
       </div>
 
