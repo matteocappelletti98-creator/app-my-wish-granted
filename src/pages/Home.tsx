@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import homeBackground from "@/assets/home-background.png";
+import comoLake from "@/assets/como-lake.jpg";
 import trueLogo from "@/assets/true-logo.png";
 import localLogo from "@/assets/local-logo.png";
 
@@ -51,15 +51,14 @@ export default function Home() {
     { value: "es", label: "Español" }
   ];
   return (
-    <div 
-      className="min-h-screen relative overflow-hidden pb-24"
-      style={{
-        backgroundImage: `url(${homeBackground})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
+    <div className="min-h-screen bg-white relative overflow-hidden pb-24">
+      {/* Blue gradient strip at top */}
+      <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-[#288cbd] to-transparent pointer-events-none"></div>
+      
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-100/30 rounded-full blur-3xl"></div>
+      </div>
 
       {/* Header - Mobile Optimized */}
       <header className="relative z-10 px-4 py-4">
@@ -93,11 +92,77 @@ export default function Home() {
             </div>
           </div>
 
+          {/* App Title */}
+          <div className="text-center mb-6">
+            <div className="flex flex-col items-center gap-0 mb-3">
+              <div 
+                className="h-14 w-28"
+                style={{
+                  backgroundColor: '#ffffff',
+                  WebkitMaskImage: `url(${trueLogo})`,
+                  maskImage: `url(${trueLogo})`,
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'center',
+                  maskPosition: 'center',
+                }}
+              />
+              <div 
+                className="h-8 w-20"
+                style={{
+                  backgroundColor: '#ffffff',
+                  WebkitMaskImage: `url(${localLogo})`,
+                  maskImage: `url(${localLogo})`,
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'center',
+                  maskPosition: 'center',
+                }}
+              />
+            </div>
+            <p className="text-base text-black font-karantina tracking-wide mb-4 uppercase">DISCOVER THE CITY</p>
+          </div>
 
         </div>
       </header>
 
+      {/* Como Lake Image - Full Width */}
+      <div className="w-full mb-6">
+        <img 
+          src={comoLake} 
+          alt="Lake Como" 
+          className="w-full h-48 object-cover"
+        />
+      </div>
 
+      {/* Content Container */}
+      <div className="relative z-10 px-4">
+        <div className="mx-auto max-w-md">
+
+          {/* Manifesto */}
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-blue-100/50 text-center">
+            <h2 className="text-3xl md:text-4xl font-karantina font-normal text-black leading-tight tracking-wide uppercase">
+              {t('home.manifesto')}
+            </h2>
+            <div className="mt-6 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
+            
+            {/* Join Community Button */}
+            <div className="mt-8">
+              <Button
+                onClick={() => window.open('https://www.instagram.com/truelocalcomo/', '_blank')}
+                className="bg-[#288cbd] hover:bg-[#288cbd]/90 text-white font-medium px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
+              >
+                <Instagram className="w-6 h-6 mr-2" />
+                Join the Community
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Contact Dialog */}
       <Dialog open={contactDialogOpen} onOpenChange={setContactDialogOpen}>
