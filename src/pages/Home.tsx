@@ -154,7 +154,7 @@ export default function Home() {
             <div className="mt-8">
               <Button
                 onClick={() => window.open('https://www.instagram.com/truelocalcomo/', '_blank')}
-                className="bg-[#288cbd] hover:bg-[#288cbd]/90 text-white font-medium px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
+                className="bg-gradient-to-r from-[#288cbd] to-[#1a5a7a] hover:from-[#2499d1] hover:to-[#1e6a8f] text-white font-medium px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
               >
                 <Instagram className="w-6 h-6 mr-2" />
                 Join the Community
