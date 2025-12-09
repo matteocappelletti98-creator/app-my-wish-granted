@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import comoLake from "@/assets/como-lake.jpg";
+import homeBackground from "@/assets/home-background.png";
 import trueLogo from "@/assets/true-logo.png";
 import localLogo from "@/assets/local-logo.png";
 
@@ -51,14 +51,15 @@ export default function Home() {
     { value: "es", label: "Español" }
   ];
   return (
-    <div className="min-h-screen bg-white relative overflow-hidden pb-24">
-      {/* Blue gradient strip at top */}
-      <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-[#288cbd] to-transparent pointer-events-none"></div>
-      
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-100/30 rounded-full blur-3xl"></div>
-      </div>
+    <div 
+      className="min-h-screen relative overflow-hidden pb-24"
+      style={{
+        backgroundImage: `url(${homeBackground})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
 
       {/* Header - Mobile Optimized */}
       <header className="relative z-10 px-4 py-4">
@@ -130,14 +131,6 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Como Lake Image - Full Width */}
-      <div className="w-full mb-6">
-        <img 
-          src={comoLake} 
-          alt="Lake Como" 
-          className="w-full h-48 object-cover"
-        />
-      </div>
 
       {/* Content Container */}
       <div className="relative z-10 px-4">
