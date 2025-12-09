@@ -263,23 +263,6 @@ export default function VirtualExploration() {
       <div className="sticky top-0 z-40 bg-white border-b">
         <div className="px-4 py-3 overflow-x-auto scrollbar-hide touch-pan-x">
           <div className="inline-flex gap-1 min-w-full">
-            {/* Traveller Path - Prima posizione con glow */}
-            {userTravellerCodes.length > 0 && (
-              <button
-                onClick={() => {
-                  setTpFilterActive(!tpFilterActive);
-                  if (!tpFilterActive) setSelectedCategories([]);
-                }}
-                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 border-2
-                  ${tpFilterActive 
-                    ? "bg-sunset-orange text-white border-sunset-orange shadow-[0_0_12px_hsl(var(--sunset-orange)/0.6)]" 
-                    : "bg-white text-sunset-orange border-sunset-orange shadow-[0_0_8px_hsl(var(--sunset-orange)/0.4)] animate-pulse"}`}
-              >
-                <span>🧭</span>
-                <span>Traveller Path</span>
-              </button>
-            )}
-            
             <button
               onClick={() => { setSelectedCategories([]); setTpFilterActive(false); }}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
@@ -289,6 +272,24 @@ export default function VirtualExploration() {
             >
               {t('categories.all')}
             </button>
+            
+            {/* Traveller Path - Dopo "All" con glow blu */}
+            {userTravellerCodes.length > 0 && (
+              <button
+                onClick={() => {
+                  setTpFilterActive(!tpFilterActive);
+                  if (!tpFilterActive) setSelectedCategories([]);
+                }}
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 border-2
+                  ${tpFilterActive 
+                    ? "bg-blue-600 text-white border-blue-600 shadow-[0_0_12px_rgba(37,99,235,0.6)]" 
+                    : "bg-white text-blue-600 border-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.4)] animate-pulse"}`}
+              >
+                <span>🧭</span>
+                <span>Traveller Path</span>
+              </button>
+            )}
+            
             {categories.map(c => (
               <button 
                 key={c} 
