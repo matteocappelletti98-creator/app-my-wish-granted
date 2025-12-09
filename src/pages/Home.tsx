@@ -93,69 +93,11 @@ export default function Home() {
             </div>
           </div>
 
-          {/* App Title */}
-          <div className="text-center mb-6">
-            <div className="flex flex-col items-center gap-0 mb-3">
-              <div 
-                className="h-14 w-28"
-                style={{
-                  backgroundColor: '#ffffff',
-                  WebkitMaskImage: `url(${trueLogo})`,
-                  maskImage: `url(${trueLogo})`,
-                  WebkitMaskSize: 'contain',
-                  maskSize: 'contain',
-                  WebkitMaskRepeat: 'no-repeat',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskPosition: 'center',
-                  maskPosition: 'center',
-                }}
-              />
-              <div 
-                className="h-8 w-20"
-                style={{
-                  backgroundColor: '#ffffff',
-                  WebkitMaskImage: `url(${localLogo})`,
-                  maskImage: `url(${localLogo})`,
-                  WebkitMaskSize: 'contain',
-                  maskSize: 'contain',
-                  WebkitMaskRepeat: 'no-repeat',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskPosition: 'center',
-                  maskPosition: 'center',
-                }}
-              />
-            </div>
-            <p className="text-base text-black font-karantina tracking-wide mb-4 uppercase">DISCOVER THE CITY</p>
-          </div>
 
         </div>
       </header>
 
 
-      {/* Content Container */}
-      <div className="relative z-10 px-4">
-        <div className="mx-auto max-w-md">
-
-          {/* Manifesto */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-blue-100/50 text-center">
-            <h2 className="text-3xl md:text-4xl font-karantina font-normal text-black leading-tight tracking-wide uppercase">
-              {t('home.manifesto')}
-            </h2>
-            <div className="mt-6 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
-            
-            {/* Join Community Button */}
-            <div className="mt-8">
-              <Button
-                onClick={() => window.open('https://www.instagram.com/truelocalcomo/', '_blank')}
-                className="bg-[#288cbd] hover:bg-[#288cbd]/90 text-white font-medium px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
-              >
-                <Instagram className="w-6 h-6 mr-2" />
-                Join the Community
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Contact Dialog */}
       <Dialog open={contactDialogOpen} onOpenChange={setContactDialogOpen}>
