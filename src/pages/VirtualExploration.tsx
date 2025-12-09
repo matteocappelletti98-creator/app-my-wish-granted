@@ -318,7 +318,7 @@ export default function VirtualExploration() {
           </div>
         ) : (
           <MapView
-            places={all.filter(p => p.status === "published")} 
+            places={tpFilterActive ? filtered : all.filter(p => p.status === "published")} 
             selectedCategories={selectedCategories} 
             className="absolute inset-0 w-full h-full"
             favorites={favorites}
