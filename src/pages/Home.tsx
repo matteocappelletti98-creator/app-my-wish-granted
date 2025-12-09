@@ -53,7 +53,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white relative overflow-hidden pb-24">
       {/* Blue gradient strip at top */}
-      <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-blue-900 via-blue-600 to-transparent pointer-events-none"></div>
+      <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-[#288cbd] to-transparent pointer-events-none"></div>
       
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
