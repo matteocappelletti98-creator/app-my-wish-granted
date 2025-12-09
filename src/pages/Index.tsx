@@ -48,10 +48,18 @@ export default function Index() {
     return all.filter(p => {
       const t = `${p.name} ${p.city} ${p.description}`.toLowerCase();
       const okText = !needle || t.includes(needle);
+      
+      // Gestione categoria speciale "traveller-path"
+      if (cat === "traveller-path") {
+        if (!userTravellerCodes.length || !p.tp_codes?.length) return false;
+        const hasMatch = p.tp_codes.some(code => userTravellerCodes.includes(code));
+        return okText && hasMatch;
+      }
+      
       const okCat = !cat || normalizeCategory(p.category) === normalizeCategory(cat);
       return okText && okCat;
     });
-  }, [all, search, cat]);
+  }, [all, search, cat, userTravellerCodes]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -99,6 +107,18 @@ export default function Index() {
                   className={`text-left rounded-xl px-3 py-2 border ${cat==="" ? "bg-blue-600 text-white border-blue-600" : "bg-white hover:bg-slate-50"}`}>
                   Tutte
                 </button>
+                
+                {/* Categoria speciale Traveller Path */}
+                {userTravellerCodes.length > 0 && (
+                  <button 
+                    onClick={()=> setCat(cat === "traveller-path" ? "" : "traveller-path")}
+                    className={`text-left rounded-xl px-3 py-2 border flex items-center gap-2
+                    ${cat === "traveller-path" ? "bg-sunset-orange text-white border-sunset-orange" : "bg-white hover:bg-slate-50 border-sunset-orange/50"}`}>
+                    <span>🧭</span>
+                    <span className="text-sm font-medium">Traveller Path</span>
+                  </button>
+                )}
+                
                 {categories.map(c => (
                   <button key={c} onClick={()=> setCat(c===cat?"":c)}
                     className={`text-left rounded-xl px-3 py-2 border flex items-center gap-2
