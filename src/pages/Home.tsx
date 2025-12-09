@@ -124,7 +124,7 @@ export default function Home() {
                 }}
               />
             </div>
-            <p className="text-base text-white font-bebas tracking-wide mb-4">discover the city</p>
+            <p className="text-base text-black font-karantina tracking-wide mb-4">discover the city</p>
           </div>
 
           {/* Como Lake Image */}

@@ -89,6 +89,7 @@ export default {
 			fontFamily: {
 				'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
 				'bebas': ['Bebas Neue', 'cursive'],
+				'karantina': ['Karantina', 'cursive'],
 			},
 			keyframes: {
 				'accordion-down': {
