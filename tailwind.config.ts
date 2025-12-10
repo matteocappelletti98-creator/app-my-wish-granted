@@ -90,6 +90,7 @@ export default {
 				'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
 				'bebas': ['Bebas Neue', 'cursive'],
 				'karantina': ['Karantina', 'cursive'],
+				'dm-sans': ['DM Sans', 'sans-serif'],
 			},
 			keyframes: {
 				'accordion-down': {

@@ -143,7 +143,7 @@ export default function Home() {
 
           {/* Manifesto */}
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-blue-100/50 text-center">
-            <h2 className="text-3xl md:text-4xl font-karantina font-normal text-black leading-tight tracking-wide uppercase">
+            <h2 className="text-xl md:text-2xl font-dm-sans font-extralight text-black leading-relaxed tracking-normal">
               {t('home.manifesto')}
             </h2>
             <div className="mt-6 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
