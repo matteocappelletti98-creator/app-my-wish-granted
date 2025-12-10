@@ -97,7 +97,7 @@ export default function Home() {
       <div className="w-full flex justify-center mb-8">
         <div className="w-32 h-32 bg-[#1a5a7a] rounded-2xl flex flex-col items-center justify-center shadow-lg">
           <div 
-            className="h-16 w-32"
+            className="h-12 w-24"
             style={{
               backgroundColor: '#ffffff',
               WebkitMaskImage: `url(${trueLogo})`,
@@ -111,7 +111,7 @@ export default function Home() {
             }}
           />
           <div 
-            className="h-8 w-20"
+            className="h-6 w-16"
             style={{
               backgroundColor: '#ffffff',
               WebkitMaskImage: `url(${localLogo})`,
