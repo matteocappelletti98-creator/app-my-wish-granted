@@ -95,7 +95,7 @@ export default function Home() {
 
       {/* App Icon Square - True Local Logo */}
       <div className="w-full flex justify-center mb-8">
-        <div className="w-44 h-44 bg-[#1a5a7a] rounded-2xl flex flex-col items-center justify-center shadow-lg">
+        <div className="w-32 h-32 bg-[#1a5a7a] rounded-2xl flex flex-col items-center justify-center shadow-lg">
           <div 
             className="h-16 w-32"
             style={{
