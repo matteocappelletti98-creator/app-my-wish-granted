@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import trueLogo from "@/assets/true-logo.png";
 import localLogo from "@/assets/local-logo.png";
-import homeHero from "@/assets/home-hero.jpg";
+import homeHero from "@/assets/home-hero.png";
 
 export default function Home() {
   const { language, setLanguage, t } = useLanguage();
