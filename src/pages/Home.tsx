@@ -136,7 +136,6 @@ export default function Home() {
             <h2 className="text-xl md:text-2xl font-dm-sans font-extralight text-black leading-relaxed tracking-normal">
               {t('home.manifesto')}
             </h2>
-            <div className="mt-6 h-1 w-24 bg-blue-600 mx-auto rounded-full"></div>
             
             {/* Join Community Button */}
             <div className="mt-8">
