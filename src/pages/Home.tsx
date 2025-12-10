@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import trueLogo from "@/assets/true-logo.png";
 import localLogo from "@/assets/local-logo.png";
+import homeHero from "@/assets/home-hero.jpg";
 
 export default function Home() {
   const { language, setLanguage, t } = useLanguage();
@@ -130,6 +131,15 @@ export default function Home() {
       {/* Discover Lake Como Title */}
       <div className="w-full text-center mb-6">
         <h1 className="text-3xl font-karantina text-[#1a5a7a] uppercase tracking-wide">DISCOVER LAKE COMO</h1>
+      </div>
+
+      {/* Hero Image */}
+      <div className="w-full px-4 mb-6">
+        <img 
+          src={homeHero} 
+          alt="Lake Como" 
+          className="w-full h-48 object-cover rounded-2xl"
+        />
       </div>
 
       {/* Content Container */}
