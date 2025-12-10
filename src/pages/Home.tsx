@@ -50,7 +50,7 @@ export default function Home() {
     { value: "es", label: "Español" }
   ];
   return (
-    <div className="min-h-screen bg-white relative overflow-hidden pb-24">
+    <div className="min-h-screen bg-white relative overflow-hidden flex flex-col">
       
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -61,7 +61,7 @@ export default function Home() {
       <header className="relative z-10 px-4 py-4">
         <div className="mx-auto max-w-md">
           {/* Top Bar: Auth Buttons and Settings */}
-          <div className="flex justify-between items-center gap-2 mb-8">
+          <div className="flex justify-between items-center gap-2">
             <div className="flex gap-2">
               <Link to="/auth">
                 <button className="px-4 py-2 text-sm text-black font-dm-sans font-extralight tracking-wide hover:text-black/70 transition-colors active:scale-95">
@@ -88,14 +88,13 @@ export default function Home() {
               </Link>
             </div>
           </div>
-
-          {/* App Title - Removed */}
         </div>
       </header>
 
-      {/* App Icon Square - True Local Logo */}
-      <div className="w-full flex justify-center mb-8">
-        <div className="w-44 h-44 bg-[#1a5a7a] rounded-2xl flex flex-col items-center justify-center shadow-lg">
+      {/* Main Content - Centered */}
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
+        {/* App Icon Square - True Local Logo */}
+        <div className="w-44 h-44 bg-[#1a5a7a] rounded-2xl flex flex-col items-center justify-center shadow-lg mb-6">
           <div 
             className="h-16 w-32"
             style={{
@@ -125,33 +124,25 @@ export default function Home() {
             }}
           />
         </div>
-      </div>
 
-      {/* Discover Lake Como Title */}
-      <div className="w-full text-center mb-6">
-        <h1 className="text-3xl font-karantina text-[#1a5a7a] uppercase tracking-wide">DISCOVER LAKE COMO</h1>
-      </div>
+        {/* Discover Lake Como Title */}
+        <h1 className="text-3xl font-karantina text-[#1a5a7a] uppercase tracking-wide mb-6 text-center">DISCOVER LAKE COMO</h1>
 
-      {/* Content Container */}
-      <div className="relative z-10 px-4">
-        <div className="mx-auto max-w-md">
-
-          {/* Manifesto */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-blue-100/50 text-center">
-            <h2 className="text-xl md:text-2xl font-dm-sans font-extralight text-black leading-relaxed tracking-normal">
-              {t('home.manifesto')}
-            </h2>
-            
-            {/* Join Community Button */}
-            <div className="mt-8">
-              <Button
-                onClick={() => window.open('https://www.instagram.com/truelocalcomo/', '_blank')}
-                className="bg-gradient-to-r from-[#288cbd] to-[#1a5a7a] hover:from-[#2499d1] hover:to-[#1e6a8f] text-white font-dm-sans font-extralight px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
-              >
-                <Instagram className="w-6 h-6 mr-2" />
-                Join the Community
-              </Button>
-            </div>
+        {/* Manifesto */}
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-blue-100/50 text-center max-w-md">
+          <h2 className="text-xl md:text-2xl font-dm-sans font-extralight text-black leading-relaxed tracking-normal">
+            {t('home.manifesto')}
+          </h2>
+          
+          {/* Join Community Button */}
+          <div className="mt-8">
+            <Button
+              onClick={() => window.open('https://www.instagram.com/truelocalcomo/', '_blank')}
+              className="bg-gradient-to-r from-[#288cbd] to-[#1a5a7a] hover:from-[#2499d1] hover:to-[#1e6a8f] text-white font-dm-sans font-extralight px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
+            >
+              <Instagram className="w-6 h-6 mr-2" />
+              Join the Community
+            </Button>
           </div>
         </div>
       </div>
