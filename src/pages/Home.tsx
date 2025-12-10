@@ -61,13 +61,33 @@ export default function Home() {
       {/* Header - Mobile Optimized */}
       <header className="relative z-10 px-4 py-4">
         <div className="mx-auto max-w-md">
-          {/* Top Bar: Settings */}
-          <div className="flex justify-end items-center mb-8">
-            <Link to="/impostazioni">
-              <button className="p-2 text-black hover:text-black/70 transition-colors active:scale-95">
-                <Settings className="w-5 h-5" />
+          {/* Top Bar: Auth Buttons and Settings */}
+          <div className="flex justify-between items-center gap-2 mb-8">
+            <div className="flex gap-2">
+              <Link to="/auth">
+                <button className="px-4 py-2 text-sm text-black font-dm-sans font-extralight tracking-wide hover:text-black/70 transition-colors active:scale-95">
+                  Accedi
+                </button>
+              </Link>
+              <Link to="/auth">
+                <button className="px-4 py-2 text-sm text-black font-dm-sans font-extralight tracking-wide hover:text-black/70 transition-colors active:scale-95">
+                  Registrati
+                </button>
+              </Link>
+            </div>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => setContactDialogOpen(true)}
+                className="px-3 py-2 text-sm text-black font-dm-sans font-extralight tracking-wide hover:text-black/70 transition-colors active:scale-95"
+              >
+                Contattaci
               </button>
-            </Link>
+              <Link to="/impostazioni">
+                <button className="p-2 text-black hover:text-black/70 transition-colors active:scale-95">
+                  <Settings className="w-5 h-5" />
+                </button>
+              </Link>
+            </div>
           </div>
 
           {/* App Title */}
