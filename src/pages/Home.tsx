@@ -89,49 +89,15 @@ export default function Home() {
             </div>
           </div>
 
-          {/* App Title */}
-          <div className="text-center mb-6">
-            <div className="flex flex-col items-center gap-0 mb-3">
-              <div 
-                className="h-14 w-28"
-                style={{
-                  backgroundColor: '#000000',
-                  WebkitMaskImage: `url(${trueLogo})`,
-                  maskImage: `url(${trueLogo})`,
-                  WebkitMaskSize: 'contain',
-                  maskSize: 'contain',
-                  WebkitMaskRepeat: 'no-repeat',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskPosition: 'center',
-                  maskPosition: 'center',
-                }}
-              />
-              <div 
-                className="h-8 w-20"
-                style={{
-                  backgroundColor: '#000000',
-                  WebkitMaskImage: `url(${localLogo})`,
-                  maskImage: `url(${localLogo})`,
-                  WebkitMaskSize: 'contain',
-                  maskSize: 'contain',
-                  WebkitMaskRepeat: 'no-repeat',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskPosition: 'center',
-                  maskPosition: 'center',
-                }}
-              />
-            </div>
-            <p className="text-base text-black font-karantina tracking-wide mb-4 uppercase">DISCOVER THE CITY</p>
-          </div>
-
+          {/* App Title - Removed */}
         </div>
       </header>
 
       {/* App Icon Square - True Local Logo */}
-      <div className="w-full flex justify-center mb-6">
-        <div className="w-32 h-32 bg-[#1a5a7a] rounded-2xl flex flex-col items-center justify-center shadow-lg">
+      <div className="w-full flex justify-center mb-8">
+        <div className="w-44 h-44 bg-[#1a5a7a] rounded-2xl flex flex-col items-center justify-center shadow-lg">
           <div 
-            className="h-12 w-24"
+            className="h-16 w-32"
             style={{
               backgroundColor: '#ffffff',
               WebkitMaskImage: `url(${trueLogo})`,
@@ -145,7 +111,7 @@ export default function Home() {
             }}
           />
           <div 
-            className="h-6 w-16"
+            className="h-8 w-20"
             style={{
               backgroundColor: '#ffffff',
               WebkitMaskImage: `url(${localLogo})`,
