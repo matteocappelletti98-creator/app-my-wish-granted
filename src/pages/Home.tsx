@@ -127,6 +127,11 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Discover Lake Como Title */}
+      <div className="w-full text-center mb-6">
+        <h1 className="text-3xl font-karantina text-[#1a5a7a] uppercase tracking-wide">DISCOVER LAKE COMO</h1>
+      </div>
+
       {/* Content Container */}
       <div className="relative z-10 px-4">
         <div className="mx-auto max-w-md">
