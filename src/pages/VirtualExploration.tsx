@@ -313,7 +313,7 @@ export default function VirtualExploration() {
                     : "bg-white text-red-500 border-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]"}`}
               >
                 <Heart className="w-3 h-3" fill={favoritesFilterActive ? "white" : "currentColor"} />
-                <span>Preferiti</span>
+                <span>my Como</span>
                 <span className={`text-[9px] px-1 rounded ${favoritesFilterActive ? 'bg-white/20' : 'bg-red-100'}`}>
                   {favorites.length}
                 </span>
