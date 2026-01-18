@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import patternBg from "@/assets/pattern-traveler.png";
 
 type TPLanguage = "it" | "en" | "es" | "fr" | "de";
 
@@ -385,8 +386,16 @@ export default function TravellerPath() {
   // Show intro screen
   if (showIntro) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#e6f7fd]/40 via-white to-[#e6f7fd]/30 pb-20 flex items-center justify-center">
-        <div className="max-w-2xl mx-auto px-4">
+      <div 
+        className="min-h-screen pb-20 flex items-center justify-center relative"
+        style={{
+          backgroundImage: `url(${patternBg})`,
+          backgroundSize: '400px',
+          backgroundRepeat: 'repeat'
+        }}
+      >
+        <div className="absolute inset-0 bg-white/85"></div>
+        <div className="max-w-2xl mx-auto px-4 relative z-10">
           <Link to="/" className="inline-flex items-center gap-2 text-[#009fe3] hover:text-[#007bb5] transition-colors mb-8 absolute top-8 left-4">
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm">Home</span>
@@ -399,7 +408,7 @@ export default function TravellerPath() {
                 TRAVELER PATH
               </h1>
               <p className="text-xl md:text-2xl font-bebas text-[#006a99] tracking-wide max-w-lg mx-auto mb-12">
-                Answer a few quick questions and get a <span className="text-orange-700">personalized</span> selection of places made just for you.
+                Answer a few quick questions and get a <span className="text-black font-bold">personalized</span> selection of places made just for you.
               </p>
             </div>
 
@@ -417,8 +426,16 @@ export default function TravellerPath() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e6f7fd]/40 via-white to-[#e6f7fd]/30 pb-20">
-      <div className="max-w-4xl mx-auto px-4 py-4 md:py-8">
+    <div 
+      className="min-h-screen pb-20 relative"
+      style={{
+        backgroundImage: `url(${patternBg})`,
+        backgroundSize: '400px',
+        backgroundRepeat: 'repeat'
+      }}
+    >
+      <div className="absolute inset-0 bg-white/90"></div>
+      <div className="max-w-4xl mx-auto px-4 py-4 md:py-8 relative z-10">
         
         {/* Header */}
         <div className="mb-4 md:mb-8">
