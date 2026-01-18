@@ -350,9 +350,6 @@ export default function MapView({ places, selectedCategories = [], className, on
 
     const bounds = new mapboxgl.LngLatBounds();
 
-    // Effetto cascata solo al primissimo caricamento
-    const shouldAnimate = isFirstLoadRef.current;
-    
     filtered.forEach((p, index) => {
       const emoji = categoryEmoji(p.category);
       
@@ -361,61 +358,15 @@ export default function MapView({ places, selectedCategories = [], className, on
         ? p.tp_codes.some(code => userTravellerCodes.includes(code))
         : false;
       
-      // Delay casuale per ogni marker per effetto caduta multipla
-      const delay = (index * 50) + Math.random() * 200;
-      
-      // Crea elemento marker con animazione di caduta
+      // Crea elemento marker senza animazione
       const el = document.createElement('div');
-      const animationName = isCompatible ? 'fall-from-west' : 'fall-from-sky';
       el.innerHTML = `
-        <style>
-          @keyframes fall-from-sky {
-            0% {
-              transform: translate(1000px, -1000px) rotate(0deg) scale(0.3);
-              opacity: 0;
-            }
-            70% {
-              opacity: 1;
-            }
-            85% {
-              transform: translate(0, 10px) rotate(720deg) scale(1.1);
-            }
-            100% {
-              transform: translate(0, 0) rotate(720deg) scale(1);
-              opacity: 1;
-            }
-          }
-          
-          @keyframes fall-from-west {
-            0% {
-              transform: translate(-1500px, -1200px) rotate(0deg) scale(0.3);
-              opacity: 0;
-            }
-            50% {
-              opacity: 1;
-            }
-            65% {
-              transform: translate(0, 0) rotate(-720deg) scale(1);
-            }
-            80% {
-              transform: translate(0, 0) rotate(-720deg) scale(1);
-            }
-            90% {
-              transform: translate(0, 0) rotate(-720deg) scale(2.5);
-            }
-            100% {
-              transform: translate(0, 0) rotate(-720deg) scale(1);
-              opacity: 1;
-            }
-          }
-        </style>
         <div style="
           width:24px;height:24px;border-radius:999px;
           background:#fff; display:flex;align-items:center;justify-content:center;
           box-shadow:${isCompatible ? '0 0 20px 4px rgba(59, 130, 246, 0.8), 0 0 40px 8px rgba(59, 130, 246, 0.5), 0 0 60px 12px rgba(59, 130, 246, 0.3), 0 2px 8px rgba(0,0,0,.3)' : '0 2px 8px rgba(0,0,0,.3), 0 0 20px rgba(59, 130, 246, 0.3)'}; 
           border:${isCompatible ? '3px solid #3b82f6' : '1px solid rgba(0,0,0,.1)'};
           cursor: pointer;
-          ${shouldAnimate ? `animation: ${animationName} ${isCompatible ? '3.5s' : '2.5s'} ease-out ${delay}ms forwards; opacity: 0;` : 'opacity: 1;'}
         ">
           <div style="font-size:14px;line-height:14px">${emoji}</div>
         </div>
