@@ -12,9 +12,9 @@ import blogHero from "@/assets/blog-hero.png";
 export default function Blog() {
   const { t, language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<("faq" | "daytrip" | "tip")[]>(["faq"]);
+  const [selectedCategories, setSelectedCategories] = useState<("faq" | "daytrip" | "tip" | "city+")[]>(["faq"]);
   
-  const toggleCategory = (category: "faq" | "daytrip" | "tip") => {
+  const toggleCategory = (category: "faq" | "daytrip" | "tip" | "city+") => {
     setSelectedCategories(prev => 
       prev.includes(category) 
         ? prev.filter(c => c !== category)
@@ -28,7 +28,8 @@ export default function Blog() {
   const articles = {
     faq: allArticles.filter(a => a.tipo === 'faq'),
     daytrip: allArticles.filter(a => a.tipo === 'daytrip'), 
-    tip: allArticles.filter(a => a.tipo === 'tip')
+    tip: allArticles.filter(a => a.tipo === 'tip'),
+    "city+": allArticles.filter(a => a.tipo === 'city+')
   };
 
   // Filtra gli articoli in base alla ricerca
@@ -155,9 +156,9 @@ export default function Blog() {
                   day trip
                 </Button>
                 <Button 
-                  onClick={() => toggleCategory("daytrip")}
+                  onClick={() => toggleCategory("city+")}
                   className={`w-full sm:w-auto font-bebas font-normal tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-8 sm:px-12 py-4 sm:py-6 text-xl sm:text-2xl ${
-                    selectedCategories.includes("daytrip") 
+                    selectedCategories.includes("city+") 
                       ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700" 
                       : "bg-white/80 text-green-600 border border-green-200 hover:bg-green-50"
                   }`}
@@ -202,6 +203,7 @@ export default function Blog() {
               selectedCategories.flatMap(category => 
                 category === "faq" ? articles.faq : 
                 category === "daytrip" ? articles.daytrip : 
+                category === "city+" ? articles["city+"] :
                 articles.tip
               )
             )}

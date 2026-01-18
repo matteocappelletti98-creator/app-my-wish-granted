@@ -1,6 +1,6 @@
 ---
 id: "Chi siamo "
-lang: "en"
+lang: "it"
 titolo: "Chi è True Local "
 sottotitolo: " "
 tipo: "city+"
