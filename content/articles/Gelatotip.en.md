@@ -3,48 +3,57 @@ id: "best-gelato"
 lang: "en"
 titolo: "How to Recognize High-Quality Gelato"
 sottotitolo: "The secrets of Italy’s most authentic scoop"
-tipo: "tip"
+tipo: "city+"
 autore: "Explore Team"
 data: "2025-09-25"
 cover: "/articles/gelato.jpg"
-tags: ["gelato","tips","food"]
+tags: 
 accent: "#f97316"
 layout: "hero"
 readingTime: "3 min"
-quote: "Gelato is happiness frozen in a cone."
+quote: " Benvenuti in True Local "
 ---
 
-Italy is the homeland of gelato — but not every colorful scoop you see is truly artisanal.  
-Even the best gelaterie, pressed by demand, sometimes rely on semi-finished bases for certain flavors. The real trick? Spotting those **signature flavors** that reveal the authentic craft.  
+CHI SIAMO
 
-Explore has gone around Como to taste, compare, and hand-pick the very best. Here’s how you can recognize genuine quality gelato on your own.  
+Parte noiosa — ma necessaria.
 
----
+Quattro linee messe al posto giusto fanno una mappa.
+E con una mappa puoi viaggiare senza perderti.
+O perderti meglio.
+Una mappa non è solo la copia in miniatura di quello che c’è: montagne, valli, fiumi, strade, bar, ristoranti, rifugi, ville… No.
+Una buona mappa riflette le persone che vivono quel territorio.
+Il loro modo di stare al mondo.
+Perché l’architettura non è un caso.
+Il cibo non è un caso.
+Gli accenti, i modi, le abitudini… non lo sono mai.
+Quindi, per capire un territorio, serve una mappa.
+Fine della parte noiosa.
+⸻
+Parte meno noiosa — si spera.
 
-# 👀 Before Tasting
+Ehi, abbiamo creato una mappa.
+Ma non solo.
+Il fatto (tragicamente ironico) è che noi volevamo chiamarci Explore.
+Fare la guida classica.
+Parlare solo ai “ travelers “.
+Farcirci di sponsor qualunque , ristoranti paganti, e banner enormi e luminosi.
+Poi Giulio dello studio marketing ci ha guardati e ha detto:
+“Explore non funziona. È troppo inflazionato.”
+Qualunque cosa volesse dire… risultato:
+ora ci chiamiamo True Local.
+E non possiamo più fare la guida Pay to Enter.
+Quindi che facciamo?
+⸻
+Ciao locals 👋
 
-> [!TIP] **Color matters**  
-> Shades should look natural. Pistachio glowing neon green or lemon shining bright yellow? Likely boosted with colorants.  
+Facciamo nascere una community di Local & Travelers.
+Un posto dove il meglio di una città emerge in modo spontaneo, indipendente, autentico.
+Raccogliamo le insight dei local.
+Organizziamo tutto in categorie intelligenti.
+Lo mettiamo su una mappa.
+Tutti possono vederla. Gratis.
+Creiamo articoli come questo nel nostro Blog.
+Un questionario per personalizzare l’esperienza.
+E quando la community sarà pronta… beh, lì comincerà la parte interessante. Ma per ora non possiamo dire di più.
 
-> [!TIP] **Respect the season**  
-> Strawberry in January? That’s a red flag. Authentic gelato follows the rhythm of fresh fruit.  
-
-> [!TIP] **Volume tells the truth**  
-> If the gelato stands up tall above the tray like whipped cream, it may be puffed up with artificial stabilizers.  
-
----
-
-## 😋 After Tasting
-
-- **Pure flavor** → Raspberry should taste like biting into a fresh raspberry, not like syrup.  
-- **Smooth texture** → Good gelato melts naturally in your mouth. It should never feel greasy or sticky.  
-- **The water test** → Drink a glass of water. If the taste won’t fade, chances are it’s overloaded with sugar and fats.  
-
----
-
-### 📝 Remember
-Even top gelaterie sometimes use semi-finished bases for a handful of flavors — but they always shine on their **strong points**.  
-That’s where you’ll find the true craft and passion.  
-
-👉 Explore has already scouted the **best gelaterie in Como** and their must-try flavors.  
-Check our guides and taste the difference yourself!  
