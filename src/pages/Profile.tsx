@@ -311,7 +311,7 @@ export default function Profile() {
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex-1 text-center">
             <h1 className="text-4xl md:text-5xl font-bebas font-normal text-blue-900 tracking-wider">
-              my <span className="text-orange-700">Como</span>
+              My<span className="text-orange-700">map</span>
             </h1>
           </div>
           {user && (
