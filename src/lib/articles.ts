@@ -3,7 +3,7 @@ import { marked } from "marked";
 export type ArticleMeta = {
   id: string;
   titolo: string;
-  tipo: "faq" | "tip" | "daytrip";
+  tipo: "faq" | "tip" | "daytrip" | "city+";
   autore?: string;
   data?: string;
   cover?: string;
@@ -112,6 +112,16 @@ export function getAllArticles(language: string = 'it'): ArticleMeta[] {
       
       const { data } = parseFrontmatter(raw as string);
       articleGroups[baseName][lang] = { path, data };
+    } else if (fileName.endsWith('.md')) {
+      // Handle files without language suffix (e.g., tlchisiamo.md)
+      const baseName = fileName.replace('.md', '');
+      const { data } = parseFrontmatter(raw as string);
+      const lang = (data.lang as string) || 'it'; // Use frontmatter lang or default to 'it'
+      
+      if (!articleGroups[baseName]) {
+        articleGroups[baseName] = {};
+      }
+      articleGroups[baseName][lang] = { path, data };
     }
   });
   
@@ -178,6 +188,16 @@ export function getArticleBySlug(slug: string, language: string = 'it'): Article
       }
       
       const { data, content } = parseFrontmatter(raw as string);
+      articleGroups[baseName][lang] = { path, data, content };
+    } else if (fileName.endsWith('.md')) {
+      // Handle files without language suffix
+      const baseName = fileName.replace('.md', '');
+      const { data, content } = parseFrontmatter(raw as string);
+      const lang = (data.lang as string) || 'it';
+      
+      if (!articleGroups[baseName]) {
+        articleGroups[baseName] = {};
+      }
       articleGroups[baseName][lang] = { path, data, content };
     }
   });
