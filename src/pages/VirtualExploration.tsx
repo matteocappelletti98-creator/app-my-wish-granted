@@ -3,7 +3,7 @@ import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import MapView from "@/components/MapView";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, MapPin, User, Lightbulb, ChevronDown } from "lucide-react";
+import { MapPin, User, Lightbulb, ChevronDown } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
@@ -189,7 +189,6 @@ export default function VirtualExploration() {
 
   // Stato per filtri speciali
   const [tpFilterActive, setTpFilterActive] = useState(false);
-  const [favoritesFilterActive, setFavoritesFilterActive] = useState(false);
   const [suggestDialogOpen, setSuggestDialogOpen] = useState(false);
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
 
@@ -202,9 +201,6 @@ export default function VirtualExploration() {
       // Filtro categoria (se selezionate)
       const okCat = selectedCategories.length === 0 || selectedCategories.some(cat => normalizeCategory(p.category) === cat);
       
-      // Filtro Preferiti (combinabile con categorie)
-      const okFavorites = !favoritesFilterActive || favorites.includes(p.id);
-      
       // Filtro Traveller Path (combinabile con categorie)
       let okTp = true;
       if (tpFilterActive) {
@@ -215,9 +211,9 @@ export default function VirtualExploration() {
         }
       }
       
-      return okText && okCat && okFavorites && okTp;
+      return okText && okCat && okTp;
     });
-  }, [all, search, selectedCategories, tpFilterActive, favoritesFilterActive, favorites, userTravellerCodes]);
+  }, [all, search, selectedCategories, tpFilterActive, userTravellerCodes]);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories(prev => 
@@ -277,45 +273,20 @@ export default function VirtualExploration() {
         <div className="px-4 py-3 overflow-x-auto scrollbar-hide touch-pan-x">
           <div className="inline-flex gap-1 min-w-full">
             <button
-              onClick={() => { setSelectedCategories([]); setTpFilterActive(false); setFavoritesFilterActive(false); }}
+              onClick={() => { setSelectedCategories([]); setTpFilterActive(false); }}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
-                ${selectedCategories.length === 0 && !tpFilterActive && !favoritesFilterActive
+                ${selectedCategories.length === 0 && !tpFilterActive
                   ? "bg-blue-600 text-white" 
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
             >
               {t('categories.all')}
             </button>
             
-            {/* Mymap - Categoria speciale con cuore (combinabile) */}
-            {favorites.length > 0 && (
-              <button
-                onClick={() => {
-                  setFavoritesFilterActive(!favoritesFilterActive);
-                  if (!favoritesFilterActive) {
-                    setTpFilterActive(false);
-                  }
-                }}
-                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 border-2
-                  ${favoritesFilterActive 
-                    ? "bg-red-500 text-white border-red-500 shadow-[0_0_12px_rgba(239,68,68,0.6)]" 
-                    : "bg-white text-red-500 border-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]"}`}
-              >
-                <Heart className="w-3 h-3" fill={favoritesFilterActive ? "white" : "currentColor"} />
-                <span>Mymap</span>
-                <span className={`text-[9px] px-1 rounded ${favoritesFilterActive ? 'bg-white/20' : 'bg-red-100'}`}>
-                  {favorites.length}
-                </span>
-              </button>
-            )}
-            
             {/* Traveller Path - Combinabile con categorie */}
             {userTravellerCodes.length > 0 && (
               <button
                 onClick={() => {
                   setTpFilterActive(!tpFilterActive);
-                  if (!tpFilterActive) {
-                    setFavoritesFilterActive(false);
-                  }
                 }}
                 className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 border-2
                   ${tpFilterActive 
@@ -392,7 +363,7 @@ export default function VirtualExploration() {
           </div>
         ) : (
           <MapView
-            places={tpFilterActive || favoritesFilterActive || selectedCategories.length > 0 ? filtered : all.filter(p => p.status === "published")}
+            places={tpFilterActive || selectedCategories.length > 0 ? filtered : all.filter(p => p.status === "published")}
             selectedCategories={selectedCategories} 
             className="absolute inset-0 w-full h-full"
             favorites={favorites}
