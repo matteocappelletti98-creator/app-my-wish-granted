@@ -49,14 +49,14 @@ export default function Blog() {
     <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {filteredArticles.length === 0 ? (
         <div className="col-span-full text-center py-8 sm:py-12">
-          <p className="text-blue-700/70 text-base sm:text-lg font-light px-4">
+          <p className="text-[#009fe3]/70 text-base sm:text-lg font-light px-4">
             {searchQuery.trim() ? "Nessun articolo trovato per la ricerca" : "Nessun articolo disponibile in questa categoria"}
           </p>
         </div>
       ) : (
         filteredArticles.map(article => (
           <Link key={article.id} to={`/articolo/${article.slug}`}>
-            <Card className="group overflow-hidden bg-white/60 backdrop-blur-lg border border-blue-100/50 hover:bg-white/80 hover:shadow-2xl hover:shadow-blue-100/20 transition-all duration-500 hover:-translate-y-1 sm:hover:-translate-y-2 rounded-3xl h-full">
+            <Card className="group overflow-hidden bg-white/60 backdrop-blur-lg border border-[#b3e5fc]/50 hover:bg-white/80 hover:shadow-2xl hover:shadow-[#e6f7fd]/20 transition-all duration-500 hover:-translate-y-1 sm:hover:-translate-y-2 rounded-3xl h-full">
               {article.cover && (
                 <div className="aspect-[4/3] overflow-hidden">
                   <img 
@@ -67,13 +67,13 @@ export default function Blog() {
                 </div>
               )}
               <CardHeader className="pb-3 px-4 sm:px-6">
-                <CardTitle className="text-base sm:text-lg font-light leading-tight text-blue-900 hover:text-blue-600 cursor-pointer transition-colors duration-300 tracking-wide">
+                <CardTitle className="text-base sm:text-lg font-light leading-tight text-[#006a99] hover:text-[#009fe3] cursor-pointer transition-colors duration-300 tracking-wide">
                   {article.titolo}
                 </CardTitle>
                 {article.tags && article.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2">
                     {article.tags.map(tag => (
-                      <Badge key={tag} variant="secondary" className="text-xs bg-blue-100/50 text-blue-600">
+                      <Badge key={tag} variant="secondary" className="text-xs bg-[#e6f7fd]/50 text-[#009fe3]">
                         {tag}
                       </Badge>
                     ))}
@@ -81,7 +81,7 @@ export default function Blog() {
                 )}
               </CardHeader>
               <CardContent className="space-y-3 pt-0 px-4 sm:px-6 pb-4">
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-blue-600/60">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-[#009fe3]/60">
                   {article.autore && (
                     <div className="flex items-center gap-1">
                       <User className="w-3 h-3" />
@@ -96,13 +96,13 @@ export default function Blog() {
                   )}
                 </div>
                 
-                <div className="flex items-center justify-between pt-3 border-t border-blue-100/30">
-                  <div className="flex items-center gap-3 text-xs text-blue-600/60">
-                    <Badge variant="outline" className="text-xs border-blue-200 text-blue-600">
+                <div className="flex items-center justify-between pt-3 border-t border-[#b3e5fc]/30">
+                  <div className="flex items-center gap-3 text-xs text-[#009fe3]/60">
+                    <Badge variant="outline" className="text-xs border-[#b3e5fc] text-[#009fe3]">
                       {article.tipo}
                     </Badge>
                   </div>
-                  <Button variant="outline" size="sm" className="bg-white/80 border-blue-100/50 text-blue-600 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300 rounded-xl font-light text-xs sm:text-sm">
+                  <Button variant="outline" size="sm" className="bg-white/80 border-[#b3e5fc]/50 text-[#009fe3] hover:bg-[#009fe3] hover:text-white hover:border-[#009fe3] transition-all duration-300 rounded-xl font-light text-xs sm:text-sm">
                     {t('blog.read')}
                   </Button>
                 </div>
@@ -116,19 +116,19 @@ export default function Blog() {
 };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#e6f7fd]/40 via-white to-[#e6f7fd]/30 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-100/30 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-100/30 rounded-full blur-3xl"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#b3e5fc]/30 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#b3e5fc]/30 rounded-full blur-3xl"></div>
       </div>
 
       {/* Header */}
-      <header className="relative z-10 bg-white/70 backdrop-blur-sm border-b border-blue-100/50">
+      <header className="relative z-10 bg-white/70 backdrop-blur-sm border-b border-[#b3e5fc]/50">
         <div className="px-4 sm:px-6 py-8 sm:py-16">
           <div className="mx-auto max-w-6xl">
             <div className="text-center mb-8 sm:mb-16">
-              <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bebas font-normal text-blue-900 tracking-wider mb-6 sm:mb-8">
+              <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bebas font-normal text-[#006a99] tracking-wider mb-6 sm:mb-8">
                 Blog
               </h1>
               
@@ -138,8 +138,8 @@ export default function Blog() {
                   onClick={() => toggleCategory("faq")}
                   className={`w-full sm:w-auto font-bebas font-normal tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-8 sm:px-12 py-4 sm:py-6 text-xl sm:text-2xl ${
                     selectedCategories.includes("faq") 
-                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700" 
-                      : "bg-white/80 text-blue-600 border border-blue-200 hover:bg-blue-50"
+                      ? "bg-gradient-to-r from-[#009fe3] to-[#007bb5] text-white hover:from-[#008bcc] hover:to-[#006a99]" 
+                      : "bg-white/80 text-[#009fe3] border border-[#b3e5fc] hover:bg-[#e6f7fd]"
                   }`}
                 >
                   day trip
@@ -170,12 +170,12 @@ export default function Blog() {
             {/* Search */}
             <div className="max-w-2xl mx-auto px-4 sm:px-0">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-600/40 w-4 h-4 sm:w-5 sm:h-5" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#009fe3]/40 w-4 h-4 sm:w-5 sm:h-5" />
                 <Input
                   placeholder="Cerca articoli..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 sm:pl-12 py-3 sm:py-4 bg-white/80 backdrop-blur-sm border-blue-100/50 rounded-2xl text-blue-900 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition-all font-light"
+                  className="pl-10 sm:pl-12 py-3 sm:py-4 bg-white/80 backdrop-blur-sm border-[#b3e5fc]/50 rounded-2xl text-[#006a99] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#b3e5fc] focus:border-[#009fe3] transition-all font-light"
                 />
               </div>
             </div>

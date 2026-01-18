@@ -376,8 +376,8 @@ export default function TravellerPath() {
   // Don't render until data is loaded
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 flex items-center justify-center">
-        <div className="text-blue-600">Loading...</div>
+      <div className="min-h-screen bg-gradient-to-br from-[#e6f7fd]/40 via-white to-[#e6f7fd]/30 flex items-center justify-center">
+        <div className="text-[#009fe3]">Loading...</div>
       </div>
     );
   }
@@ -385,27 +385,27 @@ export default function TravellerPath() {
   // Show intro screen
   if (showIntro) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 pb-20 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#e6f7fd]/40 via-white to-[#e6f7fd]/30 pb-20 flex items-center justify-center">
         <div className="max-w-2xl mx-auto px-4">
-          <Link to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors mb-8 absolute top-8 left-4">
+          <Link to="/" className="inline-flex items-center gap-2 text-[#009fe3] hover:text-[#007bb5] transition-colors mb-8 absolute top-8 left-4">
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm">Home</span>
           </Link>
 
           <div className="text-center animate-fade-in">
             <div className="mb-8">
-              <Compass className="w-24 h-24 md:w-28 md:h-28 mx-auto mb-6 text-blue-600" />
-              <h1 className="text-6xl md:text-7xl font-bebas text-blue-900 mb-4 tracking-wide">
+              <Compass className="w-24 h-24 md:w-28 md:h-28 mx-auto mb-6 text-[#009fe3]" />
+              <h1 className="text-6xl md:text-7xl font-bebas text-[#006a99] mb-4 tracking-wide">
                 TRAVELER PATH
               </h1>
-              <p className="text-xl md:text-2xl font-bebas text-blue-900 tracking-wide max-w-lg mx-auto mb-12">
+              <p className="text-xl md:text-2xl font-bebas text-[#006a99] tracking-wide max-w-lg mx-auto mb-12">
                 Answer a few quick questions and get a <span className="text-orange-700">personalized</span> selection of places made just for you.
               </p>
             </div>
 
             <Button
               onClick={handleStartQuestionnaire}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-12 py-7 text-xl font-bebas rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all tracking-wide"
+              className="bg-gradient-to-r from-[#009fe3] to-[#007bb5] hover:from-[#008bcc] hover:to-[#006a99] text-white px-12 py-7 text-xl font-bebas rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all tracking-wide"
             >
               INIZIA
               <ChevronRight className="w-6 h-6 ml-2" />
@@ -417,13 +417,13 @@ export default function TravellerPath() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/40 via-white to-indigo-50/30 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-[#e6f7fd]/40 via-white to-[#e6f7fd]/30 pb-20">
       <div className="max-w-4xl mx-auto px-4 py-4 md:py-8">
         
         {/* Header */}
         <div className="mb-4 md:mb-8">
           <div className="flex items-center justify-between mb-3 md:mb-4">
-            <Link to="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors">
+            <Link to="/" className="inline-flex items-center gap-2 text-[#009fe3] hover:text-[#007bb5] transition-colors">
               <ArrowLeft className="w-4 h-4" />
               <span className="text-sm">Home</span>
             </Link>
@@ -460,9 +460,9 @@ export default function TravellerPath() {
           </div>
           
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-            <h1 className="text-3xl md:text-4xl font-bebas text-blue-900 tracking-wide">TRAVELER PATH</h1>
+            <h1 className="text-3xl md:text-4xl font-bebas text-[#006a99] tracking-wide">TRAVELER PATH</h1>
             
-            <div className="text-xs md:text-sm text-blue-600/70 font-medium">
+            <div className="text-xs md:text-sm text-[#009fe3]/70 font-medium">
               {getAnsweredQuestionsCount()} / {questions.length}
             </div>
           </div>
@@ -470,26 +470,26 @@ export default function TravellerPath() {
 
         {/* Progress Bar */}
         <div className="mb-4 md:mb-8">
-          <div className="w-full bg-blue-100/50 rounded-full h-2">
+          <div className="w-full bg-[#e6f7fd]/50 rounded-full h-2">
             <div 
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 h-2 rounded-full transition-all duration-300"
+              className="bg-gradient-to-r from-[#009fe3] to-[#007bb5] h-2 rounded-full transition-all duration-300"
               style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
             />
           </div>
         </div>
 
         {/* Question Card */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 md:p-8 border border-blue-100/50 shadow-lg flex flex-col" style={{ minHeight: 'calc(100vh - 250px)' }}>
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 md:p-8 border border-[#b3e5fc]/50 shadow-lg flex flex-col" style={{ minHeight: 'calc(100vh - 250px)' }}>
           
           {/* Category */}
           <div className="mb-4 md:mb-6">
-            <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-blue-100/50 text-blue-700 rounded-full text-xs md:text-sm font-medium">
+            <span className="inline-block px-3 py-1.5 md:px-4 md:py-2 bg-[#e6f7fd]/50 text-[#009fe3] rounded-full text-xs md:text-sm font-medium">
               {currentQuestion.category[tpLanguage]}
             </span>
           </div>
 
           {/* Question */}
-          <h2 className="text-xl md:text-2xl font-bebas text-blue-900 mb-6 md:mb-8 tracking-wide">
+          <h2 className="text-xl md:text-2xl font-bebas text-[#006a99] mb-6 md:mb-8 tracking-wide">
             {currentQuestion.question[tpLanguage]}
           </h2>
 
@@ -502,8 +502,8 @@ export default function TravellerPath() {
                     key={option.value}
                     className={`flex items-center justify-center gap-2 p-4 md:p-6 rounded-xl border transition-all cursor-pointer text-center ${
                       (currentAnswer as string[] || []).includes(option.value)
-                        ? 'bg-blue-600 text-white border-blue-600 shadow-md'
-                        : 'bg-white/50 text-blue-900 border-blue-100/30 hover:bg-blue-50/50'
+                        ? 'bg-[#009fe3] text-white border-[#009fe3] shadow-md'
+                        : 'bg-white/50 text-[#006a99] border-[#b3e5fc]/30 hover:bg-[#e6f7fd]/50'
                     }`}
                   >
                     <input
@@ -527,8 +527,8 @@ export default function TravellerPath() {
                     key={option.value}
                     className={`flex items-center justify-center gap-2 p-4 md:p-6 rounded-xl border transition-all cursor-pointer text-center ${
                       currentAnswer === option.value
-                        ? 'bg-blue-600 text-white border-blue-600 shadow-md'
-                        : 'bg-white/50 text-blue-900 border-blue-100/30 hover:bg-blue-50/50'
+                        ? 'bg-[#009fe3] text-white border-[#009fe3] shadow-md'
+                        : 'bg-white/50 text-[#006a99] border-[#b3e5fc]/30 hover:bg-[#e6f7fd]/50'
                     }`}
                   >
                     <RadioGroupItem value={option.value} className="hidden" />
@@ -556,7 +556,7 @@ export default function TravellerPath() {
                 variant="ghost"
                 onClick={goToNextQuestion}
                 disabled={currentQuestionIndex === questions.length - 1}
-                className="text-blue-600 text-xs md:text-sm h-9 px-3 md:h-10 md:px-4"
+                className="text-[#009fe3] text-xs md:text-sm h-9 px-3 md:h-10 md:px-4"
                 size="sm"
               >
                 Skip
@@ -597,10 +597,10 @@ export default function TravellerPath() {
                 onClick={() => setCurrentQuestionIndex(index)}
                 className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all flex-shrink-0 ${
                   index === currentQuestionIndex
-                    ? 'bg-blue-600 scale-125'
+                    ? 'bg-[#009fe3] scale-125'
                     : answers[questions[index].id]
                     ? 'bg-green-500'
-                    : 'bg-blue-200'
+                    : 'bg-[#b3e5fc]'
                 }`}
               />
             ))}
