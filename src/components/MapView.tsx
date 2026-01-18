@@ -305,31 +305,13 @@ export default function MapView({ places, selectedCategories = [], className, on
     const map = new mapboxgl.Map({
       container: containerRef.current,
       style: `mapbox://styles/teoteoteo/${selectedMapStyle}`,
-      center: [0, 20], // Partiamo da una vista globale centrata
-      zoom: 0.8, // Zoom molto lontano per vedere il globo intero
+      center: [9.0852, 45.8081], // Como
+      zoom: 12,
       pitch: 0,
       bearing: 0
     });
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-    
-    // Effetto turbinio: rotazione da est verso ovest integrata con zoom
-    map.on('load', () => {
-      // Easing personalizzato: veloce all'inizio, rallenta alla fine
-      const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-      
-      setTimeout(() => {
-        map.flyTo({
-          center: [9.0852, 45.8081], // Como
-          zoom: 12,
-          pitch: 0,
-          bearing: 1080, // 3 rotazioni complete da est verso ovest (direzione positiva)
-          duration: 4500,
-          easing: easeOutCubic,
-          essential: true
-        });
-      }, 500);
-    });
     
     mapRef.current = map;
 
