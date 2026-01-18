@@ -6,7 +6,7 @@ sottotitolo: "The secrets of Italy’s most authentic scoop"
 tipo: "city+"
 autore: "Explore Team"
 data: "2025-09-25"
-cover: "/articles/gelato.jpg"
+cover: "/articles/tlmercato.jpg"
 tags: 
 accent: "#f97316"
 layout: "hero"
