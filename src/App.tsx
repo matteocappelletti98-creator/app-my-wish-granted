@@ -11,7 +11,7 @@ import Impostazioni from "@/pages/Impostazioni";
 import Lingua from "@/pages/Lingua";
 import Privacy from "@/pages/Privacy";
 import Auth from "@/pages/Auth";
-import Profile from "@/pages/Profile";
+
 import UserAuth from "@/pages/UserAuth";
 
 export default function App() {
@@ -26,7 +26,7 @@ export default function App() {
         <Route path="/articolo/:slug" element={<ArticlePage />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/user-auth" element={<UserAuth />} />
-        <Route path="/profile" element={<Profile />} />
+        
         <Route path="/traveller-path" element={<TravellerPath />} />
         <Route path="/impostazioni" element={<Impostazioni />} />
         <Route path="/lingua" element={<Lingua />} />
