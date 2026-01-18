@@ -147,12 +147,12 @@ export default function VirtualExploration() {
   }, []);
 
   // Tutte le categorie da visualizzare, anche se vuote
+  // IMPORTANTE: questi devono corrispondere ai valori restituiti da normalizeCategory()
   const allCategories = [
     'restaurant',
     'culture',
-    'shopping',
+    'shop',  // normalizeCategory restituisce 'shop' per 'shopping'
     'attractions',
-    'info',
     'taxi',
     'boat',
     'cafe',
@@ -160,8 +160,7 @@ export default function VirtualExploration() {
     'adventure',
     'transport',
     'lidi',
-    'bar',
-    'cinema',
+    'cocktails',  // normalizeCategory restituisce 'cocktails' per 'bars & cocktails'
     'stroll',
     'wc',
     'free_beaches',
@@ -169,18 +168,25 @@ export default function VirtualExploration() {
     'gelato',
     'refuge',
     'luggage',
-    'rent',
+    'bike',  // normalizeCategory restituisce 'bike' per 'bike riding'
     'bakery',
-    'local',
     'parking',
-    'private_luxury',
+    'luxury',  // normalizeCategory restituisce 'luxury' per 'private & luxury'
     'pizza',
     'gym',
     'pub',
     'nightlife',
-    'late_night',
-    'wine_bar',
-    'gastronomy'
+    'streetfood',  // normalizeCategory restituisce 'streetfood' per 'street food'
+    'bar',
+    'hotel',
+    'viewpoint',
+    'beach',
+    'museum',
+    'park',
+    'atm',
+    'grocery',
+    'shopping_hq',  // luxury shopping
+    'daytrips'
   ];
 
   const categories = useMemo(() => {
@@ -228,40 +234,46 @@ export default function VirtualExploration() {
   };
 
   // Mapping dei titoli delle categorie
+  // Le chiavi devono corrispondere ai valori restituiti da normalizeCategory()
   const categoryTitles: Record<string, string> = {
     restaurant: "Ristoranti",
-    culture: "Art and Culture",
-    shopping: "Shopping",
+    culture: "Art & Culture",
+    shop: "Shopping",
     attractions: "Attractions",
-    info: "Info Point",
-    taxi: "Taxi",
+    taxi: "Taxi & Private Transport",
     boat: "Boat Rental",
     cafe: "Cafè",
     villa: "Villa",
     adventure: "Adventure",
     transport: "Public Transport",
-    lidi: "Lidi",
-    bar: "Bar and Cocktail's",
-    cinema: "Cinemas & Bookstores",
-    stroll: "Stroll",
-    wc: "WC",
+    lidi: "Beach Resorts",
+    cocktails: "Bars & Cocktails",
+    stroll: "Strolls",
+    wc: "Public Toilets",
     free_beaches: "Free Beaches",
     secret: "Secret Places",
     gelato: "Gelato",
     refuge: "Mountain Refuge",
     luggage: "Luggage Storage",
-    rent: "Rent a Ride",
-    bakery: "Bakery and Pastry",
-    local: "Local Life",
+    bike: "Bike Riding",
+    bakery: "Bakery & Pastry",
     parking: "Parking",
-    private_luxury: "Private and Luxury",
+    luxury: "Private & Luxury",
     pizza: "Pizzerie",
     gym: "Gym",
     pub: "Pub",
     nightlife: "Night Life",
-    late_night: "Late Night Eats",
-    wine_bar: "Wine Bar",
-    gastronomy: "Gastronomie"
+    streetfood: "Street Food",
+    bar: "Bar",
+    hotel: "Hotel",
+    viewpoint: "Viewpoint",
+    beach: "Beach",
+    museum: "Museum",
+    park: "Park",
+    atm: "ATM",
+    grocery: "Grocery",
+    shopping_hq: "Luxury Shopping",
+    daytrips: "Day Trips"
   };
 
   // Filtra solo i luoghi preferiti per la lista
