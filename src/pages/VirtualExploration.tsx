@@ -3,7 +3,7 @@ import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import MapView from "@/components/MapView";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, MapPin, User, Lightbulb, ChevronDown, Grid3X3 } from "lucide-react";
+import { Heart, MapPin, User, Lightbulb, ChevronDown } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
@@ -273,6 +273,7 @@ export default function VirtualExploration() {
     <div className="min-h-screen bg-white">
       {/* Filtri categorie in alto - Sticky */}
       <div className="sticky top-0 z-40 bg-white border-b">
+        {/* Barra categorie scorrevole */}
         <div className="px-4 py-3 overflow-x-auto scrollbar-hide touch-pan-x">
           <div className="inline-flex gap-1 min-w-full">
             <button
@@ -285,20 +286,7 @@ export default function VirtualExploration() {
               {t('categories.all')}
             </button>
             
-            {/* Bottone menu categorie a tendina */}
-            <button
-              onClick={() => setCategoryMenuOpen(!categoryMenuOpen)}
-              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
-                ${categoryMenuOpen
-                  ? "bg-blue-600 text-white" 
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-            >
-              <Grid3X3 className="w-3 h-3" />
-              <span>Categorie</span>
-              <ChevronDown className={`w-3 h-3 transition-transform ${categoryMenuOpen ? 'rotate-180' : ''}`} />
-            </button>
-            
-            {/* Preferiti - Categoria speciale con cuore (combinabile) */}
+            {/* Mymap - Categoria speciale con cuore (combinabile) */}
             {favorites.length > 0 && (
               <button
                 onClick={() => {
@@ -339,16 +327,19 @@ export default function VirtualExploration() {
               </button>
             )}
             
-            {/* Categorie selezionate inline (chip visibili) */}
-            {selectedCategories.map(c => (
+            {/* Tutte le categorie scorrevoli */}
+            {categories.map(c => (
               <button 
                 key={c} 
                 onClick={() => toggleCategory(c)}
-                className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium bg-blue-600 text-white whitespace-nowrap flex-shrink-0"
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
+                  ${selectedCategories.includes(c)
+                    ? "bg-blue-600 text-white" 
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
               >
                 <CategoryBadge category={c} />
                 <span>{categoryTitles[c] || c}</span>
-                <span className="text-[9px] px-1 rounded bg-white/20">
+                <span className={`text-[9px] px-1 rounded ${selectedCategories.includes(c) ? 'bg-white/20' : 'bg-white'}`}>
                   {all.filter(p => normalizeCategory(p.category) === c).length}
                 </span>
               </button>
@@ -356,17 +347,23 @@ export default function VirtualExploration() {
           </div>
         </div>
         
-        {/* Menu a tendina categorie */}
+        {/* Indicatore per tirare giù - Pull down handle */}
+        <button
+          onClick={() => setCategoryMenuOpen(!categoryMenuOpen)}
+          className="w-full flex justify-center py-1 bg-gray-50 hover:bg-gray-100 transition-colors border-t"
+        >
+          <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${categoryMenuOpen ? 'rotate-180' : ''}`} />
+        </button>
+        
+        {/* Menu espanso con tutte le categorie */}
         {categoryMenuOpen && (
-          <div className="absolute left-0 right-0 bg-white border-b shadow-lg z-50 max-h-[60vh] overflow-y-auto">
+          <div className="bg-white border-b shadow-lg max-h-[50vh] overflow-y-auto">
             <div className="p-4">
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                 {categories.map(c => (
                   <button 
                     key={c} 
-                    onClick={() => {
-                      toggleCategory(c);
-                    }}
+                    onClick={() => toggleCategory(c)}
                     className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors text-left
                       ${selectedCategories.includes(c)
                         ? "bg-blue-600 text-white" 
@@ -382,14 +379,6 @@ export default function VirtualExploration() {
                   </button>
                 ))}
               </div>
-              
-              {/* Bottone chiudi */}
-              <button
-                onClick={() => setCategoryMenuOpen(false)}
-                className="w-full mt-4 py-2 text-sm text-gray-500 hover:text-gray-700 border-t"
-              >
-                Chiudi menu
-              </button>
             </div>
           </div>
         )}
