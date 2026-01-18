@@ -20,8 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import trueLogo from "@/assets/true-logo.png";
-import localLogo from "@/assets/local-logo.png";
+import trueLocalLogo from "@/assets/true-local-logo.png";
 import homeHero from "@/assets/home-hero.png";
 
 export default function Home() {
@@ -94,38 +93,13 @@ export default function Home() {
         </div>
       </header>
 
-      {/* App Icon Square - True Local Logo */}
+      {/* True Local Logo */}
       <div className="w-full flex justify-center mb-8">
-        <div className="w-32 h-32 bg-[#1a5a7a] rounded-2xl flex flex-col items-center justify-center shadow-lg">
-          <div 
-            className="h-12 w-24"
-            style={{
-              backgroundColor: '#ffffff',
-              WebkitMaskImage: `url(${trueLogo})`,
-              maskImage: `url(${trueLogo})`,
-              WebkitMaskSize: 'contain',
-              maskSize: 'contain',
-              WebkitMaskRepeat: 'no-repeat',
-              maskRepeat: 'no-repeat',
-              WebkitMaskPosition: 'center',
-              maskPosition: 'center',
-            }}
-          />
-          <div 
-            className="h-6 w-16"
-            style={{
-              backgroundColor: '#ffffff',
-              WebkitMaskImage: `url(${localLogo})`,
-              maskImage: `url(${localLogo})`,
-              WebkitMaskSize: 'contain',
-              maskSize: 'contain',
-              WebkitMaskRepeat: 'no-repeat',
-              maskRepeat: 'no-repeat',
-              WebkitMaskPosition: 'center',
-              maskPosition: 'center',
-            }}
-          />
-        </div>
+        <img 
+          src={trueLocalLogo} 
+          alt="True Local - Be a traveler" 
+          className="h-24 w-auto object-contain"
+        />
       </div>
 
       {/* Discover Lake Como Title */}
