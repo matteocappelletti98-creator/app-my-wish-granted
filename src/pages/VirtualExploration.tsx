@@ -3,12 +3,13 @@ import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import MapView from "@/components/MapView";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, MapPin, User } from "lucide-react";
+import { Heart, MapPin, User, Lightbulb } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { User as SupabaseUser, Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
+import { SuggestPlaceDialog } from "@/components/SuggestPlaceDialog";
 
 // Tuo CSV pubblicato
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
@@ -189,6 +190,7 @@ export default function VirtualExploration() {
   // Stato per filtri speciali
   const [tpFilterActive, setTpFilterActive] = useState(false);
   const [favoritesFilterActive, setFavoritesFilterActive] = useState(false);
+  const [suggestDialogOpen, setSuggestDialogOpen] = useState(false);
 
   const filtered = useMemo(() => {
     const needle = search.toLowerCase();
@@ -358,7 +360,22 @@ export default function VirtualExploration() {
             userTravellerCodes={userTravellerCodes}
           />
         )}
+
+        {/* Bottone Suggerisci Luogo */}
+        <button
+          onClick={() => setSuggestDialogOpen(true)}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 bg-gradient-to-r from-[#288cbd] to-[#1a5a7a] hover:from-[#2499d1] hover:to-[#1e6a8f] text-white px-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2 font-medium"
+        >
+          <Lightbulb className="w-5 h-5" />
+          Suggerisci un luogo
+        </button>
       </div>
+
+      {/* Dialog Suggerisci Luogo */}
+      <SuggestPlaceDialog 
+        open={suggestDialogOpen} 
+        onOpenChange={setSuggestDialogOpen} 
+      />
     </div>
   );
 }
