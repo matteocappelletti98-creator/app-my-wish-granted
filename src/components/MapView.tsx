@@ -64,7 +64,7 @@ export default function MapView({ places, selectedCategories = [], className, on
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [userAnswers, setUserAnswers] = useState<Record<string, any>>({});
-  const [selectedMapStyle, setSelectedMapStyle] = useState("cmg7lnkab002601qo6yviai9g");
+  const [selectedMapStyle, setSelectedMapStyle] = useState("cmi7jnne9000001sk04x0evzp");
 
   // Carica le risposte del traveller path
   useEffect(() => {
