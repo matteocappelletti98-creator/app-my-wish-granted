@@ -6,7 +6,7 @@ sottotitolo: " "
 tipo: "city+"
 autore: "Explore Team"
 data: "2025-09-25"
-cover: "/articles/tlmercato.jpg"
+cover: "public/tlmercato.png"
 tags: 
 accent: "#f97316"
 layout: "hero"
