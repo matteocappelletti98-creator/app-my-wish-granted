@@ -622,20 +622,6 @@ export default function MapView({ places, selectedCategories = [], className, on
           </Popover>
         </div>
 
-        {/* Selettore Mappa */}
-        <div className="absolute top-4 right-4 z-10">
-          <Select value={selectedMapStyle} onValueChange={setSelectedMapStyle}>
-            <SelectTrigger className="w-[180px] bg-background/95 backdrop-blur-sm shadow-lg border-primary/20 h-9">
-              <Map className="w-4 h-4 mr-2" />
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="cmg7lnkab002601qo6yviai9g">Mappa 1 - Prova1</SelectItem>
-              <SelectItem value="cmi7ipg2b00de01sehe83hav9">Mappa 2 - Prova2</SelectItem>
-              <SelectItem value="cmi7jnne9000001sk04x0evzp">Mappa 3 - Prova3</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
 
         <style>{`
           @media (max-width: 768px) {
