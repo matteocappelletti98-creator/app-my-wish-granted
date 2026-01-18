@@ -27,6 +27,7 @@ export default function Home() {
   const { language, setLanguage, t } = useLanguage();
   const [hasIncompleteSurvey, setHasIncompleteSurvey] = useState(false);
   const [contactDialogOpen, setContactDialogOpen] = useState(false);
+  const [imageDialogOpen, setImageDialogOpen] = useState(false);
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactMessage, setContactMessage] = useState("");
@@ -103,14 +104,27 @@ export default function Home() {
       </div>
 
 
-      {/* Hero Image */}
+      {/* Hero Image - Click to enlarge */}
       <div className="w-full px-4 mb-6">
         <img 
           src={homeHero} 
-          alt="Lake Como" 
-          className="w-full h-48 object-cover rounded-2xl"
+          alt="True Local" 
+          className="w-full h-48 object-cover rounded-2xl cursor-pointer hover:opacity-90 transition-opacity active:scale-[0.98]"
+          onClick={() => setImageDialogOpen(true)}
         />
       </div>
+
+      {/* Image Fullscreen Dialog */}
+      <Dialog open={imageDialogOpen} onOpenChange={setImageDialogOpen}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none">
+          <img 
+            src={homeHero} 
+            alt="True Local" 
+            className="w-full h-full object-contain"
+            onClick={() => setImageDialogOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
 
       {/* Content Container */}
       <div className="relative z-10 px-4">
