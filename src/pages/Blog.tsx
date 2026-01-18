@@ -7,6 +7,7 @@ import { Search, Calendar, User } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getAllArticles, type ArticleMeta } from "@/lib/articles";
 import { Link } from "react-router-dom";
+import blogHero from "@/assets/blog-hero.png";
 
 export default function Blog() {
   const { t, language } = useLanguage();
@@ -123,11 +124,20 @@ export default function Blog() {
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#b3e5fc]/30 rounded-full blur-3xl"></div>
       </div>
 
+      {/* Hero Image */}
+      <div className="relative w-full h-64 sm:h-80 md:h-96 overflow-hidden">
+        <img 
+          src={blogHero} 
+          alt="To be a True Local" 
+          className="w-full h-full object-cover"
+        />
+      </div>
+
       {/* Header */}
       <header className="relative z-10 bg-white/70 backdrop-blur-sm border-b border-[#b3e5fc]/50">
-        <div className="px-4 sm:px-6 py-8 sm:py-16">
+        <div className="px-4 sm:px-6 py-8 sm:py-12">
           <div className="mx-auto max-w-6xl">
-            <div className="text-center mb-8 sm:mb-16">
+            <div className="text-center mb-8 sm:mb-12">
               <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bebas font-normal text-[#006a99] tracking-wider mb-6 sm:mb-8">
                 Blog
               </h1>
