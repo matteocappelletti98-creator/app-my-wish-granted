@@ -386,15 +386,44 @@ export default function TravellerPath() {
   // Show intro screen
   if (showIntro) {
     return (
-      <div 
-        className="min-h-screen pb-20 flex items-center justify-center relative"
-        style={{
-          backgroundImage: `url(${patternBg})`,
-          backgroundSize: '400px',
-          backgroundRepeat: 'repeat'
-        }}
-      >
-        <div className="absolute inset-0 bg-white/85"></div>
+      <div className="min-h-screen pb-20 flex items-center justify-center bg-white relative overflow-hidden">
+        {/* Pattern frame - top */}
+        <div 
+          className="absolute top-0 left-0 right-0 h-24 md:h-32"
+          style={{
+            backgroundImage: `url(${patternBg})`,
+            backgroundSize: '300px',
+            backgroundRepeat: 'repeat'
+          }}
+        />
+        {/* Pattern frame - bottom */}
+        <div 
+          className="absolute bottom-0 left-0 right-0 h-24 md:h-32"
+          style={{
+            backgroundImage: `url(${patternBg})`,
+            backgroundSize: '300px',
+            backgroundRepeat: 'repeat'
+          }}
+        />
+        {/* Pattern frame - left */}
+        <div 
+          className="absolute top-24 md:top-32 bottom-24 md:bottom-32 left-0 w-16 md:w-24"
+          style={{
+            backgroundImage: `url(${patternBg})`,
+            backgroundSize: '300px',
+            backgroundRepeat: 'repeat'
+          }}
+        />
+        {/* Pattern frame - right */}
+        <div 
+          className="absolute top-24 md:top-32 bottom-24 md:bottom-32 right-0 w-16 md:w-24"
+          style={{
+            backgroundImage: `url(${patternBg})`,
+            backgroundSize: '300px',
+            backgroundRepeat: 'repeat'
+          }}
+        />
+        
         <div className="max-w-2xl mx-auto px-4 relative z-10">
           <Link to="/" className="inline-flex items-center gap-2 text-[#009fe3] hover:text-[#007bb5] transition-colors mb-8 absolute top-8 left-4">
             <ArrowLeft className="w-4 h-4" />
@@ -426,16 +455,45 @@ export default function TravellerPath() {
   }
 
   return (
-    <div 
-      className="min-h-screen pb-20 relative"
-      style={{
-        backgroundImage: `url(${patternBg})`,
-        backgroundSize: '400px',
-        backgroundRepeat: 'repeat'
-      }}
-    >
-      <div className="absolute inset-0 bg-white/90"></div>
-      <div className="max-w-4xl mx-auto px-4 py-4 md:py-8 relative z-10">
+    <div className="min-h-screen pb-20 bg-white relative overflow-hidden">
+      {/* Pattern frame - top */}
+      <div 
+        className="absolute top-0 left-0 right-0 h-16 md:h-20"
+        style={{
+          backgroundImage: `url(${patternBg})`,
+          backgroundSize: '300px',
+          backgroundRepeat: 'repeat'
+        }}
+      />
+      {/* Pattern frame - bottom */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-16 md:h-20"
+        style={{
+          backgroundImage: `url(${patternBg})`,
+          backgroundSize: '300px',
+          backgroundRepeat: 'repeat'
+        }}
+      />
+      {/* Pattern frame - left */}
+      <div 
+        className="absolute top-16 md:top-20 bottom-16 md:bottom-20 left-0 w-8 md:w-16"
+        style={{
+          backgroundImage: `url(${patternBg})`,
+          backgroundSize: '300px',
+          backgroundRepeat: 'repeat'
+        }}
+      />
+      {/* Pattern frame - right */}
+      <div 
+        className="absolute top-16 md:top-20 bottom-16 md:bottom-20 right-0 w-8 md:w-16"
+        style={{
+          backgroundImage: `url(${patternBg})`,
+          backgroundSize: '300px',
+          backgroundRepeat: 'repeat'
+        }}
+      />
+      
+      <div className="max-w-4xl mx-auto px-4 py-4 md:py-8 relative z-10 mt-16 md:mt-20">
         
         {/* Header */}
         <div className="mb-4 md:mb-8">
