@@ -102,10 +102,6 @@ export default function Home() {
         />
       </div>
 
-      {/* Discover Lake Como Title */}
-      <div className="w-full text-center mb-6">
-        <h1 className="text-3xl font-karantina text-[#1a5a7a] uppercase tracking-wide">DISCOVER LAKE COMO</h1>
-      </div>
 
       {/* Hero Image */}
       <div className="w-full px-4 mb-6">
@@ -130,7 +126,7 @@ export default function Home() {
             <div className="mt-8">
               <Button
                 onClick={() => window.open('https://www.instagram.com/truelocalcomo/', '_blank')}
-                className="bg-gradient-to-r from-[#288cbd] to-[#1a5a7a] hover:from-[#2499d1] hover:to-[#1e6a8f] text-white font-dm-sans font-extralight px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
+                className="bg-[#009fe3] hover:bg-[#0088c6] text-white font-dm-sans font-extralight px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
               >
                 <Instagram className="w-6 h-6 mr-2" />
                 Join the Community
