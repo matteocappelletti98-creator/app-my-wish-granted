@@ -198,20 +198,23 @@ export default function VirtualExploration() {
       const t = `${p.name} ${p.city} ${p.description}`.toLowerCase();
       const okText = !needle || t.includes(needle);
       
-      // Se filtro Preferiti attivo
-      if (favoritesFilterActive) {
-        return okText && favorites.includes(p.id);
-      }
-      
-      // Se filtro Traveller Path attivo
-      if (tpFilterActive) {
-        if (!userTravellerCodes.length || !p.tp_codes?.length) return false;
-        const hasMatch = p.tp_codes.some(code => userTravellerCodes.includes(code));
-        return okText && hasMatch;
-      }
-      
+      // Filtro categoria (se selezionate)
       const okCat = selectedCategories.length === 0 || selectedCategories.some(cat => normalizeCategory(p.category) === cat);
-      return okText && okCat;
+      
+      // Filtro Preferiti (combinabile con categorie)
+      const okFavorites = !favoritesFilterActive || favorites.includes(p.id);
+      
+      // Filtro Traveller Path (combinabile con categorie)
+      let okTp = true;
+      if (tpFilterActive) {
+        if (!userTravellerCodes.length || !p.tp_codes?.length) {
+          okTp = false;
+        } else {
+          okTp = p.tp_codes.some(code => userTravellerCodes.includes(code));
+        }
+      }
+      
+      return okText && okCat && okFavorites && okTp;
     });
   }, [all, search, selectedCategories, tpFilterActive, favoritesFilterActive, favorites, userTravellerCodes]);
 
@@ -281,14 +284,14 @@ export default function VirtualExploration() {
               {t('categories.all')}
             </button>
             
-            {/* Preferiti - Categoria speciale con cuore */}
+            {/* Preferiti - Categoria speciale con cuore (combinabile) */}
             {favorites.length > 0 && (
               <button
                 onClick={() => {
                   setFavoritesFilterActive(!favoritesFilterActive);
+                  // Non resetta le altre categorie - combinabile!
                   if (!favoritesFilterActive) {
-                    setSelectedCategories([]);
-                    setTpFilterActive(false);
+                    setTpFilterActive(false); // Solo TP e Preferiti non possono coesistere
                   }
                 }}
                 className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 border-2
@@ -304,14 +307,14 @@ export default function VirtualExploration() {
               </button>
             )}
             
-            {/* Traveller Path - Dopo "Preferiti" con glow blu */}
+            {/* Traveller Path - Combinabile con categorie */}
             {userTravellerCodes.length > 0 && (
               <button
                 onClick={() => {
                   setTpFilterActive(!tpFilterActive);
+                  // Non resetta le altre categorie - combinabile!
                   if (!tpFilterActive) {
-                    setSelectedCategories([]);
-                    setFavoritesFilterActive(false);
+                    setFavoritesFilterActive(false); // Solo TP e Preferiti non possono coesistere
                   }
                 }}
                 className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 border-2
@@ -327,7 +330,7 @@ export default function VirtualExploration() {
             {categories.map(c => (
               <button 
                 key={c} 
-                onClick={() => { toggleCategory(c); setTpFilterActive(false); setFavoritesFilterActive(false); }}
+                onClick={() => toggleCategory(c)}
                 className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
                   ${selectedCategories.includes(c)
                     ? "bg-blue-600 text-white" 
@@ -352,7 +355,7 @@ export default function VirtualExploration() {
           </div>
         ) : (
           <MapView
-            places={tpFilterActive || favoritesFilterActive ? filtered : all.filter(p => p.status === "published")}
+            places={tpFilterActive || favoritesFilterActive || selectedCategories.length > 0 ? filtered : all.filter(p => p.status === "published")}
             selectedCategories={selectedCategories} 
             className="absolute inset-0 w-full h-full"
             favorites={favorites}
