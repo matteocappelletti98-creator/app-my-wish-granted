@@ -361,13 +361,13 @@ export default function VirtualExploration() {
           />
         )}
 
-        {/* Bottone Suggerisci Luogo */}
+        {/* Bottone Suggerisci Luogo - Compatto per mobile */}
         <button
           onClick={() => setSuggestDialogOpen(true)}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 bg-gradient-to-r from-[#288cbd] to-[#1a5a7a] hover:from-[#2499d1] hover:to-[#1e6a8f] text-white px-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2 font-medium"
+          className="absolute bottom-4 right-4 z-30 bg-gradient-to-r from-[#288cbd] to-[#1a5a7a] hover:from-[#2499d1] hover:to-[#1e6a8f] text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all active:scale-95"
+          aria-label="Suggerisci un luogo"
         >
           <Lightbulb className="w-5 h-5" />
-          Suggerisci un luogo
         </button>
       </div>
 
