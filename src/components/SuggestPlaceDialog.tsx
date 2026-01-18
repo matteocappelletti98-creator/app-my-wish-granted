@@ -14,13 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import trueLocalApproved from "@/assets/true-local-approved.png";
 
 interface SuggestPlaceDialogProps {
@@ -28,24 +21,11 @@ interface SuggestPlaceDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const placeCategories = [
-  { value: "ristorante", label: "Ristorante" },
-  { value: "bar", label: "Bar / Caffè" },
-  { value: "hotel", label: "Hotel / B&B" },
-  { value: "negozio", label: "Negozio" },
-  { value: "attrazione", label: "Attrazione" },
-  { value: "natura", label: "Natura / Panorama" },
-  { value: "sport", label: "Sport / Attività" },
-  { value: "altro", label: "Altro" },
-];
-
 export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogProps) {
   const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     placeName: "",
-    placeType: "",
-    location: "",
     description: "",
     senderName: "",
   });
@@ -68,8 +48,6 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
       toast.success("Grazie! Il tuo suggerimento è stato inviato 🎉");
       setFormData({
         placeName: "",
-        placeType: "",
-        location: "",
         description: "",
         senderName: "",
       });
@@ -89,7 +67,7 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
           <img 
             src={trueLocalApproved} 
             alt="True Local Approved" 
-            className="w-20 h-20 mb-2"
+            className="w-24 h-auto mb-2"
           />
           <DialogTitle className="text-2xl font-bebas text-[#1a5a7a] tracking-wide text-center flex items-center justify-center gap-2">
             <MapPin className="w-6 h-6" />
@@ -115,27 +93,6 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
           </div>
 
           <div>
-            <Label htmlFor="place-type" className="text-[#1a5a7a] font-medium">
-              Categoria
-            </Label>
-            <Select
-              value={formData.placeType}
-              onValueChange={(value) => setFormData({ ...formData, placeType: value })}
-            >
-              <SelectTrigger className="mt-1 border-blue-200 focus:border-blue-400">
-                <SelectValue placeholder="Seleziona categoria" />
-              </SelectTrigger>
-              <SelectContent>
-                {placeCategories.map((cat) => (
-                  <SelectItem key={cat.value} value={cat.value}>
-                    {cat.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
             <Label htmlFor="sender-name" className="text-[#1a5a7a] font-medium">
               Il tuo nome *
             </Label>
@@ -149,21 +106,8 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
           </div>
 
           <div>
-            <Label htmlFor="location" className="text-[#1a5a7a] font-medium">
-              Posizione / Indirizzo
-            </Label>
-            <Input
-              id="location"
-              value={formData.location}
-              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              placeholder="Es. Via Roma 15, Bellagio"
-              className="mt-1 border-blue-200 focus:border-blue-400"
-            />
-          </div>
-
-          <div>
             <Label htmlFor="description" className="text-[#1a5a7a] font-medium">
-              Perché lo consigli?
+              Se vuoi dicci perché lo consigli
             </Label>
             <Textarea
               id="description"
