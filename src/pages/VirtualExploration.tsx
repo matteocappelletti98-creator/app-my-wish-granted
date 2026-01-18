@@ -3,7 +3,7 @@ import { fetchPlacesFromSheet, Place } from "@/lib/sheet";
 import MapView from "@/components/MapView";
 import CategoryBadge, { normalizeCategory } from "@/components/CategoryBadge";
 import { Link, useNavigate } from "react-router-dom";
-import { MapPin, User, Lightbulb, ChevronDown } from "lucide-react";
+import { MapPin, User, Lightbulb, ChevronDown, Heart } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
@@ -189,6 +189,7 @@ export default function VirtualExploration() {
 
   // Stato per filtri speciali
   const [tpFilterActive, setTpFilterActive] = useState(false);
+  const [favoritesFilterActive, setFavoritesFilterActive] = useState(false);
   const [suggestDialogOpen, setSuggestDialogOpen] = useState(false);
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
 
@@ -201,6 +202,9 @@ export default function VirtualExploration() {
       // Filtro categoria (se selezionate)
       const okCat = selectedCategories.length === 0 || selectedCategories.some(cat => normalizeCategory(p.category) === cat);
       
+      // Filtro Preferiti (Mymap)
+      const okFavorites = !favoritesFilterActive || favorites.includes(p.id);
+      
       // Filtro Traveller Path (combinabile con categorie)
       let okTp = true;
       if (tpFilterActive) {
@@ -211,9 +215,9 @@ export default function VirtualExploration() {
         }
       }
       
-      return okText && okCat && okTp;
+      return okText && okCat && okFavorites && okTp;
     });
-  }, [all, search, selectedCategories, tpFilterActive, userTravellerCodes]);
+  }, [all, search, selectedCategories, tpFilterActive, favoritesFilterActive, favorites, userTravellerCodes]);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories(prev => 
@@ -273,14 +277,33 @@ export default function VirtualExploration() {
         <div className="px-4 py-3 overflow-x-auto scrollbar-hide touch-pan-x">
           <div className="inline-flex gap-1 min-w-full">
             <button
-              onClick={() => { setSelectedCategories([]); setTpFilterActive(false); }}
+              onClick={() => { setSelectedCategories([]); setTpFilterActive(false); setFavoritesFilterActive(false); }}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
-                ${selectedCategories.length === 0 && !tpFilterActive
-                  ? "bg-blue-600 text-white" 
+                ${selectedCategories.length === 0 && !tpFilterActive && !favoritesFilterActive
+                  ? "bg-[#009fe3] text-white" 
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
             >
               {t('categories.all')}
             </button>
+            
+            {/* Mymap - Categoria speciale con cuore */}
+            {favorites.length > 0 && (
+              <button
+                onClick={() => {
+                  setFavoritesFilterActive(!favoritesFilterActive);
+                }}
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 border-2
+                  ${favoritesFilterActive 
+                    ? "bg-red-500 text-white border-red-500 shadow-[0_0_12px_rgba(239,68,68,0.6)]" 
+                    : "bg-white text-red-500 border-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]"}`}
+              >
+                <Heart className="w-3 h-3" fill={favoritesFilterActive ? "white" : "currentColor"} />
+                <span>Mymap</span>
+                <span className={`text-[9px] px-1 rounded ${favoritesFilterActive ? 'bg-white/20' : 'bg-red-100'}`}>
+                  {favorites.length}
+                </span>
+              </button>
+            )}
             
             {/* Traveller Path - Combinabile con categorie */}
             {userTravellerCodes.length > 0 && (
@@ -290,8 +313,8 @@ export default function VirtualExploration() {
                 }}
                 className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 border-2
                   ${tpFilterActive 
-                    ? "bg-blue-600 text-white border-blue-600 shadow-[0_0_12px_rgba(37,99,235,0.6)]" 
-                    : "bg-white text-blue-600 border-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.4)] animate-pulse"}`}
+                    ? "bg-[#009fe3] text-white border-[#009fe3] shadow-[0_0_12px_rgba(0,159,227,0.6)]" 
+                    : "bg-white text-[#009fe3] border-[#009fe3] shadow-[0_0_8px_rgba(0,159,227,0.4)] animate-pulse"}`}
               >
                 <span>🧭</span>
                 <span>Traveller Path</span>
@@ -305,7 +328,7 @@ export default function VirtualExploration() {
                 onClick={() => toggleCategory(c)}
                 className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
                   ${selectedCategories.includes(c)
-                    ? "bg-blue-600 text-white" 
+                    ? "bg-[#009fe3] text-white" 
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
               >
                 <CategoryBadge category={c} />
@@ -337,7 +360,7 @@ export default function VirtualExploration() {
                     onClick={() => toggleCategory(c)}
                     className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors text-left
                       ${selectedCategories.includes(c)
-                        ? "bg-blue-600 text-white" 
+                        ? "bg-[#009fe3] text-white" 
                         : "bg-gray-50 text-gray-700 hover:bg-gray-100"}`}
                   >
                     <CategoryBadge category={c} />
@@ -363,7 +386,7 @@ export default function VirtualExploration() {
           </div>
         ) : (
           <MapView
-            places={tpFilterActive || selectedCategories.length > 0 ? filtered : all.filter(p => p.status === "published")}
+            places={tpFilterActive || favoritesFilterActive || selectedCategories.length > 0 ? filtered : all.filter(p => p.status === "published")}
             selectedCategories={selectedCategories} 
             className="absolute inset-0 w-full h-full"
             favorites={favorites}
@@ -375,7 +398,7 @@ export default function VirtualExploration() {
         {/* Bottone Suggerisci Luogo */}
         <button
           onClick={() => setSuggestDialogOpen(true)}
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 bg-gradient-to-r from-[#288cbd] to-[#1a5a7a] hover:from-[#2499d1] hover:to-[#1e6a8f] text-white px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all active:scale-95 flex items-center gap-2 text-sm font-medium"
+          className="absolute bottom-20 left-1/2 -translate-x-1/2 z-30 bg-[#009fe3] hover:bg-[#0088c6] text-white px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all active:scale-95 flex items-center gap-2 text-sm font-medium"
         >
           <Lightbulb className="w-4 h-4" />
           Suggerisci luogo
