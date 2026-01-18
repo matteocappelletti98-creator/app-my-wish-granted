@@ -11,11 +11,10 @@ const corsHeaders = {
 
 interface SuggestionRequest {
   placeName: string;
-  placeType: string;
-  location: string;
-  description: string;
-  senderName?: string;
-  senderEmail?: string;
+  placeType?: string;
+  location?: string;
+  description?: string;
+  senderName: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -27,15 +26,15 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { placeName, placeType, location, description, senderName, senderEmail }: SuggestionRequest = await req.json();
+    const { placeName, placeType, location, description, senderName }: SuggestionRequest = await req.json();
 
     console.log("Suggestion data:", { placeName, placeType, location, senderName });
 
-    // Validate required fields
-    if (!placeName || !placeType || !location || !description) {
+    // Validate required fields - only placeName and senderName are required
+    if (!placeName || !senderName) {
       console.error("Missing required fields");
       return new Response(
-        JSON.stringify({ error: "Missing required fields" }),
+        JSON.stringify({ error: "Missing required fields: placeName and senderName are required" }),
         {
           status: 400,
           headers: { "Content-Type": "application/json", ...corsHeaders },
@@ -64,30 +63,31 @@ const handler = async (req: Request): Promise<Response> => {
               </tr>
               <tr>
                 <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
+                  <strong style="color: #1a5a7a;">👤 Inviato da</strong><br>
+                  <span style="color: #334155; font-size: 16px;">${senderName}</span>
+                </td>
+              </tr>
+              ${placeType ? `
+              <tr>
+                <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
                   <strong style="color: #1a5a7a;">🏷️ Categoria</strong><br>
                   <span style="color: #334155; font-size: 16px;">${placeType}</span>
                 </td>
               </tr>
+              ` : ''}
+              ${location ? `
               <tr>
                 <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
                   <strong style="color: #1a5a7a;">📌 Posizione</strong><br>
                   <span style="color: #334155; font-size: 16px;">${location}</span>
                 </td>
               </tr>
-              <tr>
-                <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
-                  <strong style="color: #1a5a7a;">📝 Descrizione</strong><br>
-                  <span style="color: #334155; font-size: 16px;">${description}</span>
-                </td>
-              </tr>
-              ${senderName || senderEmail ? `
+              ` : ''}
+              ${description ? `
               <tr>
                 <td style="padding: 12px 0;">
-                  <strong style="color: #1a5a7a;">👤 Inviato da</strong><br>
-                  <span style="color: #334155; font-size: 16px;">
-                    ${senderName || 'Anonimo'}
-                    ${senderEmail ? `<br><a href="mailto:${senderEmail}" style="color: #288cbd;">${senderEmail}</a>` : ''}
-                  </span>
+                  <strong style="color: #1a5a7a;">📝 Descrizione</strong><br>
+                  <span style="color: #334155; font-size: 16px;">${description}</span>
                 </td>
               </tr>
               ` : ''}
