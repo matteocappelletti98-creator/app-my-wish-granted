@@ -47,11 +47,10 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
     location: "",
     description: "",
     senderName: "",
-    senderEmail: "",
   });
 
   const handleSubmit = async () => {
-    if (!formData.placeName || !formData.placeType || !formData.location || !formData.description) {
+    if (!formData.placeName || !formData.senderName) {
       toast.error("Compila tutti i campi obbligatori");
       return;
     }
@@ -72,7 +71,6 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
         location: "",
         description: "",
         senderName: "",
-        senderEmail: "",
       });
       onOpenChange(false);
     } catch (error: any) {
@@ -112,7 +110,7 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
 
           <div>
             <Label htmlFor="place-type" className="text-[#1a5a7a] font-medium">
-              Categoria *
+              Categoria
             </Label>
             <Select
               value={formData.placeType}
@@ -132,8 +130,21 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
           </div>
 
           <div>
+            <Label htmlFor="sender-name" className="text-[#1a5a7a] font-medium">
+              Il tuo nome *
+            </Label>
+            <Input
+              id="sender-name"
+              value={formData.senderName}
+              onChange={(e) => setFormData({ ...formData, senderName: e.target.value })}
+              placeholder="Il tuo nome"
+              className="mt-1 border-blue-200 focus:border-blue-400"
+            />
+          </div>
+
+          <div>
             <Label htmlFor="location" className="text-[#1a5a7a] font-medium">
-              Posizione / Indirizzo *
+              Posizione / Indirizzo
             </Label>
             <Input
               id="location"
@@ -146,7 +157,7 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
 
           <div>
             <Label htmlFor="description" className="text-[#1a5a7a] font-medium">
-              Perché lo consigli? *
+              Perché lo consigli?
             </Label>
             <Textarea
               id="description"
@@ -158,41 +169,9 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
             />
           </div>
 
-          <div className="pt-2 border-t border-gray-100">
-            <p className="text-xs text-gray-500 mb-3">Opzionale: lascia i tuoi contatti</p>
-            
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label htmlFor="sender-name" className="text-[#1a5a7a] font-medium text-sm">
-                  Il tuo nome
-                </Label>
-                <Input
-                  id="sender-name"
-                  value={formData.senderName}
-                  onChange={(e) => setFormData({ ...formData, senderName: e.target.value })}
-                  placeholder="Nome"
-                  className="mt-1 border-blue-200 focus:border-blue-400 text-sm"
-                />
-              </div>
-              <div>
-                <Label htmlFor="sender-email" className="text-[#1a5a7a] font-medium text-sm">
-                  La tua email
-                </Label>
-                <Input
-                  id="sender-email"
-                  type="email"
-                  value={formData.senderEmail}
-                  onChange={(e) => setFormData({ ...formData, senderEmail: e.target.value })}
-                  placeholder="Email"
-                  className="mt-1 border-blue-200 focus:border-blue-400 text-sm"
-                />
-              </div>
-            </div>
-          </div>
-
           <Button
             onClick={handleSubmit}
-            disabled={isSubmitting || !formData.placeName || !formData.placeType || !formData.location || !formData.description}
+            disabled={isSubmitting || !formData.placeName || !formData.senderName}
             className="w-full px-6 py-3 bg-gradient-to-r from-[#288cbd] to-[#1a5a7a] hover:from-[#2499d1] hover:to-[#1e6a8f] text-white font-medium rounded-xl transition-all flex items-center justify-center gap-2"
           >
             {isSubmitting ? (
