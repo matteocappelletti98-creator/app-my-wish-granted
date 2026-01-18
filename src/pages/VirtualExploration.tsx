@@ -186,14 +186,20 @@ export default function VirtualExploration() {
     return allCategories;
   }, []);
 
-  // Stato per filtro Traveller Path
+  // Stato per filtri speciali
   const [tpFilterActive, setTpFilterActive] = useState(false);
+  const [favoritesFilterActive, setFavoritesFilterActive] = useState(false);
 
   const filtered = useMemo(() => {
     const needle = search.toLowerCase();
     return all.filter(p => {
       const t = `${p.name} ${p.city} ${p.description}`.toLowerCase();
       const okText = !needle || t.includes(needle);
+      
+      // Se filtro Preferiti attivo
+      if (favoritesFilterActive) {
+        return okText && favorites.includes(p.id);
+      }
       
       // Se filtro Traveller Path attivo
       if (tpFilterActive) {
@@ -205,7 +211,7 @@ export default function VirtualExploration() {
       const okCat = selectedCategories.length === 0 || selectedCategories.some(cat => normalizeCategory(p.category) === cat);
       return okText && okCat;
     });
-  }, [all, search, selectedCategories, tpFilterActive, userTravellerCodes]);
+  }, [all, search, selectedCategories, tpFilterActive, favoritesFilterActive, favorites, userTravellerCodes]);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories(prev => 
@@ -264,21 +270,47 @@ export default function VirtualExploration() {
         <div className="px-4 py-3 overflow-x-auto scrollbar-hide touch-pan-x">
           <div className="inline-flex gap-1 min-w-full">
             <button
-              onClick={() => { setSelectedCategories([]); setTpFilterActive(false); }}
+              onClick={() => { setSelectedCategories([]); setTpFilterActive(false); setFavoritesFilterActive(false); }}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
-                ${selectedCategories.length === 0 && !tpFilterActive
+                ${selectedCategories.length === 0 && !tpFilterActive && !favoritesFilterActive
                   ? "bg-blue-600 text-white" 
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
             >
               {t('categories.all')}
             </button>
             
-            {/* Traveller Path - Dopo "All" con glow blu */}
+            {/* Preferiti - Categoria speciale con cuore */}
+            {favorites.length > 0 && (
+              <button
+                onClick={() => {
+                  setFavoritesFilterActive(!favoritesFilterActive);
+                  if (!favoritesFilterActive) {
+                    setSelectedCategories([]);
+                    setTpFilterActive(false);
+                  }
+                }}
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 border-2
+                  ${favoritesFilterActive 
+                    ? "bg-red-500 text-white border-red-500 shadow-[0_0_12px_rgba(239,68,68,0.6)]" 
+                    : "bg-white text-red-500 border-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]"}`}
+              >
+                <Heart className="w-3 h-3" fill={favoritesFilterActive ? "white" : "currentColor"} />
+                <span>Preferiti</span>
+                <span className={`text-[9px] px-1 rounded ${favoritesFilterActive ? 'bg-white/20' : 'bg-red-100'}`}>
+                  {favorites.length}
+                </span>
+              </button>
+            )}
+            
+            {/* Traveller Path - Dopo "Preferiti" con glow blu */}
             {userTravellerCodes.length > 0 && (
               <button
                 onClick={() => {
                   setTpFilterActive(!tpFilterActive);
-                  if (!tpFilterActive) setSelectedCategories([]);
+                  if (!tpFilterActive) {
+                    setSelectedCategories([]);
+                    setFavoritesFilterActive(false);
+                  }
                 }}
                 className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap flex-shrink-0 border-2
                   ${tpFilterActive 
@@ -293,7 +325,7 @@ export default function VirtualExploration() {
             {categories.map(c => (
               <button 
                 key={c} 
-                onClick={() => { toggleCategory(c); setTpFilterActive(false); }}
+                onClick={() => { toggleCategory(c); setTpFilterActive(false); setFavoritesFilterActive(false); }}
                 className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0
                   ${selectedCategories.includes(c)
                     ? "bg-blue-600 text-white" 
