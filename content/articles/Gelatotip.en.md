@@ -1,8 +1,8 @@
 ---
-id: "best-gelato"
+id: "Chi siamo "
 lang: "en"
-titolo: "How to Recognize High-Quality Gelato"
-sottotitolo: "The secrets of Italy’s most authentic scoop"
+titolo: "Chi è True Local "
+sottotitolo: " "
 tipo: "city+"
 autore: "Explore Team"
 data: "2025-09-25"
