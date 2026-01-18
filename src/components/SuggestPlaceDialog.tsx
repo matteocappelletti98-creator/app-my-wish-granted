@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import trueLocalApproved from "@/assets/true-local-approved.png";
 
 interface SuggestPlaceDialogProps {
   open: boolean;
@@ -84,7 +85,12 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-white/95 backdrop-blur-sm border-blue-100/50 rounded-2xl max-w-md max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+        <DialogHeader className="flex flex-col items-center">
+          <img 
+            src={trueLocalApproved} 
+            alt="True Local Approved" 
+            className="w-20 h-20 mb-2"
+          />
           <DialogTitle className="text-2xl font-bebas text-[#1a5a7a] tracking-wide text-center flex items-center justify-center gap-2">
             <MapPin className="w-6 h-6" />
             SUGGERISCI UN LUOGO
