@@ -26,12 +26,13 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     placeName: "",
+    city: "",
     description: "",
     senderName: "",
   });
 
   const handleSubmit = async () => {
-    if (!formData.placeName || !formData.senderName) {
+    if (!formData.placeName || !formData.city || !formData.senderName) {
       toast.error("Compila tutti i campi obbligatori");
       return;
     }
@@ -48,6 +49,7 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
       toast.success("Grazie! Il tuo suggerimento è stato inviato 🎉");
       setFormData({
         placeName: "",
+        city: "",
         description: "",
         senderName: "",
       });
@@ -93,6 +95,19 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
           </div>
 
           <div>
+            <Label htmlFor="city" className="text-[#1a5a7a] font-medium">
+              Città *
+            </Label>
+            <Input
+              id="city"
+              value={formData.city}
+              onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+              placeholder="Es. Como, Lecco, Milano..."
+              className="mt-1 border-blue-200 focus:border-blue-400"
+            />
+          </div>
+
+          <div>
             <Label htmlFor="sender-name" className="text-[#1a5a7a] font-medium">
               Il tuo nome *
             </Label>
@@ -121,7 +136,7 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
 
           <Button
             onClick={handleSubmit}
-            disabled={isSubmitting || !formData.placeName || !formData.senderName}
+            disabled={isSubmitting || !formData.placeName || !formData.city || !formData.senderName}
             className="w-full px-6 py-3 bg-gradient-to-r from-[#288cbd] to-[#1a5a7a] hover:from-[#2499d1] hover:to-[#1e6a8f] text-white font-medium rounded-xl transition-all flex items-center justify-center gap-2"
           >
             {isSubmitting ? (
