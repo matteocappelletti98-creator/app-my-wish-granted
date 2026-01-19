@@ -197,6 +197,11 @@ export default function VirtualExploration() {
   const [suggestDialogOpen, setSuggestDialogOpen] = useState(false);
   const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
 
+  // Luoghi filtrati per città (per conteggi categorie)
+  const placesInCity = useMemo(() => {
+    return all.filter(p => p.status === "published" && isPlaceInSelectedCity(p.city || ''));
+  }, [all, isPlaceInSelectedCity]);
+
   const filtered = useMemo(() => {
     const needle = search.toLowerCase();
     return all.filter(p => {
@@ -341,7 +346,7 @@ export default function VirtualExploration() {
                 <CategoryBadge category={c} />
                 <span>{categoryTitles[c] || c}</span>
                 <span className={`text-[9px] px-1 rounded ${selectedCategories.includes(c) ? 'bg-white/20' : 'bg-white'}`}>
-                  {all.filter(p => normalizeCategory(p.category) === c).length}
+                  {placesInCity.filter(p => normalizeCategory(p.category) === c).length}
                 </span>
               </button>
             ))}
@@ -374,7 +379,7 @@ export default function VirtualExploration() {
                     <div className="flex-1 min-w-0">
                       <div className="truncate">{categoryTitles[c] || c}</div>
                       <div className={`text-[10px] ${selectedCategories.includes(c) ? 'text-white/70' : 'text-gray-400'}`}>
-                        {all.filter(p => normalizeCategory(p.category) === c).length} luoghi
+                        {placesInCity.filter(p => normalizeCategory(p.category) === c).length} luoghi
                       </div>
                     </div>
                   </button>
