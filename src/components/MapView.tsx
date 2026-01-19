@@ -529,7 +529,7 @@ export default function MapView({ places, selectedCategories = [], className, on
                   onValueChange={setSearchQuery}
                 />
                 <CommandList>
-                  <CommandEmpty>Nessun luogo trovato.</CommandEmpty>
+                  <CommandEmpty>Se non c'è, suggeriscilo 💡</CommandEmpty>
                   <CommandGroup>
                     {searchResults.slice(0, 10).map((place) => (
                       <CommandItem
