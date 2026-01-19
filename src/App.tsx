@@ -13,6 +13,7 @@ import Privacy from "@/pages/Privacy";
 import Auth from "@/pages/Auth";
 import Analytics from "@/pages/Analytics";
 import UserAuth from "@/pages/UserAuth";
+import AdminCities from "@/pages/AdminCities";
 import { useTrackVisit } from "@/hooks/useTrackVisit";
 import { useGlobalClickTracking } from "@/hooks/useEventTracking";
 
@@ -34,6 +35,7 @@ function AppContent() {
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/traveller-path" element={<TravellerPath />} />
         <Route path="/impostazioni" element={<Impostazioni />} />
+        <Route path="/admin/cities" element={<AdminCities />} />
         <Route path="/lingua" element={<Lingua />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="*" element={<Navigate to="/" />} />

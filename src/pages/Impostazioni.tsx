@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, Shield, User, Globe, BarChart3 } from "lucide-react";
+import { ArrowLeft, Shield, User, Globe, BarChart3, MapPin } from "lucide-react";
 
 export default function Impostazioni() {
   return (
@@ -85,6 +85,21 @@ export default function Impostazioni() {
                   <div className="flex-1">
                     <h3 className="text-lg font-medium text-blue-900">Analytics</h3>
                     <p className="text-blue-600/70 text-sm">Statistiche visite app</p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* Admin Città */}
+            <Link to="/admin/cities">
+              <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-white/50 active:bg-white/90 shadow-lg transition-all active:scale-95">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-cyan-100 to-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-6 h-6 text-cyan-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-medium text-blue-900">Gestione Città</h3>
+                    <p className="text-blue-600/70 text-sm">Big POI City admin</p>
                   </div>
                 </div>
               </div>

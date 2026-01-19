@@ -47,6 +47,45 @@ export type Database = {
         }
         Relationships: []
       }
+      cities: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          lat: number
+          lng: number
+          name: string
+          poi_count: number | null
+          slug: string
+          updated_at: string
+          zoom_level: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          lat: number
+          lng: number
+          name: string
+          poi_count?: number | null
+          slug: string
+          updated_at?: string
+          zoom_level?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          lat?: number
+          lng?: number
+          name?: string
+          poi_count?: number | null
+          slug?: string
+          updated_at?: string
+          zoom_level?: number | null
+        }
+        Relationships: []
+      }
       place_photos: {
         Row: {
           created_at: string | null
