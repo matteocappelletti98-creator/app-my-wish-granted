@@ -79,6 +79,24 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (s === "cinema_books") return "cinema_books";
   if (s === "free_beaches") return "free_beaches";
   if (s === "shopping_hq") return "shopping_hq";
+  if (s === "cocktails") return "cocktails";
+  if (s === "nightlife") return "nightlife";
+  if (s === "streetfood") return "streetfood";
+  if (s === "culture") return "culture";
+  if (s === "restaurant") return "restaurant";
+  if (s === "transport") return "transport";
+  if (s === "bakery") return "bakery";
+  if (s === "stroll") return "stroll";
+  if (s === "lidi") return "lidi";
+  if (s === "refuge") return "refuge";
+  if (s === "luggage") return "luggage";
+  if (s === "wc") return "wc";
+  if (s === "taxi") return "taxi";
+  if (s === "boat") return "boat";
+  if (s === "luxury") return "luxury";
+  if (s === "secret") return "secret";
+  if (s === "daytrips") return "daytrips";
+  if (s === "relax") return "relax";
 
   // Exact matches from CSV
   if (s === "art & culture" || s === "art&culture") return "culture";
