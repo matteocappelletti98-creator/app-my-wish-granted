@@ -38,22 +38,22 @@ Il fatto (tragicamente ironico) è che noi volevamo chiamarci Explore.
 Fare la guida classica.
 Parlare solo ai “ travelers “.
 Farcirci di sponsor qualunque , ristoranti paganti, e banner enormi e luminosi.
-Poi Giulio dello studio marketing ci ha guardati e ha detto:
+Poi Giulio esperto di  marketing ci ha guardati e ha detto:
 “Explore non funziona. È troppo inflazionato.”
 Qualunque cosa volesse dire… risultato:
 ora ci chiamiamo True Local.
 E non possiamo più fare la guida Pay to Enter.
 Quindi che facciamo?
 ⸻
-Ciao locals 👋
+Ciao locals , benvenuti ! 👋
 
-Facciamo nascere una community di Local & Travelers.
+Facciamo nascere una community di Locals & Travelers.
 Un posto dove il meglio di una città emerge in modo spontaneo, indipendente, autentico.
-Raccogliamo le insight dei local.
+Raccogliamo le insight dei locals.
 Organizziamo tutto in categorie intelligenti.
 Lo mettiamo su una mappa.
-Tutti possono vederla. Gratis.
+Tutti possono vederla. Gratuitamente.
 Creiamo articoli come questo nel nostro Blog.
-Un questionario per personalizzare l’esperienza.
+Un questionario associato alla mappa per personalizzare l’esperienza.
 E quando la community sarà pronta… beh, lì comincerà la parte interessante. Ma per ora non possiamo dire di più.
 
