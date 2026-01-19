@@ -29,7 +29,7 @@ export default function VirtualExploration() {
   const [session, setSession] = useState<Session | null>(null);
   
   // Hook per gestire le città
-  const { cities, activeCities, selectedCity, selectCity, isPlaceInSelectedCity, loading: citiesLoading } = useCities();
+  const { cities, activeCities, selectedCity, selectCity, deselectCity, isPlaceInSelectedCity, loading: citiesLoading } = useCities();
 
   // Auth listener
   useEffect(() => {
@@ -402,6 +402,7 @@ export default function VirtualExploration() {
             cities={cities}
             selectedCity={selectedCity}
             onSelectCity={selectCity}
+            onDeselectCity={deselectCity}
           />
         )}
 

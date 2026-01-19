@@ -59,9 +59,10 @@ type Props = {
   cities?: City[];
   selectedCity?: City | null;
   onSelectCity?: (city: City) => void;
+  onDeselectCity?: () => void;
 };
 
-export default function MapView({ places, selectedCategories = [], className, onMarkerClick, favorites = [], onToggleFavorite, userTravellerCodes = [], cities = [], selectedCity, onSelectCity }: Props) {
+export default function MapView({ places, selectedCategories = [], className, onMarkerClick, favorites = [], onToggleFavorite, userTravellerCodes = [], cities = [], selectedCity, onSelectCity, onDeselectCity }: Props) {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
@@ -609,8 +610,22 @@ export default function MapView({ places, selectedCategories = [], className, on
   return (
     <>
       <div className={className ?? "relative h-[70vh] w-full"}>
+        {/* City Indicator Badge */}
+        {selectedCity && onDeselectCity && (
+          <div className="absolute top-4 left-4 z-20">
+            <button
+              onClick={onDeselectCity}
+              className="flex items-center gap-2 bg-[#009fe3] text-white px-3 py-2 rounded-full shadow-lg hover:bg-[#0088c6] transition-all active:scale-95"
+            >
+              <span className="text-lg">🌍</span>
+              <span className="font-medium text-sm">{selectedCity.name}</span>
+              <X className="w-4 h-4 ml-1" />
+            </button>
+          </div>
+        )}
+
         {/* Search Bar */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-sm px-4">
+        <div className={`absolute top-4 z-10 w-full max-w-sm px-4 ${selectedCity ? 'left-1/2 -translate-x-1/2 sm:left-auto sm:right-16 sm:translate-x-0' : 'left-1/2 -translate-x-1/2'}`}>
           <Popover open={searchOpen} onOpenChange={setSearchOpen}>
             <PopoverTrigger asChild>
               <Button
