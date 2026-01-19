@@ -364,12 +364,13 @@ export default function MapView({ places, selectedCategories = [], className, on
 
       const el = document.createElement('div');
       el.className = 'big-poi-city-marker';
+      el.style.cssText = 'cursor: pointer; pointer-events: auto;';
       el.innerHTML = `
         <div style="
           display: flex;
           flex-direction: column;
           align-items: center;
-          cursor: pointer;
+          pointer-events: none;
         ">
           <div style="
             width: 24px;
@@ -381,8 +382,9 @@ export default function MapView({ places, selectedCategories = [], className, on
             justify-content: center;
             box-shadow: 0 1px 4px rgba(0, 159, 227, 0.3);
             border: 2px solid #009fe3;
+            pointer-events: none;
           ">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 111.41 113.39" style="width: 16px; height: 16px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 111.41 113.39" style="width: 16px; height: 16px; pointer-events: none;">
               <polygon fill="#009fe3" points="41.29 81.98 41.01 85.2 32.72 85.2 32.72 64.16 32.2 64.16 32.55 60.94 36.02 60.94 36.02 81.98 41.29 81.98"/>
               <path fill="#009fe3" d="M45.62,64.03c-.12,0-.17.06-.17.17v17.75c0,.12.06.17.17.17h2.08c.12,0,.17-.06.17-.17v-17.75c0-.12-.06-.17-.17-.17h-2.08ZM51.16,82.12c0,.97-.3,1.75-.9,2.34-.6.59-1.39.88-2.36.88h-2.5c-.97,0-1.76-.29-2.36-.88-.6-.59-.9-1.37-.9-2.34v-18.09c0-.97.3-1.75.9-2.34.6-.59,1.39-.88,2.36-.88h2.5c.97,0,1.76.29,2.36.88.6.59.9,1.37.9,2.34v18.09h0Z"/>
               <path fill="#009fe3" d="M62.43,74.67v7.45c0,.97-.3,1.75-.9,2.34-.6.59-1.39.88-2.36.88h-2.5c-.97,0-1.76-.29-2.36-.88-.6-.59-.9-1.37-.9-2.34v-18.09c0-.97.3-1.75.9-2.34.6-.59,1.39-.88,2.36-.88h2.5c.97,0,1.76.29,2.36.88.6.59.9,1.37.9,2.34v7.76l-3.29-.35v-7.24c0-.12-.06-.17-.17-.17h-2.08c-.12,0-.17.06-.17.17v17.75c0,.12.06.17.17.17h2.08c.12,0,.17-.06.17-.17v-7.28h3.29Z"/>
@@ -408,36 +410,29 @@ export default function MapView({ places, selectedCategories = [], className, on
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
             color: #009fe3;
             text-transform: uppercase;
+            pointer-events: none;
           ">
             ${city.name}
           </div>
         </div>
       `;
 
-      const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
-        .setLngLat([city.lng, city.lat]);
-
-      // Click handler - assegnato direttamente all'elemento
+      // Click handler
       el.onclick = (e) => {
         e.stopPropagation();
-        console.log('BPC CLICKED:', city.name);
-        
-        // Zoom sulla città
+        console.log('=== BPC CLICK ===', city.name, city.lng, city.lat);
         map.flyTo({
           center: [city.lng, city.lat],
           zoom: 12,
           duration: 1200
         });
-        
-        // Seleziona la città
         if (onSelectCity) {
           onSelectCity(city);
         }
       };
-      
-      // Stile pointer
-      el.style.cursor = 'pointer';
-      el.style.pointerEvents = 'auto';
+
+      const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
+        .setLngLat([city.lng, city.lat]);
 
       marker.addTo(map);
       cityMarkersRef.current.push(marker);
