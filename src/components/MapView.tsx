@@ -365,47 +365,27 @@ export default function MapView({ places, selectedCategories = [], className, on
       const el = document.createElement('div');
       el.className = 'big-poi-city-marker';
       el.innerHTML = `
-        <div class="big-poi-inner" style="
-          display: flex;
-          flex-direction: column;
-          align-items: center;
+        <div style="
+          position: relative;
           cursor: pointer;
         ">
           <div style="
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 6px rgba(0, 159, 227, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 159, 227, 0.4);
             border: 2px solid #009fe3;
           ">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 111.41 113.39" style="width: 18px; height: 18px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 111.41 113.39" style="width: 20px; height: 20px;">
               <polygon fill="#009fe3" points="34.17 34.15 34.21 55.2 30.15 55.52 30.1 34.46 23.32 34.99 23 30.94 48.54 28.96 48.86 33 34.17 34.15"/>
               <path fill="#009fe3" d="M42.1,43.13l5.57,1.11-5.56,3.12v-4.23h-.01ZM51.6,46.69l.04-5.8-13.61-2.72.04,16.74,4.06-.31v-2.59s2.61-1.47,2.61-1.47l4.78,4.82,2.88-2.86-3.99-4.02,3.18-1.79h0Z"/>
               <polygon fill="#009fe3" points="68.9 49.75 68.86 33.26 64.8 33.27 64.82 41.7 58.55 44.24 58.52 33.71 51.65 34.01 51.82 38.07 54.47 37.95 54.5 50.26 64.83 46.08 64.84 49.76 68.9 49.75"/>
-              <polygon fill="#009fe3" points="54.43 52.86 55.26 56.83 63.7 55.06 62.87 51.09 54.43 52.86"/>
-              <polygon fill="#009fe3" points="79.05 34.5 71.29 27.85 68.65 30.94 76.41 37.58 79.05 34.5"/>
               <path fill="#009fe3" d="M75.44,47.34c-.02-.13-.02-.26-.02-.39-.04-2.56,2-4.68,4.56-4.72,1.01-.02,1.95.29,2.72.83l-7.26,4.29h0ZM88.4,44.4c-.39-1.33-1.1-2.54-2.03-3.52-1.62-1.71-3.93-2.76-6.47-2.72-4.8.08-8.64,4.06-8.55,8.86.02.87.16,1.71.41,2.49l-6.17,3.65,2.07,3.5,6.21-3.67c1.61,1.64,3.86,2.63,6.34,2.59,3.89-.07,7.14-2.68,8.19-6.22l-4.35-.11c-.79,1.34-2.24,2.25-3.91,2.28-.94.02-1.82-.25-2.56-.72l7.11-4.2,3.71-2.19h0Z"/>
-              <polygon fill="#009fe3" points="57.01 30.22 55.38 26.5 51.67 28.13 53.29 31.84 57.01 30.22"/>
             </svg>
-          </div>
-          <div style="
-            margin-top: 4px;
-            background: white;
-            padding: 2px 8px;
-            border-radius: 8px;
-            font-size: 10px;
-            font-weight: 700;
-            white-space: nowrap;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-            color: #009fe3;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-          ">
-            ${city.name}
           </div>
         </div>
       `;
