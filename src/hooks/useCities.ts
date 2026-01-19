@@ -32,9 +32,10 @@ export function useCities() {
       setCities(allCities);
       setActiveCities(allCities.filter(c => c.is_active));
 
-      // Se nessuna città è selezionata, seleziona la prima attiva
+      // Se nessuna città è selezionata, seleziona Como come default (o la prima attiva)
       if (!selectedCity) {
-        const defaultCity = allCities.find(c => c.is_active);
+        const comoCity = allCities.find(c => c.slug === 'como' && c.is_active);
+        const defaultCity = comoCity || allCities.find(c => c.is_active);
         if (defaultCity) {
           setSelectedCity(defaultCity);
         }
@@ -62,10 +63,20 @@ export function useCities() {
 
   // Controlla se un luogo appartiene alla città selezionata
   const isPlaceInSelectedCity = useCallback((placeCity: string) => {
-    if (!selectedCity) return true; // Se nessuna città selezionata, mostra tutto
-    return placeCity.toLowerCase().includes(selectedCity.name.toLowerCase()) ||
-           selectedCity.name.toLowerCase().includes(placeCity.toLowerCase());
-  }, [selectedCity]);
+    // Se nessuna città selezionata o ancora in caricamento, mostra tutto
+    if (!selectedCity || loading) return true;
+    
+    // Se non ci sono città attive, mostra tutto
+    if (activeCities.length === 0) return true;
+    
+    // Matching flessibile: controlla se il nome della città è contenuto
+    const placeCityLower = placeCity.toLowerCase().trim();
+    const selectedCityLower = selectedCity.name.toLowerCase().trim();
+    
+    return placeCityLower.includes(selectedCityLower) ||
+           selectedCityLower.includes(placeCityLower) ||
+           placeCityLower === selectedCityLower;
+  }, [selectedCity, loading, activeCities]);
 
   return {
     cities,
