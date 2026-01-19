@@ -424,9 +424,17 @@ export default function MapView({ places, selectedCategories = [], className, on
       el.addEventListener('click', (e) => {
         e.stopPropagation();
         e.preventDefault();
+        console.log('BPC Click - City:', city.name, 'Coords:', city.lat, city.lng);
+        console.log('onSelectCity exists:', !!onSelectCity);
+        console.log('map exists:', !!map);
+        
         if (onSelectCity) {
           onSelectCity(city);
-          // Fai lo zoom sulla città
+        }
+        
+        // Fai lo zoom sulla città - eseguito sempre
+        if (map) {
+          console.log('Flying to:', city.lng, city.lat);
           map.flyTo({
             center: [city.lng, city.lat],
             zoom: 12,
