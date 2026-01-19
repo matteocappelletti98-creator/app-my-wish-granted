@@ -362,37 +362,47 @@ export default function MapView({ places, selectedCategories = [], className, on
       if (!city.is_active) return;
 
       const el = document.createElement('div');
+      el.className = 'big-poi-city-marker';
       el.innerHTML = `
-        <div style="
-          width:48px;height:48px;border-radius:999px;
-          background: linear-gradient(135deg, #009fe3 0%, #0077b3 100%);
-          display:flex;align-items:center;justify-content:center;
-          box-shadow: 0 4px 20px rgba(0, 159, 227, 0.5), 0 0 40px rgba(0, 159, 227, 0.3);
-          border: 3px solid white;
+        <div class="big-poi-inner" style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           cursor: pointer;
-          transition: transform 0.2s ease;
         ">
-          <div style="font-size:20px;line-height:20px">📍</div>
-        </div>
-        <div style="
-          position: absolute;
-          top: 52px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: white;
-          padding: 4px 10px;
-          border-radius: 12px;
-          font-size: 11px;
-          font-weight: 600;
-          white-space: nowrap;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-          color: #009fe3;
-        ">
-          ${city.name}
+          <div style="
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #009fe3 0%, #0077b3 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 159, 227, 0.5), 0 0 40px rgba(0, 159, 227, 0.3);
+            border: 3px solid white;
+            transition: transform 0.2s ease;
+          ">
+            <span style="font-size: 28px; line-height: 1;">🌍</span>
+          </div>
+          <div style="
+            margin-top: 6px;
+            background: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            color: #009fe3;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          ">
+            ${city.name}
+          </div>
         </div>
       `;
 
-      el.style.cssText = 'position: relative;';
+      el.style.cssText = 'position: relative; z-index: 100;';
 
       const marker = new mapboxgl.Marker(el)
         .setLngLat([city.lng, city.lat]);
@@ -654,6 +664,15 @@ export default function MapView({ places, selectedCategories = [], className, on
 
 
         <style>{`
+          /* Big POI City marker - dimensioni fisse */
+          .big-poi-city-marker {
+            position: absolute !important;
+            transform: translate(-50%, -50%) !important;
+          }
+          .big-poi-city-marker .big-poi-inner:hover > div:first-child {
+            transform: scale(1.1);
+          }
+          
           @media (max-width: 768px) {
             .mapboxgl-ctrl-directions {
               width: 100% !important;
