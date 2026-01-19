@@ -80,6 +80,7 @@ export default function AdminCities() {
     try {
       const response = await supabase.functions.invoke('admin-cities', {
         body: {
+          action: 'update',
           password: ADMIN_PASSWORD,
           id: city.id,
           is_active: !city.is_active
@@ -118,6 +119,7 @@ export default function AdminCities() {
     try {
       const response = await supabase.functions.invoke('admin-cities', {
         body: {
+          action: 'create',
           password: ADMIN_PASSWORD,
           name: newCity.name,
           lat: parseFloat(newCity.lat),
@@ -151,6 +153,7 @@ export default function AdminCities() {
     try {
       const response = await supabase.functions.invoke('admin-cities', {
         body: {
+          action: 'delete',
           password: ADMIN_PASSWORD,
           id: city.id
         }

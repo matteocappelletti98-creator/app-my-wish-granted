@@ -35,32 +35,37 @@ serve(async (req) => {
     );
 
     const url = new URL(req.url);
-    const action = url.searchParams.get('action');
 
-    // Verifica password per operazioni di modifica
+    // GET senza password: lista città pubbliche
+    if (req.method === 'GET') {
+      const includeInactive = url.searchParams.get('all') === 'true';
+      
+      let query = supabase.from('cities').select('*').order('name');
+      
+      if (!includeInactive) {
+        query = query.eq('is_active', true);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+
+      return new Response(
+        JSON.stringify({ cities: data }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // POST/PUT/DELETE: operazioni admin (richiedono password)
     if (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE') {
       const body = await req.json();
+      const action = body.action || url.searchParams.get('action');
       
       if (body.password !== ADMIN_PASSWORD) {
         console.log("Password errata fornita");
         return new Response(
           JSON.stringify({ error: 'Password non valida' }),
           { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-
-      // GET: Lista tutte le città
-      if (action === 'list') {
-        const { data, error } = await supabase
-          .from('cities')
-          .select('*')
-          .order('name');
-
-        if (error) throw error;
-
-        return new Response(
-          JSON.stringify({ cities: data }),
-          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
 
@@ -187,25 +192,10 @@ serve(async (req) => {
           { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
-    }
-
-    // GET senza password: lista città pubbliche (solo attive)
-    if (req.method === 'GET') {
-      const includeInactive = url.searchParams.get('all') === 'true';
-      
-      let query = supabase.from('cities').select('*').order('name');
-      
-      if (!includeInactive) {
-        query = query.eq('is_active', true);
-      }
-
-      const { data, error } = await query;
-
-      if (error) throw error;
-
+      // Azione non riconosciuta
       return new Response(
-        JSON.stringify({ cities: data }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: 'Azione non valida' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
