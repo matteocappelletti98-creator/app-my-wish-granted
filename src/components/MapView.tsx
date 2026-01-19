@@ -430,7 +430,7 @@ export default function MapView({ places, selectedCategories = [], className, on
           // Fai lo zoom sulla città
           map.flyTo({
             center: [city.lng, city.lat],
-            zoom: 22,
+            zoom: 12,
             duration: 1200
           });
         }
