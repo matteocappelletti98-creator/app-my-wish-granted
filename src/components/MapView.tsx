@@ -375,15 +375,20 @@ export default function MapView({ places, selectedCategories = [], className, on
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #009fe3 0%, #0077b3 100%);
+            background: white;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 2px 10px rgba(0, 159, 227, 0.4);
-            border: 2px solid white;
+            border: 2px solid #009fe3;
             transition: transform 0.2s ease;
           ">
-            <span style="font-size: 16px; line-height: 1;">🌍</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70.18 70.18" style="width: 20px; height: 20px;">
+              <polygon fill="#009fe3" points="49.06 50.59 48.97 16.98 40.69 17 40.74 34.18 27.95 39.35 27.9 17.89 13.88 18.5 14.24 26.77 19.64 26.54 19.7 51.62 40.76 43.1 40.78 50.61 49.06 50.59 49.06 50.59"/>
+              <polygon fill="#009fe3" points="19.56 58.88 21.26 66.98 38.46 63.38 36.76 55.27 19.56 58.88 19.56 58.88"/>
+              <polygon fill="#009fe3" points="70.18 19.5 54.36 5.95 48.97 12.24 64.8 25.79 70.18 19.5 70.18 19.5"/>
+              <polygon fill="#009fe3" points="13.88 10.77 10.57 3.2 3 6.51 6.31 14.08 13.88 10.77 13.88 10.77"/>
+            </svg>
           </div>
           <div style="
             margin-top: 4px;
