@@ -151,7 +151,7 @@ export default function Home() {
             {/* Join Community Button */}
             <div className="mt-8">
               <Button
-                onClick={() => window.open('https://www.instagram.com/truelocalcomo/', '_blank')}
+                onClick={() => window.open('https://www.instagram.com/truelocal_official/', '_blank')}
                 className="bg-[#009fe3] hover:bg-[#0088c6] text-white font-dm-sans font-extralight px-8 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all"
               >
                 <Instagram className="w-6 h-6 mr-2" />
