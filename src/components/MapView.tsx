@@ -372,31 +372,31 @@ export default function MapView({ places, selectedCategories = [], className, on
           cursor: pointer;
         ">
           <div style="
-            width: 56px;
-            height: 56px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: linear-gradient(135deg, #009fe3 0%, #0077b3 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 20px rgba(0, 159, 227, 0.5), 0 0 40px rgba(0, 159, 227, 0.3);
-            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(0, 159, 227, 0.4);
+            border: 2px solid white;
             transition: transform 0.2s ease;
           ">
-            <span style="font-size: 28px; line-height: 1;">🌍</span>
+            <span style="font-size: 16px; line-height: 1;">🌍</span>
           </div>
           <div style="
-            margin-top: 6px;
+            margin-top: 4px;
             background: white;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 10px;
             font-weight: 700;
             white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.12);
             color: #009fe3;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
           ">
             ${city.name}
           </div>
