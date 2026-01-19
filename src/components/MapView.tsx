@@ -428,7 +428,7 @@ export default function MapView({ places, selectedCategories = [], className, on
 
   // Filtra i luoghi per la ricerca
   const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return filtered;
+    if (!searchQuery.trim()) return [];
     
     const query = searchQuery.toLowerCase();
     return filtered.filter(p => 
