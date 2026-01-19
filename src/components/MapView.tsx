@@ -403,9 +403,7 @@ export default function MapView({ places, selectedCategories = [], className, on
         </div>
       `;
 
-      el.style.cssText = 'position: relative; z-index: 100;';
-
-      const marker = new mapboxgl.Marker(el)
+      const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
         .setLngLat([city.lng, city.lat]);
 
       // Quando si clicca sul Big POI City, seleziona la città
