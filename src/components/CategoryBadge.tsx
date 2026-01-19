@@ -102,6 +102,14 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (!input) return "other";
   const s = strip(input.trim().toLowerCase());
 
+  // Direct key match (already normalized)
+  if (s === "late_night_eats") return "late_night_eats";
+  if (s === "local_life") return "local_life";
+  if (s === "rent_a_ride") return "rent_a_ride";
+  if (s === "cinema_books") return "cinema_books";
+  if (s === "free_beaches") return "free_beaches";
+  if (s === "shopping_hq") return "shopping_hq";
+
   // Exact matches from CSV
   if (s === "art & culture" || s === "art&culture") return "culture";
   if (s === "bakery" || s === "bakery and pastry") return "bakery";
