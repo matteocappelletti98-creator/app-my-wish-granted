@@ -418,8 +418,8 @@ export default function MapView({ places, selectedCategories = [], className, on
           // Fai lo zoom sulla città
           map.flyTo({
             center: [city.lng, city.lat],
-            zoom: city.zoom_level,
-            duration: 1500
+            zoom: city.zoom_level || 13,
+            duration: 1200
           });
         }
       });
