@@ -326,7 +326,7 @@ export default function MapView({ places, selectedCategories = [], className, on
       bearing: 0
     });
 
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    // Zoom controls removed per user request
     
     mapRef.current = map;
 
