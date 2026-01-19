@@ -89,7 +89,7 @@ const EMOJI: Record<CategoryKey, string> = {
   atm: "🏧",
   rent_a_ride: "🛵",
   local_life: "🏡",
-  late_night_eats: "🌯",
+  late_night_eats: "🌑",
   relax: "🧘",
   cinema_books: "🎬",
   other: "📍",
