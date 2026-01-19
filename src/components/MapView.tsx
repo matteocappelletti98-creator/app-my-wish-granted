@@ -37,6 +37,17 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+interface City {
+  id: string;
+  name: string;
+  slug: string;
+  is_active: boolean;
+  lat: number;
+  lng: number;
+  zoom_level: number;
+  poi_count: number;
+}
+
 type Props = {
   places: Place[];
   selectedCategories?: string[];
@@ -45,9 +56,12 @@ type Props = {
   favorites?: string[];
   onToggleFavorite?: (placeId: string) => void;
   userTravellerCodes?: number[];
+  cities?: City[];
+  selectedCity?: City | null;
+  onSelectCity?: (city: City) => void;
 };
 
-export default function MapView({ places, selectedCategories = [], className, onMarkerClick, favorites = [], onToggleFavorite, userTravellerCodes = [] }: Props) {
+export default function MapView({ places, selectedCategories = [], className, onMarkerClick, favorites = [], onToggleFavorite, userTravellerCodes = [], cities = [], selectedCity, onSelectCity }: Props) {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
@@ -321,6 +335,9 @@ export default function MapView({ places, selectedCategories = [], className, on
     };
   }, [mapboxToken, selectedMapStyle]);
 
+  // Ref per i marker delle città
+  const cityMarkersRef = useRef<mapboxgl.Marker[]>([]);
+
   // Aggiungi marker ogni volta che cambia filtered
   useEffect(() => {
     if (!mapRef.current || !mapboxToken) return;
@@ -329,9 +346,87 @@ export default function MapView({ places, selectedCategories = [], className, on
     // Rimuovi marker esistenti
     markersRef.current.forEach(m => m.remove());
     markersRef.current = [];
+    
+    // Rimuovi marker città esistenti
+    cityMarkersRef.current.forEach(m => m.remove());
+    cityMarkersRef.current = [];
 
     const bounds = new mapboxgl.LngLatBounds();
 
+    // Aggiungi i "Big POI City" per le città non attive o non selezionate
+    cities.forEach((city) => {
+      // Mostra il Big POI solo se la città non è quella selezionata
+      if (selectedCity && selectedCity.id === city.id) return;
+      
+      // Mostra il Big POI solo per città attive (ma non selezionate)
+      if (!city.is_active) return;
+
+      const el = document.createElement('div');
+      el.innerHTML = `
+        <div style="
+          width:48px;height:48px;border-radius:999px;
+          background: linear-gradient(135deg, #009fe3 0%, #0077b3 100%);
+          display:flex;align-items:center;justify-content:center;
+          box-shadow: 0 4px 20px rgba(0, 159, 227, 0.5), 0 0 40px rgba(0, 159, 227, 0.3);
+          border: 3px solid white;
+          cursor: pointer;
+          transition: transform 0.2s ease;
+        ">
+          <div style="font-size:20px;line-height:20px">📍</div>
+        </div>
+        <div style="
+          position: absolute;
+          top: 52px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: white;
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 11px;
+          font-weight: 600;
+          white-space: nowrap;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+          color: #009fe3;
+        ">
+          ${city.name}
+        </div>
+      `;
+
+      el.style.cssText = 'position: relative;';
+
+      const marker = new mapboxgl.Marker(el)
+        .setLngLat([city.lng, city.lat]);
+
+      // Quando si clicca sul Big POI City, seleziona la città
+      marker.getElement().addEventListener('click', () => {
+        if (onSelectCity) {
+          onSelectCity(city);
+          // Fai lo zoom sulla città
+          map.flyTo({
+            center: [city.lng, city.lat],
+            zoom: city.zoom_level,
+            duration: 1500
+          });
+        }
+      });
+
+      // Hover effect
+      marker.getElement().addEventListener('mouseenter', () => {
+        const innerDiv = el.querySelector('div') as HTMLElement;
+        if (innerDiv) innerDiv.style.transform = 'scale(1.1)';
+      });
+      marker.getElement().addEventListener('mouseleave', () => {
+        const innerDiv = el.querySelector('div') as HTMLElement;
+        if (innerDiv) innerDiv.style.transform = 'scale(1)';
+      });
+
+      marker.addTo(map);
+      cityMarkersRef.current.push(marker);
+      
+      bounds.extend([city.lng, city.lat]);
+    });
+
+    // Aggiungi marker normali per i POI
     filtered.forEach((p, index) => {
       const emoji = categoryEmoji(p.category);
       
@@ -372,8 +467,10 @@ export default function MapView({ places, selectedCategories = [], className, on
     });
 
     // Fit bounds se ci sono markers
-    if (filtered.length > 0) {
-      map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
+    if (filtered.length > 0 || cityMarkersRef.current.length > 0) {
+      if (filtered.length > 0) {
+        map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
+      }
       
       // Disabilita l'animazione dopo il primo caricamento (quando ci sono marker da mostrare)
       if (isFirstLoadRef.current) {
@@ -383,7 +480,7 @@ export default function MapView({ places, selectedCategories = [], className, on
         }, 500);
       }
     }
-  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken]);
+  }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken, cities, selectedCity, onSelectCity]);
 
   // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
   useEffect(() => {

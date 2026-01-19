@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { User as SupabaseUser, Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { SuggestPlaceDialog } from "@/components/SuggestPlaceDialog";
+import { useCities, City } from "@/hooks/useCities";
 
 // Tuo CSV pubblicato
 const CSV_URL = "https://docs.google.com/spreadsheets/d/1nMlIV3DaG2dOeSQ6o19pPP5OlpHW-atXr1fixKUG3bo/export?format=csv&gid=2050593337";
@@ -26,6 +27,9 @@ export default function VirtualExploration() {
   const [userTravellerCodes, setUserTravellerCodes] = useState<number[]>([]);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  
+  // Hook per gestire le città
+  const { cities, activeCities, selectedCity, selectCity, isPlaceInSelectedCity, loading: citiesLoading } = useCities();
 
   // Auth listener
   useEffect(() => {
@@ -215,9 +219,12 @@ export default function VirtualExploration() {
         }
       }
       
-      return okText && okCat && okFavorites && okTp;
+      // Filtro città (Big POI City) - mostra solo POI della città selezionata
+      const okCity = isPlaceInSelectedCity(p.city || '');
+      
+      return okText && okCat && okFavorites && okTp && okCity;
     });
-  }, [all, search, selectedCategories, tpFilterActive, favoritesFilterActive, favorites, userTravellerCodes]);
+  }, [all, search, selectedCategories, tpFilterActive, favoritesFilterActive, favorites, userTravellerCodes, isPlaceInSelectedCity]);
 
   const toggleCategory = (category: string) => {
     setSelectedCategories(prev => 
@@ -386,12 +393,15 @@ export default function VirtualExploration() {
           </div>
         ) : (
           <MapView
-            places={tpFilterActive || favoritesFilterActive || selectedCategories.length > 0 ? filtered : all.filter(p => p.status === "published")}
+            places={tpFilterActive || favoritesFilterActive || selectedCategories.length > 0 ? filtered : all.filter(p => p.status === "published" && isPlaceInSelectedCity(p.city || ''))}
             selectedCategories={selectedCategories} 
             className="absolute inset-0 w-full h-full"
             favorites={favorites}
             onToggleFavorite={toggleFavorite}
             userTravellerCodes={userTravellerCodes}
+            cities={cities}
+            selectedCity={selectedCity}
+            onSelectCity={selectCity}
           />
         )}
 
