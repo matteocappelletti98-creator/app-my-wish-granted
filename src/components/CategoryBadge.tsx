@@ -40,6 +40,11 @@ export type CategoryKey =
   | "streetfood"
   | "luggage"
   | "atm"
+  | "rent_a_ride"
+  | "local_life"
+  | "late_night_eats"
+  | "relax"
+  | "cinema_books"
   | "other";
 
 const EMOJI: Record<CategoryKey, string> = {
@@ -77,11 +82,16 @@ const EMOJI: Record<CategoryKey, string> = {
   wc: "🚻",
   adventure: "🏔️",
   refuge: "🍲",
-  grocery: "💈",
+  grocery: "🛒",
   nightlife: "🌙",
   streetfood: "🌮",
   luggage: "🛄",
   atm: "🏧",
+  rent_a_ride: "🛵",
+  local_life: "🏡",
+  late_night_eats: "🌯",
+  relax: "🧘",
+  cinema_books: "🎬",
   other: "📍",
 };
 
@@ -156,6 +166,11 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["nightlife", "vita notturna", "night"].includes(s)) return "nightlife";
   if (["street food", "cibo di strada"].includes(s)) return "streetfood";
   if (["luggage", "bagagli", "deposito bagagli"].includes(s)) return "luggage";
+  if (["rent a ride", "noleggio", "scooter", "monopattino"].includes(s)) return "rent_a_ride";
+  if (["local life", "vita locale"].includes(s)) return "local_life";
+  if (["late night eats", "cibo notturno"].includes(s)) return "late_night_eats";
+  if (["relax", "spa", "wellness", "benessere"].includes(s)) return "relax";
+  if (["cinema and bookstores", "cinema", "libreria", "bookstore"].includes(s)) return "cinema_books";
 
   return "other";
 }
@@ -193,7 +208,7 @@ export default function CategoryBadge({ category, showLabel = false }: { categor
     secret: "Secret Places",
     gelato: "Gelato",
     daytrips: "Day Trips",
-    bakery: "Bakery",
+    bakery: "Bakery and Pastry",
     shopping_hq: "Luxury Shopping",
     wc: "Public Toilets",
     adventure: "Adventure",
@@ -203,6 +218,11 @@ export default function CategoryBadge({ category, showLabel = false }: { categor
     streetfood: "Street Food",
     luggage: "Luggage Storage",
     atm: "ATM",
+    rent_a_ride: "Rent a Ride",
+    local_life: "Local Life",
+    late_night_eats: "Late Night Eats",
+    relax: "Relax",
+    cinema_books: "Cinema and Bookstores",
     other: "Other",
   };
   return (
