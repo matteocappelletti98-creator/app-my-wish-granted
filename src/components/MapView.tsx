@@ -437,8 +437,10 @@ export default function MapView({ places, selectedCategories = [], className, on
       bounds.extend([city.lng, city.lat]);
     });
 
-    // Aggiungi marker normali per i POI
-    filtered.forEach((p, index) => {
+    // Aggiungi marker normali per i POI solo se una città è selezionata
+    // Quando nessuna città è selezionata, mostra solo i Big POI City
+    if (selectedCity) {
+      filtered.forEach((p, index) => {
       const emoji = categoryEmoji(p.category);
       
       // Controlla se il POI è compatibile con il traveller path dell'utente
@@ -474,22 +476,24 @@ export default function MapView({ places, selectedCategories = [], className, on
       marker.addTo(map);
       markersRef.current.push(marker);
       
-      bounds.extend([p.lng!, p.lat!]);
-    });
+        bounds.extend([p.lng!, p.lat!]);
+      });
+    }
 
     // Fit bounds se ci sono markers
-    if (filtered.length > 0 || cityMarkersRef.current.length > 0) {
-      if (filtered.length > 0) {
-        map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
-      }
-      
-      // Disabilita l'animazione dopo il primo caricamento (quando ci sono marker da mostrare)
-      if (isFirstLoadRef.current) {
-        // Usiamo setTimeout per dare tempo ai marker di essere aggiunti al DOM
-        setTimeout(() => {
-          isFirstLoadRef.current = false;
-        }, 500);
-      }
+    if (selectedCity && filtered.length > 0) {
+      // Città selezionata: zoom sui POI filtrati
+      map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
+    } else if (!selectedCity && cityMarkersRef.current.length > 0) {
+      // Nessuna città selezionata: zoom sui Big POI City
+      map.fitBounds(bounds, { padding: 80, maxZoom: 8 });
+    }
+    
+    // Disabilita l'animazione dopo il primo caricamento
+    if (isFirstLoadRef.current) {
+      setTimeout(() => {
+        isFirstLoadRef.current = false;
+      }, 500);
     }
   }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken, cities, selectedCity, onSelectCity]);
 
