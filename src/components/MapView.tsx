@@ -664,11 +664,7 @@ export default function MapView({ places, selectedCategories = [], className, on
 
 
         <style>{`
-          /* Big POI City marker - dimensioni fisse */
-          .big-poi-city-marker {
-            position: absolute !important;
-            transform: translate(-50%, -50%) !important;
-          }
+          /* Big POI City marker */
           .big-poi-city-marker .big-poi-inner:hover > div:first-child {
             transform: scale(1.1);
           }
