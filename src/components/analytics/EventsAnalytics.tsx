@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { MousePointer, TrendingUp, Clock, Activity } from "lucide-react";
+import { MousePointer, TrendingUp, Clock, Activity, FileText } from "lucide-react";
 
 interface EventStats {
   total_events: number;
@@ -8,6 +8,7 @@ interface EventStats {
   clicks_by_element: Record<string, number>;
   events_by_type: Record<string, number>;
   top_pages: Record<string, number>;
+  article_views: Record<string, { count: number; title: string }>;
 }
 
 interface UserEvent {
@@ -45,6 +46,7 @@ export function EventsAnalytics() {
         const clicksByElement: Record<string, number> = {};
         const eventsByType: Record<string, number> = {};
         const topPages: Record<string, number> = {};
+        const articleViews: Record<string, { count: number; title: string }> = {};
 
         events.forEach((event: UserEvent) => {
           // Count by event type
@@ -54,6 +56,16 @@ export function EventsAnalytics() {
           if (event.event_type === 'click') {
             const name = event.event_name.replace('button_', '').replace('link_', '').slice(0, 30);
             clicksByElement[name] = (clicksByElement[name] || 0) + 1;
+          }
+
+          // Count article views
+          if (event.event_type === 'article_view' && event.page_path) {
+            const slug = event.page_path.replace('/articolo/', '');
+            const title = (event.event_data as any)?.article_title || slug;
+            if (!articleViews[slug]) {
+              articleViews[slug] = { count: 0, title };
+            }
+            articleViews[slug].count++;
           }
 
           // Count by page
@@ -68,6 +80,7 @@ export function EventsAnalytics() {
           clicks_by_element: clicksByElement,
           events_by_type: eventsByType,
           top_pages: topPages,
+          article_views: articleViews,
         });
 
         setRecentEvents(events.slice(0, 30) as UserEvent[]);
@@ -117,10 +130,31 @@ export function EventsAnalytics() {
 
         <div className="bg-white rounded-2xl p-6 shadow-lg border border-teal-100">
           <div className="flex items-center gap-3 mb-2">
-            <Clock className="w-6 h-6 text-teal-600" />
+          <Clock className="w-6 h-6 text-teal-600" />
             <span className="text-sm text-gray-600">Navigazioni</span>
           </div>
           <p className="text-3xl font-bold text-teal-600">{stats?.events_by_type?.navigation || 0}</p>
+        </div>
+      </div>
+
+      {/* Article Views */}
+      <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-100">
+        <h2 className="text-xl font-bebas text-[#1a5a7a] mb-4 flex items-center gap-2">
+          <FileText className="w-5 h-5" />
+          LETTURE ARTICOLI
+        </h2>
+        <div className="space-y-2 max-h-64 overflow-y-auto">
+          {stats?.article_views && Object.entries(stats.article_views)
+            .sort((a, b) => b[1].count - a[1].count)
+            .map(([slug, data]) => (
+              <div key={slug} className="flex justify-between items-center py-2 border-b border-gray-100">
+                <span className="text-gray-700 text-sm truncate max-w-[250px]">{data.title}</span>
+                <span className="font-semibold text-blue-600">{data.count} letture</span>
+              </div>
+            ))}
+          {(!stats?.article_views || Object.keys(stats.article_views).length === 0) && (
+            <p className="text-gray-500 text-sm">Nessun articolo letto ancora</p>
+          )}
         </div>
       </div>
 
