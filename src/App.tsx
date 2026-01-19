@@ -11,12 +11,15 @@ import Impostazioni from "@/pages/Impostazioni";
 import Lingua from "@/pages/Lingua";
 import Privacy from "@/pages/Privacy";
 import Auth from "@/pages/Auth";
-
+import Analytics from "@/pages/Analytics";
 import UserAuth from "@/pages/UserAuth";
+import { useTrackVisit } from "@/hooks/useTrackVisit";
 
-export default function App() {
+function AppContent() {
+  useTrackVisit();
+  
   return (
-    <BrowserRouter>
+    <>
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -26,13 +29,21 @@ export default function App() {
         <Route path="/articolo/:slug" element={<ArticlePage />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/user-auth" element={<UserAuth />} />
-        
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="/traveller-path" element={<TravellerPath />} />
         <Route path="/impostazioni" element={<Impostazioni />} />
         <Route path="/lingua" element={<Lingua />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }
