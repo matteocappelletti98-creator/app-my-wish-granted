@@ -26,6 +26,9 @@ export function useEventTracking() {
   const sessionStart = useRef(Date.now());
 
   const trackEvent = useCallback(async (options: TrackEventOptions) => {
+    // Skip if device is excluded from tracking
+    if (localStorage.getItem('tracking_excluded') === 'true') return;
+    
     try {
       await (supabase.from('user_events' as any) as any).insert({
         session_id: sessionId.current,
@@ -72,6 +75,9 @@ export function useEventTracking() {
   // Track session end on page unload
   useEffect(() => {
     const handleUnload = () => {
+      // Skip if device is excluded
+      if (localStorage.getItem('tracking_excluded') === 'true') return;
+      
       const sessionDuration = Math.round((Date.now() - sessionStart.current) / 1000);
       
       // Use sendBeacon for reliable tracking on page close
