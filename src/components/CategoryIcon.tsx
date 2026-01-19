@@ -3,7 +3,8 @@ import {
   Coffee, Utensils, Building2, TreePine, Beer, Hotel, ShoppingBag,
   Mountain, Waves, MapPin, BookImage, Pizza, Car, Circle, Ship,
   Dumbbell, ParkingCircle, Bike, Crown, Bus, Home, Navigation,
-  MapPinOff, IceCream, Calendar, ShoppingCart, Sparkles, ChefHat, LucideIcon
+  MapPinOff, IceCream, Calendar, ShoppingCart, Sparkles, LucideIcon,
+  Sofa, Film, Moon, Sandwich
 } from "lucide-react";
 
 export type CategoryKey =
@@ -12,7 +13,8 @@ export type CategoryKey =
   | "boat" | "attractions" | "cocktails" | "gym" | "parking" | "free_beaches" 
   | "bike" | "luxury" | "transport" | "villa" | "stroll" | "lidi" | "secret" 
   | "gelato" | "daytrips" | "bakery" | "shopping_hq" | "wc" | "adventure" 
-  | "refuge" | "grocery" | "nightlife" | "streetfood" | "luggage" | "atm" | "other";
+  | "refuge" | "grocery" | "nightlife" | "streetfood" | "luggage" | "atm"
+  | "rent_a_ride" | "local_life" | "late_night_eats" | "relax" | "cinema_books" | "other";
 
 const ICONS: Record<CategoryKey, LucideIcon> = {
   cafe: Coffee,
@@ -54,6 +56,11 @@ const ICONS: Record<CategoryKey, LucideIcon> = {
   streetfood: Pizza,
   luggage: ShoppingBag,
   atm: MapPin,
+  rent_a_ride: Bike,
+  local_life: Home,
+  late_night_eats: Sandwich,
+  relax: Sofa,
+  cinema_books: Film,
   other: MapPin,
 };
 
@@ -132,6 +139,11 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (["nightlife","vita notturna","night"].includes(s)) return "nightlife";
   if (["street food","cibo di strada"].includes(s)) return "streetfood";
   if (["luggage","bagagli","deposito bagagli"].includes(s)) return "luggage";
+  if (["rent a ride","noleggio","scooter","monopattino"].includes(s)) return "rent_a_ride";
+  if (["local life","vita locale"].includes(s)) return "local_life";
+  if (["late night eats","cibo notturno"].includes(s)) return "late_night_eats";
+  if (["relax","spa","wellness","benessere"].includes(s)) return "relax";
+  if (["cinema and bookstores","cinema","libreria","bookstore"].includes(s)) return "cinema_books";
 
   return "other";
 }
