@@ -417,38 +417,27 @@ export default function MapView({ places, selectedCategories = [], className, on
       const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
         .setLngLat([city.lng, city.lat]);
 
-      // Quando si clicca sul Big POI City, seleziona la città
-      el.addEventListener('click', (e) => {
+      // Click handler - assegnato direttamente all'elemento
+      el.onclick = (e) => {
         e.stopPropagation();
-        e.preventDefault();
-        console.log('BPC Click - City:', city.name, 'Coords:', city.lat, city.lng);
-        console.log('onSelectCity exists:', !!onSelectCity);
-        console.log('map exists:', !!map);
+        console.log('BPC CLICKED:', city.name);
         
+        // Zoom sulla città
+        map.flyTo({
+          center: [city.lng, city.lat],
+          zoom: 12,
+          duration: 1200
+        });
+        
+        // Seleziona la città
         if (onSelectCity) {
           onSelectCity(city);
         }
-        
-        // Fai lo zoom sulla città - eseguito sempre
-        if (map) {
-          console.log('Flying to:', city.lng, city.lat);
-          map.flyTo({
-            center: [city.lng, city.lat],
-            zoom: 12,
-            duration: 1200
-          });
-        }
-      });
-
-      // Hover effect
-      marker.getElement().addEventListener('mouseenter', () => {
-        const innerDiv = el.querySelector('div') as HTMLElement;
-        if (innerDiv) innerDiv.style.transform = 'scale(1.1)';
-      });
-      marker.getElement().addEventListener('mouseleave', () => {
-        const innerDiv = el.querySelector('div') as HTMLElement;
-        if (innerDiv) innerDiv.style.transform = 'scale(1)';
-      });
+      };
+      
+      // Stile pointer
+      el.style.cursor = 'pointer';
+      el.style.pointerEvents = 'auto';
 
       marker.addTo(map);
       cityMarkersRef.current.push(marker);
