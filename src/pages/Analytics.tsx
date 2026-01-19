@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { BarChart3, Globe, MapPin, Users, Calendar, ArrowLeft } from "lucide-react";
+import { BarChart3, Globe, MapPin, Users, Calendar, ArrowLeft, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface VisitStats {
   total_visits: number;
@@ -13,14 +14,39 @@ interface VisitStats {
   visits_this_week: number;
 }
 
+const ANALYTICS_PASSWORD = "2324";
+
 export default function Analytics() {
   const [stats, setStats] = useState<VisitStats | null>(null);
   const [recentVisits, setRecentVisits] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+
+  const handlePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === ANALYTICS_PASSWORD) {
+      setIsAuthenticated(true);
+      setPasswordError(false);
+      sessionStorage.setItem('analytics_auth', 'true');
+    } else {
+      setPasswordError(true);
+    }
+  };
 
   useEffect(() => {
-    loadAnalytics();
+    // Check if already authenticated in this session
+    if (sessionStorage.getItem('analytics_auth') === 'true') {
+      setIsAuthenticated(true);
+    }
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadAnalytics();
+    }
+  }, [isAuthenticated]);
 
   const loadAnalytics = async () => {
     try {
@@ -74,6 +100,54 @@ export default function Analytics() {
       setLoading(false);
     }
   };
+
+  // Password protection screen
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center pb-20 pt-20">
+        <div className="bg-white rounded-2xl p-8 shadow-xl border border-blue-100 max-w-sm w-full mx-4">
+          <div className="text-center mb-6">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Lock className="w-8 h-8 text-blue-600" />
+            </div>
+            <h2 className="text-2xl font-bebas text-[#1a5a7a] tracking-wide">ACCESSO ANALYTICS</h2>
+            <p className="text-gray-600 text-sm mt-2">Inserisci la password per accedere</p>
+          </div>
+          
+          <form onSubmit={handlePasswordSubmit} className="space-y-4">
+            <div>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPasswordError(false);
+                }}
+                placeholder="Password"
+                className={`text-center text-lg tracking-widest ${passwordError ? 'border-red-400 focus:border-red-400' : 'border-blue-200'}`}
+              />
+              {passwordError && (
+                <p className="text-red-500 text-sm text-center mt-2">Password errata</p>
+              )}
+            </div>
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-[#288cbd] to-[#1a5a7a] hover:from-[#2499d1] hover:to-[#1e6a8f] text-white rounded-xl py-3"
+            >
+              Accedi
+            </Button>
+          </form>
+          
+          <Link to="/impostazioni" className="block mt-4">
+            <Button variant="ghost" className="w-full text-gray-500">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Torna alle impostazioni
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
