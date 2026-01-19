@@ -98,6 +98,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_events: {
+        Row: {
+          created_at: string
+          element_id: string | null
+          element_text: string | null
+          event_data: Json | null
+          event_name: string
+          event_type: string
+          id: string
+          page_path: string | null
+          session_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          element_id?: string | null
+          element_text?: string | null
+          event_data?: Json | null
+          event_name: string
+          event_type: string
+          id?: string
+          page_path?: string | null
+          session_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          element_id?: string | null
+          element_text?: string | null
+          event_data?: Json | null
+          event_name?: string
+          event_type?: string
+          id?: string
+          page_path?: string | null
+          session_id?: string | null
+        }
+        Relationships: []
+      }
       user_favorites: {
         Row: {
           created_at: string
