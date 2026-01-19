@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { BarChart3, Globe, MapPin, Users, Calendar, ArrowLeft, Lock, MousePointer } from "lucide-react";
+import { BarChart3, Globe, MapPin, Users, Calendar, ArrowLeft, Lock, MousePointer, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
 import { EventsAnalytics } from "@/components/analytics/EventsAnalytics";
 
 interface VisitStats {
@@ -25,6 +26,21 @@ export default function Analytics() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
+  const [isExcluded, setIsExcluded] = useState(false);
+
+  useEffect(() => {
+    setIsExcluded(localStorage.getItem('tracking_excluded') === 'true');
+  }, []);
+
+  const toggleExclusion = () => {
+    const newValue = !isExcluded;
+    setIsExcluded(newValue);
+    if (newValue) {
+      localStorage.setItem('tracking_excluded', 'true');
+    } else {
+      localStorage.removeItem('tracking_excluded');
+    }
+  };
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,18 +175,26 @@ export default function Analytics() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white pb-20 pt-20">
       <div className="container mx-auto px-4 max-w-6xl">
-        <div className="flex items-center gap-4 mb-8">
-          <Link to="/impostazioni">
-            <Button variant="ghost" size="icon">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bebas text-[#1a5a7a] tracking-wide flex items-center gap-2">
-              <BarChart3 className="w-8 h-8" />
-              ANALYTICS
-            </h1>
-            <p className="text-gray-600 text-sm">Statistiche e comportamenti utente</p>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <Link to="/impostazioni">
+              <Button variant="ghost" size="icon">
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bebas text-[#1a5a7a] tracking-wide flex items-center gap-2">
+                <BarChart3 className="w-8 h-8" />
+                ANALYTICS
+              </h1>
+              <p className="text-gray-600 text-sm">Statistiche e comportamenti utente</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3 bg-white rounded-xl px-4 py-3 shadow-md border border-gray-100">
+            <EyeOff className={`w-5 h-5 ${isExcluded ? 'text-red-500' : 'text-gray-400'}`} />
+            <span className="text-sm text-gray-600">Escludi questo dispositivo</span>
+            <Switch checked={isExcluded} onCheckedChange={toggleExclusion} />
           </div>
         </div>
 

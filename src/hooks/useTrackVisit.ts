@@ -4,6 +4,9 @@ import { supabase } from '@/integrations/supabase/client';
 export function useTrackVisit() {
   useEffect(() => {
     const trackVisit = async () => {
+      // Skip if device is excluded from tracking
+      if (localStorage.getItem('tracking_excluded') === 'true') return;
+      
       // Avoid tracking multiple times per session
       const hasTracked = sessionStorage.getItem('visit_tracked');
       if (hasTracked) return;
