@@ -421,7 +421,10 @@ export default function MapView({ places, selectedCategories = [], className, on
         .setLngLat([city.lng, city.lat]);
 
       // Quando si clicca sul Big POI City, seleziona la città
-      marker.getElement().addEventListener('click', () => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        console.log('BPC clicked:', city.name, city.lat, city.lng, city.zoom_level);
         if (onSelectCity) {
           onSelectCity(city);
           // Fai lo zoom sulla città
