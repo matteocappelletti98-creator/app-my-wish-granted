@@ -328,6 +328,19 @@ export default function MapView({ places, selectedCategories = [], className, on
 
     // Zoom controls removed per user request
     
+    // Scale BPC markers slightly on zoom
+    map.on('zoom', () => {
+      const zoom = map.getZoom();
+      const baseScale = 1;
+      const scaleMultiplier = 0.02; // Very subtle scaling
+      const scale = baseScale + (zoom - 6) * scaleMultiplier;
+      const clampedScale = Math.max(0.8, Math.min(1.3, scale));
+      
+      document.querySelectorAll('.big-poi-city-marker').forEach((el) => {
+        (el as HTMLElement).style.transform = `scale(${clampedScale})`;
+      });
+    });
+    
     mapRef.current = map;
 
     return () => {
