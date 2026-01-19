@@ -366,7 +366,9 @@ export default function MapView({ places, selectedCategories = [], className, on
       el.className = 'big-poi-city-marker';
       el.innerHTML = `
         <div style="
-          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           cursor: pointer;
         ">
           <div style="
@@ -386,6 +388,21 @@ export default function MapView({ places, selectedCategories = [], className, on
               <polygon fill="#009fe3" points="68.9 49.75 68.86 33.26 64.8 33.27 64.82 41.7 58.55 44.24 58.52 33.71 51.65 34.01 51.82 38.07 54.47 37.95 54.5 50.26 64.83 46.08 64.84 49.76 68.9 49.75"/>
               <path fill="#009fe3" d="M75.44,47.34c-.02-.13-.02-.26-.02-.39-.04-2.56,2-4.68,4.56-4.72,1.01-.02,1.95.29,2.72.83l-7.26,4.29h0ZM88.4,44.4c-.39-1.33-1.1-2.54-2.03-3.52-1.62-1.71-3.93-2.76-6.47-2.72-4.8.08-8.64,4.06-8.55,8.86.02.87.16,1.71.41,2.49l-6.17,3.65,2.07,3.5,6.21-3.67c1.61,1.64,3.86,2.63,6.34,2.59,3.89-.07,7.14-2.68,8.19-6.22l-4.35-.11c-.79,1.34-2.24,2.25-3.91,2.28-.94.02-1.82-.25-2.56-.72l7.11-4.2,3.71-2.19h0Z"/>
             </svg>
+          </div>
+          <div style="
+            margin-top: 3px;
+            background: white;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 700;
+            white-space: nowrap;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            color: #009fe3;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+          ">
+            ${city.name}
           </div>
         </div>
       `;
