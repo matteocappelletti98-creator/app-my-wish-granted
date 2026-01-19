@@ -17,6 +17,7 @@ export function useCities() {
   const [activeCities, setActiveCities] = useState<City[]>([]);
   const [selectedCity, setSelectedCity] = useState<City | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hasUserDeselected, setHasUserDeselected] = useState(false); // Track if user manually deselected
 
   // Carica le città dal database
   const loadCities = useCallback(async () => {
@@ -32,8 +33,9 @@ export function useCities() {
       setCities(allCities);
       setActiveCities(allCities.filter(c => c.is_active));
 
-      // Se nessuna città è selezionata, seleziona Como come default (o la prima attiva)
-      if (!selectedCity) {
+      // Se nessuna città è selezionata E l'utente non ha deselezionato manualmente,
+      // seleziona Como come default (o la prima attiva)
+      if (!selectedCity && !hasUserDeselected) {
         const comoCity = allCities.find(c => c.slug === 'como' && c.is_active);
         const defaultCity = comoCity || allCities.find(c => c.is_active);
         if (defaultCity) {
@@ -45,7 +47,7 @@ export function useCities() {
     } finally {
       setLoading(false);
     }
-  }, [selectedCity]);
+  }, [selectedCity, hasUserDeselected]);
 
   useEffect(() => {
     loadCities();
@@ -54,11 +56,13 @@ export function useCities() {
   // Seleziona una città (espande i suoi POI)
   const selectCity = useCallback((city: City) => {
     setSelectedCity(city);
+    setHasUserDeselected(false); // Reset when user selects a city
   }, []);
 
   // Deseleziona la città corrente
   const deselectCity = useCallback(() => {
     setSelectedCity(null);
+    setHasUserDeselected(true); // Mark that user manually deselected
   }, []);
 
   // Controlla se un luogo appartiene alla città selezionata
