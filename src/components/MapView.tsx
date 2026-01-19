@@ -626,22 +626,29 @@ export default function MapView({ places, selectedCategories = [], className, on
   return (
     <>
       <div className={className ?? "relative h-[70vh] w-full"}>
-        {/* City Indicator Badge */}
+        {/* Search Bar */}
+        <div className={`absolute top-4 z-20 w-full max-w-sm px-4 ${selectedCity ? 'left-1/2 -translate-x-1/2 sm:left-auto sm:right-16 sm:translate-x-0' : 'left-1/2 -translate-x-1/2'}`}>
+
+        {/* City Indicator Badge - below search bar */}
         {selectedCity && onDeselectCity && (
-          <div className="absolute top-4 left-4 z-20">
+          <div className="absolute top-20 left-4 z-10">
             <button
               onClick={onDeselectCity}
-              className="flex items-center gap-2 bg-[#009fe3] text-white px-3 py-2 rounded-full shadow-lg hover:bg-[#0088c6] transition-all active:scale-95"
+              className="flex items-center gap-2 bg-white text-[#009fe3] px-3 py-2 rounded-full shadow-lg hover:bg-gray-50 transition-all active:scale-95 border-2 border-[#009fe3]"
             >
-              <span className="text-lg">🌍</span>
-              <span className="font-medium text-sm">{selectedCity.name}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 111.41 113.39" className="w-5 h-5">
+                <polygon fill="#009fe3" points="41.29 81.98 41.01 85.2 32.72 85.2 32.72 64.16 32.2 64.16 32.55 60.94 36.02 60.94 36.02 81.98 41.29 81.98"/>
+                <path fill="#009fe3" d="M45.62,64.03c-.12,0-.17.06-.17.17v17.75c0,.12.06.17.17.17h2.08c.12,0,.17-.06.17-.17v-17.75c0-.12-.06-.17-.17-.17h-2.08ZM51.16,82.12c0,.97-.3,1.75-.9,2.34-.6.59-1.39.88-2.36.88h-2.5c-.97,0-1.76-.29-2.36-.88-.6-.59-.9-1.37-.9-2.34v-18.09c0-.97.3-1.75.9-2.34.6-.59,1.39-.88,2.36-.88h2.5c.97,0,1.76.29,2.36.88.6.59.9,1.37.9,2.34v18.09h0Z"/>
+                <path fill="#009fe3" d="M62.43,74.67v7.45c0,.97-.3,1.75-.9,2.34-.6.59-1.39.88-2.36.88h-2.5c-.97,0-1.76-.29-2.36-.88-.6-.59-.9-1.37-.9-2.34v-18.09c0-.97.3-1.75.9-2.34.6-.59,1.39-.88,2.36-.88h2.5c.97,0,1.76.29,2.36.88.6.59.9,1.37.9,2.34v7.76l-3.29-.35v-7.24c0-.12-.06-.17-.17-.17h-2.08c-.12,0-.17.06-.17.17v17.75c0,.12.06.17.17.17h2.08c.12,0,.17-.06.17-.17v-7.28h3.29Z"/>
+                <polygon fill="#009fe3" points="34.17 34.15 34.21 55.2 30.15 55.52 30.1 34.46 23.32 34.99 23 30.94 48.54 28.96 48.86 33 34.17 34.15"/>
+                <path fill="#009fe3" d="M42.1,43.13l5.57,1.11-5.56,3.12v-4.23h-.01ZM51.6,46.69l.04-5.8-13.61-2.72.04,16.74,4.06-.31v-2.59s2.61-1.47,2.61-1.47l4.78,4.82,2.88-2.86-3.99-4.02,3.18-1.79h0Z"/>
+                <polygon fill="#009fe3" points="68.9 49.75 68.86 33.26 64.8 33.27 64.82 41.7 58.55 44.24 58.52 33.71 51.65 34.01 51.82 38.07 54.47 37.95 54.5 50.26 64.83 46.08 64.84 49.76 68.9 49.75"/>
+              </svg>
+              <span className="font-semibold text-sm">{selectedCity.name}</span>
               <X className="w-4 h-4 ml-1" />
             </button>
           </div>
         )}
-
-        {/* Search Bar */}
-        <div className={`absolute top-4 z-10 w-full max-w-sm px-4 ${selectedCity ? 'left-1/2 -translate-x-1/2 sm:left-auto sm:right-16 sm:translate-x-0' : 'left-1/2 -translate-x-1/2'}`}>
           <Popover open={searchOpen} onOpenChange={setSearchOpen}>
             <PopoverTrigger asChild>
               <Button
