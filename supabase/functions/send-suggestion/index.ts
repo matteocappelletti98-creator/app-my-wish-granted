@@ -9,12 +9,64 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+// Category options mapping
+const categoryLabels: Record<string, string> = {
+  "culture": "🖼️ Art & Culture",
+  "bakery": "🥨 Bakery and Pastry",
+  "pizza": "🍕 Pizza",
+  "restaurant": "👨‍🍳 Restaurants",
+  "cocktails": "🍸 Bars & Cocktails",
+  "cafe": "☕️ Café",
+  "gelato": "🍦 Gelato",
+  "nightlife": "🌙 Night Life",
+  "late_night_eats": "🌑 Late Night Eats",
+  "shop": "🛍️ Shopping",
+  "luxury": "💎 Private & Luxury",
+  "attractions": "🎢 Attractions",
+  "stroll": "🚶 Strolls",
+  "secret": "🤫 Secret Places",
+  "adventure": "🏔️ Adventure",
+  "refuge": "🍲 Mountain Refuge",
+  "lidi": "🏝️ Beach Resorts",
+  "free_beaches": "🏖️ Free Beaches",
+  "villa": "⛲️ Villa",
+  "boat": "🛥️ Boat Rental",
+  "bike": "🚴 Bike Riding",
+  "rent_a_ride": "🛵 Rent a Ride",
+  "local_life": "🏡 Local Life",
+  "relax": "🧘 Relax",
+  "grocery": "🛒 Grocery",
+  "cinema_books": "🎬 Cinema and Bookstores",
+  "gym": "💪 Gym",
+  "transport": "🚌 Public Transport",
+  "taxi": "🚕 Taxi & Private Transport",
+  "parking": "🅿️ Parking",
+  "atm": "🏧 ATM",
+  "luggage": "🛄 Luggage Storage",
+  "wc": "🚻 Public Toilets",
+};
+
+// Traveller Path code labels
+const tpCodeLabels: Record<number, string> = {
+  1: "Local", 2: "Viaggiatore", 3: "Uomo", 4: "Donna", 5: "Altro genere",
+  6: "< 18 anni", 7: "18-24 anni", 8: "25-34 anni", 9: "35-49 anni", 10: "50-64 anni", 11: "> 64 anni",
+  12: "Avventura", 13: "Relax", 14: "Cultura", 15: "Shopping", 16: "Night life", 17: "Foodie", 18: "Lusso",
+  19: "Tradizionale", 20: "Alta cucina", 21: "Fusion", 22: "Wine pairing", 23: "Street food",
+  24: "Vegana", 25: "Vegetariana", 26: "Senza glutine", 27: "Biologico", 28: "Pesce", 29: "Carne", 30: "Brunch spot", 31: "Quick Bite",
+  32: "Europa", 33: "Nord America", 34: "Sud America", 35: "Asia", 36: "Africa", 37: "Medio Oriente", 38: "Oceania",
+  39: "Budget Basso", 40: "Budget Medio", 41: "Budget Premium",
+  42: "1 giorno", 43: "2 giorni", 44: "3-7 giorni", 45: "> 7 giorni",
+  46: "Solo", 47: "Coppia", 48: "Gruppo", 49: "Famiglia",
+  50: "Trasporto Proprio", 51: "Nessun Trasporto", 52: "Noleggio",
+};
+
 interface SuggestionRequest {
   placeName: string;
-  placeType?: string;
-  location?: string;
+  city?: string;
   description?: string;
   senderName: string;
+  category?: string;
+  tpCodes?: number[];
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -26,11 +78,11 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { placeName, placeType, location, description, senderName }: SuggestionRequest = await req.json();
+    const { placeName, city, description, senderName, category, tpCodes }: SuggestionRequest = await req.json();
 
-    console.log("Suggestion data:", { placeName, placeType, location, senderName });
+    console.log("Suggestion data:", { placeName, city, senderName, category, tpCodes });
 
-    // Validate required fields - only placeName and senderName are required
+    // Validate required fields
     if (!placeName || !senderName) {
       console.error("Missing required fields");
       return new Response(
@@ -41,6 +93,14 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
+
+    // Format category
+    const categoryDisplay = category ? categoryLabels[category] || category : null;
+
+    // Format traveller path codes
+    const tpCodesDisplay = tpCodes && tpCodes.length > 0 
+      ? tpCodes.map(code => tpCodeLabels[code] || `Codice ${code}`).join(", ")
+      : null;
 
     const emailResponse = await resend.emails.send({
       from: "True Local <onboarding@resend.dev>",
@@ -67,26 +127,34 @@ const handler = async (req: Request): Promise<Response> => {
                   <span style="color: #334155; font-size: 16px;">${senderName}</span>
                 </td>
               </tr>
-              ${placeType ? `
+              ${city ? `
               <tr>
                 <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
-                  <strong style="color: #1a5a7a;">🏷️ Categoria</strong><br>
-                  <span style="color: #334155; font-size: 16px;">${placeType}</span>
+                  <strong style="color: #1a5a7a;">📌 Città</strong><br>
+                  <span style="color: #334155; font-size: 16px;">${city}</span>
                 </td>
               </tr>
               ` : ''}
-              ${location ? `
+              ${categoryDisplay ? `
               <tr>
                 <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
-                  <strong style="color: #1a5a7a;">📌 Posizione</strong><br>
-                  <span style="color: #334155; font-size: 16px;">${location}</span>
+                  <strong style="color: #1a5a7a;">🏷️ Categoria</strong><br>
+                  <span style="color: #334155; font-size: 16px;">${categoryDisplay}</span>
+                </td>
+              </tr>
+              ` : ''}
+              ${tpCodesDisplay ? `
+              <tr>
+                <td style="padding: 12px 0; border-bottom: 1px solid #e2e8f0;">
+                  <strong style="color: #1a5a7a;">🧭 Traveller Path</strong><br>
+                  <span style="color: #334155; font-size: 16px;">${tpCodesDisplay}</span>
                 </td>
               </tr>
               ` : ''}
               ${description ? `
               <tr>
                 <td style="padding: 12px 0;">
-                  <strong style="color: #1a5a7a;">📝 Descrizione</strong><br>
+                  <strong style="color: #1a5a7a;">📝 Perché lo consiglia</strong><br>
                   <span style="color: #334155; font-size: 16px;">${description}</span>
                 </td>
               </tr>
