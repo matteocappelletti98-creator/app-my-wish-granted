@@ -299,9 +299,9 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
           </div>
 
           <div>
-            <Label htmlFor="description" className="text-[#1a5a7a] font-medium">
-              Se vuoi dicci perché lo consigli
-            </Label>
+          <Label htmlFor="description" className="text-[#1a5a7a] font-medium">
+            Perché lo consigli
+          </Label>
             <Textarea
               id="description"
               value={formData.description}
