@@ -1,8 +1,9 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Clock, User, Calendar, Share2, Bookmark, Eye, Heart } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getArticleBySlug } from "@/lib/articles";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -10,11 +11,43 @@ export default function ArticlePage() {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [likes, setLikes] = useState(0);
+  const [viewCount, setViewCount] = useState<number | null>(null);
 
   const article = getArticleBySlug(slug || "", language);
-  console.log("ArticlePage - slug:", slug);
-  console.log("ArticlePage - article found:", article);
-  console.log("ArticlePage - article HTML:", article?.html);
+
+  // Track article view and fetch view count
+  useEffect(() => {
+    if (!slug) return;
+
+    const trackAndFetchViews = async () => {
+      // Skip tracking if device is excluded
+      const isExcluded = localStorage.getItem('tracking_excluded') === 'true';
+      const viewKey = `article_viewed_${slug}`;
+      const hasViewed = sessionStorage.getItem(viewKey);
+
+      // Track view only once per session and if not excluded
+      if (!hasViewed && !isExcluded) {
+        await (supabase.from('user_events' as any) as any).insert({
+          session_id: sessionStorage.getItem('tracking_session_id') || null,
+          event_type: 'article_view',
+          event_name: 'article_read',
+          event_data: { article_slug: slug, article_title: article?.titolo },
+          page_path: `/articolo/${slug}`,
+        });
+        sessionStorage.setItem(viewKey, 'true');
+      }
+
+      // Fetch total view count for this article
+      const { count } = await (supabase.from('user_events' as any) as any)
+        .select('*', { count: 'exact', head: true })
+        .eq('event_type', 'article_view')
+        .eq('page_path', `/articolo/${slug}`);
+
+      setViewCount(count || 0);
+    };
+
+    trackAndFetchViews();
+  }, [slug, article?.titolo]);
 
   if (!article) {
     return (
@@ -95,6 +128,12 @@ export default function ArticlePage() {
                 <Clock className="w-4 h-4" />
                 <span>5 min</span>
               </div>
+              {viewCount !== null && (
+                <div className="flex items-center gap-2">
+                  <Eye className="w-4 h-4" />
+                  <span>{viewCount} {viewCount === 1 ? 'lettura' : 'letture'}</span>
+                </div>
+              )}
             </div>
           </div>
 
