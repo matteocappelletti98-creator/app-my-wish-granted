@@ -291,7 +291,7 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-2 space-y-2">
               <p className="text-xs text-gray-500 px-1">
-                Seleziona i profili di viaggiatori a cui questo luogo è più adatto
+                Seleziona i profili di viaggiatori / local a cui questo luogo è più adatto
               </p>
               {travellerPathCategories.map((category) => (
                 <Collapsible
