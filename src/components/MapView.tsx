@@ -328,19 +328,6 @@ export default function MapView({ places, selectedCategories = [], className, on
 
     // Zoom controls removed per user request
     
-    // Scale BPC markers slightly on zoom
-    map.on('zoom', () => {
-      const zoom = map.getZoom();
-      const baseScale = 1;
-      const scaleMultiplier = 0.02; // Very subtle scaling
-      const scale = baseScale + (zoom - 6) * scaleMultiplier;
-      const clampedScale = Math.max(0.8, Math.min(1.3, scale));
-      
-      document.querySelectorAll('.big-poi-city-marker').forEach((el) => {
-        (el as HTMLElement).style.transform = `scale(${clampedScale})`;
-      });
-    });
-    
     mapRef.current = map;
 
     return () => {
@@ -385,24 +372,17 @@ export default function MapView({ places, selectedCategories = [], className, on
           cursor: pointer;
         ">
           <div style="
-            width: 40px;
-            height: 40px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 10px rgba(0, 159, 227, 0.4);
+            box-shadow: 0 2px 6px rgba(0, 159, 227, 0.3);
             border: 2px solid #009fe3;
-            transition: transform 0.2s ease;
-            overflow: hidden;
           ">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 111.41 113.39" style="width: 28px; height: 28px;">
-              <polygon fill="#009fe3" points="41.29 81.98 41.01 85.2 32.72 85.2 32.72 64.16 32.2 64.16 32.55 60.94 36.02 60.94 36.02 81.98 41.29 81.98"/>
-              <path fill="#009fe3" d="M45.62,64.03c-.12,0-.17.06-.17.17v17.75c0,.12.06.17.17.17h2.08c.12,0,.17-.06.17-.17v-17.75c0-.12-.06-.17-.17-.17h-2.08ZM51.16,82.12c0,.97-.3,1.75-.9,2.34-.6.59-1.39.88-2.36.88h-2.5c-.97,0-1.76-.29-2.36-.88-.6-.59-.9-1.37-.9-2.34v-18.09c0-.97.3-1.75.9-2.34.6-.59,1.39-.88,2.36-.88h2.5c.97,0,1.76.29,2.36.88.6.59.9,1.37.9,2.34v18.09h0Z"/>
-              <path fill="#009fe3" d="M62.43,74.67v7.45c0,.97-.3,1.75-.9,2.34-.6.59-1.39.88-2.36.88h-2.5c-.97,0-1.76-.29-2.36-.88-.6-.59-.9-1.37-.9-2.34v-18.09c0-.97.3-1.75.9-2.34.6-.59,1.39-.88,2.36-.88h2.5c.97,0,1.76.29,2.36.88.6.59.9,1.37.9,2.34v7.76l-3.29-.35v-7.24c0-.12-.06-.17-.17-.17h-2.08c-.12,0-.17.06-.17.17v17.75c0,.12.06.17.17.17h2.08c.12,0,.17-.06.17-.17v-7.28h3.29Z"/>
-              <path fill="#009fe3" d="M68.11,77.82h2.18l-1.07-12.06-1.11,12.06h0ZM67.45,85.2h-3.29l1.87-21.04h-.62l.35-3.22h6.34l2.15,24.26h-3.29l-.38-4.16h-2.74l-.38,4.16h0Z"/>
-              <polygon fill="#009fe3" points="84.71 81.98 84.44 85.2 76.15 85.2 76.15 64.16 75.63 64.16 75.98 60.94 79.44 60.94 79.44 81.98 84.71 81.98"/>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 111.41 113.39" style="width: 18px; height: 18px;">
               <polygon fill="#009fe3" points="34.17 34.15 34.21 55.2 30.15 55.52 30.1 34.46 23.32 34.99 23 30.94 48.54 28.96 48.86 33 34.17 34.15"/>
               <path fill="#009fe3" d="M42.1,43.13l5.57,1.11-5.56,3.12v-4.23h-.01ZM51.6,46.69l.04-5.8-13.61-2.72.04,16.74,4.06-.31v-2.59s2.61-1.47,2.61-1.47l4.78,4.82,2.88-2.86-3.99-4.02,3.18-1.79h0Z"/>
               <polygon fill="#009fe3" points="68.9 49.75 68.86 33.26 64.8 33.27 64.82 41.7 58.55 44.24 58.52 33.71 51.65 34.01 51.82 38.07 54.47 37.95 54.5 50.26 64.83 46.08 64.84 49.76 68.9 49.75"/>
