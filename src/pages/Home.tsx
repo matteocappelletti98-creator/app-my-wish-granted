@@ -28,11 +28,12 @@ export default function Home() {
   const [hasIncompleteSurvey, setHasIncompleteSurvey] = useState(false);
   const [contactDialogOpen, setContactDialogOpen] = useState(false);
   const [imageDialogOpen, setImageDialogOpen] = useState(false);
+  const [welcomeDialogOpen, setWelcomeDialogOpen] = useState(false);
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactMessage, setContactMessage] = useState("");
 
-  // Check for incomplete survey on component mount
+  // Check for incomplete survey and show welcome popup on component mount
   useEffect(() => {
     const savedAnswers = localStorage.getItem('traveller-path-answers');
     if (savedAnswers) {
@@ -41,7 +42,18 @@ export default function Home() {
       const answeredQuestions = Object.keys(answers).length;
       setHasIncompleteSurvey(answeredQuestions > 0 && answeredQuestions < totalQuestions);
     }
+    
+    // Show welcome popup if user hasn't seen it
+    const hasSeenWelcome = localStorage.getItem('true-local-welcome-seen');
+    if (!hasSeenWelcome) {
+      setWelcomeDialogOpen(true);
+    }
   }, []);
+
+  const handleWelcomeClose = () => {
+    localStorage.setItem('true-local-welcome-seen', 'true');
+    setWelcomeDialogOpen(false);
+  };
 
   const languages = [
     { value: "it", label: "Italiano" },
@@ -214,6 +226,49 @@ export default function Home() {
               Invia Messaggio
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Welcome Popup Dialog */}
+      <Dialog open={welcomeDialogOpen} onOpenChange={(open) => !open && handleWelcomeClose()}>
+        <DialogContent className="bg-white/95 backdrop-blur-sm border-blue-100/50 rounded-2xl max-w-md max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-dm-sans font-medium text-blue-900 text-center">
+              Ciao 👋
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4 text-sm text-gray-700 leading-relaxed font-dm-sans">
+            <p>
+              Grazie per essere qui!
+            </p>
+            <p>
+              <strong>True Local</strong> sarà un'app mobile con lo scopo di raccontare, scoprire e valorizzare il nostro territorio nella sua traccia più vera.
+            </p>
+            <p>
+              Questo che stai visualizzando è un <strong>prototipo</strong>. Ha tanti difetti, non sarà il prodotto definitivo.
+            </p>
+            <p>
+              Il suo scopo è quello di raccogliere informazioni rispetto a quello che un utente potrebbe volere da True Local.
+            </p>
+            <p>
+              Un team di sviluppatori è infatti proprio in questo momento al lavoro sull'app originale ed è dunque importante per noi capire ora se ci sono dei difetti strutturali nella impalcatura concettuale di True Local.
+            </p>
+            <p className="font-medium text-blue-700">
+              PS: suggeriscici i tuoi luoghi preferiti! 📍
+            </p>
+            <p className="text-right text-gray-600 italic">
+              Grazie.<br/>
+              Matteo
+            </p>
+          </div>
+          
+          <Button 
+            onClick={handleWelcomeClose}
+            className="w-full mt-4 px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all"
+          >
+            Ho capito, esplora!
+          </Button>
         </DialogContent>
       </Dialog>
     </div>
