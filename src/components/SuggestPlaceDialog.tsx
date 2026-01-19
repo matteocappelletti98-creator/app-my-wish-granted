@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin, Send, Loader2, ChevronDown, ChevronRight, Compass } from "lucide-react";
+import { MapPin, Send, Loader2, ChevronDown, ChevronRight, Compass, Tag } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Collapsible,
   CollapsibleContent,
@@ -26,6 +27,43 @@ interface SuggestPlaceDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
+
+// Category options with emoji
+const categoryOptions = [
+  { key: "culture", label: "Art & Culture", emoji: "🖼️" },
+  { key: "bakery", label: "Bakery and Pastry", emoji: "🥨" },
+  { key: "pizza", label: "Pizza", emoji: "🍕" },
+  { key: "restaurant", label: "Restaurants", emoji: "👨‍🍳" },
+  { key: "cocktails", label: "Bars & Cocktails", emoji: "🍸" },
+  { key: "cafe", label: "Café", emoji: "☕️" },
+  { key: "gelato", label: "Gelato", emoji: "🍦" },
+  { key: "nightlife", label: "Night Life", emoji: "🌙" },
+  { key: "late_night_eats", label: "Late Night Eats", emoji: "🌑" },
+  { key: "shop", label: "Shopping", emoji: "🛍️" },
+  { key: "luxury", label: "Private & Luxury", emoji: "💎" },
+  { key: "attractions", label: "Attractions", emoji: "🎢" },
+  { key: "stroll", label: "Strolls", emoji: "🚶" },
+  { key: "secret", label: "Secret Places", emoji: "🤫" },
+  { key: "adventure", label: "Adventure", emoji: "🏔️" },
+  { key: "refuge", label: "Mountain Refuge", emoji: "🍲" },
+  { key: "lidi", label: "Beach Resorts", emoji: "🏝️" },
+  { key: "free_beaches", label: "Free Beaches", emoji: "🏖️" },
+  { key: "villa", label: "Villa", emoji: "⛲️" },
+  { key: "boat", label: "Boat Rental", emoji: "🛥️" },
+  { key: "bike", label: "Bike Riding", emoji: "🚴" },
+  { key: "rent_a_ride", label: "Rent a Ride", emoji: "🛵" },
+  { key: "local_life", label: "Local Life", emoji: "🏡" },
+  { key: "relax", label: "Relax", emoji: "🧘" },
+  { key: "grocery", label: "Grocery", emoji: "🛒" },
+  { key: "cinema_books", label: "Cinema and Bookstores", emoji: "🎬" },
+  { key: "gym", label: "Gym", emoji: "💪" },
+  { key: "transport", label: "Public Transport", emoji: "🚌" },
+  { key: "taxi", label: "Taxi & Private Transport", emoji: "🚕" },
+  { key: "parking", label: "Parking", emoji: "🅿️" },
+  { key: "atm", label: "ATM", emoji: "🏧" },
+  { key: "luggage", label: "Luggage Storage", emoji: "🛄" },
+  { key: "wc", label: "Public Toilets", emoji: "🚻" },
+];
 
 // Traveller Path questions structure
 const travellerPathCategories = [
@@ -143,6 +181,8 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
   const [selectedTpCodes, setSelectedTpCodes] = useState<number[]>([]);
   const [openCategories, setOpenCategories] = useState<string[]>([]);
   const [showTpSection, setShowTpSection] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [showCategorySection, setShowCategorySection] = useState(false);
 
   const toggleCategory = (categoryId: string) => {
     setOpenCategories(prev => 
@@ -172,6 +212,7 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
       const { data, error } = await supabase.functions.invoke("send-suggestion", {
         body: {
           ...formData,
+          category: selectedCategory || undefined,
           tpCodes: selectedTpCodes.length > 0 ? selectedTpCodes : undefined,
         },
       });
@@ -188,6 +229,8 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
       setSelectedTpCodes([]);
       setOpenCategories([]);
       setShowTpSection(false);
+      setSelectedCategory("");
+      setShowCategorySection(false);
       onOpenChange(false);
     } catch (error: any) {
       console.error("Error sending suggestion:", error);
@@ -268,6 +311,53 @@ export function SuggestPlaceDialog({ open, onOpenChange }: SuggestPlaceDialogPro
               className="mt-1 border-blue-200 focus:border-blue-400"
             />
           </div>
+
+          {/* Category Section */}
+          <Collapsible open={showCategorySection} onOpenChange={setShowCategorySection}>
+            <CollapsibleTrigger asChild>
+              <button className="w-full flex items-center justify-between p-3 bg-gradient-to-r from-[#fff8e6] to-[#fffbf0] rounded-xl border border-amber-100 hover:border-amber-200 transition-colors">
+                <div className="flex items-center gap-2">
+                  <Tag className="w-5 h-5 text-amber-500" />
+                  <span className="font-medium text-[#1a5a7a]">Categoria</span>
+                  {selectedCategory && (
+                    <span className="bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full">
+                      {categoryOptions.find(c => c.key === selectedCategory)?.emoji}
+                    </span>
+                  )}
+                </div>
+                {showCategorySection ? (
+                  <ChevronDown className="w-5 h-5 text-amber-500" />
+                ) : (
+                  <ChevronRight className="w-5 h-5 text-amber-500" />
+                )}
+              </button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-2 space-y-1">
+              <p className="text-xs text-gray-500 px-1 mb-2">
+                Seleziona la categoria che meglio descrive questo luogo
+              </p>
+              <RadioGroup 
+                value={selectedCategory} 
+                onValueChange={setSelectedCategory}
+                className="grid grid-cols-2 gap-1 max-h-48 overflow-y-auto pr-1"
+              >
+                {categoryOptions.map((cat) => (
+                  <label
+                    key={cat.key}
+                    className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors ${
+                      selectedCategory === cat.key 
+                        ? 'bg-amber-50 border border-amber-200' 
+                        : 'hover:bg-gray-50 border border-transparent'
+                    }`}
+                  >
+                    <RadioGroupItem value={cat.key} className="sr-only" />
+                    <span className="text-base">{cat.emoji}</span>
+                    <span className="text-xs text-gray-600 truncate">{cat.label}</span>
+                  </label>
+                ))}
+              </RadioGroup>
+            </CollapsibleContent>
+          </Collapsible>
 
           {/* Traveller Path Section */}
           <Collapsible open={showTpSection} onOpenChange={setShowTpSection}>
