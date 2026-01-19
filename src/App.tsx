@@ -14,9 +14,11 @@ import Auth from "@/pages/Auth";
 import Analytics from "@/pages/Analytics";
 import UserAuth from "@/pages/UserAuth";
 import { useTrackVisit } from "@/hooks/useTrackVisit";
+import { useGlobalClickTracking } from "@/hooks/useEventTracking";
 
 function AppContent() {
   useTrackVisit();
+  useGlobalClickTracking();
   
   return (
     <>
