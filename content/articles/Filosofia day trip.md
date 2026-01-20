@@ -15,7 +15,7 @@ quote: "Benvenuti in True Local"
 ---
 
 
-“ La filosofia dei Day Trip
+“ 
 Chiariamoci subito.
 Il web è pieno di chiunque qualsiasi che ti spiega cosa devi fare in viaggio.
 C’è chi, per dirti di prendere un traghetto, scrive quattordici pagine.
