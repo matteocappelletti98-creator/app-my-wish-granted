@@ -31,7 +31,7 @@ Piazza cavour : prendete il più presto possibile il traghetto per Argegno. Li s
 Funivia per Pigra, che è praticamente un ascensore verticale con vista lago, che insieme al traghetto valgono la giornata.
 
 
-Pranzo ad Argegno,  easy e piacevole come dovrebbe essere ogni pausa. Categoria ristoranti per capire dove o pranzo al sacco ( who care ). 
+Pranzo a Pigra visto lago, easy e piacevole come dovrebbe essere ogni pausa. Categoria ristoranti per capire dove o pranzo al sacco ( who care ). 
 
 
 Traghetto di ritorno verso Como.
