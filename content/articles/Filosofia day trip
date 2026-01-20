@@ -1,16 +1,18 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
+---
+id: " Filosofia day trip "
+lang: "it"
+titolo: " Cos'è un day trip"
+sottotitolo: " La filosofia del day trip"
+tipo: "daytrip"
+autore: "Explore Team"
+data: "2025-09-25"
+cover: "/filosofiaDT"
+tags: ["Day trip "]
+accent: "#f97316"
+layout: "hero"
+readingTime: "3 min"
+quote: "Benvenuti in True Local"
+---
 
 
 “ La filosofia dei Day Trip
