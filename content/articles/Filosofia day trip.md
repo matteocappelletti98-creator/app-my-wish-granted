@@ -6,7 +6,7 @@ sottotitolo: " La filosofia del day trip"
 tipo: "daytrip"
 autore: "Explore Team"
 data: "2025-09-25"
-cover: "/filosofiaDT"
+cover: "/filosofiaDT.png"
 tags: ["Day trip "]
 accent: "#f97316"
 layout: "hero"
