@@ -25,7 +25,7 @@ Colazione in centro Como... no! Consiglio true local : se fate colazione in cent
 
 
 
-Piazza cavour : prendete il più presto possibile il traghetto per Argegno. Li si fa colazione. Potete dara un’ occhio alla categoria cafè nella mappa. 
+Piazza cavour : prendete il più presto possibile il traghetto per Argegno. Li si fa colazione. Potete dara un' occhio alla categoria cafè nella mappa. 
 
 
 Funivia per Pigra, che è praticamente un ascensore verticale con vista lago, che insieme al traghetto valgono la giornata.
