@@ -14,23 +14,24 @@ readingTime: "3 min"
 quote: "Benvenuti in True Local"
 ---
 
-Oggi daytrippiamo 
+
 Oggi day trippiamo che in francese significa andiamo a farci un giro lungo tutto il giorno. 
-Per il day trip di oggi andiamo sul super classico del Lago di Como: uno di quei giri semplici, bellissimi e che non stancano mai.
+Per il day trip di oggi andiamo su uno di quei giri semplici, bellissimi e che non stancano mai : traghetto Como - Argegno più funivia che da Argegno - Pigra. 
 
 
 
 Itinerario consigliato
-Colazione in centro Como , no! Consiglio true local : se fate colazione in centro rischiate di fare tardi e trovare una lunga fila al terminal traghetti di piazza Cavour. 
+Colazione in centro Como... no! Consiglio true local : se fate colazione in centro rischiate di fare tardi e trovare una lunga fila al terminal traghetti di piazza Cavour.
 
 
-Traghetto per Argegno. li si fa colazione. Date un’ occhio alla categoria cafè nella mappa per scoprire dove. 
+
+Piazza cavour : prendete il più presto possibile il traghetto per Argegno. Li si fa colazione. Potete dara un’ occhio alla categoria cafè nella mappa. 
 
 
-Funivia per Pigra, che è praticamente un ascensore verticale con vista lago.
+Funivia per Pigra, che è praticamente un ascensore verticale con vista lago, che insieme al traghetto valgono la giornata.
 
 
-Pranzo ad Argegno, easy e piacevole come dovrebbe essere ogni pausa. Categoria ristoranti. 
+Pranzo ad Argegno,  easy e piacevole come dovrebbe essere ogni pausa. Categoria ristoranti per capire dove o pranzo al sacco ( who care ). 
 
 
 Traghetto di ritorno verso Como.
@@ -41,4 +42,7 @@ Traghetto di ritorno verso Como.
 tornare a casa e crollare sul divano, oppure
 
 
-fare la scelta giusta: aperitivo + cena per chiudere in bellezza.
+fare la scelta giusta: aperitivo + cena per chiudere in bellezza. 
+
+Se sei in macchina e non sai dove parcheggiare dai un occhio alla categoria parcheggi in mappa, anche se in centro Como sarà dura, tu provaci. E ricorda : nessuno 
+è mai veramente tranquillo quando deve parcheggiare.
