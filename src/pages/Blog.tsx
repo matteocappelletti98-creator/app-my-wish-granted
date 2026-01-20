@@ -12,7 +12,7 @@ import blogHero from "@/assets/blog-hero.png";
 export default function Blog() {
   const { t, language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<("faq" | "daytrip" | "tip" | "city+")[]>(["faq"]);
+  const [selectedCategories, setSelectedCategories] = useState<("faq" | "daytrip" | "tip" | "city+")[]>(["daytrip"]);
   
   const toggleCategory = (category: "faq" | "daytrip" | "tip" | "city+") => {
     setSelectedCategories(prev => 
@@ -146,9 +146,9 @@ export default function Blog() {
               {/* Category Navigation Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center mb-8 sm:mb-12 px-4 sm:px-0">
                 <Button 
-                  onClick={() => toggleCategory("faq")}
+                  onClick={() => toggleCategory("daytrip")}
                   className={`w-full sm:w-auto font-bebas font-normal tracking-wide transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 px-8 sm:px-12 py-4 sm:py-6 text-xl sm:text-2xl ${
-                    selectedCategories.includes("faq") 
+                    selectedCategories.includes("daytrip") 
                       ? "bg-gradient-to-r from-[#009fe3] to-[#007bb5] text-white hover:from-[#008bcc] hover:to-[#006a99]" 
                       : "bg-white/80 text-[#009fe3] border border-[#b3e5fc] hover:bg-[#e6f7fd]"
                   }`}
@@ -201,10 +201,10 @@ export default function Blog() {
           <div className="space-y-8">
             {renderArticles(
               selectedCategories.flatMap(category => 
-                category === "faq" ? articles.faq : 
                 category === "daytrip" ? articles.daytrip : 
                 category === "city+" ? articles["city+"] :
-                articles.tip
+                category === "tip" ? articles.tip :
+                articles.faq
               )
             )}
           </div>
