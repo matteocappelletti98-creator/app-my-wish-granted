@@ -6,7 +6,7 @@ sottotitolo: " "
 tipo: "daytrip"
 autore: "Explore Team"
 data: "2025-09-25"
-cover: "/tlmercato.png"
+cover: "public/Funivia-di-Pigra-1.jpg"
 tags: 
 accent: "#f97316"
 layout: "hero"
