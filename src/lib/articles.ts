@@ -127,14 +127,24 @@ export function getAllArticles(language: string = 'it'): ArticleMeta[] {
   
   console.log("Article groups:", articleGroups);
   
-  // Per ogni gruppo, scegli la versione nella lingua richiesta o fallback inglese
+  // Per ogni gruppo, scegli la versione nella lingua richiesta o fallback
   const articles: ArticleMeta[] = [];
   
   Object.entries(articleGroups).forEach(([baseName, langs]) => {
+    const availableLangs = Object.keys(langs);
+    console.log(`Processing article group: ${baseName}, available langs:`, availableLangs);
+    
     let selectedLang = language;
     let articleData = langs[language];
     
-    // Se non esiste nella lingua richiesta, usa l'inglese come fallback
+    // Se non esiste nella lingua richiesta, prova italiano prima
+    if (!articleData && langs['it']) {
+      selectedLang = 'it';
+      articleData = langs['it'];
+      console.log(`Fallback to Italian for article: ${baseName}`);
+    }
+    
+    // Se non esiste in italiano, prova inglese
     if (!articleData && langs['en']) {
       selectedLang = 'en';
       articleData = langs['en'];
@@ -142,13 +152,10 @@ export function getAllArticles(language: string = 'it'): ArticleMeta[] {
     }
     
     // Se non esiste nemmeno in inglese, prendi la prima disponibile
-    if (!articleData) {
-      const availableLangs = Object.keys(langs);
-      if (availableLangs.length > 0) {
-        selectedLang = availableLangs[0];
-        articleData = langs[selectedLang];
-        console.log(`Using ${selectedLang} for article: ${baseName}`);
-      }
+    if (!articleData && availableLangs.length > 0) {
+      selectedLang = availableLangs[0];
+      articleData = langs[selectedLang];
+      console.log(`Using first available (${selectedLang}) for article: ${baseName}`);
     }
     
     if (articleData) {
