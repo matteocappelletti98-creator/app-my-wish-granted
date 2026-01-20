@@ -1,17 +1,17 @@
 ---
-id: "Chi siamo "
+id: "daytrip-como-argegno"
 lang: "it"
-titolo: "Chi è True Local "
-sottotitolo: " "
+titolo: "Day Trip: Como - Argegno - Pigra"
+sottotitolo: "Il classico giro del lago"
 tipo: "daytrip"
 autore: "Explore Team"
 data: "2025-09-25"
-cover: "public/Funivia-di-Pigra-1.jpg"
-tags: 
+cover: "/Funivia-di-Pigra-1.jpg"
+tags: ["como", "argegno", "pigra", "funivia", "traghetto"]
 accent: "#f97316"
 layout: "hero"
 readingTime: "3 min"
-quote: " Benvenuti in True Local "
+quote: "Benvenuti in True Local"
 ---
 
 Oggi daytrippiamo 
