@@ -16,7 +16,7 @@ quote: "Benvenuti in True Local"
 
 
 Oggi day trippiamo che in francese significa andiamo a farci un giro lungo tutto il giorno. 
-Per il day trip di oggi andiamo su uno di quei giri semplici, bellissimi e che non stancano mai : traghetto Como - Argegno più funivia che da Argegno - Pigra. 
+Per il day trip di oggi andiamo su uno di quei giri semplici, bellissimi e che non stancano mai : traghetto Como - Argegno più funivia Argegno - Pigra. 
 
 
 
