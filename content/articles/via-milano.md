@@ -18,12 +18,12 @@ quote: ""
 Via Milano, Como — un viaggio dentro la città
 
 C’è una zona della città, quella di via Milano alta e dei suoi dintorni, dove negli anni si sono intrecciate storie di arrivi, passaggi e nuove radici.
-Qui si sono concentrate diverse comunità di origine bengalese, nordafricana e africana, che oggi fanno parte del tessuto quotidiano del quartiere.
+Qui si sono concentrate diverse comunità.
 
 Il tema dell’immigrazione è complesso e delicato.
 Non è nostro compito affrontarlo dal punto di vista politico.
 
-Quello che ci interessa è raccontare l’anima multietnica di via Milano, attraversando i suoi luoghi più autentici: spazi che parlano attraverso odori, gesti, ritmi, usi e abitudini di mondi lontani.
+Quello che ci interessa è raccontare l’anima multietnica di via Milano, attraversando i suoi luoghi più autentici: spazi che parlano attraverso odori, gesti, ritmi, usi e abitudini di mondi lontani. Attraverso lo sguardo di viaggiatore.
 Camminare qui significa trasformare un viaggio a Como — o la quieta routine di chi non parte da tempo — in un intreccio inatteso di altri viaggi.
 
 I piccoli market internazionali sono il primo portale.
