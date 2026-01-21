@@ -6,7 +6,7 @@ sottotitolo: "Il classico giro del lago"
 tipo: "daytrip"
 autore: "Explore Team"
 data: "2025-09-25"
-cover: "public/DayTripArgegnoPigra.jpg"
+cover: "/Screenshot 2026-01-20 alle 20.25.57.png"
 tags: ["como", "argegno", "pigra", "funivia", "traghetto"]
 accent: "#f97316"
 layout: "hero"
