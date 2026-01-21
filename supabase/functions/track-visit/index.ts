@@ -8,6 +8,9 @@ const corsHeaders = {
 interface VisitData {
   referrer?: string;
   page_path?: string;
+  visitor_id?: string;
+  fingerprint?: string;
+  is_returning?: boolean;
 }
 
 Deno.serve(async (req) => {
@@ -56,6 +59,22 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Check if this visitor has been seen before
+    let isReturning = visitData.is_returning || false;
+    
+    if (visitData.visitor_id && !isReturning) {
+      // Check database for previous visits with this visitor_id
+      const { data: existingVisits } = await supabase
+        .from('app_visits')
+        .select('id')
+        .eq('visitor_id', visitData.visitor_id)
+        .limit(1);
+      
+      if (existingVisits && existingVisits.length > 0) {
+        isReturning = true;
+      }
+    }
+
     // Insert visit record
     const { data, error } = await supabase
       .from('app_visits')
@@ -66,6 +85,9 @@ Deno.serve(async (req) => {
         referrer: visitData.referrer || null,
         user_agent: userAgent,
         page_path: visitData.page_path || '/',
+        visitor_id: visitData.visitor_id || null,
+        fingerprint: visitData.fingerprint || null,
+        is_returning: isReturning,
       })
       .select()
       .single();

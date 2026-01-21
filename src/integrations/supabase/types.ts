@@ -19,31 +19,40 @@ export type Database = {
           city: string | null
           country: string | null
           created_at: string
+          fingerprint: string | null
           id: string
           ip_address: string | null
+          is_returning: boolean | null
           page_path: string | null
           referrer: string | null
           user_agent: string | null
+          visitor_id: string | null
         }
         Insert: {
           city?: string | null
           country?: string | null
           created_at?: string
+          fingerprint?: string | null
           id?: string
           ip_address?: string | null
+          is_returning?: boolean | null
           page_path?: string | null
           referrer?: string | null
           user_agent?: string | null
+          visitor_id?: string | null
         }
         Update: {
           city?: string | null
           country?: string | null
           created_at?: string
+          fingerprint?: string | null
           id?: string
           ip_address?: string | null
+          is_returning?: boolean | null
           page_path?: string | null
           referrer?: string | null
           user_agent?: string | null
+          visitor_id?: string | null
         }
         Relationships: []
       }
@@ -145,9 +154,11 @@ export type Database = {
           event_data: Json | null
           event_name: string
           event_type: string
+          fingerprint: string | null
           id: string
           page_path: string | null
           session_id: string | null
+          visitor_id: string | null
         }
         Insert: {
           created_at?: string
@@ -156,9 +167,11 @@ export type Database = {
           event_data?: Json | null
           event_name: string
           event_type: string
+          fingerprint?: string | null
           id?: string
           page_path?: string | null
           session_id?: string | null
+          visitor_id?: string | null
         }
         Update: {
           created_at?: string
@@ -167,9 +180,11 @@ export type Database = {
           event_data?: Json | null
           event_name?: string
           event_type?: string
+          fingerprint?: string | null
           id?: string
           page_path?: string | null
           session_id?: string | null
+          visitor_id?: string | null
         }
         Relationships: []
       }
