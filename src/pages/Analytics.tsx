@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { BarChart3, Globe, MapPin, Users, Calendar, ArrowLeft, Lock, MousePointer, EyeOff, Bot, UserCheck, RefreshCw } from "lucide-react";
+import { BarChart3, Globe, MapPin, Users, Calendar, ArrowLeft, Lock, MousePointer, EyeOff, Bot, UserCheck, RefreshCw, Crown } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,7 @@ interface VisitStats {
   visits_this_week: number;
   unique_visitors: number;
   returning_visitors: number;
+  top_visitors: Array<{ visitor_id: string; visit_count: number; last_visit: string; city?: string }>;
 }
 
 // Bot detection patterns
@@ -117,6 +118,7 @@ export default function Analytics() {
         const visitsByCountry: Record<string, number> = {};
         const visitsByCity: Record<string, number> = {};
         const uniqueVisitorIds = new Set<string>();
+        const visitorData: Record<string, { count: number; last_visit: string; city?: string }> = {};
         let visitsToday = 0;
         let visitsThisWeek = 0;
         let returningVisitors = 0;
@@ -135,9 +137,18 @@ export default function Analytics() {
             visitsByCity[visit.city] = (visitsByCity[visit.city] || 0) + 1;
           }
           
-          // Track unique visitors
+          // Track unique visitors and aggregate data
           if (visit.visitor_id) {
             uniqueVisitorIds.add(visit.visitor_id);
+            if (!visitorData[visit.visitor_id]) {
+              visitorData[visit.visitor_id] = { count: 0, last_visit: visit.created_at, city: visit.city };
+            }
+            visitorData[visit.visitor_id].count++;
+            // Update last visit if more recent
+            if (visit.created_at > visitorData[visit.visitor_id].last_visit) {
+              visitorData[visit.visitor_id].last_visit = visit.created_at;
+              visitorData[visit.visitor_id].city = visit.city;
+            }
           }
           
           // Count returning visitors
@@ -145,6 +156,17 @@ export default function Analytics() {
             returningVisitors++;
           }
         });
+
+        // Build top visitors list
+        const topVisitors = Object.entries(visitorData)
+          .map(([visitor_id, data]) => ({
+            visitor_id,
+            visit_count: data.count,
+            last_visit: data.last_visit,
+            city: data.city
+          }))
+          .sort((a, b) => b.visit_count - a.visit_count)
+          .slice(0, 20);
 
         setStats({
           total_visits: visits.length,
@@ -157,6 +179,7 @@ export default function Analytics() {
           visits_this_week: visitsThisWeek,
           unique_visitors: uniqueVisitorIds.size,
           returning_visitors: returningVisitors,
+          top_visitors: topVisitors,
         });
 
         setRecentVisits(realVisits.slice(0, 20));
@@ -373,6 +396,68 @@ export default function Analytics() {
                     <p className="text-gray-500 text-sm">Nessun dato disponibile</p>
                   )}
                 </div>
+              </div>
+            </div>
+
+            {/* Top Visitors */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-100">
+              <h2 className="text-xl font-bebas text-[#1a5a7a] mb-4 flex items-center gap-2">
+                <Crown className="w-5 h-5" />
+                VISITATORI PIÙ ATTIVI
+              </h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-gray-200">
+                      <th className="text-left py-2 px-2 text-gray-600">#</th>
+                      <th className="text-left py-2 px-2 text-gray-600">Visitor ID</th>
+                      <th className="text-left py-2 px-2 text-gray-600">Visite</th>
+                      <th className="text-left py-2 px-2 text-gray-600">Ultima visita</th>
+                      <th className="text-left py-2 px-2 text-gray-600">Città</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {stats?.top_visitors?.map((visitor, index) => (
+                      <tr key={visitor.visitor_id} className="border-b border-gray-50 hover:bg-gray-50">
+                        <td className="py-2 px-2">
+                          {index < 3 ? (
+                            <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${
+                              index === 0 ? 'bg-yellow-100 text-yellow-700' :
+                              index === 1 ? 'bg-gray-100 text-gray-600' :
+                              'bg-orange-100 text-orange-700'
+                            }`}>
+                              {index + 1}
+                            </span>
+                          ) : (
+                            <span className="text-gray-400">{index + 1}</span>
+                          )}
+                        </td>
+                        <td className="py-2 px-2 text-gray-700 font-mono text-xs">
+                          {visitor.visitor_id.slice(0, 12)}...
+                        </td>
+                        <td className="py-2 px-2">
+                          <span className="font-semibold text-indigo-600">{visitor.visit_count}</span>
+                        </td>
+                        <td className="py-2 px-2 text-gray-700">
+                          {new Date(visitor.last_visit).toLocaleString('it-IT', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </td>
+                        <td className="py-2 px-2 text-gray-500">{visitor.city || '-'}</td>
+                      </tr>
+                    ))}
+                    {(!stats?.top_visitors || stats.top_visitors.length === 0) && (
+                      <tr>
+                        <td colSpan={5} className="text-center py-8 text-gray-500">
+                          Nessun visitatore tracciato ancora
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
 
