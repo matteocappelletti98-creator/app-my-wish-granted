@@ -38,11 +38,8 @@ const isBot = (): boolean => {
     return true;
   }
   
-  // Check for missing browser features (bots often lack these)
-  if (!(window as any).chrome && ua.includes('Chrome')) {
-    console.log('Bot detected: fake Chrome');
-    return true;
-  }
+  // Note: Removed "fake Chrome" check as it caused false positives
+  // on legitimate browsers like Brave, Edge, and mobile Chrome
   
   return false;
 };
