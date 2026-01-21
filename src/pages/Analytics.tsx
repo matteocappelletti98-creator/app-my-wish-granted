@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { BarChart3, Globe, MapPin, Users, Calendar, ArrowLeft, Lock, MousePointer, EyeOff, Bot, UserCheck } from "lucide-react";
+import { BarChart3, Globe, MapPin, Users, Calendar, ArrowLeft, Lock, MousePointer, EyeOff, Bot, UserCheck, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,8 @@ interface VisitStats {
   visits_by_city: Record<string, number>;
   visits_today: number;
   visits_this_week: number;
+  unique_visitors: number;
+  returning_visitors: number;
 }
 
 // Bot detection patterns
@@ -114,8 +116,10 @@ export default function Analytics() {
 
         const visitsByCountry: Record<string, number> = {};
         const visitsByCity: Record<string, number> = {};
+        const uniqueVisitorIds = new Set<string>();
         let visitsToday = 0;
         let visitsThisWeek = 0;
+        let returningVisitors = 0;
 
         // Only count real visits for stats
         realVisits.forEach(visit => {
@@ -130,6 +134,16 @@ export default function Analytics() {
           if (visit.city) {
             visitsByCity[visit.city] = (visitsByCity[visit.city] || 0) + 1;
           }
+          
+          // Track unique visitors
+          if (visit.visitor_id) {
+            uniqueVisitorIds.add(visit.visitor_id);
+          }
+          
+          // Count returning visitors
+          if (visit.is_returning) {
+            returningVisitors++;
+          }
         });
 
         setStats({
@@ -141,6 +155,8 @@ export default function Analytics() {
           visits_by_city: visitsByCity,
           visits_today: visitsToday,
           visits_this_week: visitsThisWeek,
+          unique_visitors: uniqueVisitorIds.size,
+          returning_visitors: returningVisitors,
         });
 
         setRecentVisits(realVisits.slice(0, 20));
@@ -263,7 +279,7 @@ export default function Analytics() {
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-green-100">
                 <div className="flex items-center gap-3 mb-2">
                   <UserCheck className="w-6 h-6 text-green-600" />
@@ -272,10 +288,29 @@ export default function Analytics() {
                 <p className="text-3xl font-bold text-green-600">{stats?.real_visits || 0}</p>
               </div>
 
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-indigo-100">
+                <div className="flex items-center gap-3 mb-2">
+                  <Users className="w-6 h-6 text-indigo-600" />
+                  <span className="text-sm text-gray-600">Visitatori Unici</span>
+                </div>
+                <p className="text-3xl font-bold text-indigo-600">{stats?.unique_visitors || 0}</p>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-teal-100">
+                <div className="flex items-center gap-3 mb-2">
+                  <RefreshCw className="w-6 h-6 text-teal-600" />
+                  <span className="text-sm text-gray-600">Di Ritorno</span>
+                </div>
+                <p className="text-3xl font-bold text-teal-600">{stats?.returning_visitors || 0}</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {stats?.real_visits ? Math.round((stats.returning_visitors / stats.real_visits) * 100) : 0}% delle visite
+                </p>
+              </div>
+
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-100">
                 <div className="flex items-center gap-3 mb-2">
                   <Calendar className="w-6 h-6 text-blue-600" />
-                  <span className="text-sm text-gray-600">Oggi (reali)</span>
+                  <span className="text-sm text-gray-600">Oggi</span>
                 </div>
                 <p className="text-3xl font-bold text-blue-600">{stats?.visits_today || 0}</p>
               </div>
@@ -283,7 +318,7 @@ export default function Analytics() {
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-purple-100">
                 <div className="flex items-center gap-3 mb-2">
                   <Calendar className="w-6 h-6 text-purple-600" />
-                  <span className="text-sm text-gray-600">Ultima Settimana</span>
+                  <span className="text-sm text-gray-600">Settimana</span>
                 </div>
                 <p className="text-3xl font-bold text-purple-600">{stats?.visits_this_week || 0}</p>
               </div>
@@ -291,7 +326,7 @@ export default function Analytics() {
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-orange-100">
                 <div className="flex items-center gap-3 mb-2">
                   <Globe className="w-6 h-6 text-orange-600" />
-                  <span className="text-sm text-gray-600">Paesi (reali)</span>
+                  <span className="text-sm text-gray-600">Paesi</span>
                 </div>
                 <p className="text-3xl font-bold text-orange-600">{stats?.unique_countries.length || 0}</p>
               </div>

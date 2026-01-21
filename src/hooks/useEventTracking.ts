@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { getVisitorData } from './useVisitorId';
 
 type EventType = 'click' | 'navigation' | 'scroll' | 'engagement' | 'form' | 'session';
 
@@ -30,6 +31,9 @@ export function useEventTracking() {
     if (localStorage.getItem('tracking_excluded') === 'true') return;
     
     try {
+      // Get visitor identification data
+      const visitorData = getVisitorData();
+      
       await (supabase.from('user_events' as any) as any).insert({
         session_id: sessionId.current,
         event_type: options.eventType,
@@ -38,6 +42,8 @@ export function useEventTracking() {
         page_path: window.location.pathname,
         element_id: options.elementId || null,
         element_text: options.elementText || null,
+        visitor_id: visitorData.visitorId,
+        fingerprint: visitorData.fingerprint,
       });
     } catch (error) {
       console.error('Failed to track event:', error);
