@@ -6,7 +6,7 @@ sottotitolo: "Advenure combinato Relax"
 tipo: "daytrip"
 autore: "Explore Team"
 data: "2025-09-25"
-cover: ""
+cover: "/Day trip Como Bollettone.png"
 tags: ["como", "Brunate", "San Maurizio", "Bolletto", "Bollettone"]
 accent: "#f97316"
 layout: "hero"
