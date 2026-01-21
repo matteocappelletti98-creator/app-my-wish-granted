@@ -1,10 +1,18 @@
-
-
-
-
-
-
-
+---
+id: "Day Trip Como Brunate"
+lang: ""
+titolo: "Day Trip: Como Brunate"
+sottotitolo: "Advenure combinato Relax"
+tipo: "daytrip"
+autore: "Explore Team"
+data: "2025-09-25"
+cover: ""
+tags: ["como", "Brunate", "San Maurizio", "Bolletto", "Bollettone"]
+accent: "#f97316"
+layout: "hero"
+readingTime: "3 min"
+quote: ""
+---
 
 La giornata può essere organizzata secondo tre approcci:
 	•	Adventure → niente mezzi, tutto a piedi. La difficoltà cresce in base a dove decidete di fermarvi.
