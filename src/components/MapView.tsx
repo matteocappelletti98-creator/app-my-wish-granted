@@ -485,8 +485,9 @@ export default function MapView({ places, selectedCategories = [], className, on
 
     // Fit bounds se ci sono markers
     if (selectedCity && filtered.length > 0) {
-      // Città selezionata: zoom sui POI filtrati
-      map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
+      // Città selezionata: mantieni lo zoom della città (12), non fare fitBounds
+      // La mappa resta centrata sulla città con lo zoom corretto
+      // Non cambiare zoom quando si selezionano/deselezionano categorie
     } else if (!selectedCity && cityMarkersRef.current.length > 0) {
       // Nessuna città selezionata: zoom sui Big POI City
       map.fitBounds(bounds, { padding: 80, maxZoom: 8 });
