@@ -319,7 +319,7 @@ export default function MapView({ places, selectedCategories = [], className, on
     
     const map = new mapboxgl.Map({
       container: containerRef.current,
-      style: 'mapbox://styles/mapbox/streets-v12',
+      style: `mapbox://styles/teoteoteo/${selectedMapStyle}`,
       center: [9.0852, 45.8081], // Como
       zoom: 12,
       pitch: 0,
