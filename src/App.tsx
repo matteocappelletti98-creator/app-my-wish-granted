@@ -16,6 +16,7 @@ import UserAuth from "@/pages/UserAuth";
 import AdminCities from "@/pages/AdminCities";
 import { useTrackVisit } from "@/hooks/useTrackVisit";
 import { useGlobalClickTracking } from "@/hooks/useEventTracking";
+import { BotBlocker } from "@/components/BotBlocker";
 
 function AppContent() {
   useTrackVisit();
@@ -47,7 +48,9 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <BotBlocker>
+        <AppContent />
+      </BotBlocker>
     </BrowserRouter>
   );
 }
