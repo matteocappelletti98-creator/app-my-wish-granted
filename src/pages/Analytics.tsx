@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { BarChart3, Globe, MapPin, Users, Calendar, ArrowLeft, Lock, MousePointer, EyeOff } from "lucide-react";
+import { BarChart3, Globe, MapPin, Users, Calendar, ArrowLeft, Lock, MousePointer, EyeOff, Bot, UserCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,12 +10,40 @@ import { EventsAnalytics } from "@/components/analytics/EventsAnalytics";
 
 interface VisitStats {
   total_visits: number;
+  real_visits: number;
+  bot_visits: number;
   unique_countries: string[];
   visits_by_country: Record<string, number>;
   visits_by_city: Record<string, number>;
   visits_today: number;
   visits_this_week: number;
 }
+
+// Bot detection patterns
+const BOT_PATTERNS = {
+  // Old Chrome versions are typically bots
+  userAgents: ['Chrome/119', 'Chrome/118', 'Chrome/117', 'Chrome/116', 'Chrome/115'],
+  // Known datacenter cities (common bot locations)
+  datacenterCities: ['Hounslow', 'Aulnay-sous-Bois', 'Amsterdam', 'Istres', 'Chamartin'],
+  // Countries with suspiciously high automated traffic
+  suspiciousCountries: ['United Kingdom', 'The Netherlands']
+};
+
+const isBot = (visit: any): boolean => {
+  // Check user agent for old Chrome versions
+  if (visit.user_agent) {
+    for (const pattern of BOT_PATTERNS.userAgents) {
+      if (visit.user_agent.includes(pattern)) return true;
+    }
+  }
+  
+  // Check for datacenter cities
+  if (visit.city && BOT_PATTERNS.datacenterCities.includes(visit.city)) {
+    return true;
+  }
+  
+  return false;
+};
 
 const ANALYTICS_PASSWORD = "2324";
 
@@ -26,6 +54,7 @@ export default function Analytics() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
+  const [filterBots, setFilterBots] = useState(true);
   const [isExcluded, setIsExcluded] = useState(false);
 
   useEffect(() => {
@@ -79,12 +108,17 @@ export default function Analytics() {
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
 
+        // Separate bots from real visits
+        const realVisits = visits.filter(v => !isBot(v));
+        const botVisits = visits.filter(v => isBot(v));
+
         const visitsByCountry: Record<string, number> = {};
         const visitsByCity: Record<string, number> = {};
         let visitsToday = 0;
         let visitsThisWeek = 0;
 
-        visits.forEach(visit => {
+        // Only count real visits for stats
+        realVisits.forEach(visit => {
           const visitDate = new Date(visit.created_at);
           
           if (visitDate >= today) visitsToday++;
@@ -100,6 +134,8 @@ export default function Analytics() {
 
         setStats({
           total_visits: visits.length,
+          real_visits: realVisits.length,
+          bot_visits: botVisits.length,
           unique_countries: Object.keys(visitsByCountry),
           visits_by_country: visitsByCountry,
           visits_by_city: visitsByCity,
@@ -107,7 +143,7 @@ export default function Analytics() {
           visits_this_week: visitsThisWeek,
         });
 
-        setRecentVisits(visits.slice(0, 20));
+        setRecentVisits(realVisits.slice(0, 20));
       }
     } catch (error) {
       console.error('Error loading analytics:', error);
@@ -211,22 +247,37 @@ export default function Analytics() {
           </TabsList>
 
           <TabsContent value="visits" className="space-y-6">
+            {/* Bot Filter Banner */}
+            <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-4 border border-amber-200 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Bot className="w-6 h-6 text-amber-600" />
+                <div>
+                  <p className="font-medium text-amber-800">
+                    Rilevati {stats?.bot_visits || 0} visite da bot ({stats?.total_visits ? Math.round(((stats.bot_visits || 0) / stats.total_visits) * 100) : 0}%)
+                  </p>
+                  <p className="text-sm text-amber-600">
+                    I dati mostrano solo le {stats?.real_visits || 0} visite reali
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Stats Cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-100">
-                <div className="flex items-center gap-3 mb-2">
-                  <Users className="w-6 h-6 text-blue-600" />
-                  <span className="text-sm text-gray-600">Visite Totali</span>
-                </div>
-                <p className="text-3xl font-bold text-[#1a5a7a]">{stats?.total_visits || 0}</p>
-              </div>
-
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-green-100">
                 <div className="flex items-center gap-3 mb-2">
-                  <Calendar className="w-6 h-6 text-green-600" />
-                  <span className="text-sm text-gray-600">Oggi</span>
+                  <UserCheck className="w-6 h-6 text-green-600" />
+                  <span className="text-sm text-gray-600">Visite Reali</span>
                 </div>
-                <p className="text-3xl font-bold text-green-600">{stats?.visits_today || 0}</p>
+                <p className="text-3xl font-bold text-green-600">{stats?.real_visits || 0}</p>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-100">
+                <div className="flex items-center gap-3 mb-2">
+                  <Calendar className="w-6 h-6 text-blue-600" />
+                  <span className="text-sm text-gray-600">Oggi (reali)</span>
+                </div>
+                <p className="text-3xl font-bold text-blue-600">{stats?.visits_today || 0}</p>
               </div>
 
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-purple-100">
@@ -240,7 +291,7 @@ export default function Analytics() {
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-orange-100">
                 <div className="flex items-center gap-3 mb-2">
                   <Globe className="w-6 h-6 text-orange-600" />
-                  <span className="text-sm text-gray-600">Paesi</span>
+                  <span className="text-sm text-gray-600">Paesi (reali)</span>
                 </div>
                 <p className="text-3xl font-bold text-orange-600">{stats?.unique_countries.length || 0}</p>
               </div>
