@@ -335,8 +335,8 @@ export default function MapView({ places, selectedCategories = [], className, on
     const map = new mapboxgl.Map({
       container: containerRef.current,
       style: `mapbox://styles/teoteoteo/${selectedMapStyle}`,
-      center: [9.0852, 45.8081], // Como
-      zoom: 10,
+      center: [9.25, 45.95], // Nord-est di Como
+      zoom: 8,
       pitch: 0,
       bearing: 0
     });
