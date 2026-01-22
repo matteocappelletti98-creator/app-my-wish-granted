@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Shield, Bot } from 'lucide-react';
+import { Shield, Bot, UserCheck } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 // Bot detection patterns - Only detect obvious bots, not old browsers
 const BOT_PATTERNS = {
@@ -8,6 +9,8 @@ const BOT_PATTERNS = {
   // Suspicious patterns (automated tools)
   suspicious: /curl|wget|python-requests|java\/|ruby|perl|php|go-http|node-fetch/i,
 };
+
+const HUMAN_VERIFIED_KEY = 'tl_human_verified';
 
 const isBot = (): boolean => {
   const ua = navigator.userAgent;
@@ -30,9 +33,6 @@ const isBot = (): boolean => {
     return true;
   }
   
-  // Note: Removed "fake Chrome" check as it caused false positives
-  // on legitimate browsers like Brave, Edge, and mobile Chrome
-  
   return false;
 };
 
@@ -43,8 +43,17 @@ interface BotBlockerProps {
 export function BotBlocker({ children }: BotBlockerProps) {
   const [isBlocked, setIsBlocked] = useState(false);
   const [checking, setChecking] = useState(true);
+  const [verified, setVerified] = useState(false);
 
   useEffect(() => {
+    // Check if user was already verified
+    const wasVerified = localStorage.getItem(HUMAN_VERIFIED_KEY) === 'true';
+    if (wasVerified) {
+      setVerified(true);
+      setChecking(false);
+      return;
+    }
+
     // Small delay to let browser APIs initialize
     const timer = setTimeout(() => {
       const detected = isBot();
@@ -52,12 +61,18 @@ export function BotBlocker({ children }: BotBlockerProps) {
       setChecking(false);
       
       if (detected) {
-        console.log('Access blocked: bot detected');
+        console.log('Bot check triggered - showing verification');
       }
     }, 100);
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleVerify = () => {
+    localStorage.setItem(HUMAN_VERIFIED_KEY, 'true');
+    setVerified(true);
+    setIsBlocked(false);
+  };
 
   if (checking) {
     return (
@@ -67,33 +82,38 @@ export function BotBlocker({ children }: BotBlockerProps) {
     );
   }
 
-  if (isBlocked) {
+  if (isBlocked && !verified) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-orange-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md text-center border border-red-100">
-          <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Shield className="w-10 h-10 text-red-500" />
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-orange-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md text-center border border-amber-100">
+          <div className="w-20 h-20 bg-gradient-to-br from-amber-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Shield className="w-10 h-10 text-amber-500" />
           </div>
           
           <h1 className="text-2xl font-bold text-gray-800 mb-3">
-            Accesso Bloccato
+            Verifica di Sicurezza
           </h1>
           
           <div className="flex items-center justify-center gap-2 mb-4">
             <Bot className="w-5 h-5 text-gray-400" />
-            <span className="text-gray-500 text-sm">Bot rilevato</span>
+            <span className="text-gray-500 text-sm">Controllo automatico</span>
           </div>
           
           <p className="text-gray-600 mb-6">
-            Questo sito è riservato agli utenti reali. 
-            L'accesso automatizzato non è consentito.
+            Per proteggere il sito da accessi automatizzati, 
+            conferma di essere un utente reale.
           </p>
           
-          <div className="bg-gray-50 rounded-xl p-4 text-xs text-gray-500">
-            <p>Se ritieni che questo sia un errore, contattaci.</p>
-            <p className="mt-2 font-mono text-gray-400">
-              Ref: {new Date().toISOString().slice(0, 10)}
-            </p>
+          <Button 
+            onClick={handleVerify}
+            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-6 text-lg rounded-xl shadow-lg"
+          >
+            <UserCheck className="w-5 h-5 mr-2" />
+            Non sono un robot
+          </Button>
+          
+          <div className="bg-gray-50 rounded-xl p-4 text-xs text-gray-500 mt-6">
+            <p>Questa verifica è richiesta una sola volta.</p>
           </div>
         </div>
       </div>
