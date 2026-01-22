@@ -1,24 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Shield, Bot } from 'lucide-react';
 
-// Bot detection patterns
+// Bot detection patterns - Only detect obvious bots, not old browsers
 const BOT_PATTERNS = {
-  // Old Chrome versions (bots don't update their user agents)
-  oldChromeVersions: /Chrome\/(11[0-9]|10[0-9]|[1-9][0-9])\./,
   // Known bot user agents
   knownBots: /bot|crawler|spider|scraper|headless|phantom|selenium|puppeteer|playwright/i,
-  // Suspicious patterns
-  suspicious: /curl|wget|python|java|ruby|perl|php|go-http|node-fetch/i,
+  // Suspicious patterns (automated tools)
+  suspicious: /curl|wget|python-requests|java\/|ruby|perl|php|go-http|node-fetch/i,
 };
 
 const isBot = (): boolean => {
   const ua = navigator.userAgent;
-  
-  // Check for old Chrome versions (common bot fingerprint)
-  if (BOT_PATTERNS.oldChromeVersions.test(ua)) {
-    console.log('Bot detected: old Chrome version');
-    return true;
-  }
   
   // Check for known bot identifiers
   if (BOT_PATTERNS.knownBots.test(ua)) {
