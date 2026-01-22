@@ -211,7 +211,7 @@ export default function VirtualExploration() {
       // Filtro categoria (se selezionate)
       const okCat = selectedCategories.length === 0 || selectedCategories.some(cat => normalizeCategory(p.category) === cat);
       
-      // Filtro Preferiti (Mymap)
+      // Filtro Preferiti (Mymap) - IGNORA il filtro città quando attivo
       const okFavorites = !favoritesFilterActive || favorites.includes(p.id);
       
       // Filtro Traveller Path (combinabile con categorie)
@@ -224,8 +224,8 @@ export default function VirtualExploration() {
         }
       }
       
-      // Filtro città (Big POI City) - mostra solo POI della città selezionata
-      const okCity = isPlaceInSelectedCity(p.city || '');
+      // Filtro città (Big POI City) - NON applicare se filtro preferiti è attivo
+      const okCity = favoritesFilterActive ? true : isPlaceInSelectedCity(p.city || '');
       
       return okText && okCat && okFavorites && okTp && okCity;
     });
