@@ -33,15 +33,8 @@ export function useCities() {
       setCities(allCities);
       setActiveCities(allCities.filter(c => c.is_active));
 
-      // Se nessuna città è selezionata E l'utente non ha deselezionato manualmente,
-      // seleziona Como come default (o la prima attiva)
-      if (!selectedCity && !hasUserDeselected) {
-        const comoCity = allCities.find(c => c.slug === 'como' && c.is_active);
-        const defaultCity = comoCity || allCities.find(c => c.is_active);
-        if (defaultCity) {
-          setSelectedCity(defaultCity);
-        }
-      }
+      // La mappa si apre con nessuna città selezionata (BPC chiusi)
+      // L'utente deve cliccare su una città per espanderla
     } catch (error) {
       console.error('Errore caricamento città:', error);
     } finally {
