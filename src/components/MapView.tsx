@@ -705,27 +705,6 @@ export default function MapView({ places, selectedCategories = [], className, on
           .big-poi-city-marker .big-poi-inner:hover > div:first-child {
             transform: scale(1.1);
           }
-          
-          @media (max-width: 768px) {
-            .mapboxgl-ctrl-directions {
-              width: 100% !important;
-              max-width: 100% !important;
-            }
-            .directions-control {
-              width: 100% !important;
-            }
-            .mapbox-directions-component {
-              width: 100% !important;
-              max-width: 100% !important;
-            }
-            .mapbox-directions-inputs {
-              width: 100% !important;
-            }
-            .mapbox-directions-instructions {
-              max-height: 40vh !important;
-              overflow-y: auto !important;
-            }
-          }
         `}</style>
         <div ref={containerRef} className="absolute inset-0 w-full h-full rounded-2xl border" />
       </div>
