@@ -51,7 +51,6 @@
     "gray-matter": "^4.0.3",
     "html2canvas": "^1.4.1",
     "input-otp": "^1.4.2",
-    "jspdf": "^3.0.3",
     "lucide-react": "^0.462.0",
     "mapbox-gl": "^3.15.0",
     "marked": "^16.3.0",
