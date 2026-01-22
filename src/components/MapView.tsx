@@ -501,6 +501,64 @@ export default function MapView({ places, selectedCategories = [], className, on
     }
   }, [filtered, onMarkerClick, favorites, onToggleFavorite, userTravellerCodes, mapboxToken, cities, selectedCity, onSelectCity]);
 
+  // Ref per il marker della posizione utente
+  const userLocationMarkerRef = useRef<mapboxgl.Marker | null>(null);
+
+  // Mostra la posizione dell'utente sulla mappa
+  useEffect(() => {
+    if (!mapRef.current || !userLocation) return;
+
+    // Rimuovi marker precedente se esiste
+    if (userLocationMarkerRef.current) {
+      userLocationMarkerRef.current.remove();
+    }
+
+    // Crea elemento per il marker della posizione utente
+    const el = document.createElement('div');
+    el.innerHTML = `
+      <div style="position: relative;">
+        <div style="
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: #009fe3;
+          border: 3px solid white;
+          box-shadow: 0 2px 8px rgba(0, 159, 227, 0.5);
+        "></div>
+        <div style="
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: rgba(0, 159, 227, 0.2);
+          animation: pulse-ring 2s infinite;
+        "></div>
+      </div>
+      <style>
+        @keyframes pulse-ring {
+          0% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; }
+          100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        }
+      </style>
+    `;
+
+    const marker = new mapboxgl.Marker({ element: el, anchor: 'center' })
+      .setLngLat(userLocation)
+      .addTo(mapRef.current);
+
+    userLocationMarkerRef.current = marker;
+
+    return () => {
+      if (userLocationMarkerRef.current) {
+        userLocationMarkerRef.current.remove();
+        userLocationMarkerRef.current = null;
+      }
+    };
+  }, [userLocation]);
+
   // Aggiungi funzioni globali per il toggle dei preferiti e navigazione
   useEffect(() => {
     if (onToggleFavorite) {
