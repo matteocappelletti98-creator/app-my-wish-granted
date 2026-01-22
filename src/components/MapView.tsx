@@ -298,16 +298,31 @@ export default function MapView({ places, selectedCategories = [], className, on
 
   // Geolocalizzazione utente
   useEffect(() => {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation([position.coords.longitude, position.coords.latitude]);
-        },
-        (error) => {
-          console.log('Geolocalizzazione non disponibile:', error);
-        }
-      );
+    if (!('geolocation' in navigator)) {
+      console.log('Geolocalizzazione non supportata dal browser');
+      return;
     }
+
+    // Usa watchPosition per tracking continuo
+    const watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        const coords: [number, number] = [position.coords.longitude, position.coords.latitude];
+        console.log('📍 Posizione utente aggiornata:', coords);
+        setUserLocation(coords);
+      },
+      (error) => {
+        console.log('Geolocalizzazione errore:', error.code, error.message);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 30000
+      }
+    );
+
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+    };
   }, []);
 
   // Inizializza mappa Mapbox
