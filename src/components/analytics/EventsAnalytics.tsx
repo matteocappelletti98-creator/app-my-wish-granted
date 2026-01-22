@@ -1,6 +1,20 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { MousePointer, TrendingUp, Clock, Activity, FileText } from "lucide-react";
+import { MousePointer, TrendingUp, Clock, Activity, FileText, Shield, MapPin } from "lucide-react";
+
+interface BotStats {
+  total_shown: number;
+  total_clicked: number;
+  by_country: Record<string, { shown: number; clicked: number }>;
+  by_city: Record<string, { shown: number; clicked: number }>;
+  recent_events: Array<{
+    created_at: string;
+    event_name: string;
+    country?: string;
+    city?: string;
+    user_agent?: string;
+  }>;
+}
 
 interface EventStats {
   total_events: number;
@@ -9,6 +23,7 @@ interface EventStats {
   events_by_type: Record<string, number>;
   top_pages: Record<string, number>;
   article_views: Record<string, { count: number; title: string }>;
+  bot_stats: BotStats;
 }
 
 interface UserEvent {
@@ -47,6 +62,15 @@ export function EventsAnalytics() {
         const eventsByType: Record<string, number> = {};
         const topPages: Record<string, number> = {};
         const articleViews: Record<string, { count: number; title: string }> = {};
+        
+        // Bot stats
+        const botStats: BotStats = {
+          total_shown: 0,
+          total_clicked: 0,
+          by_country: {},
+          by_city: {},
+          recent_events: [],
+        };
 
         events.forEach((event: UserEvent) => {
           // Count by event type
@@ -68,6 +92,48 @@ export function EventsAnalytics() {
             articleViews[slug].count++;
           }
 
+          // Bot blocker stats
+          if (event.event_name === 'bot_verification_shown' || event.event_name === 'bot_verification_clicked') {
+            const eventData = event.event_data as any;
+            const country = eventData?.country || 'Sconosciuto';
+            const city = eventData?.city || 'Sconosciuto';
+            
+            if (event.event_name === 'bot_verification_shown') {
+              botStats.total_shown++;
+              if (!botStats.by_country[country]) {
+                botStats.by_country[country] = { shown: 0, clicked: 0 };
+              }
+              botStats.by_country[country].shown++;
+              
+              if (!botStats.by_city[city]) {
+                botStats.by_city[city] = { shown: 0, clicked: 0 };
+              }
+              botStats.by_city[city].shown++;
+            } else {
+              botStats.total_clicked++;
+              if (!botStats.by_country[country]) {
+                botStats.by_country[country] = { shown: 0, clicked: 0 };
+              }
+              botStats.by_country[country].clicked++;
+              
+              if (!botStats.by_city[city]) {
+                botStats.by_city[city] = { shown: 0, clicked: 0 };
+              }
+              botStats.by_city[city].clicked++;
+            }
+            
+            // Add to recent bot events (max 10)
+            if (botStats.recent_events.length < 10) {
+              botStats.recent_events.push({
+                created_at: event.created_at,
+                event_name: event.event_name,
+                country: eventData?.country,
+                city: eventData?.city,
+                user_agent: eventData?.user_agent,
+              });
+            }
+          }
+
           // Count by page
           if (event.page_path) {
             topPages[event.page_path] = (topPages[event.page_path] || 0) + 1;
@@ -81,6 +147,7 @@ export function EventsAnalytics() {
           events_by_type: eventsByType,
           top_pages: topPages,
           article_views: articleViews,
+          bot_stats: botStats,
         });
 
         setRecentEvents(events.slice(0, 30) as UserEvent[]);
@@ -137,7 +204,102 @@ export function EventsAnalytics() {
         </div>
       </div>
 
-      {/* Article Views */}
+      {/* Bot Blocker Stats */}
+      <div className="bg-white rounded-2xl p-6 shadow-lg border border-red-100">
+        <h2 className="text-xl font-bebas text-red-600 mb-4 flex items-center gap-2">
+          <Shield className="w-5 h-5" />
+          BOT BLOCKER
+        </h2>
+        
+        {/* Bot Stats Summary */}
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="text-center p-4 bg-red-50 rounded-xl">
+            <p className="text-2xl font-bold text-red-600">{stats?.bot_stats?.total_shown || 0}</p>
+            <p className="text-xs text-gray-600">Bot Rilevati</p>
+          </div>
+          <div className="text-center p-4 bg-green-50 rounded-xl">
+            <p className="text-2xl font-bold text-green-600">{stats?.bot_stats?.total_clicked || 0}</p>
+            <p className="text-xs text-gray-600">Verificati Umani</p>
+          </div>
+          <div className="text-center p-4 bg-orange-50 rounded-xl">
+            <p className="text-2xl font-bold text-orange-600">
+              {stats?.bot_stats?.total_shown 
+                ? Math.round(((stats.bot_stats.total_shown - stats.bot_stats.total_clicked) / stats.bot_stats.total_shown) * 100)
+                : 0}%
+            </p>
+            <p className="text-xs text-gray-600">Bot Bloccati</p>
+          </div>
+        </div>
+
+        {/* By Country */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+              <MapPin className="w-4 h-4" /> Per Paese
+            </h3>
+            <div className="space-y-1 max-h-32 overflow-y-auto">
+              {stats?.bot_stats?.by_country && Object.entries(stats.bot_stats.by_country)
+                .sort((a, b) => b[1].shown - a[1].shown)
+                .map(([country, data]) => (
+                  <div key={country} className="flex justify-between items-center text-sm py-1 border-b border-gray-50">
+                    <span className="text-gray-700">{country}</span>
+                    <span className="text-red-600 font-medium">{data.shown} rilevati</span>
+                  </div>
+                ))}
+              {(!stats?.bot_stats?.by_country || Object.keys(stats.bot_stats.by_country).length === 0) && (
+                <p className="text-gray-500 text-xs">Nessun dato ancora</p>
+              )}
+            </div>
+          </div>
+          
+          <div>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+              <MapPin className="w-4 h-4" /> Per Città
+            </h3>
+            <div className="space-y-1 max-h-32 overflow-y-auto">
+              {stats?.bot_stats?.by_city && Object.entries(stats.bot_stats.by_city)
+                .sort((a, b) => b[1].shown - a[1].shown)
+                .map(([city, data]) => (
+                  <div key={city} className="flex justify-between items-center text-sm py-1 border-b border-gray-50">
+                    <span className="text-gray-700">{city}</span>
+                    <span className="text-red-600 font-medium">{data.shown} rilevati</span>
+                  </div>
+                ))}
+              {(!stats?.bot_stats?.by_city || Object.keys(stats.bot_stats.by_city).length === 0) && (
+                <p className="text-gray-500 text-xs">Nessun dato ancora</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Recent Bot Events */}
+        {stats?.bot_stats?.recent_events && stats.bot_stats.recent_events.length > 0 && (
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">Eventi Recenti</h3>
+            <div className="space-y-2 max-h-40 overflow-y-auto">
+              {stats.bot_stats.recent_events.map((event, idx) => (
+                <div key={idx} className="text-xs p-2 bg-gray-50 rounded-lg">
+                  <div className="flex justify-between items-center">
+                    <span className={event.event_name === 'bot_verification_clicked' ? 'text-green-600' : 'text-red-600'}>
+                      {event.event_name === 'bot_verification_clicked' ? '✓ Verificato' : '⚠ Rilevato'}
+                    </span>
+                    <span className="text-gray-500">
+                      {new Date(event.created_at).toLocaleString('it-IT', {
+                        day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
+                      })}
+                    </span>
+                  </div>
+                  <div className="text-gray-600 mt-1">
+                    {event.city && event.country ? `${event.city}, ${event.country}` : 'Località sconosciuta'}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+
       <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-100">
         <h2 className="text-xl font-bebas text-[#1a5a7a] mb-4 flex items-center gap-2">
           <FileText className="w-5 h-5" />
