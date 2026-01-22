@@ -336,7 +336,7 @@ export default function MapView({ places, selectedCategories = [], className, on
       container: containerRef.current,
       style: `mapbox://styles/teoteoteo/${selectedMapStyle}`,
       center: [9.0852, 45.8081], // Como
-      zoom: 5.5,
+      zoom: 10,
       pitch: 0,
       bearing: 0
     });

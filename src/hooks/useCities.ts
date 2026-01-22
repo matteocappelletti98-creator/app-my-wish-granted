@@ -33,8 +33,13 @@ export function useCities() {
       setCities(allCities);
       setActiveCities(allCities.filter(c => c.is_active));
 
-      // La mappa si apre con nessuna città selezionata (BPC chiusi)
-      // L'utente deve cliccare su una città per espanderla
+      // Auto-seleziona Como all'apertura se non c'è già una città selezionata
+      if (!selectedCity && !hasUserDeselected) {
+        const comoCity = allCities.find(c => c.name.toLowerCase() === 'como' && c.is_active);
+        if (comoCity) {
+          setSelectedCity(comoCity);
+        }
+      }
     } catch (error) {
       console.error('Errore caricamento città:', error);
     } finally {
