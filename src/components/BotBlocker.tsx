@@ -38,17 +38,40 @@ const isBot = (): boolean => {
   return false;
 };
 
+// Get geolocation data from IP
+const getGeoLocation = async (): Promise<{ country?: string; city?: string }> => {
+  try {
+    const response = await fetch('https://ipapi.co/json/');
+    if (response.ok) {
+      const data = await response.json();
+      return {
+        country: data.country_name,
+        city: data.city,
+      };
+    }
+  } catch (error) {
+    console.error('Failed to get geolocation:', error);
+  }
+  return {};
+};
+
 // Track bot blocker events
 const trackBotBlockerEvent = async (eventName: string) => {
   try {
     const visitorData = getVisitorData();
+    const geoData = await getGeoLocation();
+    
     await (supabase.from('user_events' as any) as any).insert({
       event_type: 'engagement',
       event_name: eventName,
       page_path: window.location.pathname,
       visitor_id: visitorData.visitorId,
       fingerprint: visitorData.fingerprint,
-      event_data: { user_agent: navigator.userAgent },
+      event_data: { 
+        user_agent: navigator.userAgent,
+        country: geoData.country,
+        city: geoData.city,
+      },
     });
   } catch (error) {
     console.error('Failed to track bot blocker event:', error);
