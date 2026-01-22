@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Shield, Bot, UserCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { getVisitorData } from '@/hooks/useVisitorId';
 
 // Bot detection patterns - Only detect obvious bots, not old browsers
 const BOT_PATTERNS = {
@@ -36,6 +38,23 @@ const isBot = (): boolean => {
   return false;
 };
 
+// Track bot blocker events
+const trackBotBlockerEvent = async (eventName: string) => {
+  try {
+    const visitorData = getVisitorData();
+    await (supabase.from('user_events' as any) as any).insert({
+      event_type: 'engagement',
+      event_name: eventName,
+      page_path: window.location.pathname,
+      visitor_id: visitorData.visitorId,
+      fingerprint: visitorData.fingerprint,
+      event_data: { user_agent: navigator.userAgent },
+    });
+  } catch (error) {
+    console.error('Failed to track bot blocker event:', error);
+  }
+};
+
 interface BotBlockerProps {
   children: React.ReactNode;
 }
@@ -44,6 +63,7 @@ export function BotBlocker({ children }: BotBlockerProps) {
   const [isBlocked, setIsBlocked] = useState(false);
   const [checking, setChecking] = useState(true);
   const [verified, setVerified] = useState(false);
+  const hasTrackedView = useRef(false);
 
   useEffect(() => {
     // Check if user was already verified
@@ -62,6 +82,11 @@ export function BotBlocker({ children }: BotBlockerProps) {
       
       if (detected) {
         console.log('Bot check triggered - showing verification');
+        // Track that the verification screen was shown
+        if (!hasTrackedView.current) {
+          hasTrackedView.current = true;
+          trackBotBlockerEvent('bot_verification_shown');
+        }
       }
     }, 100);
 
@@ -69,6 +94,9 @@ export function BotBlocker({ children }: BotBlockerProps) {
   }, []);
 
   const handleVerify = () => {
+    // Track that the button was clicked
+    trackBotBlockerEvent('bot_verification_clicked');
+    
     localStorage.setItem(HUMAN_VERIFIED_KEY, 'true');
     setVerified(true);
     setIsBlocked(false);
