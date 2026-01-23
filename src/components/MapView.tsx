@@ -335,7 +335,7 @@ export default function MapView({ places, selectedCategories = [], className, on
     const map = new mapboxgl.Map({
       container: containerRef.current,
       style: `mapbox://styles/teoteoteo/${selectedMapStyle}`,
-      center: [9.20, 46.0], // Centro Lago di Como
+      center: [9.2000, 46.0000], // Centro Lago di Como
       zoom: 9.5,
       pitch: 0,
       bearing: 0
