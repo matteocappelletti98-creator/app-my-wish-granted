@@ -639,40 +639,45 @@ export default function MapView({ places, selectedCategories = [], className, on
     setMovieMoodActive(true);
     setMovieMoodAnimating(true);
     
-    // Nascondi tutti i marker
-    markersRef.current.forEach(marker => {
-      const el = marker.getElement();
-      el.style.opacity = '0';
-      el.style.transform = 'scale(0)';
-      el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-    });
-
     // Pulisci eventuali timeout precedenti
     movieMoodTimeoutRef.current.forEach(t => clearTimeout(t));
     movieMoodTimeoutRef.current = [];
 
-    // Fai apparire i marker uno alla volta con effetto Hollywood
-    markersRef.current.forEach((marker, index) => {
-      const timeout = setTimeout(() => {
-        const el = marker.getElement();
-        el.style.opacity = '1';
-        el.style.transform = 'scale(1.3)';
-        
-        // Torna alla dimensione normale dopo l'effetto
-        setTimeout(() => {
-          el.style.transform = 'scale(1)';
-        }, 200);
-        
-        // Se è l'ultimo marker, termina l'animazione
-        if (index === markersRef.current.length - 1) {
-          setTimeout(() => {
-            setMovieMoodAnimating(false);
-          }, 500);
-        }
-      }, 500 + index * 150); // 150ms di delay tra ogni marker
-      
-      movieMoodTimeoutRef.current.push(timeout);
+    // FASE 1: Nascondi tutti i marker istantaneamente
+    markersRef.current.forEach(marker => {
+      const el = marker.getElement();
+      el.style.transition = 'none';
+      el.style.opacity = '0';
+      el.style.transform = 'scale(0)';
     });
+
+    // FASE 2: Dopo 800ms di mappa vuota, inizia a far apparire i POI uno alla volta
+    const startDelay = setTimeout(() => {
+      markersRef.current.forEach((marker, index) => {
+        const timeout = setTimeout(() => {
+          const el = marker.getElement();
+          el.style.transition = 'opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          el.style.opacity = '1';
+          el.style.transform = 'scale(1.4)';
+          
+          // Torna alla dimensione normale dopo l'effetto "pop"
+          setTimeout(() => {
+            el.style.transform = 'scale(1)';
+          }, 250);
+          
+          // Se è l'ultimo marker, termina l'animazione
+          if (index === markersRef.current.length - 1) {
+            setTimeout(() => {
+              setMovieMoodAnimating(false);
+            }, 500);
+          }
+        }, index * 120); // 120ms di delay tra ogni marker
+        
+        movieMoodTimeoutRef.current.push(timeout);
+      });
+    }, 800);
+    
+    movieMoodTimeoutRef.current.push(startDelay);
   }, [movieMoodAnimating, selectedCity]);
 
   const stopMovieMood = useCallback(() => {
