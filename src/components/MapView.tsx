@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Place, normalizeImagePath } from "@/lib/sheet";
@@ -6,7 +6,7 @@ import { categoryEmoji, normalizeCategory } from "@/components/CategoryBadge";
 import LinkifiedText from "@/components/LinkifiedText";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { X, MapPin, ChevronLeft, ChevronRight, Upload, Trash2, Search, Heart, Map } from "lucide-react";
+import { X, MapPin, ChevronLeft, ChevronRight, Upload, Trash2, Search, Heart, Map, Clapperboard } from "lucide-react";
 import {
   Drawer,
   DrawerContent,
@@ -80,6 +80,9 @@ export default function MapView({ places, selectedCategories = [], className, on
   const [searchOpen, setSearchOpen] = useState(false);
   const [userAnswers, setUserAnswers] = useState<Record<string, any>>({});
   const [selectedMapStyle, setSelectedMapStyle] = useState("cmi7jnne9000001sk04x0evzp");
+  const [movieMoodActive, setMovieMoodActive] = useState(false);
+  const [movieMoodAnimating, setMovieMoodAnimating] = useState(false);
+  const movieMoodTimeoutRef = useRef<NodeJS.Timeout[]>([]);
 
   // Carica le risposte del traveller path
   useEffect(() => {
@@ -629,6 +632,65 @@ export default function MapView({ places, selectedCategories = [], className, on
     );
   }, [searchQuery, filtered]);
 
+  // Movie Mood - effetto Hollywood
+  const startMovieMood = useCallback(() => {
+    if (movieMoodAnimating || !selectedCity) return;
+    
+    setMovieMoodActive(true);
+    setMovieMoodAnimating(true);
+    
+    // Nascondi tutti i marker
+    markersRef.current.forEach(marker => {
+      const el = marker.getElement();
+      el.style.opacity = '0';
+      el.style.transform = 'scale(0)';
+      el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    });
+
+    // Pulisci eventuali timeout precedenti
+    movieMoodTimeoutRef.current.forEach(t => clearTimeout(t));
+    movieMoodTimeoutRef.current = [];
+
+    // Fai apparire i marker uno alla volta con effetto Hollywood
+    markersRef.current.forEach((marker, index) => {
+      const timeout = setTimeout(() => {
+        const el = marker.getElement();
+        el.style.opacity = '1';
+        el.style.transform = 'scale(1.3)';
+        
+        // Torna alla dimensione normale dopo l'effetto
+        setTimeout(() => {
+          el.style.transform = 'scale(1)';
+        }, 200);
+        
+        // Se è l'ultimo marker, termina l'animazione
+        if (index === markersRef.current.length - 1) {
+          setTimeout(() => {
+            setMovieMoodAnimating(false);
+          }, 500);
+        }
+      }, 500 + index * 150); // 150ms di delay tra ogni marker
+      
+      movieMoodTimeoutRef.current.push(timeout);
+    });
+  }, [movieMoodAnimating, selectedCity]);
+
+  const stopMovieMood = useCallback(() => {
+    // Pulisci tutti i timeout
+    movieMoodTimeoutRef.current.forEach(t => clearTimeout(t));
+    movieMoodTimeoutRef.current = [];
+    
+    // Ripristina tutti i marker
+    markersRef.current.forEach(marker => {
+      const el = marker.getElement();
+      el.style.opacity = '1';
+      el.style.transform = 'scale(1)';
+    });
+    
+    setMovieMoodActive(false);
+    setMovieMoodAnimating(false);
+  }, []);
+
   // Trova la connessione TP per il luogo selezionato
   const getTpConnection = () => {
     if (!selectedPlace || !selectedPlace.tp_codes || selectedPlace.tp_codes.length === 0) {
@@ -772,6 +834,26 @@ export default function MapView({ places, selectedCategories = [], className, on
           </Popover>
         </div>
 
+        {/* Movie Mood Button */}
+        {selectedCity && (
+          <div className="absolute bottom-4 right-4 z-20">
+            <Button
+              onClick={movieMoodActive ? stopMovieMood : startMovieMood}
+              disabled={movieMoodAnimating && !movieMoodActive}
+              className={`
+                gap-2 shadow-lg transition-all duration-300 
+                ${movieMoodActive 
+                  ? 'bg-amber-500 hover:bg-amber-600 text-white animate-pulse' 
+                  : 'bg-black/80 hover:bg-black text-white backdrop-blur-sm'}
+              `}
+            >
+              <Clapperboard className="h-4 w-4" />
+              <span className="text-sm font-medium">
+                {movieMoodAnimating ? 'In corso...' : movieMoodActive ? 'Stop' : 'Movie Mood'}
+              </span>
+            </Button>
+          </div>
+        )}
 
         <style>{`
           /* Big POI City marker */
