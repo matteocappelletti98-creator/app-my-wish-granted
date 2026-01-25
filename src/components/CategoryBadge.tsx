@@ -77,11 +77,11 @@ export function normalizeCategory(input?: string): CategoryKey {
   if (s.includes("pizza")) return "pizza";
 
   // Caffè
-  if (["caffe", "caffè", "coffee", "bar"].includes(s)) return "cafe";
+  if (["caffe", "caffè", "coffee"].includes(s)) return "cafe";
   if (s.includes("caffe") || s.includes("coffee")) return "cafe";
 
   // Cocktail bar
-  if (["cocktail bar", "cocktail", "bar and cocktails", "bars & cocktails", "bars&cocktails"].includes(s)) return "cocktails";
+  if (["cocktail bar", "cocktail", "bar and cocktails", "bars & cocktails", "bars&cocktails", "bar"].includes(s)) return "cocktails";
   if (s.includes("cocktail")) return "cocktails";
 
   // Gelato
