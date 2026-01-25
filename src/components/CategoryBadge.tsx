@@ -1,202 +1,140 @@
 import React from "react";
 
 export type CategoryKey =
-  | "cafe"
   | "restaurant"
-  | "museum"
-  | "park"
-  | "bar"
-  | "pub"
-  | "culture"
-  | "hotel"
-  | "shop"
-  | "viewpoint"
-  | "beach"
   | "pizza"
-  | "taxi"
-  | "calcio"
-  | "boat"
-  | "attractions"
+  | "cafe"
   | "cocktails"
-  | "gym"
-  | "parking"
-  | "free_beaches"
-  | "bike"
-  | "luxury"
-  | "transport"
-  | "villa"
-  | "stroll"
-  | "lidi"
-  | "secret"
   | "gelato"
-  | "daytrips"
   | "bakery"
-  | "shopping_hq"
-  | "wc"
-  | "adventure"
-  | "refuge"
-  | "grocery"
-  | "nightlife"
-  | "streetfood"
-  | "luggage"
-  | "atm"
-  | "rent_a_ride"
-  | "local_life"
   | "late_night_eats"
-  | "relax"
-  | "cinema_books"
+  | "free_beaches"
+  | "lidi"
+  | "rent_a_ride"
+  | "culture"
+  | "attractions"
+  | "local_life"
+  | "adventure"
+  | "nightlife"
+  | "shopping"
+  | "refuge"
   | "other";
 
 const EMOJI: Record<CategoryKey, string> = {
-  cafe: "☕️",
   restaurant: "👨‍🍳",
-  museum: "🏛️",
-  culture: "🖼️",
-  bar: "🍸",
-  pub: "🍻",
-  hotel: "🛎️",
-  shop: "🛍️",
-  viewpoint: "🗻",
-  beach: "🏖️",
-  park: "🌳",
   pizza: "🍕",
-  taxi: "🚕",
-  calcio: "⚽",
-  boat: "🛥️",
-  attractions: "🎢",
+  cafe: "☕️",
   cocktails: "🍸",
-  gym: "💪",
-  parking: "🅿️",
-  free_beaches: "🏖️",
-  bike: "🚴",
-  luxury: "💎",
-  transport: "🚌",
-  villa: "⛲️",
-  stroll: "🚶",
-  lidi: "🏝️",
-  secret: "🤫",
   gelato: "🍦",
-  daytrips: "🗓️",
   bakery: "🥨",
-  shopping_hq: "👑",
-  wc: "🚻",
-  adventure: "🏔️",
-  refuge: "🍲",
-  grocery: "🛒",
-  nightlife: "🌙",
-  streetfood: "🌮",
-  luggage: "🛄",
-  atm: "🏧",
-  rent_a_ride: "🛵",
-  local_life: "🏡",
   late_night_eats: "🌑",
-  relax: "🧘",
-  cinema_books: "🎬",
+  free_beaches: "🏖️",
+  lidi: "🏝️",
+  rent_a_ride: "🛵",
+  culture: "🖼️",
+  attractions: "🎢",
+  local_life: "🏡",
+  adventure: "🏔️",
+  nightlife: "🌙",
+  shopping: "🛍️",
+  refuge: "🍲",
   other: "📍",
 };
 
 function strip(s: string) {
   return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
+
 export function normalizeCategory(input?: string): CategoryKey {
   if (!input) return "other";
   const s = strip(input.trim().toLowerCase());
 
   // Direct key match (already normalized)
-  if (s === "late_night_eats") return "late_night_eats";
-  if (s === "local_life") return "local_life";
-  if (s === "rent_a_ride") return "rent_a_ride";
-  if (s === "cinema_books") return "cinema_books";
-  if (s === "free_beaches") return "free_beaches";
-  if (s === "shopping_hq") return "shopping_hq";
-  if (s === "cocktails") return "cocktails";
-  if (s === "nightlife") return "nightlife";
-  if (s === "streetfood") return "streetfood";
-  if (s === "culture") return "culture";
   if (s === "restaurant") return "restaurant";
-  if (s === "transport") return "transport";
-  if (s === "bakery") return "bakery";
-  if (s === "stroll") return "stroll";
-  if (s === "lidi") return "lidi";
-  if (s === "refuge") return "refuge";
-  if (s === "luggage") return "luggage";
-  if (s === "wc") return "wc";
-  if (s === "taxi") return "taxi";
-  if (s === "boat") return "boat";
-  if (s === "luxury") return "luxury";
-  if (s === "secret") return "secret";
-  if (s === "daytrips") return "daytrips";
-  if (s === "relax") return "relax";
-
-  // Exact matches from CSV
-  if (s === "art & culture" || s === "art&culture") return "culture";
-  if (s === "bakery" || s === "bakery and pastry") return "bakery";
-  if (s === "public transport") return "transport";
-  if (s === "public toilets") return "wc";
-  if (s === "restaurants") return "restaurant";
-  if (s === "bars & cocktails" || s === "bars&cocktails") return "cocktails";
+  if (s === "pizza") return "pizza";
   if (s === "cafe") return "cafe";
-  if (s === "street food") return "streetfood";
-  if (s === "bike riding") return "bike";
-  if (s === "luggage storage") return "luggage";
-  if (s === "taxi & private transport" || s === "taxi&private transport") return "taxi";
-  if (s === "atm") return "atm";
-  if (s === "boat rental") return "boat";
-  if (s === "night life" || s === "nightlife") return "nightlife";
-  if (s === "shopping") return "shop";
-  if (s === "luxury shopping") return "shopping_hq";
-  if (s === "private & luxury" || s === "private&luxury") return "luxury";
-  if (s === "mountain refuge") return "refuge";
-  if (s === "strolls") return "stroll";
-  if (s === "beach resorts") return "lidi";
-  if (s === "secret places") return "secret";
-  if (s === "day trips") return "daytrips";
-  if (s === "grocery") return "grocery";
+  if (s === "cocktails") return "cocktails";
+  if (s === "gelato") return "gelato";
+  if (s === "bakery") return "bakery";
+  if (s === "late_night_eats") return "late_night_eats";
+  if (s === "free_beaches") return "free_beaches";
+  if (s === "lidi") return "lidi";
+  if (s === "rent_a_ride") return "rent_a_ride";
+  if (s === "culture") return "culture";
+  if (s === "attractions") return "attractions";
+  if (s === "local_life") return "local_life";
+  if (s === "adventure") return "adventure";
+  if (s === "nightlife") return "nightlife";
+  if (s === "shopping") return "shopping";
+  if (s === "refuge") return "refuge";
 
-  // Fallback synonyms
-  if (["cafe", "caffe", "caffè", "coffee"].includes(s)) return "cafe";
-  if (["restaurant", "ristorante", "osteria", "trattoria"].includes(s)) return "restaurant";
-  if (["museum", "museo", "galleria", "gallery"].includes(s)) return "museum";
-  if (["park", "parco", "giardino"].includes(s)) return "park";
-  if (["bar", "winebar", "enoteca"].includes(s)) return "bar";
-  if (["pub"].includes(s)) return "pub";
-  if (["culture", "art", "chiese"].includes(s)) return "culture";
-  if (["hotel", "bnb", "b&b", "hostel"].includes(s)) return "hotel";
-  if (["shop", "negozio", "boutique", "store"].includes(s)) return "shop";
-  if (["viewpoint", "belvedere", "panorama"].includes(s)) return "viewpoint";
-  if (["beach", "spiaggia", "lido"].includes(s)) return "beach";
-  if (["pizza", "pizzeria"].includes(s)) return "pizza";
-  if (["taxi", "cab"].includes(s)) return "taxi";
-  if (["calcio como 1907", "calcio", "football", "soccer", "como"].includes(s)) return "calcio";
-  if (["boat", "noleggio barche"].includes(s)) return "boat";
-  if (["attractions", "attrazione", "attrazioni"].includes(s)) return "attractions";
-  if (["cocktails", "cocktail bar", "bar and cocktails"].includes(s)) return "cocktails";
-  if (["gym", "palestra", "fitness"].includes(s)) return "gym";
-  if (["parking garage", "parking", "parcheggio"].includes(s)) return "parking";
-  if (["free beaches", "spiagge libere", "beach free"].includes(s)) return "free_beaches";
-  if (["bike", "bicicletta", "cycling"].includes(s)) return "bike";
-  if (["luxury", "lusso", "privato", "private and luxury"].includes(s)) return "luxury";
-  if (["transport", "trasporti", "bus", "metro"].includes(s)) return "transport";
-  if (["villa", "ville"].includes(s)) return "villa";
-  if (["stroll", "passeggiata", "walk"].includes(s)) return "stroll";
-  if (["lidi", "beach resort", "stabilimento balneare"].includes(s)) return "lidi";
-  if (["secret", "segreti", "nascosti"].includes(s)) return "secret";
-  if (["gelato", "gelti", "ice cream"].includes(s)) return "gelato";
-  if (["gite", "escursioni", "day trip"].includes(s)) return "daytrips";
-  if (["panetteria", "forno"].includes(s)) return "bakery";
-  if (["shopping ( high quality )", "shopping high quality", "alta qualita"].includes(s)) return "shopping_hq";
-  if (["wc", "bagno", "toilette", "restroom", "bathroom"].includes(s)) return "wc";
-  if (["adventure", "avventura", "adventures"].includes(s)) return "adventure";
-  if (["refuge", "rifugio", "rifugi", "mountain hut"].includes(s)) return "refuge";
-  if (["supermercato", "alimentari", "market", "supermarket"].includes(s)) return "grocery";
-  if (["nightlife", "vita notturna", "night"].includes(s)) return "nightlife";
-  if (["street food", "cibo di strada"].includes(s)) return "streetfood";
-  if (["luggage", "bagagli", "deposito bagagli"].includes(s)) return "luggage";
-  if (["rent a ride", "noleggio", "scooter", "monopattino"].includes(s)) return "rent_a_ride";
-  if (["local life", "vita locale"].includes(s)) return "local_life";
-  if (["late night eats", "cibo notturno"].includes(s)) return "late_night_eats";
-  if (["relax", "spa", "wellness", "benessere"].includes(s)) return "relax";
-  if (["cinema and bookstores", "cinema", "libreria", "bookstore"].includes(s)) return "cinema_books";
+  // Ristoranti
+  if (["ristoranti", "restaurants", "ristorante", "osteria", "trattoria"].includes(s)) return "restaurant";
+  if (s.includes("restaurant") || s.includes("ristorante") || s.includes("osteria") || s.includes("trattoria")) return "restaurant";
+
+  // Pizza
+  if (["pizzeria", "pizze"].includes(s)) return "pizza";
+  if (s.includes("pizza")) return "pizza";
+
+  // Caffè
+  if (["caffe", "caffè", "coffee", "bar"].includes(s)) return "cafe";
+  if (s.includes("caffe") || s.includes("coffee")) return "cafe";
+
+  // Cocktail bar
+  if (["cocktail bar", "cocktail", "bar and cocktails", "bars & cocktails", "bars&cocktails"].includes(s)) return "cocktails";
+  if (s.includes("cocktail")) return "cocktails";
+
+  // Gelato
+  if (["gelateria", "ice cream", "gelati"].includes(s)) return "gelato";
+  if (s.includes("gelato") || s.includes("ice cream")) return "gelato";
+
+  // Pane & Dolci / Bakery & Pastry
+  if (["pane & dolci", "pane&dolci", "bakery and pastry", "bakery & pastry", "bakery&pastry", "panetteria", "forno", "pasticceria", "pastry"].includes(s)) return "bakery";
+  if (s.includes("bakery") || s.includes("pastry") || s.includes("panetteria") || s.includes("forno")) return "bakery";
+
+  // Night bite
+  if (["night bite", "nightbite", "late night eats", "cibo notturno"].includes(s)) return "late_night_eats";
+  if (s.includes("night bite") || s.includes("late night")) return "late_night_eats";
+
+  // Spiagge libere
+  if (["spiagge libere", "free beaches", "spiaggia libera", "beach free"].includes(s)) return "free_beaches";
+  if (s.includes("spiagge libere") || s.includes("free beach")) return "free_beaches";
+
+  // Lidi
+  if (["beach resorts", "stabilimento balneare", "stabilimenti balneari"].includes(s)) return "lidi";
+  if (s.includes("lido") || s.includes("lidi")) return "lidi";
+
+  // Noleggio (barche, vespa, macchine)
+  if (["noleggio barche, vespa, macchine", "noleggio", "rent a ride", "boat rental", "noleggio barche", "scooter", "vespa", "car rental"].includes(s)) return "rent_a_ride";
+  if (s.includes("noleggio") || s.includes("rental") || s.includes("rent")) return "rent_a_ride";
+
+  // Cultura
+  if (["art & culture", "art&culture", "art", "museo", "museum", "galleria", "gallery", "chiese", "chiesa"].includes(s)) return "culture";
+  if (s.includes("culture") || s.includes("cultura") || s.includes("museo") || s.includes("museum")) return "culture";
+
+  // Attrazioni
+  if (["attrazione", "attrazioni", "attraction"].includes(s)) return "attractions";
+  if (s.includes("attraz") || s.includes("attraction")) return "attractions";
+
+  // Vita locale
+  if (["vita locale", "local life"].includes(s)) return "local_life";
+  if (s.includes("local life") || s.includes("vita locale")) return "local_life";
+
+  // Avventura
+  if (["avventura", "adventures"].includes(s)) return "adventure";
+  if (s.includes("adventure") || s.includes("avventura")) return "adventure";
+
+  // Night life
+  if (["night life", "vita notturna", "nightclub", "club", "discoteca"].includes(s)) return "nightlife";
+  if (s.includes("nightlife") || s.includes("night life") || s.includes("discoteca")) return "nightlife";
+
+  // Shopping
+  if (["shop", "negozio", "boutique", "store", "luxury shopping", "shopping ( high quality )"].includes(s)) return "shopping";
+  if (s.includes("shopping") || s.includes("shop") || s.includes("boutique")) return "shopping";
+
+  // Rifugi di Montagna
+  if (["rifugi di montagna", "mountain refuge", "rifugio", "rifugi", "mountain hut"].includes(s)) return "refuge";
+  if (s.includes("rifugio") || s.includes("rifugi") || s.includes("refuge")) return "refuge";
 
   return "other";
 }
@@ -205,51 +143,24 @@ export default function CategoryBadge({ category, showLabel = false }: { categor
   const key = normalizeCategory(category);
   const emoji = EMOJI[key];
   const labelMap: Record<CategoryKey, string> = {
-    cafe: "Café",
-    restaurant: "Restaurants",
-    museum: "Museo",
-    park: "Parco",
-    bar: "Bar",
-    pub: "Pub",
-    hotel: "Hotel",
-    shop: "Shopping",
-    viewpoint: "Belvedere",
-    beach: "Spiaggia",
-    culture: "Art & Culture",
+    restaurant: "Ristoranti",
     pizza: "Pizza",
-    taxi: "Taxi & Private Transport",
-    calcio: "Calcio Como",
-    boat: "Boat Rental",
-    attractions: "Attractions",
-    cocktails: "Bars & Cocktails",
-    gym: "Gym",
-    parking: "Parking",
-    free_beaches: "Free Beaches",
-    bike: "Bike Riding",
-    luxury: "Private & Luxury",
-    transport: "Public Transport",
-    villa: "Villa",
-    stroll: "Strolls",
-    lidi: "Beach Resorts",
-    secret: "Secret Places",
+    cafe: "Caffè",
+    cocktails: "Cocktail bar",
     gelato: "Gelato",
-    daytrips: "Day Trips",
-    bakery: "Bakery and Pastry",
-    shopping_hq: "Luxury Shopping",
-    wc: "Public Toilets",
-    adventure: "Adventure",
-    refuge: "Mountain Refuge",
-    grocery: "Grocery",
-    nightlife: "Night Life",
-    streetfood: "Street Food",
-    luggage: "Luggage Storage",
-    atm: "ATM",
-    rent_a_ride: "Rent a Ride",
-    local_life: "Local Life",
-    late_night_eats: "Late Night Eats",
-    relax: "Relax",
-    cinema_books: "Cinema and Bookstores",
-    other: "Other",
+    bakery: "Pane & Dolci",
+    late_night_eats: "Night bite",
+    free_beaches: "Spiagge libere",
+    lidi: "Lidi",
+    rent_a_ride: "Noleggio",
+    culture: "Cultura",
+    attractions: "Attrazioni",
+    local_life: "Vita locale",
+    adventure: "Avventura",
+    nightlife: "Night life",
+    shopping: "Shopping",
+    refuge: "Rifugi di Montagna",
+    other: "Altro",
   };
   return (
     <span className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-2.5 py-1 text-gray-700">
