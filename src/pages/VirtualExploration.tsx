@@ -132,7 +132,8 @@ export default function VirtualExploration() {
     (async () => {
       try {
         const data = await fetchPlacesFromSheet(CSV_URL);
-        setAll(data.filter(p => p.status === "published"));
+        // Filtra published e rimuove categorie "other" (villa, secret, etc.)
+        setAll(data.filter(p => p.status === "published" && normalizeCategory(p.category) !== "other"));
       } finally {
         setLoading(false);
       }
