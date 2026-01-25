@@ -26,7 +26,7 @@ const EMOJI: Record<CategoryKey, string> = {
   cafe: "☕️",
   cocktails: "🍸",
   gelato: "🍦",
-  bakery: "🥨",
+  bakery: "🍰",
   late_night_eats: "🌑",
   free_beaches: "🏖️",
   lidi: "🏝️",
