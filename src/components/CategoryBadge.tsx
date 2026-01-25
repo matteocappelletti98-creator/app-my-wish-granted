@@ -35,7 +35,7 @@ const EMOJI: Record<CategoryKey, string> = {
   attractions: "🎢",
   local_life: "🏡",
   adventure: "🏔️",
-  nightlife: "🌙",
+  nightlife: "🪩",
   shopping: "🛍️",
   refuge: "🍲",
   other: "📍",
