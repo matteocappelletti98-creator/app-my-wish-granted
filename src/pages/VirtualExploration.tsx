@@ -411,14 +411,14 @@ export default function VirtualExploration() {
           />
         )}
 
-        {/* Bottone Suggerisci Luogo */}
-        <button
+        {/* Bottone Suggerisci Luogo - TEMPORANEAMENTE NASCOSTO PER SCREENSHOT */}
+        {/* <button
           onClick={() => setSuggestDialogOpen(true)}
           className="absolute bottom-20 left-1/2 -translate-x-1/2 z-30 bg-[#009fe3] hover:bg-[#0088c6] text-white px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all active:scale-95 flex items-center gap-2 text-sm font-medium"
         >
           <Lightbulb className="w-4 h-4" />
           Suggerisci luogo
-        </button>
+        </button> */}
       </div>
 
       {/* Dialog Suggerisci Luogo */}
